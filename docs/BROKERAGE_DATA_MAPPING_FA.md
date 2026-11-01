@@ -2,7 +2,7 @@
 
 ## قرارداد منطقی adapter
 
-`IBrokerageRequestReader` باید دو قابلیت منطقی داشته باشد: حل کد معرفی در tenant معتبر سرور، و بازخوانی زمینهٔ درخواست با شناسهٔ مبدأ. خروجی `BrokerageRequestSnapshot` شامل شناسه‌های مبدأ، موبایل معتبر، وضعیت مجازبودن درخواست، فیلدهای خودرو با وضعیت/منشأ و شناسه یا زمان نسخهٔ منبع است. این‌ها نام interface و DTO پیشنهادی‌اند؛ query یا schema مبدأ نیستند.
+در `2026-11-02` و طبق مجوز `2df8399e-d511-49b7-af28-a075f801dd57`، `IBrokerageRequestReader` با دو متد واقعی `ResolveReferralAsync` و `GetRequestSnapshotAsync` پیاده شد. resolve، BrokerageRequestReference حداقلی و snapshot، شناسه‌های دقیق مبدأ، مرجع موبایل، eligibility، هفت فیلد خودرو با provenance/validation، SourceVersion و RetrievedAtUtc مستقل دارد. این قرارداد داخلی با reader حافظه‌ای آزموده شده؛ query یا schema کارگزاری نیست. [کد، fixture و آزمون 2D](implementation/CHECKPOINT-02D-BROKERAGE-READER_FA.md).
 
 نتیجه می‌تواند `Found`، `NotFound`، `Ambiguous`، `Ineligible` یا `Unavailable` باشد. هیچ‌کدام نباید به‌صورت خودکار به fixture تبدیل شوند. کد تکراری بدون قاعدهٔ یکتایی مصوب، انتخاب تصادفی درخواست را مجاز نمی‌کند. timeout یا خطای SQL با «اطلاعات مفقود» یکی نیست.
 
@@ -18,7 +18,7 @@ credential خواندن مبدأ از credential نوشتن BAZDID جدا باش
 
 ## دفتر mapping مبتنی بر شاهد — Checkpoint 1.5
 
-مبنای این جدول آرشیو خصوصیِ ممیزی‌شده در `2026-11-01` است؛ hash و حدود جست‌وجو در [گزارش ممیزی](DUBERFRONT_CODE_AUDIT_FA.md) ثبت شده‌اند. `P` در مسیرهای زیر برابر `DuberFront/Duber` است. «صریح سورس» یعنی نگاشت EF مشاهده شده؛ «مدل سورس» یعنی property/رابطه دیده شده و نام ستون فیزیکی صرفاً از convention قابل حدس است. هیچ‌کدام تأیید پایگاه زنده نیستند. نام property مقصد، پیشنهاد قرارداد آینده است و هنوز پیاده نشده است.
+مبنای این جدول آرشیو خصوصیِ ممیزی‌شده در `2026-11-01` است؛ hash و حدود جست‌وجو در [گزارش ممیزی](DUBERFRONT_CODE_AUDIT_FA.md) ثبت شده‌اند. `P` در مسیرهای زیر برابر `DuberFront/Duber` است. «صریح سورس» یعنی نگاشت EF مشاهده شده؛ «مدل سورس» یعنی property/رابطه دیده شده و نام ستون فیزیکی صرفاً از convention قابل حدس است. هیچ‌کدام تأیید پایگاه زنده نیستند. نام propertyهای جدول پیشنهاد تاریخی‌اند؛ مدل داخلی پیاده‌شدهٔ 2D در walkthrough مشخص است و قرارداد HTTP آینده هنوز مصوب نیست.
 
 «مشروط» در ستون Manual فقط دربارهٔ فیلد خودروست: adapter مصوب باید همان فیلد را صریحاً `Missing` گزارش کند و ورودی با اعتبارسنجی مستقل ذخیره شود. نبود mapping، خطای منبع یا ادعای مرورگر، Missing نیست. تمام ردیف‌ها پیش از adapter واقعی به نام/نوع/nullability فیزیکی، نمونهٔ ساختگی و مسئول تأیید نیاز دارند.
 
@@ -67,9 +67,9 @@ credential خواندن مبدأ از credential نوشتن BAZDID جدا باش
 
 ## fixture ساختگی مستقل
 
-در Development/Test: tenant برابر `TEST-BROKERAGE`، مشتری `TEST-CUSTOMER-001`، درخواست `TEST-REQUEST-001`، referral برابر `A4K9P2` و موبایل fixture برابر `09000000001`. این رشته صرفاً دادهٔ آزمون است؛ ادعای رزروشده یا تخصیص‌نیافته‌بودن شماره نمی‌شود. **خروجی SMS در حالت ساختگی کاملاً غیرفعال است.** نام مشتری «مشتری آزمایشی» و مدل/رنگ دادهٔ ساختگی‌اند. fixtureهای کامل، ناقص، صفر با mapping و دو درخواست برای یک مشتری جدا تعریف شوند؛ اکنون seed اجرا نمی‌شود.
+در Development/Testing: scope برابر `TEST-BROKERAGE / SYNTHETIC`، مشتری `TEST-CUSTOMER-001`، درخواست `TEST-REQUEST-001`، referral برابر `A4K9P2` و موبایل fixture برابر `09000000001` است. این رشته صرفاً دادهٔ آزمون است؛ ادعای رزروشده یا تخصیص‌نیافته‌بودن شماره نمی‌شود. هیچ SMS/OTP/seed اجرا نمی‌شود. ۱۸ رکورد حافظه‌ای، کامل/ناقص/invalid/صفر با سیاست مستقل، دو درخواست یک مشتری، ambiguity، unavailable، تعارض موبایل، شناسهٔ بزرگ و scopeهای دیگر را پوشش می‌دهند؛ نام/مشخصات شخصی اضافی در snapshot وجود ندارد.
 
-کلاس‌های پیشنهادی `SyntheticBrokerageRequestReader` و `SqlBrokerageRequestReader` تنها از DI محیط انتخاب می‌شوند. در Production فعال‌بودن synthetic، نبود mapping مصوب یا قرارداد SMS باید startup احراز هویت را fail-closed کند. Production با دادهٔ mock «موقتاً» راه‌اندازی نمی‌شود.
+`SyntheticBrokerageRequestReader` از DI فقط در Development/Testing انتخاب می‌شود؛ سازنده هم محیط دقیق را کنترل می‌کند. Production mode/scope ساختگی را رد می‌کند. `SqlBrokerageRequestReader` اکنون مرز صریح تنظیم‌نشده است و صرفاً Unavailable/SourceNotConfigured می‌دهد؛ هیچ SQL یا fallback ندارد. سرویس داخلی scope سروری را bind می‌کند؛ reference به‌تنهایی مجوز مالکیت نیست. فیلد Present معتبر فقط‌خواندنی، Missing صریح با سیاست دستی null، Invalid قفل و Unavailable قفل است. سال صفر فقط طبق سیاست آزمایشی همان فیلد Missing می‌شود؛ label رنگ صفر با سیاست جدا Present می‌ماند. این سیاست‌ها، validation سال/رنگ/VIN واقعی کارگزاری نیستند.
 
 ## refresh و منشأ
 

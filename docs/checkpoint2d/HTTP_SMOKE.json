@@ -1,0 +1,15 @@
+{
+  "Date": "2026-11-02",
+  "Environment": "Development",
+  "Server": "Kestrel/loopback",
+  "Status": "Passed",
+  "HealthStatus": 200,
+  "HealthBody": "{\"status\":\"alive\"}",
+  "SwaggerUiStatus": 200,
+  "SwaggerVersion": "2.0",
+  "SwaggerBasePath": "/API/BAZDID",
+  "SwaggerPathCount": 1,
+  "AnonymousSnapshotStatus": 404,
+  "RealSqlIntegrationTested": false,
+  "IisTested": false
+}

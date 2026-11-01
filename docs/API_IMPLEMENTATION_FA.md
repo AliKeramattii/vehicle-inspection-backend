@@ -1,6 +1,6 @@
 # نقشهٔ قرارداد و پیاده‌سازی API
 
-در Checkpoint 1 فقط `GET /API/BAZDID/health/live` و Swagger غیرتولیدی واقعاً پیاده و آزموده شده‌اند. تمام مسیرهای تجاری این سند **پیشنهاد آینده** هستند. Swagger 2.0 تولیدشده از همین برنامه فقط health را دارد؛ ۵۵ endpoint تاریخی وارد آن نشده‌اند. مبنای مقایسهٔ آینده [endpointهای مرجع](reference/contracts/endpoints.json) و [schemaها](reference/contracts/schemas.json) است.
+در HTTP فقط `GET /API/BAZDID/health/live` و Swagger غیرتولیدی پیاده‌اند و در 2D دوباره آزموده شدند. reader و DTOهای 2D داخلی‌اند و endpoint/قرارداد HTTP جدیدی ایجاد نکردند؛ snapshot داخلی با موبایل کامل پاسخ مشتری نیست. تمام مسیرهای تجاری این سند **پیشنهاد آینده** هستند. Swagger 2.0 فقط health را دارد؛ ۵۵ endpoint تاریخی وارد آن نشده‌اند. مبنای مقایسهٔ آینده [endpointهای مرجع](reference/contracts/endpoints.json) و [schemaها](reference/contracts/schemas.json) است.
 
 ## پایه و قواعد مشترک
 

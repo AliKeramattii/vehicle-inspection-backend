@@ -1,6 +1,6 @@
 # راهبرد آزمون و کنترل کیفیت
 
-این سند راهبرد کلی و آزمون‌های آینده را حفظ می‌کند. در Checkpoint 1، **۱۵ آزمون واحد و ۲۸ آزمون integration، جمعاً ۴۳ آزمون، موفق اجرا شدند**. build با SDK 2.1.818 صفر warning/error و smoke واقعی health/Swagger روی loopback موفق بود. SQL و IIS/ANCM واقعی آزموده نشده‌اند. [گزارش شواهد](CHECKPOINT1_IMPLEMENTATION_FA.md).
+این سند راهبرد کلی و آزمون‌های آینده را حفظ می‌کند. در 2D، **۶۵ آزمون واحد و ۴۳ integration، جمعاً ۱۰۸ آزمون، موفق اجرا شدند**؛ همهٔ ۴۳ قبلی و ۶۵ جدید. build SDK 2.1.818 صفر warning/error و smoke واقعی Kestrel موفق بود. [شواهد تازهٔ 2D](checkpoint2d/APPLICATION_VALIDATION.json). integrationهای تازه DI/TestServer/reader حافظه‌ای‌اند؛ SQL repository یا IIS/ANCM را اثبات نمی‌کنند. ۳۵ آزمون مستقیم schema SQL متعلق به 2C است و در 2D فقط verification خواندنی DB اجرا شد. بخش foundation پایین تاریخی است؛ [گزارش همان مرحله](CHECKPOINT1_IMPLEMENTATION_FA.md).
 
 ## اجرای فعلی Checkpoint 1
 

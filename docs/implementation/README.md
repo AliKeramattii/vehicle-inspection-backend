@@ -1,6 +1,6 @@
 # راهنمای فرایند پیاده‌سازی Backend
 
-این صفحه، نقطهٔ ورود به توضیح «چگونه انجام شد» است. گزارش‌های معتبر قبلی در جای خود می‌مانند و محتوا دوباره کپی نمی‌شود. وضعیت `2026-11-01`: provisioning واقعی 2C کامل و پیشرفت کل **17%** است؛ سهم سیاست مستندات صفر بود. آخرین اجرا و شواهد SQL در راهنمای 2C زیر ثبت‌اند؛ 2D شروع نشده است.
+این صفحه، نقطهٔ ورود به توضیح «چگونه انجام شد» است. گزارش‌های معتبر قبلی در جای خود می‌مانند و محتوا دوباره کپی نمی‌شود. وضعیت `2026-11-02`: قرارداد/reader ساختگی 2D کامل و پیشرفت کل **19%** است؛ سهم سیاست مستندات صفر بود. آخرین اجرای برنامه ۱۰۸ آزمون موفق و verification خواندنی DB دارد؛ اجرای DDL و ۳۵ آزمون SQL مربوط به 2C است.
 
 ## مراحل دارای کار واقعی
 
@@ -11,8 +11,9 @@
 | 1.5 | [روش ممیزی DuberFront](../DUBERFRONT_CODE_AUDIT_FA.md)، [ماتریس نگاشت](../BROKERAGE_DATA_MAPPING_FA.md) | central directory، خواندن محدود متن، شاهدهای مسیر و ابهام‌های mapping؛ بدون اجرای source | [2e217a0](https://github.com/AliKeramattii/vehicle-inspection-backend/commit/2e217a0) |
 | 2A/2B | [فرایند کشف و آماده‌سازی](../CHECKPOINT2A_2B_REPORT_FA.md)، [راهنمای فایل‌های SQL](../../database/README.md)، [طراحی سه جدول](../DATABASE_DESIGN_FA.md) | metadata محلی و پیش‌نویس‌های بسته برای بازبینی؛ بدون ساخت DB/جدول/نقش یا repository | [a2e0958](https://github.com/AliKeramattii/vehicle-inspection-backend/commit/a2e0958) |
 | 2C | [ساخت و verification پایگاه](CHECKPOINT-02C-DATABASE-CREATION_FA.md)، [metadata](../checkpoint2c/SCHEMA_VERIFICATION.json)، [۳۵ آزمون SQL](../checkpoint2c/ROLLBACK_TEST_RESULTS.json)، [آزمون برنامه](../checkpoint2c/APPLICATION_VALIDATION.json) | DB محلی و فقط سه جدول، اصلاح CHECK با WITH CHECK و صفر ردیف پس از rollback؛ بدون SQL runtime | SHA بسته از Git واقعی و گزارش تحویل خوانده شود |
+| 2D | [reader و قراردادهای داخلی](CHECKPOINT-02D-BROKERAGE-READER_FA.md)، [آزمون برنامه](../checkpoint2d/APPLICATION_VALIDATION.json)، [بررسی خواندنی DB](../checkpoint2d/DATABASE_VERIFICATION.json)، [HTTP واقعی](../checkpoint2d/HTTP_SMOKE.json) | ۱۸ fixture حافظه‌ای، provenance، scope و DI امن؛ ۱۰۸ آزمون و smoke Kestrel؛ بدون SQL واقعی مبدأ | SHA بسته و همگام‌سازی از Git واقعی و گزارش تحویل خوانده شود |
 
-گزارشی برای پیاده‌سازی 2D، احراز هویت، Info، media، submit، کارکنان یا deployment واقعی ایجاد نشده است؛ این قابلیت‌ها هنوز پیاده نشده‌اند. نبود DB در گزارش تاریخی 2A/2B و توقف قبلی 2D، مربوط به پیش از مجوز/اجرای 2C بود؛ اکنون پایگاه و سه جدول واقعاً وجود دارند و خالی‌اند. [آموزش VS Code](../guides/VSCODE_SQLSERVER_SETUP_FA.md) راه مشاهده است و اجرای تصویری VS Code را ادعا نمی‌کند.
+گزارشی برای پیاده‌سازی احراز هویت، Info، media، submit، کارکنان یا deployment واقعی ایجاد نشده است؛ این قابلیت‌ها هنوز پیاده نشده‌اند. نبود DB در گزارش تاریخی 2A/2B و توقف قبلی 2D مربوط به پیش از مجوز/اجرای 2C بود؛ مجوز جدید 2D اکنون اجرا و تحویل شده است. [آموزش VS Code](../guides/VSCODE_SQLSERVER_SETUP_FA.md) راه مشاهده است و اجرای تصویری VS Code را ادعا نمی‌کند.
 
 ## شیوهٔ استفاده و نگهداری
 

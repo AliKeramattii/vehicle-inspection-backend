@@ -49,7 +49,7 @@ namespace Bazdid.UnitTests
         }
 
         [Fact]
-        public void Production_requires_https_and_adapters_remain_disabled()
+        public void Production_requires_https_and_unconfigured_synthetic_is_rejected()
         {
             Assert.Throws<InvalidOperationException>(() => new FoundationOptions { HttpsRedirectionEnabled = false }.Validate("Production"));
             Assert.Throws<InvalidOperationException>(() => new FoundationOptions { BrokerageAdapterMode = "Synthetic" }.Validate("Testing"));

@@ -1,6 +1,6 @@
 # معماری پیشنهادی و سازگاری محیط
 
-وضعیت: **foundation معماری در Checkpoint 1 پیاده شده است؛ قابلیت‌های تجاری این سند برای مراحل بعدند.** یک deployable به‌همراه دو پروژهٔ آزمون داریم. Controller/Contracts/Configuration/Middleware کد فعال دارند؛ Application/Domain/Infrastructure فعلاً مرز مستند و فاقد کد تجاری‌اند. microservice یا message broker اضافه نشده است.
+وضعیت: **foundation و reader داخلی ساختگی 2D پیاده‌اند؛ سایر قابلیت‌های این سند برای مراحل بعدند.** یک deployable و دو پروژهٔ آزمون داریم. Application/Domain/Infrastructure اکنون interface، مدل منشأدار، سرویس scope-bound و adapter ساختگی/مرز SQL تنظیم‌نشده دارند. [معماری و آزمون واقعی 2D](implementation/CHECKPOINT-02D-BROKERAGE-READER_FA.md). microservice یا message broker اضافه نشده است.
 
 ```mermaid
 flowchart LR
@@ -15,7 +15,7 @@ flowchart LR
 
 ## ساختار مصوب و توسعهٔ تدریجی
 
-`Bazdid.sln`، سه project، `global.json`، `Directory.Build.props` و `NuGet.Config` ساخته شده‌اند. جزئیات `Authentication/Brokerage/Sql/Media/Fixtures` در درخت زیر مربوط به مراحل بعدند و هنوز پیاده نشده‌اند.
+`Bazdid.sln`، سه project، `global.json`، `Directory.Build.props` و `NuGet.Config` موجودند. بخش reader از Domain/Brokerage، Infrastructure/Brokerage، Application و Fixtures در 2D پیاده شد؛ سایر بخش‌های درخت زیر طرح آینده‌اند. SqlBrokerageRequestReader هنوز هیچ اتصال/query ندارد.
 
 ```text
 Bazdid.sln

@@ -2,7 +2,7 @@
 
 این مخزن مستقل، پایهٔ توسعهٔ Backend برنامهٔ فارسی خودبازدید خودرو برای کارگزاری بیمه است. Frontend موجود در `C:\Projects\vehicle-inspection-integrated` فقط مرجع خواندنی است؛ دو مخزن ادغام نمی‌شوند.
 
-**وضعیت در 2026-11-01: Checkpoint 2C برای provisioning محلی تکمیل شد؛ پیشرفت کل 17%.** پایگاه `BAZDID_Development` و سه جدول dbo با metadata و ۳۵ آزمون SQL rollback-only تأیید شدند؛ هیچ ردیف تست باقی نماند. API همچنان foundation مرحلهٔ 1 است؛ SQL runtime، 2D، OTP، Session، بازدید و upload پیاده نشده‌اند. O24 و حساب‌های کم‌اختیار برنامه بازند؛ schema کارگزاری/Production تأیید نشده است. [فرایند واقعی و شواهد 2C](docs/implementation/CHECKPOINT-02C-DATABASE-CREATION_FA.md).
+**وضعیت در 2026-11-02: Checkpoint 2D تکمیل شد؛ پیشرفت کل 19%.** reader داخلی ساختگی، قراردادهای منشأدار و DI امن با ۱۰۸ آزمون موفق پیاده‌اند؛ HTTP همچنان فقط health/Swagger دارد. پایگاه و سه جدول 2C قبل/بعد به‌صورت خواندنی تأیید و خالی ماندند؛ seed/DDL انجام نشد. SQL واقعی کارگزاری، OTP/Session/Info/media اجرا نشده‌اند. O24، حساب‌های کم‌اختیار و mapping Production بازند. [فرایند و شواهد 2D](docs/implementation/CHECKPOINT-02D-BROKERAGE-READER_FA.md).
 
 ## فناوری و میزبانی
 
@@ -49,7 +49,7 @@ vehicle-inspection-backend/
   deployment/iis/               # راهنما و web.config.example
 ```
 
-یک پروژهٔ API و دو پروژهٔ آزمون ساخته شده‌اند. پوشه‌های Application/Domain/Infrastructure فعلاً مرز مستند دارند و کد تجاری صوری ندارند. سه جدول اولیه فقط در پایگاه توسعهٔ محلی ساخته شده‌اند؛ adapter مبدأ و repository برنامه هنوز ساخته نشده‌اند. برای metadata و شمار ردیف صفرِ تحویل 2C، از ریشه `.\database\tools\Invoke-BazdidDevelopmentDatabase.ps1 -Action Verify` را اجرا کنید؛ DDL مجدد یا reset خودکار وجود ندارد.
+یک پروژهٔ API و دو پروژهٔ آزمون موجودند. Application/Domain/Infrastructure و Fixtures اکنون reader ساختگی و قراردادهای 2D را دارند؛ repository SQL برنامه پیاده نشده است. سه جدول اولیه فقط در پایگاه توسعهٔ محلی ساخته شده‌اند. برای بررسی خواندنی metadata از ریشه `.\database\tools\Invoke-BazdidDevelopmentDatabase.ps1 -Action Verify` را اجرا کنید؛ DDL مجدد یا reset خودکار وجود ندارد.
 
 ## ابزار و دستورهای بررسی‌شده
 
@@ -75,7 +75,7 @@ $env:ASPNETCORE_ENVIRONMENT = 'Development'
 dotnet run --project src/Bazdid.Api/Bazdid.Api.csproj --configuration Release --no-build -- --urls http://127.0.0.1:5081
 ```
 
-restore/build موفق و ۴۳ آزمون موفق‌اند؛ build نهایی صفر warning و صفر error داشت. فرمان run تا `Ctrl+C` فعال می‌ماند. URLهای محلی آزموده‌شده:
+restore/build/test در 2D دوباره موفق اجرا شدند: **۶۵ unit و ۴۳ integration، جمع ۱۰۸ موفق**؛ build صفر warning/error. فرمان run بالا متعلق به smoke تاریخی foundation است؛ در 2D اجرای مستقیم DLL روی loopback پورت 5082 نیز health/Swagger و 404 مسیر snapshot را تأیید کرد. روش بازتولید بدون launchSettings کاربر در walkthrough 2D است. فرمان run تا `Ctrl+C` فعال می‌ماند. URLهای تاریخی foundation:
 
 | قابلیت | URL |
 |---|---|
@@ -90,11 +90,11 @@ restore/build موفق و ۴۳ آزمون موفق‌اند؛ build نهایی �
 
 ## تنظیمات و محدودیت امنیت
 
-`appsettings.json` تنظیم امن پایه و فایل‌های Development/Testing override محیط را دارند. مقادیر واقعی از environment/secret store مصوب تأمین شوند. نمونهٔ Production فقط مثال و خارج artifact است. originها پیش‌فرض خالی و در صورت تنظیم باید دقیق باشند؛ wildcard مجاز نیست. CORS فعلی read-only و بدون credential است؛ cookie/CSRF آینده هنوز فعال نیست.
+`appsettings.json` خواننده را Disabled نگه می‌دارد؛ overrideهای Development/Testing صریحاً Synthetic و scope ثابت `TEST-BROKERAGE / SYNTHETIC` دارند. Production synthetic یا scope آزمایشی را رد می‌کند و منبع تنظیم‌نشده Unavailable می‌ماند؛ fallback وجود ندارد. هیچ SMS/OTP یا seed فعال نیست. مقادیر واقعی از environment/secret store مصوب تأمین شوند. نمونهٔ Production فقط مثال و خارج artifact است. originها پیش‌فرض خالی و در صورت تنظیم باید دقیق باشند؛ wildcard مجاز نیست. CORS فعلی read-only و بدون credential است؛ cookie/CSRF آینده هنوز فعال نیست.
 
 بسته‌های اصلی `Microsoft.AspNetCore.App 2.1.30`، `Swashbuckle.AspNetCore 4.0.1` و `Newtonsoft.Json 13.0.4` هستند؛ نسخه‌های تست و lockfileها در [گزارش dependency](docs/checkpoint1/DEPENDENCY_SECURITY_FA.md) ثبت‌اند. audit واقعی، ۹ بستهٔ دارای هشدار در گراف API، از جمله Critical برای Kestrel، نشان داد. **Production تأیید امنیتی ندارد.**
 
-Checkpoint 1 نقطهٔ توقف است. گام بعدی فقط پس از **اجازهٔ تازهٔ کاربر**، Checkpoint 2 و تعیین پایگاه تست/نسخه SQL است؛ هیچ SQL، OTP، تغییر Frontend یا استقرار واقعی به‌طور خودکار شروع نمی‌شود.
+Checkpoint 2D نقطهٔ توقف فعلی است. گام پیشنهادی بعد فقط با **اجازهٔ تازهٔ کاربر**، 2E و طرح persistence/refresh است؛ ساخت BAZDIDInfo در Checkpoint 4 می‌ماند. SQL واقعی، OTP، تغییر Frontend و استقرار خودکار شروع نمی‌شوند.
 
 ## GitHub و گزارش‌دهی فارسی
 

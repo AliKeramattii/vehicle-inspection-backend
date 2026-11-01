@@ -1,0 +1,43 @@
+{
+  "Date": "2026-11-02",
+  "AuthorizationReference": "2df8399e-d511-49b7-af28-a075f801dd57",
+  "StartingCommit": "b495b10a5519818d44053206c964b21dc051b813",
+  "Sdk": "2.1.818",
+  "TargetFramework": "netcoreapp2.1",
+  "CSharp": "7.3",
+  "Restore": {
+    "Command": "dotnet restore Bazdid.sln --locked-mode",
+    "ExitCode": 0
+  },
+  "Build": {
+    "Command": "dotnet build Bazdid.sln --configuration Release --no-restore",
+    "ExitCode": 0,
+    "Warnings": 0,
+    "Errors": 0
+  },
+  "InitialTests": {
+    "Total": 104,
+    "Passed": 103,
+    "Failed": 1,
+    "Failure": "Synthetic_constructor_itself_rejects_other_environments(development)",
+    "ResolutionFa": "helper محیط ASP.NET مقایسهٔ بدون حساسیت به حروف داشت؛ سازندهٔ synthetic با مقایسهٔ دقیق و همسو با validation startup اصلاح شد."
+  },
+  "Tests": {
+    "Command": "dotnet test Bazdid.sln --configuration Release --no-build --no-restore",
+    "ExitCode": 0,
+    "UnitPassed": 65,
+    "IntegrationPassed": 43,
+    "Total": 108,
+    "Passed": 108,
+    "Failed": 0,
+    "PreviouslyExisting": 43,
+    "Added": 65
+  },
+  "RuntimeDependenciesChanged": false,
+  "RealBrokerageSqlIntegrationTested": false,
+  "ProductionIntegrationTested": false,
+  "PreviousProgressPercent": 17,
+  "ProgressEarned": 2,
+  "CurrentProgressPercent": 19,
+  "ExplanationFa": "integrationهای این مرحله DI/TestServer و reader حافظه‌ای هستند؛ شاهد SQL واقعی فقط verification خواندنی schema محلی است."
+}

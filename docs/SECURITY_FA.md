@@ -2,6 +2,8 @@
 
 ## وضعیت واقعی Checkpoint 1
 
+به‌روزرسانی `2026-11-02`: [خوانندهٔ داخلی 2D](implementation/CHECKPOINT-02D-BROKERAGE-READER_FA.md) فقط Development/Testing از fixture می‌خواند؛ mode/scope ساختگی در Production رد می‌شود، adapter واقعی Unavailable می‌ماند و fallback ندارد. resolve فاقد موبایل/خودرو و snapshot فقط داخلی است؛ reference مجوز مالکیت نیست. timeout/تعارض موبایل/eligibility نامعلوم به دادهٔ Missing قابل‌ویرایش تبدیل نمی‌شوند. تست‌های DI/privacy/cancellation و startup موفق‌اند؛ auth، SQL runtime و امنیت Production هنوز اثبات نشده‌اند. بخش foundation زیر شاهد همان مرحله است.
+
 health، خطای JSON امن، correlation سروری، logging بدون body/query/exception message، validation startup، CORS origin دقیق بدون credential، HTTPS redirect و HSTS opt-in پیاده شده‌اند. Swagger فقط Development/Testing و با منع query remote definition است؛ Production حتی با flag روشن آن را ثبت نمی‌کند. هیچ auth/cookie/CSRF/SQL/SMS/media عملیاتی وجود ندارد؛ بخش‌های مربوط زیر طرح آینده‌اند.
 
 **audit پاک نیست:** در گراف API، ۹ بسته با ۱۰ ارتباط advisory، از جمله Critical برای Kestrel، گزارش شده‌اند. [گزارش و محدودیت‌ها](checkpoint1/DEPENDENCY_SECURITY_FA.md). پشته برای انتشار عمومی تأیید امنیتی ندارد؛ صفر warning کامپایل با صفر آسیب‌پذیری برابر نیست.

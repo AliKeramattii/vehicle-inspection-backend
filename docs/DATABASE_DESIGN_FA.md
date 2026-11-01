@@ -89,7 +89,7 @@ indexهای `(RequestContextId, OccurredAtUtc, Id)` و `CorrelationId`؛ uniquen
 
 ## fixture و آماده‌سازی تست؛ بدون seed
 
-زنجیرهٔ ساختگی: `TEST-BROKERAGE / A4K9P2 → TEST-REQUEST-001 → TEST-CUSTOMER-001 → 09000000001`. شماره صرفاً fixture است و ادعای رزروشده‌بودن ندارد. OTP برابر `12345` فقط برای Development/Testing آینده است؛ هیچ SMS، seed، challenge یا منطق OTP در این مرحله اجرا/پیاده نشده. حالت دو درخواست برای یک مشتری، missing/zero، مشتری null، موبایل متعارض و شناسهٔ bigint بزرگ نیز باید ساخته شوند؛ اطلاعات Production به تست کپی نمی‌شود.
+زنجیرهٔ ساختگی: `TEST-BROKERAGE / A4K9P2 → TEST-REQUEST-001 → TEST-CUSTOMER-001 → 09000000001`. شماره صرفاً fixture است و ادعای رزروشده‌بودن ندارد. در 2D، ۱۸ رکورد **فقط حافظه‌ای** برای حالت‌های کامل/ناقص/invalid/zero، دو درخواست یک مشتری، مشتری null، موبایل متعارض، شناسهٔ بزرگ و scopeهای جدا ساخته و آزموده شدند؛ [فرایند 2D](implementation/CHECKPOINT-02D-BROKERAGE-READER_FA.md). هیچ fixture به SQL درج نشد و هیچ جدول/DDL تازه‌ای نداشت. OTP برابر `12345` فقط برای Development/Testing آینده است؛ هیچ SMS، seed، challenge یا منطق OTP پیاده نشد. اطلاعات Production به تست کپی نمی‌شود.
 
 اجرای محدود 2C انجام شد؛ فایل‌های [ساخت پایگاه](../database/proposals/create_development_database.review.sql)، جدول‌ها و repair همچنان flag صفر دارند و فقط نسخهٔ حافظه‌ایِ مجاز با hash کنترل‌شده اجرا شد. پایگاه موجود خودکار جایگزین یا reset نمی‌شود. metadata، رفتار قیود، rowversion/CAS SQL و rollback همین schema روی موتور واقعی تأیید شدند؛ migration ارتقایی، بازاعمال از نسخهٔ کسب‌وکاری، concurrency بین repositoryها، منع write مبدأ و permission مؤثر runtime هنوز اجرا نشده‌اند. هیچ `BAZDIDInfo`، journal، OTP یا جدول دیگری ساخته نشد. حساب‌ها، patch/TLS و O24 برای دامنهٔ بعدی باقی‌اند.
 

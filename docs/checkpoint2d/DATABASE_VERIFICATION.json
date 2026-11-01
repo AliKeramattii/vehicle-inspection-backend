@@ -1,0 +1,69 @@
+{
+  "Date": "2026-11-02",
+  "AuthorizationReference": "2df8399e-d511-49b7-af28-a075f801dd57",
+  "StartingCommit": "b495b10a5519818d44053206c964b21dc051b813",
+  "Mode": "ReadOnly",
+  "Command": ".\\database\\tools\\Invoke-BazdidDevelopmentDatabase.ps1 -Action Verify",
+  "Instance": "(local)\\SQLSERVER2019",
+  "Transport": "Shared memory",
+  "Authentication": "Windows",
+  "Before": {
+    "Status": "Passed",
+    "Database": "BAZDID_Development",
+    "Tables": 3,
+    "Columns": 39,
+    "Indexes": 10,
+    "PrimaryKeys": 3,
+    "UniqueConstraints": 3,
+    "ForeignKeys": 1,
+    "CheckConstraints": 13,
+    "RowVersionColumns": 2,
+    "PersistedComputedKeys": 2,
+    "RowCounts": [
+      {
+        "TableName": "BAZDIDCustomerLinks",
+        "RowCount": 0
+      },
+      {
+        "TableName": "BAZDIDRequestContexts",
+        "RowCount": 0
+      },
+      {
+        "TableName": "BAZDIDAuditLogs",
+        "RowCount": 0
+      }
+    ]
+  },
+  "After": {
+    "Status": "Passed",
+    "Database": "BAZDID_Development",
+    "Tables": 3,
+    "Columns": 39,
+    "Indexes": 10,
+    "PrimaryKeys": 3,
+    "UniqueConstraints": 3,
+    "ForeignKeys": 1,
+    "CheckConstraints": 13,
+    "RowVersionColumns": 2,
+    "PersistedComputedKeys": 2,
+    "RowCounts": [
+      {
+        "TableName": "BAZDIDCustomerLinks",
+        "RowCount": 0
+      },
+      {
+        "TableName": "BAZDIDRequestContexts",
+        "RowCount": 0
+      },
+      {
+        "TableName": "BAZDIDAuditLogs",
+        "RowCount": 0
+      }
+    ]
+  },
+  "SchemaChanged": false,
+  "DdlExecuted": false,
+  "FixtureDmlExecuted": false,
+  "Checkpoint2CRollbackTestsRerun": false,
+  "ExplanationFa": "بررسی تازهٔ metadata و شمار ردیف، پیش و پس از 2D؛ ۳۵ آزمون rollback متعلق به شاهد تاریخی 2C هستند و اینجا دوباره اجرا نشدند."
+}
