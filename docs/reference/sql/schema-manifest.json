@@ -1,0 +1,4599 @@
+{
+  "status": "PROPOSED_REQUIRES_BACKEND_APPROVAL",
+  "sqlServerTarget": "SQL Server2022؛ نسخه واقعی و compatibility نیازمند توافق",
+  "databasePerBrokerage": true,
+  "mediaBinaryStorage": "PRIVATE_FILESYSTEM_ONLY",
+  "tables": [
+    {
+      "name": "Customers",
+      "purpose": "نگاشت حداقلی هویت مبدأ؛ بدون رمز یا تکثیر پروفایل بیمه",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "SourceIssuer",
+          "type": "nvarchar(200)",
+          "nullable": false,
+          "description": "صادرکننده معتبر هویت مبدأ"
+        },
+        {
+          "name": "SourceSubjectId",
+          "type": "nvarchar(128)",
+          "nullable": false,
+          "description": "شناسه پایدار مشتری نزد صادرکننده مبدأ"
+        },
+        {
+          "name": "CreatedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای CreatedAt",
+          "default": "SYSUTCDATETIME()"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "SourceIssuer",
+          "SourceSubjectId"
+        ]
+      ],
+      "foreignKeys": [],
+      "checks": [],
+      "indexes": [],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "هویت اصلی متعلق به سامانه مبدأ؛ این ردیف فقط نگاشت حداقلی همان نصب است.",
+      "reuse": "نگاشت به جدول مشتری موجود در همان کارگزاری فقط با کلید issuer/subject پایدار و FK قابل اتکا؛ شماره و پروفایل مبدأ تکرار نشود.",
+      "concurrency": "ثبت append-only/insert با کلید یکتا و idempotency؛ در صورت تغییر ارتباط، نسخه aggregate والد کنترل شود. تاریخچه درجا بازنویسی نشود.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "A03",
+        "A05",
+        "A07",
+        "A08",
+        "A09",
+        "B04"
+      ],
+      "writeOperations": [
+        "A03"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-000000000001",
+        "SourceIssuer": "https://identity.example.invalid",
+        "SourceSubjectId": "subject-example",
+        "CreatedAt": "2026-10-27T08:30:00.000Z"
+      }
+    },
+    {
+      "name": "SourceInsuranceRequests",
+      "purpose": "درخواست بیمه متعلق به مشتری",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "CustomerId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع CustomerId"
+        },
+        {
+          "name": "SourceSystem",
+          "type": "nvarchar(80)",
+          "nullable": false,
+          "description": "فراداده SourceSystem در SourceInsuranceRequests"
+        },
+        {
+          "name": "ExternalRequestId",
+          "type": "nvarchar(128)",
+          "nullable": false,
+          "description": "شناسه درخواست بیمه در سامانه مبدأ"
+        },
+        {
+          "name": "SourceVehicleReference",
+          "type": "nvarchar(128)",
+          "nullable": true,
+          "description": "مرجع خودرو در منبع بیمه"
+        },
+        {
+          "name": "CreatedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای CreatedAt",
+          "default": "SYSUTCDATETIME()"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "SourceSystem",
+          "ExternalRequestId"
+        ]
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "CustomerId"
+          ],
+          "table": "Customers",
+          "references": [
+            "Id"
+          ]
+        }
+      ],
+      "checks": [],
+      "indexes": [
+        {
+          "columns": [
+            "CustomerId",
+            "CreatedAt"
+          ],
+          "unique": false
+        }
+      ],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "هویت اصلی متعلق به سامانه مبدأ؛ این ردیف فقط نگاشت حداقلی همان نصب است.",
+      "reuse": "جدول درخواست بیمه موجود می‌تواند مرجع یا نمای read-only باشد؛ external ID و مالکیت باید پایدار باشند.",
+      "concurrency": "ثبت append-only/insert با کلید یکتا و idempotency؛ در صورت تغییر ارتباط، نسخه aggregate والد کنترل شود. تاریخچه درجا بازنویسی نشود.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "A03",
+        "A05",
+        "A07",
+        "A08",
+        "A09",
+        "B01",
+        "B03",
+        "B04",
+        "D09"
+      ],
+      "writeOperations": [
+        "A03"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-000000000002",
+        "CustomerId": "00000000-0000-0000-0000-000000000001",
+        "SourceSystem": "نمونه",
+        "ExternalRequestId": "request-example",
+        "SourceVehicleReference": null,
+        "CreatedAt": "2026-10-27T08:30:00.000Z"
+      }
+    },
+    {
+      "name": "InspectionTemplates",
+      "purpose": "نسخه مستقل قالب؛ پس از انتشار تغییرناپذیر",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "TemplateKey",
+          "type": "nvarchar(80)",
+          "nullable": false,
+          "description": "کلید منطقی قالب"
+        },
+        {
+          "name": "Version",
+          "type": "int",
+          "nullable": false,
+          "description": "نسخه مثبت منبع"
+        },
+        {
+          "name": "PhotoPolicyVersion",
+          "type": "int",
+          "nullable": false,
+          "description": "نسخه ۱ تاریخی یا ۲ فعلی"
+        },
+        {
+          "name": "State",
+          "type": "varchar(16)",
+          "nullable": false,
+          "description": "وضعیت این منبع؛ قید CHECK حاکم است"
+        },
+        {
+          "name": "SnapshotJson",
+          "type": "nvarchar(max)",
+          "nullable": false,
+          "description": "snapshot فقط فراداده؛ بایت/Base64 رسانه ممنوع"
+        },
+        {
+          "name": "CreatedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای CreatedAt",
+          "default": "SYSUTCDATETIME()"
+        },
+        {
+          "name": "PublishedAt",
+          "type": "datetime2(3)",
+          "nullable": true,
+          "description": "زمان UTC سرور برای PublishedAt"
+        },
+        {
+          "name": "RowVersion",
+          "type": "rowversion",
+          "nullable": false,
+          "description": "نسخه هشت‌بایتی CAS؛ زمان یا کلید هویت نیست"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "TemplateKey",
+          "Version"
+        ]
+      ],
+      "foreignKeys": [],
+      "checks": [
+        "[Version]>0",
+        "[PhotoPolicyVersion] IN (1,2)",
+        "[State] IN ('draft','published','archived')",
+        "ISJSON([SnapshotJson])=1"
+      ],
+      "indexes": [],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "RowVersion فقط token باینری مقایسه است و زمان نیست؛ SQL آن را می‌سازد. CAS ردیف و قواعد aggregate در تراکنش کنترل شوند.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "B01",
+        "B05",
+        "F01",
+        "F02",
+        "F03",
+        "F04"
+      ],
+      "writeOperations": [
+        "F02",
+        "F03",
+        "F04"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-000000000003",
+        "TemplateKey": "body-image-guided",
+        "Version": 2,
+        "PhotoPolicyVersion": 2,
+        "State": "published",
+        "SnapshotJson": "{\"photoPolicyVersion\": 2, \"templateId\": \"body-image-guided\", \"templateVersion\": 2, \"sections\": [{\"id\": \"right\", \"title\": \"نمای راست\", \"order\": 1, \"photoRequirements\": [{\"id\": \"front-45-right\", \"title\": \"جلو ۴۵° راست\", \"description\": \"جلوی خودرو و سمت راست به صورت کامل دیده شود.\", \"sampleImage\": \"/assets/inspection-vehicle/photo-guides/front-45-right.webp\", \"instructions\": [\"جلوی خودرو و سمت راست به طور کامل داخل کادر باشد.\", \"حدود ۳ متر از خودرو فاصله بگیرید.\", \"از زاویه ۴۵ درجه سمت راست عکس بگیرید.\"], \"distance\": \"۳ متر\", \"height\": \"کمر\", \"orientation\": \"landscape\", \"required\": true, \"status\": \"pending\", \"checks\": [\"واضح\", \"نور مناسب\", \"خودرو کامل در کادر\"], \"guidanceTopics\": [\"frame\", \"distance\", \"angle\"]}, {\"id\": \"back-45-right\", \"title\": \"عقب ۴۵° راست\", \"description\": \"عقب خودرو و سمت راست به صورت کامل دیده شود.\", \"sampleImage\": \"/assets/inspection-vehicle/photo-guides/back-45-right.webp\", \"instructions\": [\"تمام قسمت عقب و سمت راست خودرو داخل کادر باشد.\", \"خودرو را از زاویه ۴۵ درجه ثبت کنید.\", \"در نور کافی و بدون سایه شدید عکاسی کنید.\"], \"distance\": \"۳ متر\", \"height\": \"کمر\", \"orientation\": \"landscape\", \"required\": true, \"status\": \"pending\", \"checks\": [\"واضح\", \"نور مناسب\", \"خودرو کامل در کادر\"], \"guidanceTopics\": [\"frame\", \"angle\", \"glare\"]}]}, {\"id\": \"left\", \"title\": \"نمای چپ\", \"order\": 2, \"photoRequirements\": [{\"id\": \"front-45-left\", \"title\": \"جلو ۴۵° چپ\", \"description\": \"جلوی خودرو و سمت چپ به صورت کامل دیده شود.\", \"sampleImage\": \"/assets/inspection-vehicle/photo-guides/front-45-left.webp\", \"instructions\": [\"جلوی خودرو و سمت چپ به طور کامل داخل کادر باشد.\", \"حدود ۳ متر از خودرو فاصله بگیرید.\", \"از زاویه ۴۵ درجه سمت چپ عکس بگیرید.\"], \"distance\": \"۳ متر\", \"height\": \"کمر\", \"orientation\": \"landscape\", \"required\": true, \"status\": \"pending\", \"checks\": [\"واضح\", \"نور مناسب\", \"خودرو کامل در کادر\"], \"guidanceTopics\": [\"frame\", \"distance\", \"angle\"]}, {\"id\": \"back-45-left\", \"title\": \"عقب ۴۵° چپ\", \"description\": \"عقب خودرو و سمت چپ به صورت کامل دیده شود.\", \"sampleImage\": \"/assets/inspection-vehicle/photo-guides/back-45-left.webp\", \"instructions\": [\"تمام قسمت عقب و سمت چپ خودرو داخل کادر باشد.\", \"خودرو را از زاویه ۴۵ درجه ثبت کنید.\", \"در نور کافی و بدون سایه شدید عکاسی کنید.\"], \"distance\": \"۳ متر\", \"height\": \"کمر\", \"orientation\": \"landscape\", \"required\": true, \"status\": \"pending\", \"checks\": [\"واضح\", \"نور مناسب\", \"خودرو کامل در کادر\"], \"guidanceTopics\": [\"frame\", \"angle\", \"glare\"]}]}, {\"id\": \"front\", \"title\": \"جلو\", \"order\": 3, \"photoRequirements\": [{\"id\": \"front-plate\", \"title\": \"نمای مستقیم جلو با پلاک\", \"description\": \"یک عکس مستقیم از نمای جلوی خودرو بگیرید، به طوری که پلاک کاملاً مشخص و خوانا باشد.\", \"sampleImage\": \"/assets/inspection-vehicle/photo-guides/front-plate.webp\", \"instructions\": [\"مستقیم روبه‌روی خودرو بایستید؛ خودرو وسط کادر باشد.\", \"نمای کامل جلو را بدون برش و زاویه شدید ثبت کنید.\", \"پلاک بدون بازتاب نور و کاملاً خوانا باشد.\"], \"distance\": \"۳ متر\", \"height\": \"چراغ‌ها\", \"orientation\": \"landscape\", \"required\": true, \"status\": \"pending\", \"checks\": [\"واضح\", \"نور مناسب\", \"پلاک خوانا است\"], \"guidanceTopics\": [\"angle\", \"frame\", \"text\"]}]}, {\"id\": \"rear\", \"title\": \"عقب\", \"order\": 4, \"photoRequirements\": [{\"id\": \"rear-plate\", \"title\": \"نمای مستقیم عقب با پلاک\", \"description\": \"یک عکس مستقیم از نمای عقب خودرو بگیرید، به طوری که پلاک کاملاً مشخص و خوانا باشد.\", \"sampleImage\": \"/assets/inspection-vehicle/photo-guides/rear-plate.webp\", \"instructions\": [\"مستقیم پشت خودرو بایستید؛ خودرو وسط کادر باشد.\", \"تمام نمای عقب بدون برش و زاویه شدید داخل کادر باشد.\", \"پلاک کاملاً خوانا و بدون بازتاب باشد.\"], \"distance\": \"۳ متر\", \"height\": \"چراغ‌ها\", \"orientation\": \"landscape\", \"required\": true, \"status\": \"pending\", \"checks\": [\"واضح\", \"نور مناسب\", \"پلاک خوانا است\"], \"guidanceTopics\": [\"angle\", \"frame\", \"text\"]}]}, {\"id\": \"cabin\", \"title\": \"کابین\", \"order\": 5, \"photoRequirements\": [{\"id\": \"odometer-on\", \"title\": \"کیلومترشمار\", \"description\": \"خودرو را روشن کنید و تصویری واضح از کیلومترشمار بگیرید.\", \"sampleImage\": \"/assets/inspection-vehicle/photo-guides/odometer-on.webp\", \"instructions\": [\"خودرو را روشن و در حالت توقف نگه دارید.\", \"تمام صفحه کیلومترشمار در کادر باشد.\", \"عدد کیلومتر خوانا باشد؛ از بازتاب نور جلوگیری کنید.\"], \"distance\": \"نزدیک\", \"height\": \"داشبورد\", \"orientation\": \"landscape\", \"required\": true, \"status\": \"pending\", \"checks\": [\"واضح\", \"نور مناسب\", \"عدد کیلومتر خوانا است\"], \"guidanceTopics\": [\"ignition\", \"frame\", \"glare\"]}, {\"id\": \"driver-interior\", \"title\": \"نمای داخل کابین از سمت راننده\", \"description\": \"از سمت راننده تصویری بگیرید که فضای داخلی خودرو به صورت واضح دیده شود.\", \"sampleImage\": \"/assets/inspection-vehicle/photo-guides/driver-interior.webp\", \"instructions\": [\"درِ سمت راننده را باز کنید.\", \"فرمان، داشبورد و صندلی‌ها دیده شوند.\", \"خیلی نزدیک نشوید؛ فضای داخلی کامل دیده شود.\"], \"distance\": \"۱ متر\", \"height\": \"درِ راننده\", \"orientation\": \"landscape\", \"required\": true, \"status\": \"pending\", \"checks\": [\"واضح\", \"نور مناسب\", \"کابین کامل در کادر\"], \"guidanceTopics\": [\"interior\", \"frame\", \"distance\"]}]}, {\"id\": \"engine-details\", \"title\": \"موتور و مشخصات\", \"order\": 6, \"photoRequirements\": [{\"id\": \"engine-bay\", \"title\": \"محفظه موتور\", \"description\": \"کاپوت را باز کنید و یک تصویر کامل و واضح از محفظه موتور بگیرید.\", \"sampleImage\": \"/assets/inspection-vehicle/photo-guides/engine-bay.webp\", \"instructions\": [\"خودرو متوقف باشد؛ کاپوت را کاملاً و ایمن باز کنید.\", \"تمام محفظه موتور دیده شود.\", \"گوشی ثابت و تصویر بدون تاری باشد.\"], \"distance\": \"۱ متر\", \"height\": \"سینه\", \"orientation\": \"landscape\", \"required\": true, \"status\": \"pending\", \"checks\": [\"واضح\", \"نور مناسب\", \"محفظه کامل در کادر\"], \"guidanceTopics\": [\"hood\", \"frame\", \"steady\"]}, {\"id\": \"spec-plate\", \"title\": \"محل شماره شاسی خودرو\", \"description\": \"شماره شاسی خودرو — انتخاب یکی از چهار گزینه. فقط یک تصویر لازم است.\", \"sampleImage\": \"/assets/inspection-vehicle/photo-guides/spec-plate.webp\", \"instructions\": [\"از نزدیک روی پلاک مشخصات فوکوس کنید.\", \"تمام متن پلاک داخل کادر باشد.\", \"نوشته‌ها خوانا و بدون بازتاب نور باشند.\"], \"distance\": \"۳۰ سانتی‌متر\", \"height\": \"هم‌سطح پلاک\", \"orientation\": \"landscape\", \"choice\": {\"groupId\": \"vehicle-identification\", \"alternatives\": [\"pillar\", \"engine\", \"seat\", \"windshield\"]}, \"required\": true, \"status\": \"pending\", \"checks\": [\"واضح\", \"نور مناسب\", \"اطلاعات قابل خواندن است\"], \"guidanceTopics\": [\"text\", \"frame\", \"glare\"]}]}, {\"id\": \"roof\", \"title\": \"سقف\", \"order\": 7, \"photoRequirements\": [{\"id\": \"car-roof\", \"title\": \"نمای سقف\", \"description\": \"تمام سطح سقف خودرو را در تصویر نشان دهید.\", \"sampleImage\": \"/assets/inspection-vehicle/photo-guides/car-roof.webp\", \"instructions\": [\"از موقعیتی ایمن، گوشی را بالاتر بگیرید.\", \"بیشترین سطح سقف و گوشه‌های اصلی در کادر باشند.\", \"برای عکاسی روی خودرو نایستید.\"], \"distance\": \"۱ متر\", \"height\": \"بالاتر از سقف\", \"orientation\": \"landscape\", \"required\": true, \"status\": \"pending\", \"checks\": [\"واضح\", \"نور مناسب\", \"سقف کامل در کادر\"], \"guidanceTopics\": [\"roof\", \"frame\", \"steady\"]}]}], \"captureRequirements\": {\"odometerRequirementId\": \"odometer-on\", \"video360Required\": true}}",
+        "CreatedAt": "2026-10-27T08:30:00.000Z",
+        "PublishedAt": null,
+        "RowVersion": "0x0000000000000001"
+      }
+    },
+    {
+      "name": "EvidenceRequirements",
+      "purpose": "جایگاه الزام؛ عکس و ویدیو جدا هستند",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "TemplateId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع TemplateId"
+        },
+        {
+          "name": "RequirementKey",
+          "type": "nvarchar(80)",
+          "nullable": false,
+          "description": "شناسه منطقی مانند spec-plate یا video-360 با نوع جدا"
+        },
+        {
+          "name": "Kind",
+          "type": "varchar(16)",
+          "nullable": false,
+          "description": "photo/video-360 و در قلم اصلاح field"
+        },
+        {
+          "name": "SectionKey",
+          "type": "nvarchar(80)",
+          "nullable": true,
+          "description": "بخش عکس؛ برای ویدیو NULL"
+        },
+        {
+          "name": "Required",
+          "type": "bit",
+          "nullable": false,
+          "description": "الزام نسخه قالب",
+          "default": "1"
+        },
+        {
+          "name": "HasChoice",
+          "type": "bit",
+          "nullable": false,
+          "description": "از تعریف ثابت الزام؛ فقط گروه VIN دارای گزینه است",
+          "default": "0"
+        },
+        {
+          "name": "SortOrder",
+          "type": "int",
+          "nullable": false,
+          "description": "ترتیب نمایش"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "TemplateId",
+          "RequirementKey"
+        ],
+        [
+          "Id",
+          "TemplateId"
+        ],
+        [
+          "Id",
+          "HasChoice"
+        ]
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "TemplateId"
+          ],
+          "table": "InspectionTemplates",
+          "references": [
+            "Id"
+          ]
+        }
+      ],
+      "checks": [
+        "[Kind] IN ('photo','video-360')",
+        "[SortOrder]>0",
+        "([Kind]='photo' AND [SectionKey] IS NOT NULL) OR ([Kind]='video-360' AND [SectionKey] IS NULL AND [HasChoice]=0)"
+      ],
+      "indexes": [],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "ثبت append-only/insert با کلید یکتا و idempotency؛ در صورت تغییر ارتباط، نسخه aggregate والد کنترل شود. تاریخچه درجا بازنویسی نشود.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "B05",
+        "F02",
+        "F03"
+      ],
+      "writeOperations": [
+        "F02",
+        "F03"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-000000000004",
+        "TemplateId": "00000000-0000-0000-0000-000000000003",
+        "RequirementKey": "spec-plate",
+        "Kind": "photo",
+        "SectionKey": "engine-details",
+        "Required": true,
+        "HasChoice": true,
+        "SortOrder": 1
+      }
+    },
+    {
+      "name": "RequirementAlternatives",
+      "purpose": "چهار محل مجاز همان یک الزام VIN",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "RequirementId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع RequirementId"
+        },
+        {
+          "name": "AlternativeKey",
+          "type": "varchar(20)",
+          "nullable": false,
+          "description": "pillar/engine/seat/windshield"
+        },
+        {
+          "name": "TitleFa",
+          "type": "nvarchar(250)",
+          "nullable": false,
+          "description": "عنوان فارسی"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "RequirementId",
+          "AlternativeKey"
+        ],
+        [
+          "Id",
+          "RequirementId"
+        ]
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "RequirementId"
+          ],
+          "table": "EvidenceRequirements",
+          "references": [
+            "Id"
+          ]
+        }
+      ],
+      "checks": [
+        "[AlternativeKey] IN ('pillar','engine','seat','windshield')"
+      ],
+      "indexes": [],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "ثبت append-only/insert با کلید یکتا و idempotency؛ در صورت تغییر ارتباط، نسخه aggregate والد کنترل شود. تاریخچه درجا بازنویسی نشود.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "B05",
+        "F02",
+        "F03"
+      ],
+      "writeOperations": [
+        "F02",
+        "F03"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-000000000005",
+        "RequirementId": "00000000-0000-0000-0000-000000000004",
+        "AlternativeKey": "pillar",
+        "TitleFa": "نمونه"
+      }
+    },
+    {
+      "name": "Inspections",
+      "purpose": "هر ردیف یک تلاش مستقل و دارای سابقه",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "PublicId",
+          "type": "nvarchar(80)",
+          "nullable": false,
+          "description": "شناسه opaque عمومی؛ داده قدیمی قابل نگاشت است"
+        },
+        {
+          "name": "SourceRequestId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع SourceRequestId"
+        },
+        {
+          "name": "TemplateId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع TemplateId"
+        },
+        {
+          "name": "AttemptNumber",
+          "type": "int",
+          "nullable": false,
+          "description": "شماره مثبت تلاش همان درخواست یا کار"
+        },
+        {
+          "name": "PreviousInspectionId",
+          "type": "uniqueidentifier",
+          "nullable": true,
+          "description": "شناسه مرجع PreviousInspectionId"
+        },
+        {
+          "name": "TrackingCode",
+          "type": "nvarchar(80)",
+          "nullable": false,
+          "description": "کد پیگیری نمایشی؛ ابزار احراز هویت نیست"
+        },
+        {
+          "name": "Status",
+          "type": "varchar(24)",
+          "nullable": false,
+          "description": "وضعیت این بُعد؛ نه وضعیت مبهم تمام فرآیندها"
+        },
+        {
+          "name": "IsCurrent",
+          "type": "bit",
+          "nullable": false,
+          "description": "تنها تلاش جاری همان درخواست",
+          "default": "1"
+        },
+        {
+          "name": "CreatedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای CreatedAt",
+          "default": "SYSUTCDATETIME()"
+        },
+        {
+          "name": "UpdatedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای UpdatedAt",
+          "default": "SYSUTCDATETIME()"
+        },
+        {
+          "name": "RowVersion",
+          "type": "rowversion",
+          "nullable": false,
+          "description": "نسخه هشت‌بایتی CAS؛ زمان یا کلید هویت نیست"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "PublicId"
+        ],
+        [
+          "TrackingCode"
+        ],
+        [
+          "SourceRequestId",
+          "AttemptNumber"
+        ],
+        [
+          "Id",
+          "TemplateId"
+        ],
+        [
+          "Id",
+          "SourceRequestId"
+        ]
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "SourceRequestId"
+          ],
+          "table": "SourceInsuranceRequests",
+          "references": [
+            "Id"
+          ]
+        },
+        {
+          "columns": [
+            "TemplateId"
+          ],
+          "table": "InspectionTemplates",
+          "references": [
+            "Id"
+          ]
+        },
+        {
+          "columns": [
+            "PreviousInspectionId",
+            "SourceRequestId"
+          ],
+          "table": "Inspections",
+          "references": [
+            "Id",
+            "SourceRequestId"
+          ]
+        }
+      ],
+      "checks": [
+        "[AttemptNumber]>0",
+        "[Status] IN ('DRAFT','UPLOAD_PENDING','SUBMITTED','UNDER_REVIEW','CHANGES_REQUESTED','REJECTED','REVIEW_APPROVED','FORWARD_PENDING','FORWARDED','FORWARD_FAILED')",
+        "[PreviousInspectionId] IS NULL OR [PreviousInspectionId]<>[Id]"
+      ],
+      "indexes": [
+        {
+          "columns": [
+            "SourceRequestId"
+          ],
+          "unique": true,
+          "where": "[IsCurrent] = 1"
+        },
+        {
+          "columns": [
+            "Status",
+            "UpdatedAt"
+          ],
+          "unique": false,
+          "include": [
+            "SourceRequestId",
+            "TrackingCode"
+          ]
+        }
+      ],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "RowVersion فقط token باینری مقایسه است و زمان نیست؛ SQL آن را می‌سازد. CAS ردیف و قواعد aggregate در تراکنش کنترل شوند.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "B01",
+        "B02",
+        "B03",
+        "B04",
+        "B07",
+        "B09",
+        "B10",
+        "D01",
+        "D02",
+        "D04",
+        "D07",
+        "D09",
+        "E01",
+        "E02",
+        "E03",
+        "E05",
+        "E06",
+        "E07",
+        "E09",
+        "G01",
+        "G02",
+        "G03"
+      ],
+      "writeOperations": [
+        "B01",
+        "B07",
+        "B09",
+        "B10",
+        "D02",
+        "D07",
+        "D09",
+        "E03",
+        "E05",
+        "E06",
+        "E07",
+        "E09",
+        "G02",
+        "G03"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-000000000006",
+        "PublicId": "insp-example-01",
+        "SourceRequestId": "00000000-0000-0000-0000-000000000002",
+        "TemplateId": "00000000-0000-0000-0000-000000000003",
+        "AttemptNumber": 1,
+        "PreviousInspectionId": null,
+        "TrackingCode": "BDI-EXAMPLE",
+        "Status": "DRAFT",
+        "IsCurrent": true,
+        "CreatedAt": "2026-10-27T08:30:00.000Z",
+        "UpdatedAt": "2026-10-27T08:30:00.000Z",
+        "RowVersion": "0x0000000000000001"
+      }
+    },
+    {
+      "name": "Vehicles",
+      "purpose": "تصویر اطلاعاتی خودرو همان تلاش؛ منبع بیمه بازنویسی نمی‌شود",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "InspectionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع InspectionId"
+        },
+        {
+          "name": "SourceVehicleReference",
+          "type": "nvarchar(128)",
+          "nullable": true,
+          "description": "مرجع خودرو در منبع بیمه"
+        },
+        {
+          "name": "Make",
+          "type": "nvarchar(100)",
+          "nullable": false,
+          "description": "سازنده خودرو"
+        },
+        {
+          "name": "Model",
+          "type": "nvarchar(100)",
+          "nullable": false,
+          "description": "مدل خودرو"
+        },
+        {
+          "name": "ModelYear",
+          "type": "int",
+          "nullable": false,
+          "description": "سال مطابق تقویم و سیاست مصوب"
+        },
+        {
+          "name": "BodyColor",
+          "type": "nvarchar(80)",
+          "nullable": false,
+          "description": "رنگ بدنه"
+        },
+        {
+          "name": "PlateFirstTwo",
+          "type": "char(2)",
+          "nullable": false,
+          "description": "دو رقم ASCII پلاک"
+        },
+        {
+          "name": "PlateLetter",
+          "type": "nvarchar(3)",
+          "nullable": false,
+          "description": "حرف مجاز پلاک"
+        },
+        {
+          "name": "PlateThree",
+          "type": "char(3)",
+          "nullable": false,
+          "description": "سه رقم ASCII پلاک"
+        },
+        {
+          "name": "PlateRegion",
+          "type": "char(2)",
+          "nullable": false,
+          "description": "دو رقم منطقه"
+        },
+        {
+          "name": "MaskedVin",
+          "type": "nvarchar(80)",
+          "nullable": false,
+          "description": "VIN پوشانده‌شده؛ نمایش کامل سیاست جدا می‌خواهد"
+        },
+        {
+          "name": "ConfirmedAt",
+          "type": "datetime2(3)",
+          "nullable": true,
+          "description": "زمان UTC سرور برای ConfirmedAt"
+        },
+        {
+          "name": "RowVersion",
+          "type": "rowversion",
+          "nullable": false,
+          "description": "نسخه هشت‌بایتی CAS؛ زمان یا کلید هویت نیست"
+        },
+        {
+          "name": "BodyColorHex",
+          "type": "char(7)",
+          "nullable": true,
+          "description": "رنگ hex اختیاری برای swatch؛ نام رنگ در BodyColor است و رنگ ناشناخته نباید حدس قطعی شود."
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "InspectionId"
+        ]
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "InspectionId"
+          ],
+          "table": "Inspections",
+          "references": [
+            "Id"
+          ]
+        }
+      ],
+      "checks": [
+        "[ModelYear] BETWEEN 1000 AND 3000",
+        "[PlateFirstTwo] NOT LIKE '%[^0-9]%' AND [PlateThree] NOT LIKE '%[^0-9]%' AND [PlateRegion] NOT LIKE '%[^0-9]%'"
+      ],
+      "indexes": [],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "RowVersion فقط token باینری مقایسه است و زمان نیست؛ SQL آن را می‌سازد. CAS ردیف و قواعد aggregate در تراکنش کنترل شوند.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "B01",
+        "B02",
+        "B08",
+        "B09",
+        "D09",
+        "E07"
+      ],
+      "writeOperations": [
+        "B01",
+        "B09",
+        "D09",
+        "E07"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-000000000007",
+        "InspectionId": "00000000-0000-0000-0000-000000000006",
+        "SourceVehicleReference": null,
+        "Make": "نمونه",
+        "Model": "نمونه",
+        "ModelYear": 1402,
+        "BodyColor": "نمونه",
+        "PlateFirstTwo": "12",
+        "PlateLetter": "ب",
+        "PlateThree": "345",
+        "PlateRegion": "67",
+        "MaskedVin": "نمونه",
+        "ConfirmedAt": null,
+        "RowVersion": "0x0000000000000001",
+        "BodyColorHex": "#FFFFFF"
+      }
+    },
+    {
+      "name": "InspectionLocations",
+      "purpose": "محل تأییدشده بازدید",
+      "columns": [
+        {
+          "name": "InspectionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع InspectionId"
+        },
+        {
+          "name": "Latitude",
+          "type": "decimal(9,6)",
+          "nullable": false,
+          "description": "عرض جغرافیایی[-90,90]"
+        },
+        {
+          "name": "Longitude",
+          "type": "decimal(9,6)",
+          "nullable": false,
+          "description": "طول جغرافیایی[-180,180]"
+        },
+        {
+          "name": "AccuracyMeters",
+          "type": "decimal(9,2)",
+          "nullable": true,
+          "description": "دقت غیرمنفی بر حسب متر"
+        },
+        {
+          "name": "FormattedAddress",
+          "type": "nvarchar(500)",
+          "nullable": false,
+          "description": "نشانی فارسی قابل ویرایش"
+        },
+        {
+          "name": "BuildingNumber",
+          "type": "nvarchar(40)",
+          "nullable": true,
+          "description": "شماره ساختمان به صورت رشته"
+        },
+        {
+          "name": "UnitFloor",
+          "type": "nvarchar(80)",
+          "nullable": true,
+          "description": "واحد یا طبقه اختیاری"
+        },
+        {
+          "name": "ParkingDescription",
+          "type": "nvarchar(500)",
+          "nullable": true,
+          "description": "توضیح اختیاری محل پارک"
+        },
+        {
+          "name": "ConfirmedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای ConfirmedAt",
+          "default": "SYSUTCDATETIME()"
+        },
+        {
+          "name": "RowVersion",
+          "type": "rowversion",
+          "nullable": false,
+          "description": "نسخه هشت‌بایتی CAS؛ زمان یا کلید هویت نیست"
+        },
+        {
+          "name": "SelectionSource",
+          "type": "varchar(10)",
+          "nullable": true,
+          "description": "روش انتخاب اعلام‌شده gps/manual؛ ادعای GPS بدونمجوزیا accuracy ساخته نشود."
+        },
+        {
+          "name": "ClientRecordedAt",
+          "type": "datetime2(3)",
+          "nullable": true,
+          "description": "زمان اعلامی مشتری؛ با ConfirmedAt سرور و audit trusted فرق دارد."
+        }
+      ],
+      "primaryKey": [
+        "InspectionId"
+      ],
+      "unique": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "InspectionId"
+          ],
+          "table": "Inspections",
+          "references": [
+            "Id"
+          ]
+        }
+      ],
+      "checks": [
+        "[Latitude] BETWEEN -90 AND 90",
+        "[Longitude] BETWEEN -180 AND 180",
+        "[AccuracyMeters]>=0",
+        "[SelectionSource] IS NULL OR [SelectionSource] IN ('gps','manual')"
+      ],
+      "indexes": [],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "RowVersion فقط token باینری مقایسه است و زمان نیست؛ SQL آن را می‌سازد. CAS ردیف و قواعد aggregate در تراکنش کنترل شوند.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "B02",
+        "B07"
+      ],
+      "writeOperations": [
+        "B07"
+      ],
+      "example": {
+        "InspectionId": "00000000-0000-0000-0000-000000000006",
+        "Latitude": 35.6892,
+        "Longitude": 51.389,
+        "AccuracyMeters": 8,
+        "FormattedAddress": "نمونه",
+        "BuildingNumber": "نمونه",
+        "UnitFloor": null,
+        "ParkingDescription": null,
+        "ConfirmedAt": "2026-10-27T08:30:00.000Z",
+        "RowVersion": "0x0000000000000001",
+        "SelectionSource": "manual",
+        "ClientRecordedAt": null
+      }
+    },
+    {
+      "name": "InspectionConsents",
+      "purpose": "رسید پذیرش نسخه شرایط",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "InspectionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع InspectionId"
+        },
+        {
+          "name": "TermsVersion",
+          "type": "nvarchar(80)",
+          "nullable": false,
+          "description": "نسخه متن شرایط مصوب"
+        },
+        {
+          "name": "AcceptedBySubject",
+          "type": "nvarchar(128)",
+          "nullable": false,
+          "description": "فراداده AcceptedBySubject در InspectionConsents"
+        },
+        {
+          "name": "AcceptedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای AcceptedAt",
+          "default": "SYSUTCDATETIME()"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "InspectionId",
+          "TermsVersion"
+        ]
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "InspectionId"
+          ],
+          "table": "Inspections",
+          "references": [
+            "Id"
+          ]
+        }
+      ],
+      "checks": [],
+      "indexes": [],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "ثبت append-only/insert با کلید یکتا و idempotency؛ در صورت تغییر ارتباط، نسخه aggregate والد کنترل شود. تاریخچه درجا بازنویسی نشود.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "B06"
+      ],
+      "writeOperations": [
+        "B06"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-000000000009",
+        "InspectionId": "00000000-0000-0000-0000-000000000006",
+        "TermsVersion": "نمونه",
+        "AcceptedBySubject": "نمونه",
+        "AcceptedAt": "2026-10-27T08:30:00.000Z"
+      }
+    },
+    {
+      "name": "OdometerReadings",
+      "purpose": "کیلومتر عددی، مستقل از رسانه",
+      "columns": [
+        {
+          "name": "InspectionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع InspectionId"
+        },
+        {
+          "name": "Kilometers",
+          "type": "bigint",
+          "nullable": false,
+          "description": "عدد صحیح غیرمنفی در محدوده امن JavaScript"
+        },
+        {
+          "name": "EvidenceVersionId",
+          "type": "uniqueidentifier",
+          "nullable": true,
+          "description": "شناسه مرجع EvidenceVersionId"
+        },
+        {
+          "name": "UpdatedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای UpdatedAt",
+          "default": "SYSUTCDATETIME()"
+        },
+        {
+          "name": "RowVersion",
+          "type": "rowversion",
+          "nullable": false,
+          "description": "نسخه هشت‌بایتی CAS؛ زمان یا کلید هویت نیست"
+        }
+      ],
+      "primaryKey": [
+        "InspectionId"
+      ],
+      "unique": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "InspectionId"
+          ],
+          "table": "Inspections",
+          "references": [
+            "Id"
+          ]
+        }
+      ],
+      "checks": [
+        "[Kilometers] BETWEEN 0 AND 9007199254740991"
+      ],
+      "indexes": [],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "RowVersion فقط token باینری مقایسه است و زمان نیست؛ SQL آن را می‌سازد. CAS ردیف و قواعد aggregate در تراکنش کنترل شوند.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "B10",
+        "D01"
+      ],
+      "writeOperations": [
+        "B10"
+      ],
+      "example": {
+        "InspectionId": "00000000-0000-0000-0000-000000000006",
+        "Kilometers": 48320,
+        "EvidenceVersionId": null,
+        "UpdatedAt": "2026-10-27T08:30:00.000Z",
+        "RowVersion": "0x0000000000000001"
+      }
+    },
+    {
+      "name": "InspectionEvidence",
+      "purpose": "جایگاه مدرک و اشاره‌گر نسخه خوب/جایگزین منتظر",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "InspectionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع InspectionId"
+        },
+        {
+          "name": "TemplateId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع TemplateId"
+        },
+        {
+          "name": "RequirementId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع RequirementId"
+        },
+        {
+          "name": "CurrentVersionId",
+          "type": "uniqueidentifier",
+          "nullable": true,
+          "description": "نسخه خوب فعلی تا موفقیت جایگزین محفوظ است"
+        },
+        {
+          "name": "PendingVersionId",
+          "type": "uniqueidentifier",
+          "nullable": true,
+          "description": "جایگزین موردنظر که هنوز تأیید پایدار نشده"
+        },
+        {
+          "name": "RowVersion",
+          "type": "rowversion",
+          "nullable": false,
+          "description": "نسخه هشت‌بایتی CAS؛ زمان یا کلید هویت نیست"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "InspectionId",
+          "RequirementId"
+        ],
+        [
+          "Id",
+          "InspectionId"
+        ],
+        [
+          "Id",
+          "RequirementId"
+        ]
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "InspectionId",
+            "TemplateId"
+          ],
+          "table": "Inspections",
+          "references": [
+            "Id",
+            "TemplateId"
+          ]
+        },
+        {
+          "columns": [
+            "RequirementId",
+            "TemplateId"
+          ],
+          "table": "EvidenceRequirements",
+          "references": [
+            "Id",
+            "TemplateId"
+          ]
+        }
+      ],
+      "checks": [],
+      "indexes": [],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "RowVersion فقط token باینری مقایسه است و زمان نیست؛ SQL آن را می‌سازد. CAS ردیف و قواعد aggregate در تراکنش کنترل شوند.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "C01",
+        "C04",
+        "D01",
+        "D07"
+      ],
+      "writeOperations": [
+        "C01",
+        "D07"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-00000000000b",
+        "InspectionId": "00000000-0000-0000-0000-000000000006",
+        "TemplateId": "00000000-0000-0000-0000-000000000003",
+        "RequirementId": "00000000-0000-0000-0000-000000000004",
+        "CurrentVersionId": null,
+        "PendingVersionId": null,
+        "RowVersion": "0x0000000000000001"
+      }
+    },
+    {
+      "name": "EvidenceVersions",
+      "purpose": "نسخه مستقل با هویت واقعی گزینه و بایت‌ها",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "EvidenceId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع EvidenceId"
+        },
+        {
+          "name": "InspectionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع InspectionId"
+        },
+        {
+          "name": "RequirementId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع RequirementId"
+        },
+        {
+          "name": "HasChoice",
+          "type": "bit",
+          "nullable": false,
+          "description": "از تعریف ثابت الزام؛ فقط گروه VIN دارای گزینه است"
+        },
+        {
+          "name": "AlternativeId",
+          "type": "uniqueidentifier",
+          "nullable": true,
+          "description": "گزینه واقعی فایل؛ نه ترجیح راهنمای بعدی"
+        },
+        {
+          "name": "RevisionKey",
+          "type": "nvarchar(160)",
+          "nullable": false,
+          "description": "کلید ثابت نسخه محلی برای تکرار امن"
+        },
+        {
+          "name": "ReplacesVersionId",
+          "type": "uniqueidentifier",
+          "nullable": true,
+          "description": "شناسه مرجع ReplacesVersionId"
+        },
+        {
+          "name": "UploadStatus",
+          "type": "varchar(16)",
+          "nullable": false,
+          "description": "انتقال مستقل از پردازش و تصمیم کارشناس"
+        },
+        {
+          "name": "VerificationStatus",
+          "type": "varchar(24)",
+          "nullable": false,
+          "description": "not-started/processing/verified/retake-requested"
+        },
+        {
+          "name": "CapturedAtClaim",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان ادعایی دستگاه؛ اثبات زمان واقعی نیست"
+        },
+        {
+          "name": "CreatedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای CreatedAt",
+          "default": "SYSUTCDATETIME()"
+        },
+        {
+          "name": "RowVersion",
+          "type": "rowversion",
+          "nullable": false,
+          "description": "نسخه هشت‌بایتی CAS؛ زمان یا کلید هویت نیست"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "EvidenceId",
+          "RevisionKey"
+        ],
+        [
+          "Id",
+          "EvidenceId"
+        ],
+        [
+          "Id",
+          "InspectionId"
+        ]
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "EvidenceId",
+            "InspectionId"
+          ],
+          "table": "InspectionEvidence",
+          "references": [
+            "Id",
+            "InspectionId"
+          ]
+        },
+        {
+          "columns": [
+            "EvidenceId",
+            "RequirementId"
+          ],
+          "table": "InspectionEvidence",
+          "references": [
+            "Id",
+            "RequirementId"
+          ]
+        },
+        {
+          "columns": [
+            "RequirementId",
+            "HasChoice"
+          ],
+          "table": "EvidenceRequirements",
+          "references": [
+            "Id",
+            "HasChoice"
+          ]
+        },
+        {
+          "columns": [
+            "AlternativeId",
+            "RequirementId"
+          ],
+          "table": "RequirementAlternatives",
+          "references": [
+            "Id",
+            "RequirementId"
+          ]
+        }
+      ],
+      "checks": [
+        "[UploadStatus] IN ('queued','uploading','uploaded','failed','cancelled')",
+        "[VerificationStatus] IN ('not-started','processing','verified','retake-requested')",
+        "([HasChoice]=1 AND [AlternativeId] IS NOT NULL) OR ([HasChoice]=0 AND [AlternativeId] IS NULL)"
+      ],
+      "indexes": [],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "RowVersion فقط token باینری مقایسه است و زمان نیست؛ SQL آن را می‌سازد. CAS ردیف و قواعد aggregate در تراکنش کنترل شوند.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "C01",
+        "C02",
+        "C03",
+        "C04",
+        "C05",
+        "C06",
+        "C07",
+        "D01",
+        "D06",
+        "E10"
+      ],
+      "writeOperations": [
+        "C01",
+        "C02",
+        "C03",
+        "C07",
+        "D06"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-00000000000c",
+        "EvidenceId": "00000000-0000-0000-0000-00000000000b",
+        "InspectionId": "00000000-0000-0000-0000-000000000006",
+        "RequirementId": "00000000-0000-0000-0000-000000000004",
+        "HasChoice": true,
+        "AlternativeId": "00000000-0000-0000-0000-000000000005",
+        "RevisionKey": "نمونه",
+        "ReplacesVersionId": null,
+        "UploadStatus": "queued",
+        "VerificationStatus": "not-started",
+        "CapturedAtClaim": "2026-10-27T08:30:00.000Z",
+        "CreatedAt": "2026-10-27T08:30:00.000Z",
+        "RowVersion": "0x0000000000000001"
+      }
+    },
+    {
+      "name": "MediaFiles",
+      "purpose": "فقط فراداده و مسیر فایل خصوصی؛ بدون باینری رسانه",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "EvidenceVersionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع EvidenceVersionId"
+        },
+        {
+          "name": "Variant",
+          "type": "varchar(16)",
+          "nullable": false,
+          "description": "original/thumbnail/preview/transcode"
+        },
+        {
+          "name": "GeneratedFilename",
+          "type": "nvarchar(200)",
+          "nullable": false,
+          "description": "نام تولیدشده سرور، نه نام فایل کاربر"
+        },
+        {
+          "name": "RelativePath",
+          "type": "nvarchar(450)",
+          "nullable": false,
+          "description": "مسیر نسبی canonical زیر ریشه خصوصی"
+        },
+        {
+          "name": "MimeType",
+          "type": "varchar(127)",
+          "nullable": false,
+          "description": "نوع واقعی تأییدشده رسانه"
+        },
+        {
+          "name": "ByteSize",
+          "type": "bigint",
+          "nullable": false,
+          "description": "اندازه واقعی مورد تطبیق در complete"
+        },
+        {
+          "name": "Sha256",
+          "type": "binary(32)",
+          "nullable": true,
+          "description": "هش ۳۲ بایتی؛ فراداده است و رسانه نیست"
+        },
+        {
+          "name": "Width",
+          "type": "int",
+          "nullable": true,
+          "description": "عرض مثبت رسانه"
+        },
+        {
+          "name": "Height",
+          "type": "int",
+          "nullable": true,
+          "description": "ارتفاع مثبت رسانه"
+        },
+        {
+          "name": "DurationMs",
+          "type": "bigint",
+          "nullable": true,
+          "description": "مدت ویدیو به میلی‌ثانیه"
+        },
+        {
+          "name": "StorageState",
+          "type": "varchar(16)",
+          "nullable": false,
+          "description": "دوام/نگهداری مستقل از انتقال"
+        },
+        {
+          "name": "CreatedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای CreatedAt",
+          "default": "SYSUTCDATETIME()"
+        },
+        {
+          "name": "RetentionUntil",
+          "type": "datetime2(3)",
+          "nullable": true,
+          "description": "سیاست مصوب؛ NULL مجوز حذف نیست"
+        },
+        {
+          "name": "LegalHold",
+          "type": "bit",
+          "nullable": false,
+          "description": "مانع حذف قانونی یا عملیاتی",
+          "default": "0"
+        },
+        {
+          "name": "DeletedAt",
+          "type": "datetime2(3)",
+          "nullable": true,
+          "description": "زمان UTC سرور برای DeletedAt"
+        },
+        {
+          "name": "RowVersion",
+          "type": "rowversion",
+          "nullable": false,
+          "description": "نسخه هشت‌بایتی CAS؛ زمان یا کلید هویت نیست"
+        },
+        {
+          "name": "DerivedFromFileId",
+          "type": "uniqueidentifier",
+          "nullable": true,
+          "description": "فایل والد همان نسخه برای مشتق اختیاری؛ NULL یعنی بایت دریافتی یا فاقد مشتق."
+        },
+        {
+          "name": "ProfileVersion",
+          "type": "nvarchar(80)",
+          "nullable": true,
+          "description": "شناسه نسخه پروفایل پردازش سرور؛ سیاست مرورگر یا گواه کیفیت نیست."
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "RelativePath"
+        ],
+        [
+          "Id",
+          "EvidenceVersionId"
+        ]
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "EvidenceVersionId"
+          ],
+          "table": "EvidenceVersions",
+          "references": [
+            "Id"
+          ]
+        },
+        {
+          "columns": [
+            "DerivedFromFileId",
+            "EvidenceVersionId"
+          ],
+          "table": "MediaFiles",
+          "references": [
+            "Id",
+            "EvidenceVersionId"
+          ]
+        }
+      ],
+      "checks": [
+        "[Variant] IN ('original','thumbnail','preview','transcode')",
+        "[StorageState] IN ('staging','durable','submitted','finalized','historical','missing','deleted')",
+        "[ByteSize]>0",
+        "[Width] IS NULL OR [Width]>0",
+        "[Height] IS NULL OR [Height]>0",
+        "[DurationMs] IS NULL OR [DurationMs]>0",
+        "[RelativePath] NOT LIKE '%..%' AND [RelativePath] NOT LIKE '/%' AND [RelativePath] NOT LIKE '%:%' AND CHARINDEX(NCHAR(92),[RelativePath])=0",
+        "[DerivedFromFileId] IS NULL OR [DerivedFromFileId]<>[Id]"
+      ],
+      "indexes": [
+        {
+          "columns": [
+            "EvidenceVersionId",
+            "Variant"
+          ],
+          "unique": true,
+          "where": "[DeletedAt] IS NULL"
+        },
+        {
+          "columns": [
+            "StorageState",
+            "RetentionUntil"
+          ],
+          "unique": false
+        },
+        {
+          "columns": [
+            "EvidenceVersionId",
+            "Variant",
+            "ProfileVersion"
+          ],
+          "include": [
+            "MimeType",
+            "ByteSize"
+          ]
+        }
+      ],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "RowVersion فقط token باینری مقایسه است و زمان نیست؛ SQL آن را می‌سازد. CAS ردیف و قواعد aggregate در تراکنش کنترل شوند.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "C01",
+        "C02",
+        "C03",
+        "C04",
+        "C05",
+        "C06",
+        "D06",
+        "G03"
+      ],
+      "writeOperations": [
+        "C01",
+        "C02",
+        "C03",
+        "D06"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-00000000000d",
+        "EvidenceVersionId": "00000000-0000-0000-0000-00000000000c",
+        "Variant": "original",
+        "GeneratedFilename": "evidence-example-revision-01.jpg",
+        "RelativePath": "GUI_example/INSPECTION_example/finalized/photos/evidence-example-revision-01.jpg",
+        "MimeType": "image/jpeg",
+        "ByteSize": 1048576,
+        "Sha256": null,
+        "Width": null,
+        "Height": null,
+        "DurationMs": null,
+        "StorageState": "staging",
+        "CreatedAt": "2026-10-27T08:30:00.000Z",
+        "RetentionUntil": null,
+        "LegalHold": false,
+        "DeletedAt": null,
+        "RowVersion": "0x0000000000000001",
+        "DerivedFromFileId": null,
+        "ProfileVersion": null
+      }
+    },
+    {
+      "name": "UploadSessions",
+      "purpose": "مجوز و انتقال قابل بازیابی همان فایل",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "MediaFileId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع MediaFileId"
+        },
+        {
+          "name": "State",
+          "type": "varchar(16)",
+          "nullable": false,
+          "description": "وضعیت این منبع؛ قید CHECK حاکم است"
+        },
+        {
+          "name": "ExpectedBytes",
+          "type": "bigint",
+          "nullable": false,
+          "description": "اندازه اظهارشده با سقف مجاز"
+        },
+        {
+          "name": "BytesReceived",
+          "type": "bigint",
+          "nullable": false,
+          "description": "بایت واقعاً دریافت‌شده",
+          "default": "0"
+        },
+        {
+          "name": "IsActive",
+          "type": "bit",
+          "nullable": false,
+          "description": "حداکثر یک انتقال فعال برای فایل",
+          "default": "1"
+        },
+        {
+          "name": "ExpiresAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای ExpiresAt"
+        },
+        {
+          "name": "AcknowledgedAt",
+          "type": "datetime2(3)",
+          "nullable": true,
+          "description": "زمان UTC سرور برای AcknowledgedAt"
+        },
+        {
+          "name": "CreatedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای CreatedAt",
+          "default": "SYSUTCDATETIME()"
+        },
+        {
+          "name": "RowVersion",
+          "type": "rowversion",
+          "nullable": false,
+          "description": "نسخه هشت‌بایتی CAS؛ زمان یا کلید هویت نیست"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "MediaFileId"
+          ],
+          "table": "MediaFiles",
+          "references": [
+            "Id"
+          ]
+        }
+      ],
+      "checks": [
+        "[State] IN ('registered','receiving','staged','acknowledged','expired','cancelled')",
+        "[ExpectedBytes]>0 AND [BytesReceived]>=0 AND [BytesReceived]<=[ExpectedBytes]"
+      ],
+      "indexes": [
+        {
+          "columns": [
+            "MediaFileId"
+          ],
+          "unique": true,
+          "where": "[IsActive] = 1"
+        },
+        {
+          "columns": [
+            "State",
+            "ExpiresAt"
+          ],
+          "unique": false
+        }
+      ],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "RowVersion فقط token باینری مقایسه است و زمان نیست؛ SQL آن را می‌سازد. CAS ردیف و قواعد aggregate در تراکنش کنترل شوند.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "C01",
+        "C02",
+        "C03",
+        "C07",
+        "D06"
+      ],
+      "writeOperations": [
+        "C01",
+        "C02",
+        "C03",
+        "C07",
+        "D06"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-00000000000e",
+        "MediaFileId": "00000000-0000-0000-0000-00000000000d",
+        "State": "registered",
+        "ExpectedBytes": 1048576,
+        "BytesReceived": 0,
+        "IsActive": false,
+        "ExpiresAt": "2026-10-27T08:30:00.000Z",
+        "AcknowledgedAt": null,
+        "CreatedAt": "2026-10-27T08:30:00.000Z",
+        "RowVersion": "0x0000000000000001"
+      }
+    },
+    {
+      "name": "MediaProcessingJobs",
+      "purpose": "کار اعتبارسنجی و تولید مشتق اختیاری",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "MediaFileId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع MediaFileId"
+        },
+        {
+          "name": "JobKind",
+          "type": "varchar(24)",
+          "nullable": false,
+          "description": "validate/thumbnail/transcode"
+        },
+        {
+          "name": "ProfileVersion",
+          "type": "nvarchar(80)",
+          "nullable": false,
+          "description": "نسخه پروفایل پردازش"
+        },
+        {
+          "name": "Status",
+          "type": "varchar(16)",
+          "nullable": false,
+          "description": "وضعیت این بُعد؛ نه وضعیت مبهم تمام فرآیندها"
+        },
+        {
+          "name": "AttemptCount",
+          "type": "int",
+          "nullable": false,
+          "description": "شمار تلاش غیرمنفی",
+          "default": "0"
+        },
+        {
+          "name": "LeaseUntil",
+          "type": "datetime2(3)",
+          "nullable": true,
+          "description": "زمان انقضای مالکیت موقت کارگر"
+        },
+        {
+          "name": "NextRetryAt",
+          "type": "datetime2(3)",
+          "nullable": true,
+          "description": "زمان تلاش بعدی با backoff محدود"
+        },
+        {
+          "name": "FailureCode",
+          "type": "varchar(80)",
+          "nullable": true,
+          "description": "کد امن؛ بدون stack، مسیر یا راز"
+        },
+        {
+          "name": "CreatedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای CreatedAt",
+          "default": "SYSUTCDATETIME()"
+        },
+        {
+          "name": "RowVersion",
+          "type": "rowversion",
+          "nullable": false,
+          "description": "نسخه هشت‌بایتی CAS؛ زمان یا کلید هویت نیست"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "MediaFileId",
+          "JobKind",
+          "ProfileVersion"
+        ]
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "MediaFileId"
+          ],
+          "table": "MediaFiles",
+          "references": [
+            "Id"
+          ]
+        }
+      ],
+      "checks": [
+        "[JobKind] IN ('validate','thumbnail','transcode')",
+        "[Status] IN ('queued','running','completed','failed')",
+        "[AttemptCount]>=0"
+      ],
+      "indexes": [
+        {
+          "columns": [
+            "Status",
+            "NextRetryAt"
+          ],
+          "unique": false
+        }
+      ],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "optional",
+      "classificationReason": "در صورت انتخاب پردازش غیرهم‌زمان سرور؛ دریافت باینری بدون transcoding اجباری ممکن است.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "RowVersion فقط token باینری مقایسه است و زمان نیست؛ SQL آن را می‌سازد. CAS ردیف و قواعد aggregate در تراکنش کنترل شوند.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "C03",
+        "C05"
+      ],
+      "writeOperations": [
+        "C03"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-00000000000f",
+        "MediaFileId": "00000000-0000-0000-0000-00000000000d",
+        "JobKind": "validate",
+        "ProfileVersion": "نمونه",
+        "Status": "queued",
+        "AttemptCount": 0,
+        "LeaseUntil": null,
+        "NextRetryAt": null,
+        "FailureCode": null,
+        "CreatedAt": "2026-10-27T08:30:00.000Z",
+        "RowVersion": "0x0000000000000001"
+      }
+    },
+    {
+      "name": "StaffUsers",
+      "purpose": "نگاشت کارکنان SSO؛ بدون حساب/رمز تکراری",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "ExternalIssuer",
+          "type": "nvarchar(200)",
+          "nullable": false,
+          "description": "فراداده ExternalIssuer در StaffUsers"
+        },
+        {
+          "name": "ExternalSubject",
+          "type": "nvarchar(128)",
+          "nullable": false,
+          "description": "فراداده ExternalSubject در StaffUsers"
+        },
+        {
+          "name": "DisplayName",
+          "type": "nvarchar(160)",
+          "nullable": false,
+          "description": "فراداده DisplayName در StaffUsers"
+        },
+        {
+          "name": "Active",
+          "type": "bit",
+          "nullable": false,
+          "description": "فعال‌بودن نگاشت یا ارجاع",
+          "default": "1"
+        },
+        {
+          "name": "Capacity",
+          "type": "int",
+          "nullable": false,
+          "description": "ظرفیت پرونده فعال کارشناس",
+          "default": "10"
+        },
+        {
+          "name": "CreatedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای CreatedAt",
+          "default": "SYSUTCDATETIME()"
+        },
+        {
+          "name": "RowVersion",
+          "type": "rowversion",
+          "nullable": false,
+          "description": "نسخه هشت‌بایتی CAS؛ زمان یا کلید هویت نیست"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "ExternalIssuer",
+          "ExternalSubject"
+        ]
+      ],
+      "foreignKeys": [],
+      "checks": [
+        "[Capacity]>=0"
+      ],
+      "indexes": [],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "هویت اصلی متعلق به سامانه مبدأ؛ این ردیف فقط نگاشت حداقلی همان نصب است.",
+      "reuse": "شناسه SSO یا جدول کارکنان موجود قابل استفاده است؛ رمز و پروفایل هویت تکثیر نشود.",
+      "concurrency": "RowVersion فقط token باینری مقایسه است و زمان نیست؛ SQL آن را می‌سازد. CAS ردیف و قواعد aggregate در تراکنش کنترل شوند.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "A04",
+        "A05",
+        "E01",
+        "E03",
+        "E04",
+        "F01",
+        "F10"
+      ],
+      "writeOperations": [
+        "A04",
+        "E04",
+        "F10"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-000000000010",
+        "ExternalIssuer": "https://identity.example.invalid",
+        "ExternalSubject": "subject-example",
+        "DisplayName": "نمونه",
+        "Active": true,
+        "Capacity": 8,
+        "CreatedAt": "2026-10-27T08:30:00.000Z",
+        "RowVersion": "0x0000000000000001"
+      }
+    },
+    {
+      "name": "StaffRoleAssignments",
+      "purpose": "نقش کارکنان در همان نصب",
+      "columns": [
+        {
+          "name": "StaffId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع StaffId"
+        },
+        {
+          "name": "RoleCode",
+          "type": "varchar(32)",
+          "nullable": false,
+          "description": "نقش همین نصب؛ platform-admin مدیر همین کارگزاری است"
+        },
+        {
+          "name": "CreatedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای CreatedAt",
+          "default": "SYSUTCDATETIME()"
+        }
+      ],
+      "primaryKey": [
+        "StaffId",
+        "RoleCode"
+      ],
+      "unique": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "StaffId"
+          ],
+          "table": "StaffUsers",
+          "references": [
+            "Id"
+          ]
+        }
+      ],
+      "checks": [
+        "[RoleCode] IN ('platform-admin','reviewer','template-editor','viewer')"
+      ],
+      "indexes": [],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "قابل نگاشت به RBAC موجود با همان scope و semantics؛ کد نقش تنها claim مرورگر نیست.",
+      "concurrency": "ثبت append-only/insert با کلید یکتا و idempotency؛ در صورت تغییر ارتباط، نسخه aggregate والد کنترل شود. تاریخچه درجا بازنویسی نشود.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "A04",
+        "A05",
+        "F01",
+        "F10"
+      ],
+      "writeOperations": [
+        "A04",
+        "F10"
+      ],
+      "example": {
+        "StaffId": "00000000-0000-0000-0000-000000000010",
+        "RoleCode": "reviewer",
+        "CreatedAt": "2026-10-27T08:30:00.000Z"
+      }
+    },
+    {
+      "name": "StaffOperationsSettings",
+      "purpose": "سیاست ارجاع مستقل از برند",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "tinyint",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "1"
+        },
+        {
+          "name": "AssignmentMode",
+          "type": "varchar(16)",
+          "nullable": false,
+          "description": "manual/random"
+        },
+        {
+          "name": "RowVersion",
+          "type": "rowversion",
+          "nullable": false,
+          "description": "نسخه هشت‌بایتی CAS؛ زمان یا کلید هویت نیست"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [],
+      "foreignKeys": [],
+      "checks": [
+        "[Id]=1",
+        "[AssignmentMode] IN ('manual','random')"
+      ],
+      "indexes": [],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "RowVersion فقط token باینری مقایسه است و زمان نیست؛ SQL آن را می‌سازد. CAS ردیف و قواعد aggregate در تراکنش کنترل شوند.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "E04"
+      ],
+      "writeOperations": [
+        "E04"
+      ],
+      "example": {
+        "Id": 1,
+        "AssignmentMode": "manual",
+        "RowVersion": "0x0000000000000001"
+      }
+    },
+    {
+      "name": "ReviewerAssignments",
+      "purpose": "سابقه ارجاع؛ یک ارجاع فعال هر پرونده",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "InspectionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع InspectionId"
+        },
+        {
+          "name": "ReviewerId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع ReviewerId"
+        },
+        {
+          "name": "AssignedBy",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع AssignedBy"
+        },
+        {
+          "name": "Active",
+          "type": "bit",
+          "nullable": false,
+          "description": "فعال‌بودن نگاشت یا ارجاع",
+          "default": "1"
+        },
+        {
+          "name": "AssignedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای AssignedAt",
+          "default": "SYSUTCDATETIME()"
+        },
+        {
+          "name": "RevokedAt",
+          "type": "datetime2(3)",
+          "nullable": true,
+          "description": "زمان UTC سرور برای RevokedAt"
+        },
+        {
+          "name": "RowVersion",
+          "type": "rowversion",
+          "nullable": false,
+          "description": "نسخه هشت‌بایتی CAS؛ زمان یا کلید هویت نیست"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "Id",
+          "InspectionId"
+        ]
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "InspectionId"
+          ],
+          "table": "Inspections",
+          "references": [
+            "Id"
+          ]
+        },
+        {
+          "columns": [
+            "ReviewerId"
+          ],
+          "table": "StaffUsers",
+          "references": [
+            "Id"
+          ]
+        },
+        {
+          "columns": [
+            "AssignedBy"
+          ],
+          "table": "StaffUsers",
+          "references": [
+            "Id"
+          ]
+        }
+      ],
+      "checks": [],
+      "indexes": [
+        {
+          "columns": [
+            "InspectionId"
+          ],
+          "unique": true,
+          "where": "[Active] = 1"
+        },
+        {
+          "columns": [
+            "ReviewerId",
+            "Active"
+          ],
+          "unique": false
+        }
+      ],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "RowVersion فقط token باینری مقایسه است و زمان نیست؛ SQL آن را می‌سازد. CAS ردیف و قواعد aggregate در تراکنش کنترل شوند.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "C06",
+        "E01",
+        "E02",
+        "E03"
+      ],
+      "writeOperations": [
+        "E03"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-000000000013",
+        "InspectionId": "00000000-0000-0000-0000-000000000006",
+        "ReviewerId": "00000000-0000-0000-0000-000000000010",
+        "AssignedBy": "00000000-0000-0000-0000-000000000010",
+        "Active": true,
+        "AssignedAt": "2026-10-27T08:30:00.000Z",
+        "RevokedAt": null,
+        "RowVersion": "0x0000000000000001"
+      }
+    },
+    {
+      "name": "InspectionSubmissions",
+      "purpose": "رسید و نسخه ثابت ارسال اولیه/اصلاح",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "InspectionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع InspectionId"
+        },
+        {
+          "name": "SubmissionNumber",
+          "type": "int",
+          "nullable": false,
+          "description": "ترتیب مثبت ارسال"
+        },
+        {
+          "name": "CorrectionRequestId",
+          "type": "uniqueidentifier",
+          "nullable": true,
+          "description": "شناسه مرجع CorrectionRequestId"
+        },
+        {
+          "name": "SnapshotJson",
+          "type": "nvarchar(max)",
+          "nullable": false,
+          "description": "snapshot فقط فراداده؛ بایت/Base64 رسانه ممنوع"
+        },
+        {
+          "name": "SubmittedBySubject",
+          "type": "nvarchar(128)",
+          "nullable": false,
+          "description": "فراداده SubmittedBySubject در InspectionSubmissions"
+        },
+        {
+          "name": "SubmittedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای SubmittedAt",
+          "default": "SYSUTCDATETIME()"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "InspectionId",
+          "SubmissionNumber"
+        ],
+        [
+          "Id",
+          "InspectionId"
+        ]
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "InspectionId"
+          ],
+          "table": "Inspections",
+          "references": [
+            "Id"
+          ]
+        }
+      ],
+      "checks": [
+        "[SubmissionNumber]>0",
+        "ISJSON([SnapshotJson])=1"
+      ],
+      "indexes": [
+        {
+          "columns": [
+            "InspectionId"
+          ],
+          "unique": true,
+          "where": "[CorrectionRequestId] IS NULL"
+        }
+      ],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "ثبت append-only/insert با کلید یکتا و idempotency؛ در صورت تغییر ارتباط، نسخه aggregate والد کنترل شود. تاریخچه درجا بازنویسی نشود.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "D02",
+        "D03",
+        "D05",
+        "D07",
+        "G02"
+      ],
+      "writeOperations": [
+        "D02",
+        "D07"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-000000000014",
+        "InspectionId": "00000000-0000-0000-0000-000000000006",
+        "SubmissionNumber": 1,
+        "CorrectionRequestId": null,
+        "SnapshotJson": "{\"inspection\": {\"inspectionId\": \"insp_contract_001\", \"sourceRequestId\": \"REQ-DEMO-001\", \"trackingCode\": \"BDI-8F31K2\", \"status\": \"DRAFT\", \"templateId\": \"body-image-guided\", \"templateVersion\": 2, \"photoPolicyVersion\": 2, \"version\": \"AAAAAAAAB9E=\"}, \"photos\": {\"completed\": 11, \"required\": 11}, \"odometer\": {\"kilometers\": 48320, \"updatedAt\": \"2026-10-26T09:00:00Z\"}, \"video360\": {\"accepted\": true, \"durationSeconds\": 48}, \"media\": {\"uploaded\": 12, \"required\": 12, \"processing\": 2}, \"readiness\": {\"captureComplete\": true, \"requiredMediaUploaded\": true, \"odometerValid\": true, \"factsConfirmed\": true, \"canSubmit\": true, \"blockingUploadFailures\": false}, \"blockers\": []}",
+        "SubmittedBySubject": "نمونه",
+        "SubmittedAt": "2026-10-27T08:30:00.000Z"
+      }
+    },
+    {
+      "name": "SubmissionEvidence",
+      "purpose": "نسخه دقیق هر مدرک در رسید ارسال",
+      "columns": [
+        {
+          "name": "SubmissionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع SubmissionId"
+        },
+        {
+          "name": "InspectionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع InspectionId"
+        },
+        {
+          "name": "EvidenceId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع EvidenceId"
+        },
+        {
+          "name": "EvidenceVersionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع EvidenceVersionId"
+        }
+      ],
+      "primaryKey": [
+        "SubmissionId",
+        "EvidenceId"
+      ],
+      "unique": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "SubmissionId",
+            "InspectionId"
+          ],
+          "table": "InspectionSubmissions",
+          "references": [
+            "Id",
+            "InspectionId"
+          ]
+        },
+        {
+          "columns": [
+            "EvidenceId",
+            "InspectionId"
+          ],
+          "table": "InspectionEvidence",
+          "references": [
+            "Id",
+            "InspectionId"
+          ]
+        },
+        {
+          "columns": [
+            "EvidenceVersionId",
+            "EvidenceId"
+          ],
+          "table": "EvidenceVersions",
+          "references": [
+            "Id",
+            "EvidenceId"
+          ]
+        }
+      ],
+      "checks": [],
+      "indexes": [],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "ثبت append-only/insert با کلید یکتا و idempotency؛ در صورت تغییر ارتباط، نسخه aggregate والد کنترل شود. تاریخچه درجا بازنویسی نشود.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "D02",
+        "D07"
+      ],
+      "writeOperations": [
+        "D02",
+        "D07"
+      ],
+      "example": {
+        "SubmissionId": "00000000-0000-0000-0000-000000000014",
+        "InspectionId": "00000000-0000-0000-0000-000000000006",
+        "EvidenceId": "00000000-0000-0000-0000-00000000000b",
+        "EvidenceVersionId": "00000000-0000-0000-0000-00000000000c"
+      }
+    },
+    {
+      "name": "EvidenceReviews",
+      "purpose": "رویداد تغییرناپذیر تصمیم یک نسخه",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "InspectionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع InspectionId"
+        },
+        {
+          "name": "EvidenceVersionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع EvidenceVersionId"
+        },
+        {
+          "name": "AssignmentId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع AssignmentId"
+        },
+        {
+          "name": "Decision",
+          "type": "varchar(16)",
+          "nullable": false,
+          "description": "approved/rejected؛ تصمیم مدرک و کل جدا"
+        },
+        {
+          "name": "CustomerReason",
+          "type": "nvarchar(2000)",
+          "nullable": true,
+          "description": "دلیل قابل نمایش به مشتری؛ برای رد الزامی"
+        },
+        {
+          "name": "DecidedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای DecidedAt",
+          "default": "SYSUTCDATETIME()"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "EvidenceVersionId",
+            "InspectionId"
+          ],
+          "table": "EvidenceVersions",
+          "references": [
+            "Id",
+            "InspectionId"
+          ]
+        },
+        {
+          "columns": [
+            "AssignmentId",
+            "InspectionId"
+          ],
+          "table": "ReviewerAssignments",
+          "references": [
+            "Id",
+            "InspectionId"
+          ]
+        }
+      ],
+      "checks": [
+        "[Decision] IN ('approved','rejected')",
+        "[Decision]<>'rejected' OR ([CustomerReason] IS NOT NULL AND LEN(LTRIM(RTRIM([CustomerReason])))>0)"
+      ],
+      "indexes": [
+        {
+          "columns": [
+            "InspectionId",
+            "DecidedAt"
+          ],
+          "unique": false
+        },
+        {
+          "columns": [
+            "EvidenceVersionId",
+            "DecidedAt"
+          ],
+          "unique": false
+        }
+      ],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "ثبت append-only/insert با کلید یکتا و idempotency؛ در صورت تغییر ارتباط، نسخه aggregate والد کنترل شود. تاریخچه درجا بازنویسی نشود.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "E02",
+        "E05",
+        "E10"
+      ],
+      "writeOperations": [
+        "E05"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-000000000016",
+        "InspectionId": "00000000-0000-0000-0000-000000000006",
+        "EvidenceVersionId": "00000000-0000-0000-0000-00000000000c",
+        "AssignmentId": "00000000-0000-0000-0000-000000000013",
+        "Decision": "approved",
+        "CustomerReason": null,
+        "DecidedAt": "2026-10-27T08:30:00.000Z"
+      }
+    },
+    {
+      "name": "InspectionReviews",
+      "purpose": "تصمیم کل مستقل از تحویل به مقصد",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "InspectionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع InspectionId"
+        },
+        {
+          "name": "AssignmentId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع AssignmentId"
+        },
+        {
+          "name": "SubmissionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع SubmissionId"
+        },
+        {
+          "name": "Decision",
+          "type": "varchar(16)",
+          "nullable": false,
+          "description": "approved/rejected؛ تصمیم مدرک و کل جدا"
+        },
+        {
+          "name": "CustomerReason",
+          "type": "nvarchar(2000)",
+          "nullable": true,
+          "description": "دلیل قابل نمایش به مشتری؛ برای رد الزامی"
+        },
+        {
+          "name": "DecidedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای DecidedAt",
+          "default": "SYSUTCDATETIME()"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "InspectionId"
+        ],
+        [
+          "Id",
+          "InspectionId"
+        ],
+        [
+          "Id",
+          "InspectionId",
+          "SubmissionId"
+        ]
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "AssignmentId",
+            "InspectionId"
+          ],
+          "table": "ReviewerAssignments",
+          "references": [
+            "Id",
+            "InspectionId"
+          ]
+        },
+        {
+          "columns": [
+            "SubmissionId",
+            "InspectionId"
+          ],
+          "table": "InspectionSubmissions",
+          "references": [
+            "Id",
+            "InspectionId"
+          ]
+        }
+      ],
+      "checks": [
+        "[Decision] IN ('approved','rejected')",
+        "[Decision]<>'rejected' OR ([CustomerReason] IS NOT NULL AND LEN(LTRIM(RTRIM([CustomerReason])))>0)"
+      ],
+      "indexes": [],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "ثبت append-only/insert با کلید یکتا و idempotency؛ در صورت تغییر ارتباط، نسخه aggregate والد کنترل شود. تاریخچه درجا بازنویسی نشود.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "E09",
+        "G02"
+      ],
+      "writeOperations": [
+        "E09"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-000000000017",
+        "InspectionId": "00000000-0000-0000-0000-000000000006",
+        "AssignmentId": "00000000-0000-0000-0000-000000000013",
+        "SubmissionId": "00000000-0000-0000-0000-000000000014",
+        "Decision": "approved",
+        "CustomerReason": null,
+        "DecidedAt": "2026-10-27T08:30:00.000Z"
+      }
+    },
+    {
+      "name": "CorrectionRequests",
+      "purpose": "دور اصلاح نسخه‌دار با حفظ اصل",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "InspectionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع InspectionId"
+        },
+        {
+          "name": "OriginalSubmissionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع OriginalSubmissionId"
+        },
+        {
+          "name": "RequestedByAssignmentId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع RequestedByAssignmentId"
+        },
+        {
+          "name": "RequestVersion",
+          "type": "int",
+          "nullable": false,
+          "description": "نسخه مثبت درخواست"
+        },
+        {
+          "name": "RoundNumber",
+          "type": "int",
+          "nullable": false,
+          "description": "دور مثبت اصلاح"
+        },
+        {
+          "name": "Status",
+          "type": "varchar(24)",
+          "nullable": false,
+          "description": "وضعیت این بُعد؛ نه وضعیت مبهم تمام فرآیندها"
+        },
+        {
+          "name": "Active",
+          "type": "bit",
+          "nullable": false,
+          "description": "فعال‌بودن نگاشت یا ارجاع",
+          "default": "1"
+        },
+        {
+          "name": "RequestedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای RequestedAt",
+          "default": "SYSUTCDATETIME()"
+        },
+        {
+          "name": "RowVersion",
+          "type": "rowversion",
+          "nullable": false,
+          "description": "نسخه هشت‌بایتی CAS؛ زمان یا کلید هویت نیست"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "Id",
+          "InspectionId"
+        ],
+        [
+          "InspectionId",
+          "RoundNumber"
+        ]
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "OriginalSubmissionId",
+            "InspectionId"
+          ],
+          "table": "InspectionSubmissions",
+          "references": [
+            "Id",
+            "InspectionId"
+          ]
+        },
+        {
+          "columns": [
+            "RequestedByAssignmentId",
+            "InspectionId"
+          ],
+          "table": "ReviewerAssignments",
+          "references": [
+            "Id",
+            "InspectionId"
+          ]
+        }
+      ],
+      "checks": [
+        "[RequestVersion]>0 AND [RoundNumber]>0",
+        "[Status] IN ('requested','resubmitting','resubmitted','resubmit-failed','resolved','superseded')"
+      ],
+      "indexes": [
+        {
+          "columns": [
+            "InspectionId",
+            "Active"
+          ],
+          "unique": false
+        }
+      ],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "RowVersion فقط token باینری مقایسه است و زمان نیست؛ SQL آن را می‌سازد. CAS ردیف و قواعد aggregate در تراکنش کنترل شوند.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "D04",
+        "D05",
+        "D07",
+        "E05",
+        "E06"
+      ],
+      "writeOperations": [
+        "D07",
+        "E05",
+        "E06"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-000000000018",
+        "InspectionId": "00000000-0000-0000-0000-000000000006",
+        "OriginalSubmissionId": "00000000-0000-0000-0000-000000000014",
+        "RequestedByAssignmentId": "00000000-0000-0000-0000-000000000013",
+        "RequestVersion": 1,
+        "RoundNumber": 1,
+        "Status": "requested",
+        "Active": true,
+        "RequestedAt": "2026-10-27T08:30:00.000Z",
+        "RowVersion": "0x0000000000000001"
+      }
+    },
+    {
+      "name": "CorrectionItems",
+      "purpose": "قلم مشخص رسانه یا فیلد در درخواست",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "RequestId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع RequestId"
+        },
+        {
+          "name": "InspectionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع InspectionId"
+        },
+        {
+          "name": "Kind",
+          "type": "varchar(16)",
+          "nullable": false,
+          "description": "photo/video-360 و در قلم اصلاح field"
+        },
+        {
+          "name": "EvidenceId",
+          "type": "uniqueidentifier",
+          "nullable": true,
+          "description": "شناسه مرجع EvidenceId"
+        },
+        {
+          "name": "OriginalVersionId",
+          "type": "uniqueidentifier",
+          "nullable": true,
+          "description": "شناسه مرجع OriginalVersionId"
+        },
+        {
+          "name": "CandidateVersionId",
+          "type": "uniqueidentifier",
+          "nullable": true,
+          "description": "شناسه مرجع CandidateVersionId"
+        },
+        {
+          "name": "FieldName",
+          "type": "varchar(20)",
+          "nullable": true,
+          "description": "plate/color/modelYear؛ سایر فیلدها بسته‌اند"
+        },
+        {
+          "name": "ProposalJson",
+          "type": "nvarchar(max)",
+          "nullable": true,
+          "description": "پیشنهاد تایپ‌شده فیلد؛ فقط فراداده"
+        },
+        {
+          "name": "CustomerReason",
+          "type": "nvarchar(2000)",
+          "nullable": false,
+          "description": "دلیل قابل نمایش به مشتری؛ برای رد الزامی"
+        },
+        {
+          "name": "State",
+          "type": "varchar(16)",
+          "nullable": false,
+          "description": "وضعیت این منبع؛ قید CHECK حاکم است"
+        },
+        {
+          "name": "RowVersion",
+          "type": "rowversion",
+          "nullable": false,
+          "description": "نسخه هشت‌بایتی CAS؛ زمان یا کلید هویت نیست"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "RequestId",
+            "InspectionId"
+          ],
+          "table": "CorrectionRequests",
+          "references": [
+            "Id",
+            "InspectionId"
+          ]
+        },
+        {
+          "columns": [
+            "EvidenceId",
+            "InspectionId"
+          ],
+          "table": "InspectionEvidence",
+          "references": [
+            "Id",
+            "InspectionId"
+          ]
+        },
+        {
+          "columns": [
+            "OriginalVersionId",
+            "EvidenceId"
+          ],
+          "table": "EvidenceVersions",
+          "references": [
+            "Id",
+            "EvidenceId"
+          ]
+        },
+        {
+          "columns": [
+            "CandidateVersionId",
+            "EvidenceId"
+          ],
+          "table": "EvidenceVersions",
+          "references": [
+            "Id",
+            "EvidenceId"
+          ]
+        }
+      ],
+      "checks": [
+        "[Kind] IN ('photo','video-360','field')",
+        "([Kind]='field' AND [FieldName] IS NOT NULL AND [FieldName] IN ('plate','color','modelYear') AND [EvidenceId] IS NULL AND [OriginalVersionId] IS NULL AND [CandidateVersionId] IS NULL) OR ([Kind] IN ('photo','video-360') AND [FieldName] IS NULL AND [EvidenceId] IS NOT NULL AND [OriginalVersionId] IS NOT NULL AND [ProposalJson] IS NULL)",
+        "[ProposalJson] IS NULL OR ISJSON([ProposalJson])=1",
+        "LEN(LTRIM(RTRIM([CustomerReason])))>0",
+        "[State] IN ('requested','submitted','approved')"
+      ],
+      "indexes": [
+        {
+          "columns": [
+            "RequestId",
+            "EvidenceId"
+          ],
+          "unique": true,
+          "where": "[EvidenceId] IS NOT NULL"
+        },
+        {
+          "columns": [
+            "RequestId",
+            "FieldName"
+          ],
+          "unique": true,
+          "where": "[FieldName] IS NOT NULL"
+        }
+      ],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "RowVersion فقط token باینری مقایسه است و زمان نیست؛ SQL آن را می‌سازد. CAS ردیف و قواعد aggregate در تراکنش کنترل شوند.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "D05",
+        "D06",
+        "D07",
+        "D08",
+        "E05",
+        "E06",
+        "E07"
+      ],
+      "writeOperations": [
+        "D06",
+        "D07",
+        "D08",
+        "E05",
+        "E06",
+        "E07"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-000000000019",
+        "RequestId": "00000000-0000-0000-0000-000000000018",
+        "InspectionId": "00000000-0000-0000-0000-000000000006",
+        "Kind": "photo",
+        "EvidenceId": "00000000-0000-0000-0000-00000000000b",
+        "OriginalVersionId": null,
+        "CandidateVersionId": null,
+        "FieldName": null,
+        "ProposalJson": null,
+        "CustomerReason": "نمونه",
+        "State": "requested",
+        "RowVersion": "0x0000000000000001"
+      }
+    },
+    {
+      "name": "InternalNotes",
+      "purpose": "یادداشت خصوصی کارکنان، خارج از DTO مشتری",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "InspectionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع InspectionId"
+        },
+        {
+          "name": "AssignmentId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع AssignmentId"
+        },
+        {
+          "name": "Text",
+          "type": "nvarchar(4000)",
+          "nullable": false,
+          "description": "یادداشت خصوصی؛ در خروجی مشتری ممنوع"
+        },
+        {
+          "name": "CreatedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای CreatedAt",
+          "default": "SYSUTCDATETIME()"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "AssignmentId",
+            "InspectionId"
+          ],
+          "table": "ReviewerAssignments",
+          "references": [
+            "Id",
+            "InspectionId"
+          ]
+        }
+      ],
+      "checks": [
+        "LEN(LTRIM(RTRIM([Text])))>0"
+      ],
+      "indexes": [
+        {
+          "columns": [
+            "InspectionId",
+            "CreatedAt"
+          ],
+          "unique": false
+        }
+      ],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "ثبت append-only/insert با کلید یکتا و idempotency؛ در صورت تغییر ارتباط، نسخه aggregate والد کنترل شود. تاریخچه درجا بازنویسی نشود.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "E02",
+        "E08"
+      ],
+      "writeOperations": [
+        "E08"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-00000000001a",
+        "InspectionId": "00000000-0000-0000-0000-000000000006",
+        "AssignmentId": "00000000-0000-0000-0000-000000000013",
+        "Text": "نمونه",
+        "CreatedAt": "2026-10-27T08:30:00.000Z"
+      }
+    },
+    {
+      "name": "InspectionStatusHistory",
+      "purpose": "تاریخچه تغییر چرخه عمر",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "InspectionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع InspectionId"
+        },
+        {
+          "name": "FromStatus",
+          "type": "varchar(24)",
+          "nullable": true,
+          "description": "فراداده FromStatus در InspectionStatusHistory"
+        },
+        {
+          "name": "ToStatus",
+          "type": "varchar(24)",
+          "nullable": false,
+          "description": "فراداده ToStatus در InspectionStatusHistory"
+        },
+        {
+          "name": "ActorReference",
+          "type": "nvarchar(160)",
+          "nullable": false,
+          "description": "فراداده ActorReference در InspectionStatusHistory"
+        },
+        {
+          "name": "ReasonCode",
+          "type": "varchar(80)",
+          "nullable": false,
+          "description": "فراداده ReasonCode در InspectionStatusHistory"
+        },
+        {
+          "name": "CreatedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای CreatedAt",
+          "default": "SYSUTCDATETIME()"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "InspectionId"
+          ],
+          "table": "Inspections",
+          "references": [
+            "Id"
+          ]
+        }
+      ],
+      "checks": [
+        "[FromStatus] IS NULL OR [FromStatus] IN ('DRAFT','UPLOAD_PENDING','SUBMITTED','UNDER_REVIEW','CHANGES_REQUESTED','REJECTED','REVIEW_APPROVED','FORWARD_PENDING','FORWARDED','FORWARD_FAILED')",
+        "[ToStatus] IN ('DRAFT','UPLOAD_PENDING','SUBMITTED','UNDER_REVIEW','CHANGES_REQUESTED','REJECTED','REVIEW_APPROVED','FORWARD_PENDING','FORWARDED','FORWARD_FAILED')"
+      ],
+      "indexes": [
+        {
+          "columns": [
+            "InspectionId",
+            "CreatedAt"
+          ],
+          "unique": false
+        }
+      ],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "ثبت append-only/insert با کلید یکتا و idempotency؛ در صورت تغییر ارتباط، نسخه aggregate والد کنترل شود. تاریخچه درجا بازنویسی نشود.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "D04",
+        "E10"
+      ],
+      "writeOperations": [
+        "D02",
+        "D07",
+        "D09",
+        "E03",
+        "E05",
+        "E06",
+        "E09",
+        "G02",
+        "G03"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-00000000001b",
+        "InspectionId": "00000000-0000-0000-0000-000000000006",
+        "FromStatus": null,
+        "ToStatus": "DRAFT",
+        "ActorReference": "نمونه",
+        "ReasonCode": "example",
+        "CreatedAt": "2026-10-27T08:30:00.000Z"
+      }
+    },
+    {
+      "name": "IdempotencyRecords",
+      "purpose": "رزرو و نتیجه پایدار فرمان",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "ScopeKey",
+          "type": "nvarchar(200)",
+          "nullable": false,
+          "description": "نصب + عامل + عملیات + منبع"
+        },
+        {
+          "name": "CommandKey",
+          "type": "varchar(100)",
+          "nullable": false,
+          "description": "کلید پایدار فرمان"
+        },
+        {
+          "name": "RequestHash",
+          "type": "binary(32)",
+          "nullable": false,
+          "description": "هش بدنه canonical فرمان"
+        },
+        {
+          "name": "State",
+          "type": "varchar(16)",
+          "nullable": false,
+          "description": "وضعیت این منبع؛ قید CHECK حاکم است"
+        },
+        {
+          "name": "ResponseStatus",
+          "type": "smallint",
+          "nullable": true,
+          "description": "فراداده ResponseStatus در IdempotencyRecords"
+        },
+        {
+          "name": "ResponseJson",
+          "type": "nvarchar(max)",
+          "nullable": true,
+          "description": "نتیجه whitelist بدون token، مسیر خصوصی یا رسانه"
+        },
+        {
+          "name": "LeaseUntil",
+          "type": "datetime2(3)",
+          "nullable": true,
+          "description": "زمان انقضای مالکیت موقت کارگر"
+        },
+        {
+          "name": "ExpiresAt",
+          "type": "datetime2(3)",
+          "nullable": true,
+          "description": "زمان UTC سرور برای ExpiresAt"
+        },
+        {
+          "name": "CreatedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای CreatedAt",
+          "default": "SYSUTCDATETIME()"
+        },
+        {
+          "name": "RowVersion",
+          "type": "rowversion",
+          "nullable": false,
+          "description": "نسخه هشت‌بایتی CAS؛ زمان یا کلید هویت نیست"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "ScopeKey",
+          "CommandKey"
+        ]
+      ],
+      "foreignKeys": [],
+      "checks": [
+        "[State] IN ('reserved','completed','failed')",
+        "[ResponseJson] IS NULL OR ISJSON([ResponseJson])=1",
+        "[ResponseStatus] IS NULL OR [ResponseStatus] BETWEEN 100 AND 599"
+      ],
+      "indexes": [
+        {
+          "columns": [
+            "State",
+            "LeaseUntil"
+          ],
+          "unique": false
+        }
+      ],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "RowVersion فقط token باینری مقایسه است و زمان نیست؛ SQL آن را می‌سازد. CAS ردیف و قواعد aggregate در تراکنش کنترل شوند.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "A03",
+        "A04",
+        "B01",
+        "B06",
+        "B07",
+        "B09",
+        "B10",
+        "C01",
+        "C02",
+        "C03",
+        "C07",
+        "D02",
+        "D03",
+        "D06",
+        "D07",
+        "D08",
+        "D09",
+        "E03",
+        "E04",
+        "E05",
+        "E06",
+        "E07",
+        "E08",
+        "E09",
+        "F02",
+        "F03",
+        "F04",
+        "F06",
+        "F07",
+        "F08",
+        "F09",
+        "F10",
+        "F11",
+        "G01",
+        "G02",
+        "G03",
+        "G04"
+      ],
+      "writeOperations": [
+        "A03",
+        "A04",
+        "B01",
+        "B06",
+        "B07",
+        "B09",
+        "B10",
+        "C01",
+        "C02",
+        "C03",
+        "C07",
+        "D02",
+        "D06",
+        "D07",
+        "D08",
+        "D09",
+        "E03",
+        "E04",
+        "E05",
+        "E06",
+        "E07",
+        "E08",
+        "E09",
+        "F02",
+        "F03",
+        "F04",
+        "F06",
+        "F07",
+        "F08",
+        "F09",
+        "F10",
+        "F11",
+        "G01",
+        "G02",
+        "G03",
+        "G04"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-00000000001c",
+        "ScopeKey": "brokerage-example:subject-example:submit:insp-example-01",
+        "CommandKey": "command-example",
+        "RequestHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "State": "reserved",
+        "ResponseStatus": null,
+        "ResponseJson": null,
+        "LeaseUntil": null,
+        "ExpiresAt": null,
+        "CreatedAt": "2026-10-27T08:30:00.000Z",
+        "RowVersion": "0x0000000000000001"
+      }
+    },
+    {
+      "name": "ForwardingJobs",
+      "purpose": "outbox پایدار نسخه تأییدشده",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "InspectionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع InspectionId"
+        },
+        {
+          "name": "InspectionReviewId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع InspectionReviewId"
+        },
+        {
+          "name": "SubmissionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع SubmissionId"
+        },
+        {
+          "name": "DestinationKey",
+          "type": "nvarchar(80)",
+          "nullable": false,
+          "description": "مرجع allowlist سرور؛ نه URL یا credential"
+        },
+        {
+          "name": "DeliveryKey",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه ثابت مقصد برای تکرار امن"
+        },
+        {
+          "name": "State",
+          "type": "varchar(16)",
+          "nullable": false,
+          "description": "وضعیت این منبع؛ قید CHECK حاکم است"
+        },
+        {
+          "name": "AttemptCount",
+          "type": "int",
+          "nullable": false,
+          "description": "شمار تلاش غیرمنفی",
+          "default": "0"
+        },
+        {
+          "name": "NextRetryAt",
+          "type": "datetime2(3)",
+          "nullable": true,
+          "description": "زمان تلاش بعدی با backoff محدود"
+        },
+        {
+          "name": "LeaseUntil",
+          "type": "datetime2(3)",
+          "nullable": true,
+          "description": "زمان انقضای مالکیت موقت کارگر"
+        },
+        {
+          "name": "AcknowledgementId",
+          "type": "nvarchar(160)",
+          "nullable": true,
+          "description": "شناسه تأیید معتبر مقصد"
+        },
+        {
+          "name": "AcknowledgedAt",
+          "type": "datetime2(3)",
+          "nullable": true,
+          "description": "زمان UTC سرور برای AcknowledgedAt"
+        },
+        {
+          "name": "CreatedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای CreatedAt",
+          "default": "SYSUTCDATETIME()"
+        },
+        {
+          "name": "RowVersion",
+          "type": "rowversion",
+          "nullable": false,
+          "description": "نسخه هشت‌بایتی CAS؛ زمان یا کلید هویت نیست"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "InspectionReviewId",
+          "DestinationKey"
+        ],
+        [
+          "DeliveryKey"
+        ]
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "InspectionReviewId",
+            "InspectionId",
+            "SubmissionId"
+          ],
+          "table": "InspectionReviews",
+          "references": [
+            "Id",
+            "InspectionId",
+            "SubmissionId"
+          ]
+        },
+        {
+          "columns": [
+            "SubmissionId",
+            "InspectionId"
+          ],
+          "table": "InspectionSubmissions",
+          "references": [
+            "Id",
+            "InspectionId"
+          ]
+        }
+      ],
+      "checks": [
+        "[State] IN ('ready','sending','retrying','acknowledged','failed')",
+        "[AttemptCount]>=0",
+        "[State]<>'acknowledged' OR ([AcknowledgementId] IS NOT NULL AND [AcknowledgedAt] IS NOT NULL)"
+      ],
+      "indexes": [
+        {
+          "columns": [
+            "State",
+            "NextRetryAt"
+          ],
+          "unique": false
+        }
+      ],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "RowVersion فقط token باینری مقایسه است و زمان نیست؛ SQL آن را می‌سازد. CAS ردیف و قواعد aggregate در تراکنش کنترل شوند.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "D04",
+        "E09",
+        "G02",
+        "G03",
+        "G04",
+        "G05"
+      ],
+      "writeOperations": [
+        "E09",
+        "G02",
+        "G03",
+        "G04"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-00000000001d",
+        "InspectionId": "00000000-0000-0000-0000-000000000006",
+        "InspectionReviewId": "00000000-0000-0000-0000-000000000017",
+        "SubmissionId": "00000000-0000-0000-0000-000000000014",
+        "DestinationKey": "نمونه",
+        "DeliveryKey": "00000000-0000-0000-0000-00000000001d",
+        "State": "ready",
+        "AttemptCount": 0,
+        "NextRetryAt": null,
+        "LeaseUntil": null,
+        "AcknowledgementId": null,
+        "AcknowledgedAt": null,
+        "CreatedAt": "2026-10-27T08:30:00.000Z",
+        "RowVersion": "0x0000000000000001"
+      }
+    },
+    {
+      "name": "ForwardingAttempts",
+      "purpose": "تلاش‌های تحویل مستقل و محفوظ",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "JobId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع JobId"
+        },
+        {
+          "name": "AttemptNumber",
+          "type": "int",
+          "nullable": false,
+          "description": "شماره مثبت تلاش همان درخواست یا کار"
+        },
+        {
+          "name": "StartedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای StartedAt",
+          "default": "SYSUTCDATETIME()"
+        },
+        {
+          "name": "FinishedAt",
+          "type": "datetime2(3)",
+          "nullable": true,
+          "description": "زمان UTC سرور برای FinishedAt"
+        },
+        {
+          "name": "HttpStatus",
+          "type": "smallint",
+          "nullable": true,
+          "description": "فراداده HttpStatus در ForwardingAttempts"
+        },
+        {
+          "name": "FailureCode",
+          "type": "varchar(80)",
+          "nullable": true,
+          "description": "کد امن؛ بدون stack، مسیر یا راز"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "JobId",
+          "AttemptNumber"
+        ]
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "JobId"
+          ],
+          "table": "ForwardingJobs",
+          "references": [
+            "Id"
+          ]
+        }
+      ],
+      "checks": [
+        "[AttemptNumber]>0",
+        "[HttpStatus] IS NULL OR [HttpStatus] BETWEEN 100 AND 599"
+      ],
+      "indexes": [],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "ثبت append-only/insert با کلید یکتا و idempotency؛ در صورت تغییر ارتباط، نسخه aggregate والد کنترل شود. تاریخچه درجا بازنویسی نشود.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "G03",
+        "G04"
+      ],
+      "writeOperations": [
+        "G03"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-00000000001e",
+        "JobId": "00000000-0000-0000-0000-00000000001d",
+        "AttemptNumber": 1,
+        "StartedAt": "2026-10-27T08:30:00.000Z",
+        "FinishedAt": null,
+        "HttpStatus": null,
+        "FailureCode": null
+      }
+    },
+    {
+      "name": "BrandingAssets",
+      "purpose": "دارایی عمومی ایمن برند، جدا از شواهد",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "SlotCode",
+          "type": "nvarchar(80)",
+          "nullable": false,
+          "description": "فراداده SlotCode در BrandingAssets"
+        },
+        {
+          "name": "PublicRelativePath",
+          "type": "nvarchar(450)",
+          "nullable": false,
+          "description": "مسیر عمومی برند؛ جدا از ریشه خصوصی شواهد"
+        },
+        {
+          "name": "MimeType",
+          "type": "varchar(127)",
+          "nullable": false,
+          "description": "نوع واقعی تأییدشده رسانه"
+        },
+        {
+          "name": "ByteSize",
+          "type": "bigint",
+          "nullable": false,
+          "description": "اندازه واقعی مورد تطبیق در complete"
+        },
+        {
+          "name": "Width",
+          "type": "int",
+          "nullable": false,
+          "description": "عرض مثبت رسانه"
+        },
+        {
+          "name": "Height",
+          "type": "int",
+          "nullable": false,
+          "description": "ارتفاع مثبت رسانه"
+        },
+        {
+          "name": "Sha256",
+          "type": "binary(32)",
+          "nullable": false,
+          "description": "هش ۳۲ بایتی؛ فراداده است و رسانه نیست"
+        },
+        {
+          "name": "CreatedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای CreatedAt",
+          "default": "SYSUTCDATETIME()"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "PublicRelativePath"
+        ]
+      ],
+      "foreignKeys": [],
+      "checks": [
+        "[ByteSize]>0 AND [Width]>0 AND [Height]>0"
+      ],
+      "indexes": [],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "ثبت append-only/insert با کلید یکتا و idempotency؛ در صورت تغییر ارتباط، نسخه aggregate والد کنترل شود. تاریخچه درجا بازنویسی نشود.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "A02",
+        "F05",
+        "F08"
+      ],
+      "writeOperations": [
+        "F08"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-00000000001f",
+        "SlotCode": "نمونه",
+        "PublicRelativePath": "/branding/example-brokerage-logo.webp",
+        "MimeType": "image/webp",
+        "ByteSize": 1048576,
+        "Width": 320,
+        "Height": 160,
+        "Sha256": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "CreatedAt": "2026-10-27T08:30:00.000Z"
+      }
+    },
+    {
+      "name": "SiteSettingsVersions",
+      "purpose": "نسخه draft یا عمومی، بدون راز زیرساخت",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "Version",
+          "type": "int",
+          "nullable": false,
+          "description": "نسخه مثبت منبع"
+        },
+        {
+          "name": "State",
+          "type": "varchar(16)",
+          "nullable": false,
+          "description": "وضعیت این منبع؛ قید CHECK حاکم است"
+        },
+        {
+          "name": "SchemaVersion",
+          "type": "int",
+          "nullable": false,
+          "description": "فراداده SchemaVersion در SiteSettingsVersions"
+        },
+        {
+          "name": "SettingsJson",
+          "type": "nvarchar(max)",
+          "nullable": false,
+          "description": "تنظیمات عمومی whitelist؛ بدون راز Neshan یا احراز هویت"
+        },
+        {
+          "name": "CreatedBy",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع CreatedBy"
+        },
+        {
+          "name": "CreatedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای CreatedAt",
+          "default": "SYSUTCDATETIME()"
+        },
+        {
+          "name": "PublishedAt",
+          "type": "datetime2(3)",
+          "nullable": true,
+          "description": "زمان UTC سرور برای PublishedAt"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "Version"
+        ]
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "CreatedBy"
+          ],
+          "table": "StaffUsers",
+          "references": [
+            "Id"
+          ]
+        }
+      ],
+      "checks": [
+        "[Version]>0 AND [SchemaVersion]>0",
+        "[State] IN ('draft','published','archived')",
+        "ISJSON([SettingsJson])=1"
+      ],
+      "indexes": [],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "ثبت append-only/insert با کلید یکتا و idempotency؛ در صورت تغییر ارتباط، نسخه aggregate والد کنترل شود. تاریخچه درجا بازنویسی نشود.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "A02",
+        "F05",
+        "F06",
+        "F07",
+        "F09"
+      ],
+      "writeOperations": [
+        "F06",
+        "F07",
+        "F09"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-000000000020",
+        "Version": 2,
+        "State": "draft",
+        "SchemaVersion": 1,
+        "SettingsJson": "{\"schemaVersion\": 1, \"tenantId\": \"demo\", \"version\": 2, \"publishedAt\": \"2026-10-26T09:00:00Z\", \"identity\": {\"brokerageName\": \"کارگزاری نمونه\", \"appTitle\": \"بازدید خودرو\", \"logo\": null, \"favicon\": null, \"publicEmail\": \"support@example.invalid\", \"publicPhone\": \"نمونه قراردادی\"}, \"theme\": {\"primary\": \"#047857\", \"secondary\": \"#475569\", \"background\": \"#FFFFFF\", \"neutral\": \"#64748B\", \"onPrimary\": \"#FFFFFF\", \"onBackground\": \"#0F172A\", \"accent\": \"#F59E0B\", \"haloColor\": \"#10B981\", \"haloIntensity\": 35}, \"images\": {\"landing\": null, \"referral\": null, \"otp\": null, \"readiness\": null, \"consent\": null, \"submission\": null}, \"application\": {\"apiBaseUrl\": \"/api/bazdid\", \"contractVersion\": \"1\", \"template\": {\"id\": \"body-image-guided\", \"version\": 2}, \"features\": {\"nativeCaptureFallback\": true, \"additionalEvidence\": true, \"supportLink\": false}, \"locationMap\": {\"enabled\": true, \"webMapKey\": null, \"mapType\": \"dreamy\", \"reverseGeocoding\": \"api\", \"initialViewport\": {\"latitude\": 35.699739, \"longitude\": 51.338097, \"zoom\": 12}}}}",
+        "CreatedBy": "00000000-0000-0000-0000-000000000010",
+        "CreatedAt": "2026-10-27T08:30:00.000Z",
+        "PublishedAt": null
+      }
+    },
+    {
+      "name": "SiteSettings",
+      "purpose": "اشاره‌گر تنها ارائه‌دهنده تنظیمات",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "tinyint",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "1"
+        },
+        {
+          "name": "PublishedVersionId",
+          "type": "uniqueidentifier",
+          "nullable": true,
+          "description": "شناسه مرجع PublishedVersionId"
+        },
+        {
+          "name": "DraftVersionId",
+          "type": "uniqueidentifier",
+          "nullable": true,
+          "description": "شناسه مرجع DraftVersionId"
+        },
+        {
+          "name": "RowVersion",
+          "type": "rowversion",
+          "nullable": false,
+          "description": "نسخه هشت‌بایتی CAS؛ زمان یا کلید هویت نیست"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "PublishedVersionId"
+          ],
+          "table": "SiteSettingsVersions",
+          "references": [
+            "Id"
+          ]
+        },
+        {
+          "columns": [
+            "DraftVersionId"
+          ],
+          "table": "SiteSettingsVersions",
+          "references": [
+            "Id"
+          ]
+        }
+      ],
+      "checks": [
+        "[Id]=1"
+      ],
+      "indexes": [],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "RowVersion فقط token باینری مقایسه است و زمان نیست؛ SQL آن را می‌سازد. CAS ردیف و قواعد aggregate در تراکنش کنترل شوند.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "A02",
+        "F05",
+        "F06",
+        "F07",
+        "F09"
+      ],
+      "writeOperations": [
+        "F06",
+        "F07",
+        "F09"
+      ],
+      "example": {
+        "Id": 1,
+        "PublishedVersionId": null,
+        "DraftVersionId": null,
+        "RowVersion": "0x0000000000000001"
+      }
+    },
+    {
+      "name": "SiteSettingsAssetLinks",
+      "purpose": "ارجاع نسخه تنظیمات به دارایی برند",
+      "columns": [
+        {
+          "name": "SettingsVersionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع SettingsVersionId"
+        },
+        {
+          "name": "SlotCode",
+          "type": "nvarchar(80)",
+          "nullable": false,
+          "description": "فراداده SlotCode در SiteSettingsAssetLinks"
+        },
+        {
+          "name": "BrandingAssetId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع BrandingAssetId"
+        }
+      ],
+      "primaryKey": [
+        "SettingsVersionId",
+        "SlotCode"
+      ],
+      "unique": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "SettingsVersionId"
+          ],
+          "table": "SiteSettingsVersions",
+          "references": [
+            "Id"
+          ]
+        },
+        {
+          "columns": [
+            "BrandingAssetId"
+          ],
+          "table": "BrandingAssets",
+          "references": [
+            "Id"
+          ]
+        }
+      ],
+      "checks": [],
+      "indexes": [],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "ثبت append-only/insert با کلید یکتا و idempotency؛ در صورت تغییر ارتباط، نسخه aggregate والد کنترل شود. تاریخچه درجا بازنویسی نشود.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "A02",
+        "F05",
+        "F06",
+        "F08",
+        "F09"
+      ],
+      "writeOperations": [
+        "F06",
+        "F09"
+      ],
+      "example": {
+        "SettingsVersionId": "00000000-0000-0000-0000-000000000020",
+        "SlotCode": "نمونه",
+        "BrandingAssetId": "00000000-0000-0000-0000-00000000001f"
+      }
+    },
+    {
+      "name": "WebhookSubscriptions",
+      "purpose": "رویداد و مقصد سروری شناخته‌شده",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "EventCode",
+          "type": "varchar(80)",
+          "nullable": false,
+          "description": "فراداده EventCode در WebhookSubscriptions"
+        },
+        {
+          "name": "DestinationKey",
+          "type": "nvarchar(80)",
+          "nullable": false,
+          "description": "مرجع allowlist سرور؛ نه URL یا credential"
+        },
+        {
+          "name": "Enabled",
+          "type": "bit",
+          "nullable": false,
+          "description": "فراداده Enabled در WebhookSubscriptions",
+          "default": "0"
+        },
+        {
+          "name": "RowVersion",
+          "type": "rowversion",
+          "nullable": false,
+          "description": "نسخه هشت‌بایتی CAS؛ زمان یا کلید هویت نیست"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "EventCode",
+          "DestinationKey"
+        ]
+      ],
+      "foreignKeys": [],
+      "checks": [],
+      "indexes": [],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "optional",
+      "classificationReason": "تنها در صورت فعال‌سازی اشتراک رویدادهای مصوب؛ مقصد دلخواه مرورگر مجاز نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "جدول اختصاصی پیشنهادی؛ reuse فقط پس از اثبات برابری کلیدها، مجوز، تاریخچه، CAS و تراکنش مجاز است. یک API به معنی یک جدول تازه نیست.",
+      "concurrency": "RowVersion فقط token باینری مقایسه است و زمان نیست؛ SQL آن را می‌سازد. CAS ردیف و قواعد aggregate در تراکنش کنترل شوند.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "F11",
+        "G01"
+      ],
+      "writeOperations": [
+        "F11"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-000000000023",
+        "EventCode": "example",
+        "DestinationKey": "نمونه",
+        "Enabled": false,
+        "RowVersion": "0x0000000000000001"
+      }
+    },
+    {
+      "name": "AuditLogs",
+      "purpose": "audit سرور، بدون راز یا رسانه",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "bigint IDENTITY(1,1)",
+          "nullable": false,
+          "description": "شناسه داخلی سرور"
+        },
+        {
+          "name": "ActorReference",
+          "type": "nvarchar(160)",
+          "nullable": false,
+          "description": "فراداده ActorReference در AuditLogs"
+        },
+        {
+          "name": "InspectionId",
+          "type": "uniqueidentifier",
+          "nullable": true,
+          "description": "شناسه مرجع InspectionId"
+        },
+        {
+          "name": "ActionCode",
+          "type": "varchar(100)",
+          "nullable": false,
+          "description": "فراداده ActionCode در AuditLogs"
+        },
+        {
+          "name": "ResourceType",
+          "type": "varchar(80)",
+          "nullable": false,
+          "description": "فراداده ResourceType در AuditLogs"
+        },
+        {
+          "name": "ResourceId",
+          "type": "nvarchar(160)",
+          "nullable": false,
+          "description": "فراداده ResourceId در AuditLogs"
+        },
+        {
+          "name": "CorrelationId",
+          "type": "varchar(80)",
+          "nullable": false,
+          "description": "فراداده CorrelationId در AuditLogs"
+        },
+        {
+          "name": "MetadataJson",
+          "type": "nvarchar(max)",
+          "nullable": true,
+          "description": "جزئیات whitelist بدون راز یا باینری"
+        },
+        {
+          "name": "CreatedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای CreatedAt",
+          "default": "SYSUTCDATETIME()"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "InspectionId"
+          ],
+          "table": "Inspections",
+          "references": [
+            "Id"
+          ]
+        }
+      ],
+      "checks": [
+        "[MetadataJson] IS NULL OR ISJSON([MetadataJson])=1"
+      ],
+      "indexes": [
+        {
+          "columns": [
+            "InspectionId",
+            "CreatedAt"
+          ],
+          "unique": false
+        },
+        {
+          "columns": [
+            "ActionCode",
+            "CreatedAt"
+          ],
+          "unique": false
+        }
+      ],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "mandatory",
+      "classificationReason": "مسئولیت این جدول برای جریان فعلی الزامی است؛ الزام به ایجاد جدول فیزیکی تکراری در صورت reuse مصوب نیست.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "زیرساخت audit موجود در صورت append-only بودن، redaction، scope و قابلیت جست‌وجو قابل استفاده است.",
+      "concurrency": "ثبت append-only/insert با کلید یکتا و idempotency؛ در صورت تغییر ارتباط، نسخه aggregate والد کنترل شود. تاریخچه درجا بازنویسی نشود.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [],
+      "writeOperations": [
+        "A03",
+        "A04",
+        "B01",
+        "B06",
+        "B07",
+        "B09",
+        "B10",
+        "C01",
+        "C02",
+        "C03",
+        "C07",
+        "D02",
+        "D06",
+        "D07",
+        "D08",
+        "D09",
+        "E03",
+        "E04",
+        "E05",
+        "E06",
+        "E07",
+        "E08",
+        "E09",
+        "F02",
+        "F03",
+        "F04",
+        "F06",
+        "F07",
+        "F08",
+        "F09",
+        "F10",
+        "F11",
+        "G01",
+        "G02",
+        "G03",
+        "G04"
+      ],
+      "example": {
+        "Id": 1,
+        "ActorReference": "نمونه",
+        "InspectionId": null,
+        "ActionCode": "example",
+        "ResourceType": "example",
+        "ResourceId": "نمونه",
+        "CorrelationId": "example",
+        "MetadataJson": "{\"action\":\"example\"}",
+        "CreatedAt": "2026-10-27T08:30:00.000Z"
+      }
+    },
+    {
+      "name": "NotificationOutbox",
+      "purpose": "اعلان اختیاری مصوب؛ نه جایگزین وضعیت سامانه",
+      "columns": [
+        {
+          "name": "Id",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه داخلی سرور",
+          "default": "NEWSEQUENTIALID()"
+        },
+        {
+          "name": "InspectionId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع InspectionId"
+        },
+        {
+          "name": "EventId",
+          "type": "uniqueidentifier",
+          "nullable": false,
+          "description": "شناسه مرجع EventId"
+        },
+        {
+          "name": "ChannelCode",
+          "type": "varchar(16)",
+          "nullable": false,
+          "description": "فراداده ChannelCode در NotificationOutbox"
+        },
+        {
+          "name": "RecipientReference",
+          "type": "nvarchar(160)",
+          "nullable": false,
+          "description": "مرجع هویت مبدأ؛ نه شماره دلخواه مرورگر"
+        },
+        {
+          "name": "TemplateKey",
+          "type": "nvarchar(80)",
+          "nullable": false,
+          "description": "کلید منطقی قالب"
+        },
+        {
+          "name": "State",
+          "type": "varchar(16)",
+          "nullable": false,
+          "description": "وضعیت این منبع؛ قید CHECK حاکم است"
+        },
+        {
+          "name": "AttemptCount",
+          "type": "int",
+          "nullable": false,
+          "description": "شمار تلاش غیرمنفی",
+          "default": "0"
+        },
+        {
+          "name": "NextRetryAt",
+          "type": "datetime2(3)",
+          "nullable": true,
+          "description": "زمان تلاش بعدی با backoff محدود"
+        },
+        {
+          "name": "CreatedAt",
+          "type": "datetime2(3)",
+          "nullable": false,
+          "description": "زمان UTC سرور برای CreatedAt",
+          "default": "SYSUTCDATETIME()"
+        },
+        {
+          "name": "RowVersion",
+          "type": "rowversion",
+          "nullable": false,
+          "description": "نسخه هشت‌بایتی CAS؛ زمان یا کلید هویت نیست"
+        }
+      ],
+      "primaryKey": [
+        "Id"
+      ],
+      "unique": [
+        [
+          "EventId",
+          "ChannelCode"
+        ]
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "InspectionId"
+          ],
+          "table": "Inspections",
+          "references": [
+            "Id"
+          ]
+        }
+      ],
+      "checks": [
+        "[State] IN ('queued','sending','sent','failed')",
+        "[AttemptCount]>=0"
+      ],
+      "indexes": [
+        {
+          "columns": [
+            "State",
+            "NextRetryAt"
+          ],
+          "unique": false
+        }
+      ],
+      "security": "فقط پایگاه همین نصب؛ کنترل مالکیت/نقش/ارجاع در لحظه commit؛ ذخیره باینری رسانه در SQL ممنوع",
+      "classification": "optional",
+      "classificationReason": "فقط با تصویب کانال/رضایت اعلان؛ نبود آن وضعیت/رسید را از دسترس خارج نمی‌کند.",
+      "ownership": "متعلق به برنامه بازدید همین کارگزاری؛ در صورت snapshot، تاریخچه immutable و مستقل از تغییرات بعدی مبدأ است.",
+      "reuse": "outbox مصوب موجود در همان deployment با یکتایی event/channel و retry قابل جایگزینی است.",
+      "concurrency": "RowVersion فقط token باینری مقایسه است و زمان نیست؛ SQL آن را می‌سازد. CAS ردیف و قواعد aggregate در تراکنش کنترل شوند.",
+      "retention": "هیچ مدت حذف خودکار تصویب نشده است؛ active/submission/history/legal-hold و روابط قبل از حذف بررسی شوند. مدت، backup و حذف با D12 تصویب شود.",
+      "readOperations": [
+        "G01"
+      ],
+      "writeOperations": [
+        "G01"
+      ],
+      "example": {
+        "Id": "00000000-0000-0000-0000-000000000025",
+        "InspectionId": "00000000-0000-0000-0000-000000000006",
+        "EventId": "00000000-0000-0000-0000-000000000025",
+        "ChannelCode": "example",
+        "RecipientReference": "نمونه",
+        "TemplateKey": "body-image-guided",
+        "State": "queued",
+        "AttemptCount": 0,
+        "NextRetryAt": null,
+        "CreatedAt": "2026-10-27T08:30:00.000Z",
+        "RowVersion": "0x0000000000000001"
+      }
+    }
+  ],
+  "deferredForeignKeys": [
+    {
+      "fromTable": "EvidenceVersions",
+      "columns": [
+        "ReplacesVersionId",
+        "EvidenceId"
+      ],
+      "table": "EvidenceVersions",
+      "references": [
+        "Id",
+        "EvidenceId"
+      ]
+    },
+    {
+      "fromTable": "InspectionEvidence",
+      "columns": [
+        "CurrentVersionId",
+        "Id"
+      ],
+      "table": "EvidenceVersions",
+      "references": [
+        "Id",
+        "EvidenceId"
+      ]
+    },
+    {
+      "fromTable": "InspectionEvidence",
+      "columns": [
+        "PendingVersionId",
+        "Id"
+      ],
+      "table": "EvidenceVersions",
+      "references": [
+        "Id",
+        "EvidenceId"
+      ]
+    },
+    {
+      "fromTable": "OdometerReadings",
+      "columns": [
+        "EvidenceVersionId",
+        "InspectionId"
+      ],
+      "table": "EvidenceVersions",
+      "references": [
+        "Id",
+        "InspectionId"
+      ]
+    },
+    {
+      "fromTable": "InspectionSubmissions",
+      "columns": [
+        "CorrectionRequestId",
+        "InspectionId"
+      ],
+      "table": "CorrectionRequests",
+      "references": [
+        "Id",
+        "InspectionId"
+      ]
+    }
+  ],
+  "notEnforcedBySqlCheck": [
+    "تعداد دقیق ۱۱ عکس/یک ویدیو، عضویت فعال قالب، MIME/هش/مسیر فیزیکی، مجوز/ارجاع/ظرفیت، انتقال وضعیت، حفظ اصل و تراکنش file+SQL و تأیید مقصد باید در سرویس و آزمون Backend enforce شود."
+  ],
+  "blueprintStatus": "PROPOSED_BACKEND_CONTRACT",
+  "mandatoryTables": 34,
+  "optionalTables": 3
+}

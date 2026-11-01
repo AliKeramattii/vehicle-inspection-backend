@@ -1,0 +1,6 @@
+# پایان خط اسناد تازه یکسان بماند؛ بایت مرجع‌های تحویل‌شده تغییر نکند
+* text=auto
+*.md text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
+docs/reference/** -text

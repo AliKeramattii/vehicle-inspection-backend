@@ -1,0 +1,3159 @@
+{
+  "status": "PROPOSED",
+  "basePathConvention": "/api نماد پایه قابل پیکربندی؛ /api/bazdid فقط یک‌بار join می‌شود.",
+  "endpoints": [
+    {
+      "id": "P00",
+      "method": "GET",
+      "path": "/site-bootstrap.json",
+      "kind": "static",
+      "status": "CURRENT_STATIC_FILE",
+      "title": "فایل عمومی هویت نصب",
+      "operations": [
+        "A01"
+      ],
+      "role": "public",
+      "authentication": "بدون نشست؛ فقط داده عمومی مجاز نصب",
+      "pathParameters": {},
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json"
+      },
+      "requestSchema": "Bootstrap",
+      "responseSchema": "Bootstrap",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        404,
+        503
+      ],
+      "validation": "ساختار SiteBootstrap، origin مجاز و URL عمومی معتبر؛ فایل هیچ کلید خصوصی، session یا هویت مشتری ندارد.",
+      "idempotency": "بدون اثر تجاری؛ تکرار خواندن امن است، حساس‌ها no-store و بدون cache عمومی",
+      "concurrency": "خواندن ETag/version؛ GET هیچ بازدید یا تصمیمی ایجاد نمی‌کند",
+      "tables": [],
+      "frontendAdapters": [
+        "src/config/site-settings.loader.ts"
+      ],
+      "dependencies": "توافق هویت/نصب و قرارداد عمومی",
+      "openDecisions": [
+        "D01",
+        "D02"
+      ]
+    },
+    {
+      "id": "P01",
+      "method": "GET",
+      "path": "/api/public/site-settings",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "تنظیمات عمومی منتشرشده",
+      "operations": [
+        "A02",
+        "F05"
+      ],
+      "role": "public",
+      "authentication": "بدون نشست؛ فقط داده عمومی مجاز نصب",
+      "pathParameters": {},
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json"
+      },
+      "requestSchema": "Empty",
+      "responseSchema": "PublicSettings",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        404,
+        503
+      ],
+      "validation": "schemaVersion و tenant نصب و نسخه انتشار معتبر؛ projection فقط عمومی است و secret سرویس یا مسیر خصوصی ندارد.؛ همان projection عمومی A02؛ هیچ store یا endpoint رقیب برای برند ساخته نشود.",
+      "idempotency": "بدون اثر تجاری؛ تکرار خواندن امن است، حساس‌ها no-store و بدون cache عمومی",
+      "concurrency": "خواندن ETag/version؛ GET هیچ بازدید یا تصمیمی ایجاد نمی‌کند",
+      "tables": [
+        "BrandingAssets",
+        "SiteSettings",
+        "SiteSettingsAssetLinks",
+        "SiteSettingsVersions"
+      ],
+      "frontendAdapters": [
+        "src/config/site-settings.loader.ts"
+      ],
+      "dependencies": "توافق هویت/نصب و قرارداد عمومی؛ A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "openDecisions": [
+        "D01",
+        "D02",
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "AU01",
+      "method": "POST",
+      "path": "/api/auth/customer-handoff",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "تبادل بلیت مشتری مبدأ",
+      "operations": [
+        "A03"
+      ],
+      "role": "source",
+      "authentication": "بلیت معتبر مبدأ و ضد replay؛ روش نهایی نیازمند تصویب",
+      "pathParameters": {},
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "TicketRequest",
+      "responseSchema": "Session",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "issuer، audience، expiry، state/nonce و اتصال subject به sourceRequest؛ مصرف اتمیک بلیت یک‌بارمصرف و رد replay.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "بلیت/nonce یک‌بار به‌صورت اتمیک مصرف شود؛ بازیابی همان تحویل پس از پاسخ گم‌شده باید امن باشد. این فرمان expectedVersion بازدید ندارد؛ TTL و پروتکل بازیابی در قرارداد هویت تصویب شود.",
+      "tables": [
+        "AuditLogs",
+        "Customers",
+        "IdempotencyRecords",
+        "SourceInsuranceRequests"
+      ],
+      "frontendAdapters": [
+        "src/features/identity/source-context.ts"
+      ],
+      "dependencies": "توافق هویت/نصب و قرارداد عمومی",
+      "openDecisions": [
+        "D01",
+        "D02"
+      ]
+    },
+    {
+      "id": "AU02",
+      "method": "POST",
+      "path": "/api/auth/staff/exchange",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "تبادل بلیت کارکنان؛ مشروط به انتخاب این روش SSO",
+      "operations": [
+        "A04"
+      ],
+      "role": "staff-handoff",
+      "authentication": "بلیت معتبر مبدأ و ضد replay؛ روش نهایی نیازمند تصویب",
+      "pathParameters": {},
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "TicketRequest",
+      "responseSchema": "Session",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "پروتکل SSO مصوب، issuer/audience/callback/PKCE یا بلیت محدود؛ نگاشت subject به نقش فعال از مرجع trusted.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "بلیت/nonce یک‌بار به‌صورت اتمیک مصرف شود؛ بازیابی همان تحویل پس از پاسخ گم‌شده باید امن باشد. این فرمان expectedVersion بازدید ندارد؛ TTL و پروتکل بازیابی در قرارداد هویت تصویب شود.",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "StaffRoleAssignments",
+        "StaffUsers"
+      ],
+      "frontendAdapters": [
+        "src/features/identity/staff-session.ts"
+      ],
+      "dependencies": "توافق هویت/نصب و قرارداد عمومی",
+      "openDecisions": [
+        "D01",
+        "D02"
+      ]
+    },
+    {
+      "id": "AU03",
+      "method": "GET",
+      "path": "/api/me",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "وضعیت نشست",
+      "operations": [
+        "A05"
+      ],
+      "role": "session",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {},
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json"
+      },
+      "requestSchema": "Empty",
+      "responseSchema": "Session",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "اعتبار نشست سرور، expiry/revocation و scope نصب؛ بازگردانی sessionStorage mock مدرک احراز هویت تولیدی نیست.",
+      "idempotency": "بدون اثر تجاری؛ تکرار خواندن امن است، حساس‌ها no-store و بدون cache عمومی",
+      "concurrency": "خواندن ETag/version؛ GET هیچ بازدید یا تصمیمی ایجاد نمی‌کند",
+      "tables": [
+        "Customers",
+        "SourceInsuranceRequests",
+        "StaffRoleAssignments",
+        "StaffUsers"
+      ],
+      "frontendAdapters": [
+        "src/features/identity/source-context.ts"
+      ],
+      "dependencies": "توافق هویت/نصب و قرارداد عمومی",
+      "openDecisions": [
+        "D01",
+        "D02"
+      ]
+    },
+    {
+      "id": "AU04",
+      "method": "POST",
+      "path": "/api/auth/logout",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "ابطال نشست",
+      "operations": [
+        "A06"
+      ],
+      "role": "session",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {},
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست"
+      },
+      "requestSchema": "Empty",
+      "responseSchema": "Acknowledgement",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "نشست معتبر و ضد CSRF؛ ابطال سرور و cookie؛ logout سراسری مبدأ فقط طبق توافق.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "ابطال نشست با logout موازی امن باشد؛ logout تکراری اثر اضافه ندارد و نسخه بازدید لازم نیست.",
+      "tables": [
+        "AuditLogs"
+      ],
+      "frontendAdapters": [
+        "src/features/identity/staff-session.ts"
+      ],
+      "dependencies": "توافق هویت/نصب و قرارداد عمومی",
+      "openDecisions": [
+        "D01",
+        "D02"
+      ]
+    },
+    {
+      "id": "AU05",
+      "method": "POST",
+      "path": "/api/referrals/validate",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "اعتبار معرفی‌نامه در زمینه مبدأ",
+      "operations": [
+        "A07"
+      ],
+      "role": "source",
+      "authentication": "بلیت معتبر مبدأ و ضد replay؛ روش نهایی نیازمند تصویب",
+      "pathParameters": {},
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "ReferralRequest",
+      "responseSchema": "ReferralResult",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "معرفی‌نامه معتبر، انقضا و اتصال به درخواست و شماره trusted؛ پاسخ نباید شماره دیگران را افشا کند.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "اعتبارسنجی خواندنی است و تلاش بازدید نمی‌سازد؛ rate limit از scope trusted مشتق شود، بدون CAS بازدید.",
+      "tables": [
+        "Customers",
+        "SourceInsuranceRequests"
+      ],
+      "frontendAdapters": [
+        "src/lib/api/repositories.ts"
+      ],
+      "dependencies": "توافق هویت/نصب و قرارداد عمومی",
+      "openDecisions": [
+        "D01",
+        "D02"
+      ]
+    },
+    {
+      "id": "AU06",
+      "method": "POST",
+      "path": "/api/auth/otp/request",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "صدور یا ارسال دوباره چالش OTP",
+      "operations": [
+        "A08"
+      ],
+      "role": "source",
+      "authentication": "بلیت معتبر مبدأ و ضد replay؛ روش نهایی نیازمند تصویب",
+      "pathParameters": {},
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "OtpRequest",
+      "responseSchema": "OtpChallenge",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "همان شماره فقط‌خواندنی منبع، challenge/sourceRequest، cooldown و rate limit؛ هیچ شماره قابل‌ویرایش هویت نمی‌سازد.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "نسخه/expiry/سقف تلاش و مصرف challenge در سرور اتمیک کنترل شود؛ expectedVersion بازدید در این مرحله کاربرد ندارد.",
+      "tables": [
+        "Customers",
+        "SourceInsuranceRequests"
+      ],
+      "frontendAdapters": [
+        "src/lib/api/repositories.ts"
+      ],
+      "dependencies": "توافق هویت/نصب و قرارداد عمومی",
+      "openDecisions": [
+        "D01",
+        "D02"
+      ]
+    },
+    {
+      "id": "AU07",
+      "method": "POST",
+      "path": "/api/auth/otp/verify",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "تأیید چالش و صدور نشست محدود",
+      "operations": [
+        "A09"
+      ],
+      "role": "source",
+      "authentication": "بلیت معتبر مبدأ و ضد replay؛ روش نهایی نیازمند تصویب",
+      "pathParameters": {},
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "OtpVerification",
+      "responseSchema": "Session",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "challenge فعال، کد با طول مصوب، expiry و سقف تلاش؛ مصرف اتمیک؛ کد پنج‌رقمی mock قاعده تولیدی نیست.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "نسخه/expiry/سقف تلاش و مصرف challenge در سرور اتمیک کنترل شود؛ expectedVersion بازدید در این مرحله کاربرد ندارد.",
+      "tables": [
+        "AuditLogs",
+        "Customers",
+        "IdempotencyRecords",
+        "SourceInsuranceRequests"
+      ],
+      "frontendAdapters": [
+        "src/lib/api/repositories.ts"
+      ],
+      "dependencies": "توافق هویت/نصب و قرارداد عمومی",
+      "openDecisions": [
+        "D01",
+        "D02"
+      ]
+    },
+    {
+      "id": "I01",
+      "method": "POST",
+      "path": "/api/inspections",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "ایجاد بازدید و تثبیت نسخه قالب",
+      "operations": [
+        "B01"
+      ],
+      "role": "customer",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {},
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "CreateInspection",
+      "responseSchema": "Inspection",
+      "contentType": "application/json",
+      "successStatuses": [
+        201,
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "مالکیت درخواست مبدأ و قالب منتشرشده؛ عدم ایجاد current دوم؛ کلید ثابت و شماره attempt در تراکنش.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InspectionTemplates",
+        "Inspections",
+        "SourceInsuranceRequests",
+        "Vehicles"
+      ],
+      "frontendAdapters": [
+        "src/features/inspection-status/lifecycle-repository.ts"
+      ],
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "I02",
+      "method": "GET",
+      "path": "/api/inspections/{inspectionId}",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "دریافت حقایق بازدید",
+      "operations": [
+        "B02"
+      ],
+      "role": "owner-staff",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "inspectionId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json"
+      },
+      "requestSchema": "Empty",
+      "responseSchema": "Inspection",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "شناسه opaque و اتصال مالک یا اختیار کارکنان؛ نسخه قالب و حقایق همان تلاش، نه رکورد ساختگی جدید.",
+      "idempotency": "بدون اثر تجاری؛ تکرار خواندن امن است، حساس‌ها no-store و بدون cache عمومی",
+      "concurrency": "خواندن ETag/version؛ GET هیچ بازدید یا تصمیمی ایجاد نمی‌کند",
+      "tables": [
+        "InspectionLocations",
+        "Inspections",
+        "Vehicles"
+      ],
+      "frontendAdapters": [
+        "src/lib/api/repositories.ts"
+      ],
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "I03",
+      "method": "GET",
+      "path": "/api/inspections/current",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "تلاش جاری درخواست بیمه",
+      "operations": [
+        "B03"
+      ],
+      "role": "customer",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {},
+      "queryParameters": {
+        "sourceRequestId": "string؛ باید متعلق به زمینه معتبر نشست باشد"
+      },
+      "headers": {
+        "Accept": "application/json"
+      },
+      "requestSchema": "Empty",
+      "responseSchema": "InspectionOrNone",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "sourceRequest متعلق به subject نشست؛ پاسخ nullable برای نبود current؛ GET اجازه ساخت تلاش ندارد.",
+      "idempotency": "بدون اثر تجاری؛ تکرار خواندن امن است، حساس‌ها no-store و بدون cache عمومی",
+      "concurrency": "خواندن ETag/version؛ GET هیچ بازدید یا تصمیمی ایجاد نمی‌کند",
+      "tables": [
+        "Inspections",
+        "SourceInsuranceRequests"
+      ],
+      "frontendAdapters": [
+        "src/features/inspection-status/customer-entry.tsx"
+      ],
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "I04",
+      "method": "GET",
+      "path": "/api/inspections",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "پیگیری مالک یا صف و جست‌وجوی مجاز کارکنان",
+      "operations": [
+        "B04",
+        "E01"
+      ],
+      "role": "owner-staff",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {},
+      "queryParameters": {
+        "cursor": "string اختیاری، opaque و scope-bound",
+        "pageSize": "integer از 1 تا 100؛ پیش‌فرض 20",
+        "sort": "whitelist، ترتیب پایدار با شناسه نهایی",
+        "trackingCode": "string اختیاری؛ مجوز از نشست، نه کد",
+        "status": "InspectionLifecycle اختیاری",
+        "q": "string حداکثر 100، بدون اطلاعات خصوصی در log"
+      },
+      "headers": {
+        "Accept": "application/json"
+      },
+      "requestSchema": "Empty",
+      "responseSchema": "InspectionPage",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "scope مشتری یا permission کارکنان، cursor و pageSize محدود؛ trackingCode به تنهایی مجوز نیست.؛ فیلتر، cursor و scope کارکنان؛ آمار از query واقعی، نه مقدار نمایشی ثابت؛ حد pageSize.",
+      "idempotency": "بدون اثر تجاری؛ تکرار خواندن امن است، حساس‌ها no-store و بدون cache عمومی",
+      "concurrency": "خواندن ETag/version؛ GET هیچ بازدید یا تصمیمی ایجاد نمی‌کند",
+      "tables": [
+        "Customers",
+        "Inspections",
+        "ReviewerAssignments",
+        "SourceInsuranceRequests",
+        "StaffUsers"
+      ],
+      "frontendAdapters": [
+        "src/features/review-operations/model.ts",
+        "src/features/review-operations/repository.ts"
+      ],
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست؛ A04/A05، D02؛ ارجاع و نسخه پرونده",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "I05",
+      "method": "GET",
+      "path": "/api/inspections/{inspectionId}/capture-plan",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "قالب ثابت همان بازدید",
+      "operations": [
+        "B05"
+      ],
+      "role": "owner-staff",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "inspectionId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json"
+      },
+      "requestSchema": "Empty",
+      "responseSchema": "CapturePlan",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "قالب immutable پین‌شده همین تلاش؛ requirementId‌های یکتا و گزینه‌های همان نسخه؛ نسخه قدیمی بازنویسی نشود.",
+      "idempotency": "بدون اثر تجاری؛ تکرار خواندن امن است، حساس‌ها no-store و بدون cache عمومی",
+      "concurrency": "خواندن ETag/version؛ GET هیچ بازدید یا تصمیمی ایجاد نمی‌کند",
+      "tables": [
+        "EvidenceRequirements",
+        "InspectionTemplates",
+        "RequirementAlternatives"
+      ],
+      "frontendAdapters": [
+        "src/lib/api/repositories.ts"
+      ],
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "I06",
+      "method": "POST",
+      "path": "/api/inspections/{inspectionId}/consent",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "ثبت پذیرش شرایط",
+      "operations": [
+        "B06"
+      ],
+      "role": "customer",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "inspectionId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "ConsentRequest",
+      "responseSchema": "Acknowledgement",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "accepted=true، نسخه شرایط مجاز و عدم جعل زمان/هویت؛ رسید سرور و نسخه بازدید ثبت شود.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InspectionConsents"
+      ],
+      "frontendAdapters": [
+        "src/lib/api/repositories.ts"
+      ],
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "I07",
+      "method": "PUT",
+      "path": "/api/inspections/{inspectionId}/location",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "ثبت موقعیت تأییدشده",
+      "operations": [
+        "B07"
+      ],
+      "role": "customer",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "inspectionId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "LocationRequest",
+      "responseSchema": "Location",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "lat/lng محدود، accuracy غیرمنفی و رشته‌های محدود؛ نسخه و اجازه ویرایش؛ درخواست مجدد GPS لازم نیست.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InspectionLocations",
+        "Inspections"
+      ],
+      "frontendAdapters": [
+        "src/lib/media/inspection-facts-store.ts"
+      ],
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "I08",
+      "method": "GET",
+      "path": "/api/inspections/{inspectionId}/vehicle",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "مشخصات خودرو",
+      "operations": [
+        "B08"
+      ],
+      "role": "owner-staff",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "inspectionId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json"
+      },
+      "requestSchema": "Empty",
+      "responseSchema": "Vehicle",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "snapshot خودرو همین بازدید؛ پلاک ساختاریافته، VIN با projection مناسب و مجوز خواندن.",
+      "idempotency": "بدون اثر تجاری؛ تکرار خواندن امن است، حساس‌ها no-store و بدون cache عمومی",
+      "concurrency": "خواندن ETag/version؛ GET هیچ بازدید یا تصمیمی ایجاد نمی‌کند",
+      "tables": [
+        "Vehicles"
+      ],
+      "frontendAdapters": [
+        "src/lib/api/repositories.ts"
+      ],
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "I09",
+      "method": "PUT",
+      "path": "/api/inspections/{inspectionId}/vehicle",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "تأیید مشخصات و مغایرت مجاز",
+      "operations": [
+        "B09"
+      ],
+      "role": "customer",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "inspectionId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "VehicleRequest",
+      "responseSchema": "Vehicle",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "IranianPlate segment‌ها، حقایق مجاز و نسخه؛ پس از ارسال تغییر آزاد ممنوع و field correction باید scoped باشد.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "Inspections",
+        "Vehicles"
+      ],
+      "frontendAdapters": [
+        "src/lib/api/repositories.ts"
+      ],
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "I10",
+      "method": "PUT",
+      "path": "/api/inspections/{inspectionId}/vehicle/plate",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "نام مستعار سازگار برای اصلاح پلاک پیش از ارسال",
+      "operations": [
+        "B09"
+      ],
+      "role": "customer",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "inspectionId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "PlateRequest",
+      "responseSchema": "Vehicle",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "IranianPlate segment‌ها، حقایق مجاز و نسخه؛ پس از ارسال تغییر آزاد ممنوع و field correction باید scoped باشد.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "Inspections",
+        "Vehicles"
+      ],
+      "frontendAdapters": [
+        "src/lib/api/repositories.ts"
+      ],
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "I11",
+      "method": "PUT",
+      "path": "/api/inspections/{inspectionId}/odometer",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "کیلومتر عددی؛ خواندن از summary",
+      "operations": [
+        "B10"
+      ],
+      "role": "customer",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "inspectionId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "OdometerRequest",
+      "responseSchema": "Odometer",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "kilometers صحیح و امن، صفر مجاز؛ evidenceId در صورت وجود به عکس کیلومتر همین بازدید؛ replacement عدد را خودکار پاک نکند.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "Inspections",
+        "OdometerReadings"
+      ],
+      "frontendAdapters": [
+        "src/lib/media/capture-data-store.ts"
+      ],
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "M01",
+      "method": "GET",
+      "path": "/api/maps/reverse",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "مرز مرکزی نشانی نشان",
+      "operations": [
+        "B11"
+      ],
+      "role": "customer",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {},
+      "queryParameters": {
+        "lat": "number محدود به[-90,90]",
+        "lng": "number محدود به[-180,180]"
+      },
+      "headers": {
+        "Accept": "application/json"
+      },
+      "requestSchema": "Empty",
+      "responseSchema": "ReverseAddress",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "مختصات محدود، مجوز و quota درخواست؛ کلید خصوصی Neshan فقط سرور مرکزی و پاسخ عمومی نشانی فارسی.",
+      "idempotency": "بدون اثر تجاری؛ تکرار خواندن امن است، حساس‌ها no-store و بدون cache عمومی",
+      "concurrency": "خواندن ETag/version؛ GET هیچ بازدید یا تصمیمی ایجاد نمی‌کند",
+      "tables": [],
+      "frontendAdapters": [
+        "src/lib/map/reverse-geocoder.ts"
+      ],
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "EV01",
+      "method": "POST",
+      "path": "/api/inspections/{inspectionId}/evidence",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "ثبت نسخه و قرارداد انتقال مشترک عکس و ویدیو",
+      "operations": [
+        "C01",
+        "D06"
+      ],
+      "role": "customer",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "inspectionId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "EvidenceRegistration",
+      "responseSchema": "UploadTicket",
+      "contentType": "application/json",
+      "successStatuses": [
+        201,
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "kind و revision ثابت؛ requirement عضو قالب پین‌شده؛ spec-plate نسخه ۲ دقیقاً یک alternative معتبر؛ video فاقد photoId؛ فراداده نوع/اندازه و scope اصلاح.؛ candidate به request/item/requirement/revision مجاز وصل باشد؛ هیچ قلم اضافی یا job قدیمی pointer اصل را تغییر ندهد.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "نسخه همان evidence slot/upload session با CAS کنترل شود؛ عضویت، قفل بازدید و scope اصلاح در تراکنش بررسی شود. Byte progress نسخه aggregate را عوض نکند. replay نتیجه ثبت‌شده پیش از رد CAS کهنه؛ granularity نهایی در D04 تصویب شود.",
+      "tables": [
+        "AuditLogs",
+        "CorrectionItems",
+        "EvidenceVersions",
+        "IdempotencyRecords",
+        "InspectionEvidence",
+        "MediaFiles",
+        "UploadSessions"
+      ],
+      "frontendAdapters": [
+        "src/features/additional-evidence/request-service.ts",
+        "src/features/upload/upload-transport.ts"
+      ],
+      "dependencies": "A03/A05، B01/B05؛ سیاست نوع/اندازه و فضای خصوصی؛ B01-B10، C01-C06؛ نسخه دقیق و آمادگی سرور",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "EV02",
+      "method": "PUT",
+      "path": "/api/uploads/{uploadId}/content",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "جریان فایل به فضای موقت خصوصی",
+      "operations": [
+        "C02"
+      ],
+      "role": "upload-owner",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "uploadId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "MIME واقعی مذاکره‌شده",
+        "Content-Length": "اگر توسط UA/پروتکل ارسال شد باید مطابق ticket باشد؛ درغیاب آن stream محدود و count واقعی ملاک است."
+      },
+      "requestSchema": "BinaryTransfer",
+      "responseSchema": "TransferResult",
+      "contentType": "application/octet-stream",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        413,
+        415,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "upload session متعلق به همان نسخه، expiry و سقف stream؛ signature/hash واقعی در سرور؛ فایل بدون Base64 و بدون مسیر دلخواه نوشته شود.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "فقط مالک lease/session و هویت ثابت همین انتقال می‌تواند stream بنویسد؛ انتقال تکراری هم‌زمان باید رد یا به همان نتیجه وصل شود. پیشرفت بایت rowversion کل بازدید را تغییر ندهد.",
+      "tables": [
+        "AuditLogs",
+        "EvidenceVersions",
+        "IdempotencyRecords",
+        "MediaFiles",
+        "UploadSessions"
+      ],
+      "frontendAdapters": [
+        "src/features/upload/upload-coordinator.ts"
+      ],
+      "dependencies": "A03/A05، B01/B05؛ سیاست نوع/اندازه و فضای خصوصی",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "EV03",
+      "method": "POST",
+      "path": "/api/evidence/{evidenceId}/complete",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "تأیید پایدار انتقال و اعلام پردازش",
+      "operations": [
+        "C03",
+        "D06"
+      ],
+      "role": "upload-owner",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "evidenceId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "CompleteUpload",
+      "responseSchema": "Evidence",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "بایت پایدار، اندازه و hash سرور، revision هدف و receipt قابل بازیابی؛ پردازش جدا؛ اصل خوب قبل از موفقیت حفظ شود.؛ candidate به request/item/requirement/revision مجاز وصل باشد؛ هیچ قلم اضافی یا job قدیمی pointer اصل را تغییر ندهد.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "نسخه همان evidence slot/upload session با CAS کنترل شود؛ عضویت، قفل بازدید و scope اصلاح در تراکنش بررسی شود. Byte progress نسخه aggregate را عوض نکند. replay نتیجه ثبت‌شده پیش از رد CAS کهنه؛ granularity نهایی در D04 تصویب شود.",
+      "tables": [
+        "AuditLogs",
+        "CorrectionItems",
+        "EvidenceVersions",
+        "IdempotencyRecords",
+        "MediaFiles",
+        "MediaProcessingJobs",
+        "UploadSessions"
+      ],
+      "frontendAdapters": [
+        "src/features/additional-evidence/request-service.ts",
+        "src/features/upload/upload-transport.ts"
+      ],
+      "dependencies": "A03/A05، B01/B05؛ سیاست نوع/اندازه و فضای خصوصی؛ B01-B10، C01-C06؛ نسخه دقیق و آمادگی سرور",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "EV04",
+      "method": "GET",
+      "path": "/api/inspections/{inspectionId}/evidence",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "فهرست و تطبیق نسخه و وضعیت پردازش",
+      "operations": [
+        "C04",
+        "C05"
+      ],
+      "role": "owner-staff",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "inspectionId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {
+        "cursor": "string اختیاری، opaque و scope-bound",
+        "pageSize": "integer از 1 تا 100؛ پیش‌فرض 20",
+        "sort": "whitelist، ترتیب پایدار با شناسه نهایی",
+        "view": "current یا history؛ history تنها با مجوز"
+      },
+      "headers": {
+        "Accept": "application/json"
+      },
+      "requestSchema": "Empty",
+      "responseSchema": "EvidencePage",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "scope پرونده/نسخه و cursor محدود؛ نمایش current/history دقیق؛ localBlobKey مرجع فایل سرور نیست.؛ processing از upload و تصمیم کارشناس جدا؛ فقط وضعیت نسخه مجاز و بدون درصد ساختگی برگردد.",
+      "idempotency": "بدون اثر تجاری؛ تکرار خواندن امن است، حساس‌ها no-store و بدون cache عمومی",
+      "concurrency": "خواندن ETag/version؛ GET هیچ بازدید یا تصمیمی ایجاد نمی‌کند",
+      "tables": [
+        "EvidenceReviews",
+        "EvidenceVersions",
+        "InspectionEvidence",
+        "MediaFiles",
+        "MediaProcessingJobs"
+      ],
+      "frontendAdapters": [
+        "src/features/upload/queue-repository.ts",
+        "src/features/upload/upload-transport.ts"
+      ],
+      "dependencies": "A03/A05، B01/B05؛ سیاست نوع/اندازه و فضای خصوصی",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "EV05",
+      "method": "GET",
+      "path": "/api/inspections/{inspectionId}/evidence/{evidenceId}/file",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "دریافت مجاز نسخه و Range ویدیو",
+      "operations": [
+        "C06"
+      ],
+      "role": "owner-staff",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "inspectionId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت",
+        "evidenceId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {
+        "revision": "string اختیاری؛ نسخه مجاز دقیق",
+        "variant": "original، thumbnail، preview یا transcode؛ فقط variant موجود و مجاز همان revision"
+      },
+      "headers": {
+        "Accept": "نوع رسانه مجاز",
+        "Range": "bytes=start-end اختیاری؛ پاسخ 206 یا 416 معتبر"
+      },
+      "requestSchema": "Empty",
+      "responseSchema": "BinaryTransfer",
+      "contentType": "application/json",
+      "successStatuses": [
+        200,
+        206
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        416,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "مجوز هر درخواست و Range، نسخه دقیق و path containment؛ MIME/nosniff و 206/416 صحیح؛ فایل خصوصی عمومی نشود.",
+      "idempotency": "بدون اثر تجاری؛ تکرار خواندن امن است، حساس‌ها no-store و بدون cache عمومی",
+      "concurrency": "خواندن ETag/version؛ GET هیچ بازدید یا تصمیمی ایجاد نمی‌کند",
+      "tables": [
+        "EvidenceVersions",
+        "MediaFiles",
+        "ReviewerAssignments"
+      ],
+      "frontendAdapters": [
+        "src/features/upload/upload-preview.tsx"
+      ],
+      "dependencies": "A03/A05، B01/B05؛ سیاست نوع/اندازه و فضای خصوصی",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "EV06",
+      "method": "POST",
+      "path": "/api/evidence/{evidenceId}/cancel-upload",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "لغو انتقال منسوخ بدون حذف مدرک خوب",
+      "operations": [
+        "C07"
+      ],
+      "role": "upload-owner",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "evidenceId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "Command",
+      "responseSchema": "Acknowledgement",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "فقط session منسوخ مجاز با CAS لغو شود؛ فایل پذیرفته‌شده یا snapshot قبلی حذف نشود.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "EvidenceVersions",
+        "IdempotencyRecords",
+        "UploadSessions"
+      ],
+      "frontendAdapters": [
+        "src/features/upload/upload-coordinator.ts"
+      ],
+      "dependencies": "A03/A05، B01/B05؛ سیاست نوع/اندازه و فضای خصوصی",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "I12",
+      "method": "GET",
+      "path": "/api/inspections/{inspectionId}/summary",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "مرور نهایی و موانع مشتق",
+      "operations": [
+        "D01",
+        "B10"
+      ],
+      "role": "customer",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "inspectionId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json"
+      },
+      "requestSchema": "Empty",
+      "responseSchema": "Summary",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "خلاصه از همان منابع مشتق؛ ۱۱ عکس قالب تازه، کیلومتر معتبر و ویدیو جدا؛ شمار فایل از قالب، نه عدد ثابت.؛ kilometers صحیح و امن، صفر مجاز؛ evidenceId در صورت وجود به عکس کیلومتر همین بازدید؛ replacement عدد را خودکار پاک نکند.",
+      "idempotency": "بدون اثر تجاری؛ تکرار خواندن امن است، حساس‌ها no-store و بدون cache عمومی",
+      "concurrency": "خواندن ETag/version؛ GET هیچ بازدید یا تصمیمی ایجاد نمی‌کند",
+      "tables": [
+        "AuditLogs",
+        "EvidenceVersions",
+        "IdempotencyRecords",
+        "InspectionEvidence",
+        "Inspections",
+        "OdometerReadings"
+      ],
+      "frontendAdapters": [
+        "src/features/submission/summary-source.ts",
+        "src/lib/media/capture-data-store.ts"
+      ],
+      "dependencies": "B01-B10، C01-C06؛ نسخه دقیق و آمادگی سرور؛ A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "I13",
+      "method": "POST",
+      "path": "/api/inspections/{inspectionId}/submit",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "ارسال رسمی و بازیابی همان فرمان",
+      "operations": [
+        "D02",
+        "D03"
+      ],
+      "role": "customer",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "inspectionId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "Command",
+      "responseSchema": "Receipt",
+      "contentType": "application/json",
+      "successStatuses": [
+        201,
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "آمادگی سروری، receipt همه نسخه‌های هدف، کیلومتر، قفل و CAS؛ processing/uploaded/verified با سیاست باینری سازگار و local/queued/failed مسدود.؛ همان کلید و بدنه فرمان قبلی با احراز مجدد مجوز؛ بازیابی receipt پیش از رد نسخه کهنه؛ ارسال تکراری نسازد.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InspectionStatusHistory",
+        "InspectionSubmissions",
+        "Inspections",
+        "SubmissionEvidence"
+      ],
+      "frontendAdapters": [
+        "src/features/submission/submission-service.ts"
+      ],
+      "dependencies": "B01-B10، C01-C06؛ نسخه دقیق و آمادگی سرور",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "I14",
+      "method": "GET",
+      "path": "/api/inspections/{inspectionId}/status",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "وضعیت امن و رسید تأیید مقصد",
+      "operations": [
+        "D04",
+        "G05"
+      ],
+      "role": "owner-staff",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "inspectionId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json"
+      },
+      "requestSchema": "Empty",
+      "responseSchema": "Status",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "همان inspection و رسید موجود؛ submit و upload و review و forwarding جدا؛ نبود رسید مجوز ادعای موفقیت نیست.؛ نمایش از D04 و فقط پس از ack معتبر FORWARDED؛ وضعیت داخلی credential/خطای خام نشت نکند.",
+      "idempotency": "بدون اثر تجاری؛ تکرار خواندن امن است، حساس‌ها no-store و بدون cache عمومی",
+      "concurrency": "خواندن ETag/version؛ GET هیچ بازدید یا تصمیمی ایجاد نمی‌کند",
+      "tables": [
+        "CorrectionRequests",
+        "ForwardingJobs",
+        "InspectionStatusHistory",
+        "Inspections"
+      ],
+      "frontendAdapters": [
+        "src/features/inspection-status/lifecycle-model.ts",
+        "src/features/inspection-status/status-service.ts"
+      ],
+      "dependencies": "B01-B10، C01-C06؛ نسخه دقیق و آمادگی سرور؛ E09؛ snapshot و مقصد/تأیید مقصد مورد توافق",
+      "openDecisions": [
+        "D04",
+        "D08",
+        "D11",
+        "D12"
+      ]
+    },
+    {
+      "id": "R01",
+      "method": "GET",
+      "path": "/api/inspections/{inspectionId}/evidence-requests",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "اقلام و دلایل دقیق اصلاح",
+      "operations": [
+        "D05"
+      ],
+      "role": "owner-staff",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "inspectionId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json"
+      },
+      "requestSchema": "Empty",
+      "responseSchema": "EvidenceRequestPage",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "requestId/version متعلق به همین بازدید و مشتری؛ reason عمومی و اقلام فعال دقیق؛ اطلاعات خصوصی کارشناس حذف شود.",
+      "idempotency": "بدون اثر تجاری؛ تکرار خواندن امن است، حساس‌ها no-store و بدون cache عمومی",
+      "concurrency": "خواندن ETag/version؛ GET هیچ بازدید یا تصمیمی ایجاد نمی‌کند",
+      "tables": [
+        "CorrectionItems",
+        "CorrectionRequests",
+        "InspectionSubmissions"
+      ],
+      "frontendAdapters": [
+        "src/features/additional-evidence/request-repository.ts"
+      ],
+      "dependencies": "B01-B10، C01-C06؛ نسخه دقیق و آمادگی سرور",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "R02",
+      "method": "POST",
+      "path": "/api/evidence-requests/{requestId}/replacement",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "پوسته سازگار ثبت جایگزین؛ همان سرویس EV01",
+      "operations": [
+        "D06"
+      ],
+      "role": "customer-request",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "requestId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "EvidenceRegistration",
+      "responseSchema": "UploadTicket",
+      "contentType": "application/json",
+      "successStatuses": [
+        201,
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "candidate به request/item/requirement/revision مجاز وصل باشد؛ هیچ قلم اضافی یا job قدیمی pointer اصل را تغییر ندهد.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "CorrectionItems",
+        "EvidenceVersions",
+        "IdempotencyRecords",
+        "MediaFiles",
+        "UploadSessions"
+      ],
+      "frontendAdapters": [
+        "src/features/additional-evidence/request-service.ts"
+      ],
+      "dependencies": "B01-B10، C01-C06؛ نسخه دقیق و آمادگی سرور",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "R03",
+      "method": "POST",
+      "path": "/api/inspections/{inspectionId}/resubmit",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "ثبت دور اصلاحات تأییدشده و برگشت به بررسی",
+      "operations": [
+        "D07"
+      ],
+      "role": "customer-request",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "inspectionId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "ResubmitRequest",
+      "responseSchema": "Receipt",
+      "contentType": "application/json",
+      "successStatuses": [
+        201,
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "نسخه درخواست و receipt تمام اقلام خواسته‌شده؛ promotion اتمیک؛ اقلام تأییدشده خارج از scope ثابت بمانند.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "CorrectionItems",
+        "CorrectionRequests",
+        "IdempotencyRecords",
+        "InspectionEvidence",
+        "InspectionStatusHistory",
+        "InspectionSubmissions",
+        "Inspections",
+        "SubmissionEvidence"
+      ],
+      "frontendAdapters": [
+        "src/features/additional-evidence/request-service.ts"
+      ],
+      "dependencies": "B01-B10، C01-C06؛ نسخه دقیق و آمادگی سرور",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "R04",
+      "method": "PUT",
+      "path": "/api/inspections/{inspectionId}/field-corrections/{taskId}",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "پیشنهاد اصلاح همان فیلد",
+      "operations": [
+        "D08"
+      ],
+      "role": "customer-request",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "inspectionId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت",
+        "taskId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "FieldProposal",
+      "responseSchema": "Acknowledgement",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "field از union مجاز همان task و نوع مقدار درست؛ فقط scope خواسته‌شده و CAS؛ درخواست جدید ضمنی ایجاد نشود.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "CorrectionItems",
+        "IdempotencyRecords"
+      ],
+      "frontendAdapters": [
+        "src/features/inspection-status/lifecycle-repository.ts"
+      ],
+      "dependencies": "B01-B10، C01-C06؛ نسخه دقیق و آمادگی سرور",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "I15",
+      "method": "POST",
+      "path": "/api/inspections/{inspectionId}/attempts",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "تلاش جدید خالی پس از رد کامل",
+      "operations": [
+        "D09"
+      ],
+      "role": "customer",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "inspectionId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "Command",
+      "responseSchema": "Inspection",
+      "contentType": "application/json",
+      "successStatuses": [
+        201,
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "فقط رد کامل و فرمان صریح مالک؛ current/attempt اتمیک؛ تلاش جدید خالی و تاریخچه قبلی immutable.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InspectionStatusHistory",
+        "Inspections",
+        "SourceInsuranceRequests",
+        "Vehicles"
+      ],
+      "frontendAdapters": [
+        "src/features/inspection-status/lifecycle-repository.ts"
+      ],
+      "dependencies": "B01-B10، C01-C06؛ نسخه دقیق و آمادگی سرور",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "RV01",
+      "method": "GET",
+      "path": "/api/reviewer/cases/{caseId}",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "پرونده کارشناس با یادداشت خصوصی",
+      "operations": [
+        "E02"
+      ],
+      "role": "case-read",
+      "authentication": "نشست کارکنان؛ کارشناس دارای ارجاع یا مدیر دارای مجوز خواندن همان پرونده. پاسخ براساس نقش پالایش شود؛ یادداشت خصوصی فقط با اختیار صریح و تصمیم فقط برای کارشناس مجاز است.",
+      "pathParameters": {
+        "caseId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json"
+      },
+      "requestSchema": "Empty",
+      "responseSchema": "Case",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "ارجاع فعال کارشناس یا مجوز خواندن مدیر؛ projection نقش و نسخه پرونده؛ مدیر حق تصمیم ضمنی ندارد.",
+      "idempotency": "بدون اثر تجاری؛ تکرار خواندن امن است، حساس‌ها no-store و بدون cache عمومی",
+      "concurrency": "خواندن ETag/version؛ GET هیچ بازدید یا تصمیمی ایجاد نمی‌کند",
+      "tables": [
+        "EvidenceReviews",
+        "Inspections",
+        "InternalNotes",
+        "ReviewerAssignments"
+      ],
+      "frontendAdapters": [
+        "src/features/review-operations/repository.ts"
+      ],
+      "dependencies": "A04/A05، D02؛ ارجاع و نسخه پرونده",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "RV02",
+      "method": "POST",
+      "path": "/api/admin/inspections/{inspectionId}/assignment",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "ارجاع اتمیک و کنترل ظرفیت",
+      "operations": [
+        "E03"
+      ],
+      "role": "admin",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "inspectionId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "AssignmentRequest",
+      "responseSchema": "Acknowledgement",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "staff فعال، permission ارجاع، ظرفیت و سیاست؛ reassignment با CAS و audit؛ تصمیم کارشناس قبلی بعد از جابه‌جایی رد شود.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InspectionStatusHistory",
+        "Inspections",
+        "ReviewerAssignments",
+        "StaffUsers"
+      ],
+      "frontendAdapters": [
+        "src/features/review-operations/model.ts"
+      ],
+      "dependencies": "A04/A05، D02؛ ارجاع و نسخه پرونده",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "RV03",
+      "method": "PUT",
+      "path": "/api/admin/reviewer-policy",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "حالت و ظرفیت ارجاع؛ خواندن از workspace",
+      "operations": [
+        "E04"
+      ],
+      "role": "admin",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {},
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "ReviewerPolicy",
+      "responseSchema": "Acknowledgement",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "mode از manual/random، ظرفیت صحیح و نسخه workspace؛ random در سرور و اختیار مدیریت لازم.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "StaffOperationsSettings",
+        "StaffUsers"
+      ],
+      "frontendAdapters": [
+        "src/features/review-operations/repository.ts"
+      ],
+      "dependencies": "A04/A05، D02؛ ارجاع و نسخه پرونده",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "RV04",
+      "method": "POST",
+      "path": "/api/reviewer/cases/{caseId}/evidence-decisions",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "تصمیم یک نسخه عکس یا ویدیو",
+      "operations": [
+        "E05"
+      ],
+      "role": "assigned-reviewer",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "caseId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "EvidenceDecision",
+      "responseSchema": "Acknowledgement",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "نسخه دقیق مدرک و پرونده، ارجاع فعال؛ دلیل عمومی برای رد/retake اجباری؛ نسخه جدید با پاسخ قدیمی overwrite نشود.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "CorrectionItems",
+        "CorrectionRequests",
+        "EvidenceReviews",
+        "IdempotencyRecords",
+        "InspectionStatusHistory",
+        "Inspections"
+      ],
+      "frontendAdapters": [
+        "src/features/review-operations/repository.ts"
+      ],
+      "dependencies": "A04/A05، D02؛ ارجاع و نسخه پرونده",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "RV05",
+      "method": "POST",
+      "path": "/api/reviewer/cases/{caseId}/field-corrections",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "ایجاد درخواست اصلاح مشخصات",
+      "operations": [
+        "E06"
+      ],
+      "role": "assigned-reviewer",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "caseId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "FieldRequest",
+      "responseSchema": "Acknowledgement",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "field فقط plate/color/modelYear و دلیل روشن؛ task مستقل از رد کلی و مدرک دیگر؛ کارشناس باید ارجاع فعال داشته باشد.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "CorrectionItems",
+        "CorrectionRequests",
+        "IdempotencyRecords",
+        "InspectionStatusHistory",
+        "Inspections"
+      ],
+      "frontendAdapters": [
+        "src/features/review-operations/repository.ts"
+      ],
+      "dependencies": "A04/A05، D02؛ ارجاع و نسخه پرونده",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "RV06",
+      "method": "POST",
+      "path": "/api/reviewer/field-corrections/{taskId}/decision",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "تأیید پیشنهاد فیلد؛ بازگشایی نیازمند تصمیم جدا",
+      "operations": [
+        "E07"
+      ],
+      "role": "assigned-reviewer",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "taskId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "FieldDecision",
+      "responseSchema": "Acknowledgement",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "همان task/proposalVersion و مجوز؛ کد فعلی approve دارد، reopen هنوز تصمیم باز است و مسیر فرضی اجراشده نیست.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "CorrectionItems",
+        "IdempotencyRecords",
+        "Inspections",
+        "Vehicles"
+      ],
+      "frontendAdapters": [
+        "src/features/review-operations/repository.ts"
+      ],
+      "dependencies": "A04/A05، D02؛ ارجاع و نسخه پرونده",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "RV07",
+      "method": "POST",
+      "path": "/api/reviewer/cases/{caseId}/notes",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "یادداشت صرفاً کارکنان",
+      "operations": [
+        "E08"
+      ],
+      "role": "assigned-reviewer",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "caseId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "NoteRequest",
+      "responseSchema": "Acknowledgement",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "متن محدود و private واقعی، اختیار مشاهده/نوشتن و نسخه؛ در DTO مشتری یا گزارش عمومی نیاید.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InternalNotes"
+      ],
+      "frontendAdapters": [
+        "src/features/review-operations/repository.ts"
+      ],
+      "dependencies": "A04/A05، D02؛ ارجاع و نسخه پرونده",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "RV08",
+      "method": "POST",
+      "path": "/api/reviewer/cases/{caseId}/decision",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "تصمیم جداگانه کل بازدید",
+      "operations": [
+        "E09"
+      ],
+      "role": "assigned-reviewer",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "caseId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "FinalDecision",
+      "responseSchema": "Acknowledgement",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "تصمیم کل جدا از تک‌مدرک؛ approved فقط پس از آمادگی همه اقلام؛ rejected نیازمند دلیل؛ تأیید outbox می‌سازد نه FORWARDED.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "ForwardingJobs",
+        "IdempotencyRecords",
+        "InspectionReviews",
+        "InspectionStatusHistory",
+        "Inspections"
+      ],
+      "frontendAdapters": [
+        "src/features/review-operations/repository.ts"
+      ],
+      "dependencies": "A04/A05، D02؛ ارجاع و نسخه پرونده",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "RV09",
+      "method": "GET",
+      "path": "/api/reviewer/cases/{caseId}/history",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "تاریخچه صفحه‌بندی‌شده نسخه و تصمیم",
+      "operations": [
+        "E10"
+      ],
+      "role": "case-read",
+      "authentication": "نشست کارکنان؛ کارشناس دارای ارجاع یا مدیر دارای مجوز خواندن همان پرونده. پاسخ براساس نقش پالایش شود؛ یادداشت خصوصی فقط با اختیار صریح و تصمیم فقط برای کارشناس مجاز است.",
+      "pathParameters": {
+        "caseId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {
+        "cursor": "string اختیاری، opaque و scope-bound",
+        "pageSize": "integer از 1 تا 100؛ پیش‌فرض 20",
+        "sort": "whitelist، ترتیب پایدار با شناسه نهایی"
+      },
+      "headers": {
+        "Accept": "application/json"
+      },
+      "requestSchema": "Empty",
+      "responseSchema": "HistoryPage",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "مجوز خواندن پرونده، cursor و projection نقش؛ نسخه‌ها و تصمیم‌ها حذف نشوند؛ private notes به نقش غیرمجاز نرسند.",
+      "idempotency": "بدون اثر تجاری؛ تکرار خواندن امن است، حساس‌ها no-store و بدون cache عمومی",
+      "concurrency": "خواندن ETag/version؛ GET هیچ بازدید یا تصمیمی ایجاد نمی‌کند",
+      "tables": [
+        "AuditLogs",
+        "EvidenceReviews",
+        "EvidenceVersions",
+        "InspectionStatusHistory"
+      ],
+      "frontendAdapters": [
+        "src/features/review-operations/repository.ts"
+      ],
+      "dependencies": "A04/A05، D02؛ ارجاع و نسخه پرونده",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "AD01",
+      "method": "GET",
+      "path": "/api/admin/workspace",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "قالب‌ها، کارکنان و سیاست در محدوده مجوز",
+      "operations": [
+        "F01",
+        "F10",
+        "E04"
+      ],
+      "role": "admin-read",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {},
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json"
+      },
+      "requestSchema": "Empty",
+      "responseSchema": "AdminWorkspace",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "permission‌های مجزا، نسخه workspace و projection مجاز؛ مدیر همان نصب، نه مالک کلید مرکزی نقشه.؛ staffId همان نصب، نقش/فعال‌بودن مجاز و جلوگیری از ارتقای بی‌اختیار؛ هویت SSO در Frontend ساخته نشود.؛ mode از manual/random، ظرفیت صحیح و نسخه workspace؛ random در سرور و اختیار مدیریت لازم.",
+      "idempotency": "بدون اثر تجاری؛ تکرار خواندن امن است، حساس‌ها no-store و بدون cache عمومی",
+      "concurrency": "خواندن ETag/version؛ GET هیچ بازدید یا تصمیمی ایجاد نمی‌کند",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InspectionTemplates",
+        "StaffOperationsSettings",
+        "StaffRoleAssignments",
+        "StaffUsers"
+      ],
+      "frontendAdapters": [
+        "src/features/admin/repository.ts",
+        "src/features/review-operations/repository.ts"
+      ],
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب؛ A04/A05، D02؛ ارجاع و نسخه پرونده",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "AD02",
+      "method": "POST",
+      "path": "/api/admin/capture-templates",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "ایجاد قالب یا draft بر پایه نسخه موجود",
+      "operations": [
+        "F02"
+      ],
+      "role": "template-editor",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {},
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "TemplateDraftRequest",
+      "responseSchema": "CapturePlan",
+      "contentType": "application/json",
+      "successStatuses": [
+        201,
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "عنوان و قالب مبنا معتبر و نسخه جدید مستقل؛ هیچ قالب پین‌شده تاریخی درجا تغییر نکند.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "EvidenceRequirements",
+        "IdempotencyRecords",
+        "InspectionTemplates",
+        "RequirementAlternatives"
+      ],
+      "frontendAdapters": [
+        "src/features/admin/repository.ts"
+      ],
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "AD03",
+      "method": "PUT",
+      "path": "/api/admin/capture-templates/{templateId}/versions/{version}/draft",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "ذخیره draft با قفل نسخه",
+      "operations": [
+        "F03"
+      ],
+      "role": "template-editor",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "templateId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت",
+        "version": "integer مثبت؛ نسخه immutable قالب"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "TemplateSaveRequest",
+      "responseSchema": "CapturePlan",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "Zod فعلی کامل شامل راهنماها، شناسه‌های یکتا، ۱۱ عکس و گروه یک‌ازچهار؛ expectedRevision و حالت draft.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "EvidenceRequirements",
+        "IdempotencyRecords",
+        "InspectionTemplates",
+        "RequirementAlternatives"
+      ],
+      "frontendAdapters": [
+        "src/features/admin/repository.ts"
+      ],
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "AD04",
+      "method": "POST",
+      "path": "/api/admin/capture-templates/{templateId}/versions/{version}/publication",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "انتشار یا بایگانی immutable",
+      "operations": [
+        "F04"
+      ],
+      "role": "admin",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "templateId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت",
+        "version": "integer مثبت؛ نسخه immutable قالب"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "PublicationRequest",
+      "responseSchema": "Acknowledgement",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "فقط draft معتبر منتشر یا نسخه مجاز بایگانی شود؛ قالب پین‌شده قابل خواندن بماند؛ CAS و audit.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InspectionTemplates"
+      ],
+      "frontendAdapters": [
+        "src/features/admin/repository.ts"
+      ],
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "AD05",
+      "method": "GET",
+      "path": "/api/admin/site-settings",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "workspace واحد تنظیمات",
+      "operations": [
+        "F06"
+      ],
+      "role": "admin",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {},
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json"
+      },
+      "requestSchema": "Empty",
+      "responseSchema": "SettingsWorkspace",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "whitelist متن/برند، قالب، URL و contrast؛ API base و Neshan مرکزی از فرم عادی قابل تغییر نیستند؛ CAS draft.",
+      "idempotency": "بدون اثر تجاری؛ تکرار خواندن امن است، حساس‌ها no-store و بدون cache عمومی",
+      "concurrency": "خواندن ETag/version؛ GET هیچ بازدید یا تصمیمی ایجاد نمی‌کند",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "SiteSettings",
+        "SiteSettingsAssetLinks",
+        "SiteSettingsVersions"
+      ],
+      "frontendAdapters": [
+        "src/config/site-settings.repository.ts"
+      ],
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "AD06",
+      "method": "PUT",
+      "path": "/api/admin/site-settings/draft",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "ذخیره برندینگ در همان مخزن",
+      "operations": [
+        "F06",
+        "F09"
+      ],
+      "role": "admin",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {},
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "SettingsDraft",
+      "responseSchema": "SettingsWorkspace",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "whitelist متن/برند، قالب، URL و contrast؛ API base و Neshan مرکزی از فرم عادی قابل تغییر نیستند؛ CAS draft.؛ تبدیل payload قدیمی به همان schema جدید، whitelist و CAS؛ مسیر مستقل ذخیره حقیقت ایجاد نشود.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "SiteSettings",
+        "SiteSettingsAssetLinks",
+        "SiteSettingsVersions"
+      ],
+      "frontendAdapters": [
+        "src/config/site-settings.repository.ts",
+        "src/features/admin/repository.ts"
+      ],
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "AD07",
+      "method": "POST",
+      "path": "/api/admin/site-settings/publish",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "انتشار draft؛ reset از همین مسیر ویرایش draft",
+      "operations": [
+        "F07"
+      ],
+      "role": "admin",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {},
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "Command",
+      "responseSchema": "PublicSettings",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "publish با CAS و اعتبار کامل؛ reset فقط draft بصری است، نه حذف مدارک/بازدید/تنظیمات مرکزی.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "SiteSettings",
+        "SiteSettingsVersions"
+      ],
+      "frontendAdapters": [
+        "src/config/site-settings.repository.ts"
+      ],
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "AD08",
+      "method": "POST",
+      "path": "/api/admin/branding-assets",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "دارایی برند عمومیِ ایمن، جدا از شواهد خصوصی",
+      "operations": [
+        "F08"
+      ],
+      "role": "admin",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {},
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست"
+      },
+      "requestSchema": "BrandUpload",
+      "responseSchema": "BrandAsset",
+      "contentType": "multipart/form-data",
+      "successStatuses": [
+        201,
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        413,
+        415,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "slot مجاز، اندازه، signature، ابعاد و نوع امن فایل؛ SVG خام نامطمئن ممنوع؛ لوگوی کارگزاری از هویت برنامه جدا.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "BrandingAssets",
+        "IdempotencyRecords",
+        "SiteSettingsAssetLinks"
+      ],
+      "frontendAdapters": [
+        "src/features/admin/assets/asset-repository.ts"
+      ],
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "AD09",
+      "method": "PUT",
+      "path": "/api/admin/staff/{staffId}/roles",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "نگاشت نقش فعال نصب از هویت مبدأ",
+      "operations": [
+        "F10"
+      ],
+      "role": "admin",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "staffId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "StaffRolesRequest",
+      "responseSchema": "Acknowledgement",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "staffId همان نصب، نقش/فعال‌بودن مجاز و جلوگیری از ارتقای بی‌اختیار؛ هویت SSO در Frontend ساخته نشود.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "StaffRoleAssignments",
+        "StaffUsers"
+      ],
+      "frontendAdapters": [
+        "src/features/admin/repository.ts"
+      ],
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "AD10",
+      "method": "PUT",
+      "path": "/api/admin/webhooks/{webhookId}",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "فعال‌بودن مقصد سروری whitelist",
+      "operations": [
+        "F11"
+      ],
+      "role": "admin",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "webhookId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "WebhookRequest",
+      "responseSchema": "Acknowledgement",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "فقط webhook ازپیش‌تعریف‌شده whitelist؛ مقصد و credential دلخواه مرورگر مردود؛ تغییر enabled با مجوز و CAS.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "WebhookSubscriptions"
+      ],
+      "frontendAdapters": [
+        "src/features/admin/repository.ts"
+      ],
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "AD11",
+      "method": "GET",
+      "path": "/api/admin/system/health",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "سلامت واقعی بدون مسیر و راز",
+      "operations": [
+        "F12"
+      ],
+      "role": "admin",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {},
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json"
+      },
+      "requestSchema": "Empty",
+      "responseSchema": "Health",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "اندازه‌گیری واقعی فضای فایل/صف/worker و وضعیت dependency؛ secret یا physical root در پاسخ نیاید؛ نبود تحلیل با موفقیت جعل نشود.",
+      "idempotency": "بدون اثر تجاری؛ تکرار خواندن امن است، حساس‌ها no-store و بدون cache عمومی",
+      "concurrency": "خواندن ETag/version؛ GET هیچ بازدید یا تصمیمی ایجاد نمی‌کند",
+      "tables": [],
+      "frontendAdapters": [
+        "src/features/admin/operational-snapshot.tsx"
+      ],
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "FW01",
+      "method": "POST",
+      "path": "/api/admin/forwarding-jobs/{jobId}/retry",
+      "kind": "api",
+      "status": "PROPOSED",
+      "title": "تلاش مجدد همان کار تحویل",
+      "operations": [
+        "G04"
+      ],
+      "role": "admin-operations",
+      "authentication": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "pathParameters": {
+        "jobId": "شناسه opaque؛ resolve از پایگاه همین نصب و بررسی مالکیت"
+      },
+      "queryParameters": {},
+      "headers": {
+        "Accept": "application/json",
+        "Idempotency-Key": "کلید پایدار فرمان؛ برای PUT باینری uploadId/همان انتقال، نه ساخت نسخه تازه",
+        "X-CSRF-Token": "برای احراز هویت cookie طبق پروتکل مصوب؛ مقدار واقعی هرگز در مثال/log نیست",
+        "Content-Type": "application/json"
+      },
+      "requestSchema": "Command",
+      "responseSchema": "Acknowledgement",
+      "contentType": "application/json",
+      "successStatuses": [
+        200
+      ],
+      "errorStatuses": [
+        400,
+        401,
+        403,
+        404,
+        409,
+        422,
+        429,
+        500,
+        503
+      ],
+      "validation": "همان job معتبر و permission عملیاتی؛ lease، نسخه و retryable بودن؛ job جدید برای همان تحویل نسازد.",
+      "idempotency": "رزرو اتمیک کلید در scope نصب + عامل + عملیات + منبع با hash بدنه؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409. CAS همان تراکنش؛ فرمان متفاوت با نسخه کهنه 409.",
+      "concurrency": "expectedVersion یا If-Match باید با نسخه سرور تطبیق کند؛ transition و idempotency و audit در یک تراکنش SQL؛ بایت فایل تراکنش SQL نیست",
+      "tables": [
+        "AuditLogs",
+        "ForwardingAttempts",
+        "ForwardingJobs",
+        "IdempotencyRecords"
+      ],
+      "frontendAdapters": [
+        "src/features/inspection-status/integration-contracts.ts"
+      ],
+      "dependencies": "E09؛ snapshot و مقصد/تأیید مقصد مورد توافق",
+      "openDecisions": [
+        "D11",
+        "D12"
+      ]
+    }
+  ],
+  "serverOnly": [
+    "G01",
+    "G02",
+    "G03"
+  ]
+}

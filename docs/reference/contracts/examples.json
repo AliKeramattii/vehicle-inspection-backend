@@ -1,0 +1,3878 @@
+{
+  "description": "همه مثال‌ها ساختگی‌اند؛ نام دامنه invalid، بلیت و هش صفر هیچ اعتبار عملیاتی ندارند.",
+  "examples": {
+    "Empty": {},
+    "Command": {
+      "expectedVersion": "AAAAAAAAB9E="
+    },
+    "Acknowledgement": {
+      "acknowledged": true,
+      "version": "AAAAAAAAB9E=",
+      "at": "2026-10-26T09:00:00Z"
+    },
+    "Bootstrap": {
+      "schemaVersion": 1,
+      "tenantId": "demo",
+      "apiBaseUrl": "/api/bazdid",
+      "siteSettingsEndpoint": "/api/bazdid/public/site-settings",
+      "settingsSource": "api"
+    },
+    "SourceContext": {
+      "tenantId": "demo",
+      "subjectId": "customer-fixture",
+      "sourceRequestId": "REQ-DEMO-001",
+      "mobile": "09120000000",
+      "authority": "brokerage-session"
+    },
+    "TicketRequest": {
+      "ticket": "FICTIONAL_ONE_USE_TICKET_NOT_A_CREDENTIAL",
+      "state": "FICTIONAL_STATE_FOR_REVIEW_ONLY",
+      "returnPath": "/readiness"
+    },
+    "Session": {
+      "state": "authenticated",
+      "kind": "customer",
+      "expiresAt": "2026-10-26T09:00:00Z",
+      "source": {
+        "tenantId": "demo",
+        "subjectId": "customer-fixture",
+        "sourceRequestId": "REQ-DEMO-001",
+        "mobile": "09120000000",
+        "authority": "brokerage-session"
+      }
+    },
+    "ReferralRequest": {
+      "code": "48216"
+    },
+    "ReferralResult": {
+      "valid": true
+    },
+    "OtpRequest": {
+      "referralCode": "A4K9P2",
+      "challengeContextId": "source-context-fixture"
+    },
+    "OtpChallenge": {
+      "challengeId": "11111111-1111-4111-8111-111111111111",
+      "expiresAt": "2026-10-26T09:00:00Z",
+      "retryAfterSeconds": 1,
+      "remainingAttempts": 1,
+      "codeLength": 5
+    },
+    "OtpVerification": {
+      "challengeId": "11111111-1111-4111-8111-111111111111",
+      "code": "48216"
+    },
+    "CreateInspection": {
+      "sourceRequestId": "REQ-DEMO-001"
+    },
+    "Plate": {
+      "firstTwoDigits": "12",
+      "letter": "ب",
+      "threeDigits": "345",
+      "regionDigits": "67"
+    },
+    "Location": {
+      "latitude": 35.699739,
+      "longitude": 51.338097,
+      "accuracyMeters": 8,
+      "formattedAddress": "تهران، خیابان نمونه، محل بازدید",
+      "buildingNumber": "نمونه قراردادی",
+      "unitFloor": "نمونه قراردادی",
+      "parkingDescription": "نمونه قراردادی"
+    },
+    "LocationRequest": {
+      "latitude": 35.699739,
+      "longitude": 51.338097,
+      "accuracyMeters": 8,
+      "formattedAddress": "تهران، خیابان نمونه، محل بازدید",
+      "buildingNumber": "نمونه قراردادی",
+      "unitFloor": "نمونه قراردادی",
+      "parkingDescription": "نمونه قراردادی",
+      "expectedVersion": "AAAAAAAAB9E="
+    },
+    "ConsentRequest": {
+      "accepted": true,
+      "termsVersion": "نمونه قراردادی"
+    },
+    "Vehicle": {
+      "id": "11111111-1111-4111-8111-111111111111",
+      "make": "خودروی نمونه",
+      "model": "سدان نمونه",
+      "modelYear": 2024,
+      "color": "سفید",
+      "bodyColor": "#F1F5F9",
+      "plate": {
+        "firstTwoDigits": "12",
+        "letter": "ب",
+        "threeDigits": "345",
+        "regionDigits": "67"
+      },
+      "maskedVin": "DEMO••••••3456",
+      "confirmed": true,
+      "version": "AAAAAAAAB9E="
+    },
+    "VehicleRequest": {
+      "expectedVersion": "AAAAAAAAB9E=",
+      "confirmed": true
+    },
+    "PlateRequest": {
+      "expectedVersion": "AAAAAAAAB9E=",
+      "plate": {
+        "firstTwoDigits": "12",
+        "letter": "ب",
+        "threeDigits": "345",
+        "regionDigits": "67"
+      }
+    },
+    "OdometerRequest": {
+      "kilometers": 48320,
+      "expectedVersion": "AAAAAAAAB9E="
+    },
+    "Odometer": {
+      "kilometers": 48320,
+      "updatedAt": "2026-10-26T09:00:00Z"
+    },
+    "Requirement": {
+      "id": "front-45-right",
+      "title": "جلو ۴۵° راست",
+      "description": "جلوی خودرو و سمت راست به صورت کامل دیده شود.",
+      "sampleImage": "/assets/inspection-vehicle/photo-guides/front-45-right.webp",
+      "instructions": [
+        "جلوی خودرو و سمت راست به طور کامل داخل کادر باشد.",
+        "حدود ۳ متر از خودرو فاصله بگیرید.",
+        "از زاویه ۴۵ درجه سمت راست عکس بگیرید."
+      ],
+      "distance": "۳ متر",
+      "height": "کمر",
+      "orientation": "landscape",
+      "required": true,
+      "status": "pending",
+      "checks": [
+        "واضح",
+        "نور مناسب",
+        "خودرو کامل در کادر"
+      ],
+      "guidanceTopics": [
+        "frame",
+        "distance",
+        "angle"
+      ]
+    },
+    "Section": {
+      "id": "right",
+      "title": "نمای راست",
+      "order": 1,
+      "photoRequirements": [
+        {
+          "id": "front-45-right",
+          "title": "جلو ۴۵° راست",
+          "description": "جلوی خودرو و سمت راست به صورت کامل دیده شود.",
+          "sampleImage": "/assets/inspection-vehicle/photo-guides/front-45-right.webp",
+          "instructions": [
+            "جلوی خودرو و سمت راست به طور کامل داخل کادر باشد.",
+            "حدود ۳ متر از خودرو فاصله بگیرید.",
+            "از زاویه ۴۵ درجه سمت راست عکس بگیرید."
+          ],
+          "distance": "۳ متر",
+          "height": "کمر",
+          "orientation": "landscape",
+          "required": true,
+          "status": "pending",
+          "checks": [
+            "واضح",
+            "نور مناسب",
+            "خودرو کامل در کادر"
+          ],
+          "guidanceTopics": [
+            "frame",
+            "distance",
+            "angle"
+          ]
+        },
+        {
+          "id": "back-45-right",
+          "title": "عقب ۴۵° راست",
+          "description": "عقب خودرو و سمت راست به صورت کامل دیده شود.",
+          "sampleImage": "/assets/inspection-vehicle/photo-guides/back-45-right.webp",
+          "instructions": [
+            "تمام قسمت عقب و سمت راست خودرو داخل کادر باشد.",
+            "خودرو را از زاویه ۴۵ درجه ثبت کنید.",
+            "در نور کافی و بدون سایه شدید عکاسی کنید."
+          ],
+          "distance": "۳ متر",
+          "height": "کمر",
+          "orientation": "landscape",
+          "required": true,
+          "status": "pending",
+          "checks": [
+            "واضح",
+            "نور مناسب",
+            "خودرو کامل در کادر"
+          ],
+          "guidanceTopics": [
+            "frame",
+            "angle",
+            "glare"
+          ]
+        }
+      ]
+    },
+    "CapturePlan": {
+      "photoPolicyVersion": 2,
+      "templateId": "body-image-guided",
+      "templateVersion": 2,
+      "sections": [
+        {
+          "id": "right",
+          "title": "نمای راست",
+          "order": 1,
+          "photoRequirements": [
+            {
+              "id": "front-45-right",
+              "title": "جلو ۴۵° راست",
+              "description": "جلوی خودرو و سمت راست به صورت کامل دیده شود.",
+              "sampleImage": "/assets/inspection-vehicle/photo-guides/front-45-right.webp",
+              "instructions": [
+                "جلوی خودرو و سمت راست به طور کامل داخل کادر باشد.",
+                "حدود ۳ متر از خودرو فاصله بگیرید.",
+                "از زاویه ۴۵ درجه سمت راست عکس بگیرید."
+              ],
+              "distance": "۳ متر",
+              "height": "کمر",
+              "orientation": "landscape",
+              "required": true,
+              "status": "pending",
+              "checks": [
+                "واضح",
+                "نور مناسب",
+                "خودرو کامل در کادر"
+              ],
+              "guidanceTopics": [
+                "frame",
+                "distance",
+                "angle"
+              ]
+            },
+            {
+              "id": "back-45-right",
+              "title": "عقب ۴۵° راست",
+              "description": "عقب خودرو و سمت راست به صورت کامل دیده شود.",
+              "sampleImage": "/assets/inspection-vehicle/photo-guides/back-45-right.webp",
+              "instructions": [
+                "تمام قسمت عقب و سمت راست خودرو داخل کادر باشد.",
+                "خودرو را از زاویه ۴۵ درجه ثبت کنید.",
+                "در نور کافی و بدون سایه شدید عکاسی کنید."
+              ],
+              "distance": "۳ متر",
+              "height": "کمر",
+              "orientation": "landscape",
+              "required": true,
+              "status": "pending",
+              "checks": [
+                "واضح",
+                "نور مناسب",
+                "خودرو کامل در کادر"
+              ],
+              "guidanceTopics": [
+                "frame",
+                "angle",
+                "glare"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "left",
+          "title": "نمای چپ",
+          "order": 2,
+          "photoRequirements": [
+            {
+              "id": "front-45-left",
+              "title": "جلو ۴۵° چپ",
+              "description": "جلوی خودرو و سمت چپ به صورت کامل دیده شود.",
+              "sampleImage": "/assets/inspection-vehicle/photo-guides/front-45-left.webp",
+              "instructions": [
+                "جلوی خودرو و سمت چپ به طور کامل داخل کادر باشد.",
+                "حدود ۳ متر از خودرو فاصله بگیرید.",
+                "از زاویه ۴۵ درجه سمت چپ عکس بگیرید."
+              ],
+              "distance": "۳ متر",
+              "height": "کمر",
+              "orientation": "landscape",
+              "required": true,
+              "status": "pending",
+              "checks": [
+                "واضح",
+                "نور مناسب",
+                "خودرو کامل در کادر"
+              ],
+              "guidanceTopics": [
+                "frame",
+                "distance",
+                "angle"
+              ]
+            },
+            {
+              "id": "back-45-left",
+              "title": "عقب ۴۵° چپ",
+              "description": "عقب خودرو و سمت چپ به صورت کامل دیده شود.",
+              "sampleImage": "/assets/inspection-vehicle/photo-guides/back-45-left.webp",
+              "instructions": [
+                "تمام قسمت عقب و سمت چپ خودرو داخل کادر باشد.",
+                "خودرو را از زاویه ۴۵ درجه ثبت کنید.",
+                "در نور کافی و بدون سایه شدید عکاسی کنید."
+              ],
+              "distance": "۳ متر",
+              "height": "کمر",
+              "orientation": "landscape",
+              "required": true,
+              "status": "pending",
+              "checks": [
+                "واضح",
+                "نور مناسب",
+                "خودرو کامل در کادر"
+              ],
+              "guidanceTopics": [
+                "frame",
+                "angle",
+                "glare"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "front",
+          "title": "جلو",
+          "order": 3,
+          "photoRequirements": [
+            {
+              "id": "front-plate",
+              "title": "نمای مستقیم جلو با پلاک",
+              "description": "یک عکس مستقیم از نمای جلوی خودرو بگیرید، به طوری که پلاک کاملاً مشخص و خوانا باشد.",
+              "sampleImage": "/assets/inspection-vehicle/photo-guides/front-plate.webp",
+              "instructions": [
+                "مستقیم روبه‌روی خودرو بایستید؛ خودرو وسط کادر باشد.",
+                "نمای کامل جلو را بدون برش و زاویه شدید ثبت کنید.",
+                "پلاک بدون بازتاب نور و کاملاً خوانا باشد."
+              ],
+              "distance": "۳ متر",
+              "height": "چراغ‌ها",
+              "orientation": "landscape",
+              "required": true,
+              "status": "pending",
+              "checks": [
+                "واضح",
+                "نور مناسب",
+                "پلاک خوانا است"
+              ],
+              "guidanceTopics": [
+                "angle",
+                "frame",
+                "text"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "rear",
+          "title": "عقب",
+          "order": 4,
+          "photoRequirements": [
+            {
+              "id": "rear-plate",
+              "title": "نمای مستقیم عقب با پلاک",
+              "description": "یک عکس مستقیم از نمای عقب خودرو بگیرید، به طوری که پلاک کاملاً مشخص و خوانا باشد.",
+              "sampleImage": "/assets/inspection-vehicle/photo-guides/rear-plate.webp",
+              "instructions": [
+                "مستقیم پشت خودرو بایستید؛ خودرو وسط کادر باشد.",
+                "تمام نمای عقب بدون برش و زاویه شدید داخل کادر باشد.",
+                "پلاک کاملاً خوانا و بدون بازتاب باشد."
+              ],
+              "distance": "۳ متر",
+              "height": "چراغ‌ها",
+              "orientation": "landscape",
+              "required": true,
+              "status": "pending",
+              "checks": [
+                "واضح",
+                "نور مناسب",
+                "پلاک خوانا است"
+              ],
+              "guidanceTopics": [
+                "angle",
+                "frame",
+                "text"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cabin",
+          "title": "کابین",
+          "order": 5,
+          "photoRequirements": [
+            {
+              "id": "odometer-on",
+              "title": "کیلومترشمار",
+              "description": "خودرو را روشن کنید و تصویری واضح از کیلومترشمار بگیرید.",
+              "sampleImage": "/assets/inspection-vehicle/photo-guides/odometer-on.webp",
+              "instructions": [
+                "خودرو را روشن و در حالت توقف نگه دارید.",
+                "تمام صفحه کیلومترشمار در کادر باشد.",
+                "عدد کیلومتر خوانا باشد؛ از بازتاب نور جلوگیری کنید."
+              ],
+              "distance": "نزدیک",
+              "height": "داشبورد",
+              "orientation": "landscape",
+              "required": true,
+              "status": "pending",
+              "checks": [
+                "واضح",
+                "نور مناسب",
+                "عدد کیلومتر خوانا است"
+              ],
+              "guidanceTopics": [
+                "ignition",
+                "frame",
+                "glare"
+              ]
+            },
+            {
+              "id": "driver-interior",
+              "title": "نمای داخل کابین از سمت راننده",
+              "description": "از سمت راننده تصویری بگیرید که فضای داخلی خودرو به صورت واضح دیده شود.",
+              "sampleImage": "/assets/inspection-vehicle/photo-guides/driver-interior.webp",
+              "instructions": [
+                "درِ سمت راننده را باز کنید.",
+                "فرمان، داشبورد و صندلی‌ها دیده شوند.",
+                "خیلی نزدیک نشوید؛ فضای داخلی کامل دیده شود."
+              ],
+              "distance": "۱ متر",
+              "height": "درِ راننده",
+              "orientation": "landscape",
+              "required": true,
+              "status": "pending",
+              "checks": [
+                "واضح",
+                "نور مناسب",
+                "کابین کامل در کادر"
+              ],
+              "guidanceTopics": [
+                "interior",
+                "frame",
+                "distance"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "engine-details",
+          "title": "موتور و مشخصات",
+          "order": 6,
+          "photoRequirements": [
+            {
+              "id": "engine-bay",
+              "title": "محفظه موتور",
+              "description": "کاپوت را باز کنید و یک تصویر کامل و واضح از محفظه موتور بگیرید.",
+              "sampleImage": "/assets/inspection-vehicle/photo-guides/engine-bay.webp",
+              "instructions": [
+                "خودرو متوقف باشد؛ کاپوت را کاملاً و ایمن باز کنید.",
+                "تمام محفظه موتور دیده شود.",
+                "گوشی ثابت و تصویر بدون تاری باشد."
+              ],
+              "distance": "۱ متر",
+              "height": "سینه",
+              "orientation": "landscape",
+              "required": true,
+              "status": "pending",
+              "checks": [
+                "واضح",
+                "نور مناسب",
+                "محفظه کامل در کادر"
+              ],
+              "guidanceTopics": [
+                "hood",
+                "frame",
+                "steady"
+              ]
+            },
+            {
+              "id": "spec-plate",
+              "title": "محل شماره شاسی خودرو",
+              "description": "شماره شاسی خودرو — انتخاب یکی از چهار گزینه. فقط یک تصویر لازم است.",
+              "sampleImage": "/assets/inspection-vehicle/photo-guides/spec-plate.webp",
+              "instructions": [
+                "از نزدیک روی پلاک مشخصات فوکوس کنید.",
+                "تمام متن پلاک داخل کادر باشد.",
+                "نوشته‌ها خوانا و بدون بازتاب نور باشند."
+              ],
+              "distance": "۳۰ سانتی‌متر",
+              "height": "هم‌سطح پلاک",
+              "orientation": "landscape",
+              "choice": {
+                "groupId": "vehicle-identification",
+                "alternatives": [
+                  "pillar",
+                  "engine",
+                  "seat",
+                  "windshield"
+                ]
+              },
+              "required": true,
+              "status": "pending",
+              "checks": [
+                "واضح",
+                "نور مناسب",
+                "اطلاعات قابل خواندن است"
+              ],
+              "guidanceTopics": [
+                "text",
+                "frame",
+                "glare"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "roof",
+          "title": "سقف",
+          "order": 7,
+          "photoRequirements": [
+            {
+              "id": "car-roof",
+              "title": "نمای سقف",
+              "description": "تمام سطح سقف خودرو را در تصویر نشان دهید.",
+              "sampleImage": "/assets/inspection-vehicle/photo-guides/car-roof.webp",
+              "instructions": [
+                "از موقعیتی ایمن، گوشی را بالاتر بگیرید.",
+                "بیشترین سطح سقف و گوشه‌های اصلی در کادر باشند.",
+                "برای عکاسی روی خودرو نایستید."
+              ],
+              "distance": "۱ متر",
+              "height": "بالاتر از سقف",
+              "orientation": "landscape",
+              "required": true,
+              "status": "pending",
+              "checks": [
+                "واضح",
+                "نور مناسب",
+                "سقف کامل در کادر"
+              ],
+              "guidanceTopics": [
+                "roof",
+                "frame",
+                "steady"
+              ]
+            }
+          ]
+        }
+      ],
+      "captureRequirements": {
+        "odometerRequirementId": "odometer-on",
+        "video360Required": true
+      }
+    },
+    "Inspection": {
+      "inspectionId": "insp_contract_001",
+      "sourceRequestId": "REQ-DEMO-001",
+      "trackingCode": "BDI-8F31K2",
+      "status": "DRAFT",
+      "templateId": "body-image-guided",
+      "templateVersion": 2,
+      "photoPolicyVersion": 2,
+      "version": "AAAAAAAAB9E="
+    },
+    "InspectionPage": {
+      "items": [
+        {
+          "inspectionId": "insp_contract_001",
+          "sourceRequestId": "REQ-DEMO-001",
+          "trackingCode": "BDI-8F31K2",
+          "status": "DRAFT",
+          "templateId": "body-image-guided",
+          "templateVersion": 2,
+          "photoPolicyVersion": 2,
+          "version": "AAAAAAAAB9E="
+        }
+      ],
+      "nextCursor": null,
+      "total": 1
+    },
+    "RequestScope": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "requestVersion": 1,
+      "requestItemId": "11111111-1111-4111-8111-111111111111"
+    },
+    "EvidenceRegistration": {
+      "kind": "photo",
+      "requirementId": "spec-plate",
+      "alternativeId": "pillar",
+      "templateId": "body-image-guided",
+      "templateVersion": 2,
+      "photoPolicyVersion": 2,
+      "revision": "client-revision-0002",
+      "mimeType": "image/jpeg",
+      "byteSize": 420000,
+      "capturedAt": "2026-10-26T09:00:00Z",
+      "expectedVersion": "AAAAAAAAB9E="
+    },
+    "UploadTicket": {
+      "evidenceId": "11111111-1111-4111-8111-111111111111",
+      "evidenceVersionId": "22222222-2222-4222-8222-222222222222",
+      "uploadId": "33333333-3333-4333-8333-333333333333",
+      "uploadUrl": "/api/bazdid/uploads/33333333-3333-4333-8333-333333333333/content",
+      "method": "PUT",
+      "expiresAt": "2026-10-26T09:00:00Z",
+      "version": "AAAAAAAAB9E="
+    },
+    "BinaryTransfer": "نمونه قراردادی",
+    "TransferResult": {
+      "uploadId": "33333333-3333-4333-8333-333333333333",
+      "state": "staged",
+      "bytesReceived": 420000
+    },
+    "CompleteUpload": {
+      "revision": "client-revision-0002",
+      "byteSize": 420000,
+      "expectedVersion": "AAAAAAAAB9E="
+    },
+    "Evidence": {
+      "evidenceId": "11111111-1111-4111-8111-111111111111",
+      "evidenceVersionId": "22222222-2222-4222-8222-222222222222",
+      "inspectionId": "insp_contract_001",
+      "kind": "photo",
+      "requirementId": "spec-plate",
+      "alternativeId": "pillar",
+      "revision": "client-revision-0002",
+      "upload": "uploaded",
+      "verification": "processing",
+      "byteSize": 420000,
+      "mimeType": "image/jpeg",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "current": true,
+      "version": "AAAAAAAAB9E="
+    },
+    "EvidencePage": {
+      "items": [
+        {
+          "evidenceId": "11111111-1111-4111-8111-111111111111",
+          "evidenceVersionId": "22222222-2222-4222-8222-222222222222",
+          "inspectionId": "insp_contract_001",
+          "kind": "photo",
+          "requirementId": "spec-plate",
+          "alternativeId": "pillar",
+          "revision": "client-revision-0002",
+          "upload": "uploaded",
+          "verification": "processing",
+          "byteSize": 420000,
+          "mimeType": "image/jpeg",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "current": true,
+          "version": "AAAAAAAAB9E="
+        }
+      ],
+      "nextCursor": null
+    },
+    "Summary": {
+      "inspection": {
+        "inspectionId": "insp_contract_001",
+        "sourceRequestId": "REQ-DEMO-001",
+        "trackingCode": "BDI-8F31K2",
+        "status": "DRAFT",
+        "templateId": "body-image-guided",
+        "templateVersion": 2,
+        "photoPolicyVersion": 2,
+        "version": "AAAAAAAAB9E="
+      },
+      "photos": {
+        "completed": 11,
+        "required": 11
+      },
+      "odometer": {
+        "kilometers": 48320,
+        "updatedAt": "2026-10-26T09:00:00Z"
+      },
+      "video360": {
+        "accepted": true,
+        "durationSeconds": 48
+      },
+      "media": {
+        "uploaded": 12,
+        "required": 12,
+        "processing": 2
+      },
+      "readiness": {
+        "captureComplete": true,
+        "requiredMediaUploaded": true,
+        "odometerValid": true,
+        "factsConfirmed": true,
+        "canSubmit": true,
+        "blockingUploadFailures": false
+      },
+      "blockers": []
+    },
+    "Receipt": {
+      "reference": "BDI-8F31K2",
+      "submittedAt": "2026-10-26T09:00:00Z",
+      "status": "queued-for-review",
+      "inspectionId": "insp_contract_001",
+      "version": "AAAAAAAAB9E=",
+      "reviewEstimateLabel": "۳ تا ۵ روز کاری؛ برآورد نمونه محصول، نه SLA",
+      "isEstimate": true
+    },
+    "Status": {
+      "inspectionId": "insp_contract_001",
+      "status": "FORWARD_PENDING",
+      "trackingCode": "BDI-8F31K2",
+      "version": "AAAAAAAAB9E=",
+      "updatedAt": "2026-10-26T09:00:00Z",
+      "forwarding": {
+        "phase": "ready"
+      },
+      "corrections": []
+    },
+    "CorrectionItem": {
+      "id": "11111111-1111-4111-8111-111111111111",
+      "kind": "photo",
+      "requirementId": "spec-plate",
+      "originalEvidenceId": "11111111-1111-4111-8111-111111111111",
+      "originalRevision": "client-revision-0001",
+      "reviewerReason": "شماره شاسی خوانا نیست.",
+      "state": "requested"
+    },
+    "EvidenceRequest": {
+      "id": "11111111-1111-4111-8111-111111111111",
+      "inspectionId": "insp_contract_001",
+      "version": 1,
+      "round": 1,
+      "status": "requested",
+      "items": [
+        {
+          "id": "11111111-1111-4111-8111-111111111111",
+          "kind": "photo",
+          "requirementId": "spec-plate",
+          "originalEvidenceId": "11111111-1111-4111-8111-111111111111",
+          "originalRevision": "client-revision-0001",
+          "reviewerReason": "شماره شاسی خوانا نیست.",
+          "state": "requested"
+        }
+      ],
+      "template": {
+        "photoPolicyVersion": 2,
+        "templateId": "body-image-guided",
+        "templateVersion": 2,
+        "sections": [
+          {
+            "id": "right",
+            "title": "نمای راست",
+            "order": 1,
+            "photoRequirements": [
+              {
+                "id": "front-45-right",
+                "title": "جلو ۴۵° راست",
+                "description": "جلوی خودرو و سمت راست به صورت کامل دیده شود.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/front-45-right.webp",
+                "instructions": [
+                  "جلوی خودرو و سمت راست به طور کامل داخل کادر باشد.",
+                  "حدود ۳ متر از خودرو فاصله بگیرید.",
+                  "از زاویه ۴۵ درجه سمت راست عکس بگیرید."
+                ],
+                "distance": "۳ متر",
+                "height": "کمر",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "خودرو کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "frame",
+                  "distance",
+                  "angle"
+                ]
+              },
+              {
+                "id": "back-45-right",
+                "title": "عقب ۴۵° راست",
+                "description": "عقب خودرو و سمت راست به صورت کامل دیده شود.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/back-45-right.webp",
+                "instructions": [
+                  "تمام قسمت عقب و سمت راست خودرو داخل کادر باشد.",
+                  "خودرو را از زاویه ۴۵ درجه ثبت کنید.",
+                  "در نور کافی و بدون سایه شدید عکاسی کنید."
+                ],
+                "distance": "۳ متر",
+                "height": "کمر",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "خودرو کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "frame",
+                  "angle",
+                  "glare"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "left",
+            "title": "نمای چپ",
+            "order": 2,
+            "photoRequirements": [
+              {
+                "id": "front-45-left",
+                "title": "جلو ۴۵° چپ",
+                "description": "جلوی خودرو و سمت چپ به صورت کامل دیده شود.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/front-45-left.webp",
+                "instructions": [
+                  "جلوی خودرو و سمت چپ به طور کامل داخل کادر باشد.",
+                  "حدود ۳ متر از خودرو فاصله بگیرید.",
+                  "از زاویه ۴۵ درجه سمت چپ عکس بگیرید."
+                ],
+                "distance": "۳ متر",
+                "height": "کمر",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "خودرو کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "frame",
+                  "distance",
+                  "angle"
+                ]
+              },
+              {
+                "id": "back-45-left",
+                "title": "عقب ۴۵° چپ",
+                "description": "عقب خودرو و سمت چپ به صورت کامل دیده شود.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/back-45-left.webp",
+                "instructions": [
+                  "تمام قسمت عقب و سمت چپ خودرو داخل کادر باشد.",
+                  "خودرو را از زاویه ۴۵ درجه ثبت کنید.",
+                  "در نور کافی و بدون سایه شدید عکاسی کنید."
+                ],
+                "distance": "۳ متر",
+                "height": "کمر",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "خودرو کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "frame",
+                  "angle",
+                  "glare"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "front",
+            "title": "جلو",
+            "order": 3,
+            "photoRequirements": [
+              {
+                "id": "front-plate",
+                "title": "نمای مستقیم جلو با پلاک",
+                "description": "یک عکس مستقیم از نمای جلوی خودرو بگیرید، به طوری که پلاک کاملاً مشخص و خوانا باشد.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/front-plate.webp",
+                "instructions": [
+                  "مستقیم روبه‌روی خودرو بایستید؛ خودرو وسط کادر باشد.",
+                  "نمای کامل جلو را بدون برش و زاویه شدید ثبت کنید.",
+                  "پلاک بدون بازتاب نور و کاملاً خوانا باشد."
+                ],
+                "distance": "۳ متر",
+                "height": "چراغ‌ها",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "پلاک خوانا است"
+                ],
+                "guidanceTopics": [
+                  "angle",
+                  "frame",
+                  "text"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "rear",
+            "title": "عقب",
+            "order": 4,
+            "photoRequirements": [
+              {
+                "id": "rear-plate",
+                "title": "نمای مستقیم عقب با پلاک",
+                "description": "یک عکس مستقیم از نمای عقب خودرو بگیرید، به طوری که پلاک کاملاً مشخص و خوانا باشد.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/rear-plate.webp",
+                "instructions": [
+                  "مستقیم پشت خودرو بایستید؛ خودرو وسط کادر باشد.",
+                  "تمام نمای عقب بدون برش و زاویه شدید داخل کادر باشد.",
+                  "پلاک کاملاً خوانا و بدون بازتاب باشد."
+                ],
+                "distance": "۳ متر",
+                "height": "چراغ‌ها",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "پلاک خوانا است"
+                ],
+                "guidanceTopics": [
+                  "angle",
+                  "frame",
+                  "text"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "cabin",
+            "title": "کابین",
+            "order": 5,
+            "photoRequirements": [
+              {
+                "id": "odometer-on",
+                "title": "کیلومترشمار",
+                "description": "خودرو را روشن کنید و تصویری واضح از کیلومترشمار بگیرید.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/odometer-on.webp",
+                "instructions": [
+                  "خودرو را روشن و در حالت توقف نگه دارید.",
+                  "تمام صفحه کیلومترشمار در کادر باشد.",
+                  "عدد کیلومتر خوانا باشد؛ از بازتاب نور جلوگیری کنید."
+                ],
+                "distance": "نزدیک",
+                "height": "داشبورد",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "عدد کیلومتر خوانا است"
+                ],
+                "guidanceTopics": [
+                  "ignition",
+                  "frame",
+                  "glare"
+                ]
+              },
+              {
+                "id": "driver-interior",
+                "title": "نمای داخل کابین از سمت راننده",
+                "description": "از سمت راننده تصویری بگیرید که فضای داخلی خودرو به صورت واضح دیده شود.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/driver-interior.webp",
+                "instructions": [
+                  "درِ سمت راننده را باز کنید.",
+                  "فرمان، داشبورد و صندلی‌ها دیده شوند.",
+                  "خیلی نزدیک نشوید؛ فضای داخلی کامل دیده شود."
+                ],
+                "distance": "۱ متر",
+                "height": "درِ راننده",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "کابین کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "interior",
+                  "frame",
+                  "distance"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "engine-details",
+            "title": "موتور و مشخصات",
+            "order": 6,
+            "photoRequirements": [
+              {
+                "id": "engine-bay",
+                "title": "محفظه موتور",
+                "description": "کاپوت را باز کنید و یک تصویر کامل و واضح از محفظه موتور بگیرید.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/engine-bay.webp",
+                "instructions": [
+                  "خودرو متوقف باشد؛ کاپوت را کاملاً و ایمن باز کنید.",
+                  "تمام محفظه موتور دیده شود.",
+                  "گوشی ثابت و تصویر بدون تاری باشد."
+                ],
+                "distance": "۱ متر",
+                "height": "سینه",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "محفظه کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "hood",
+                  "frame",
+                  "steady"
+                ]
+              },
+              {
+                "id": "spec-plate",
+                "title": "محل شماره شاسی خودرو",
+                "description": "شماره شاسی خودرو — انتخاب یکی از چهار گزینه. فقط یک تصویر لازم است.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/spec-plate.webp",
+                "instructions": [
+                  "از نزدیک روی پلاک مشخصات فوکوس کنید.",
+                  "تمام متن پلاک داخل کادر باشد.",
+                  "نوشته‌ها خوانا و بدون بازتاب نور باشند."
+                ],
+                "distance": "۳۰ سانتی‌متر",
+                "height": "هم‌سطح پلاک",
+                "orientation": "landscape",
+                "choice": {
+                  "groupId": "vehicle-identification",
+                  "alternatives": [
+                    "pillar",
+                    "engine",
+                    "seat",
+                    "windshield"
+                  ]
+                },
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "اطلاعات قابل خواندن است"
+                ],
+                "guidanceTopics": [
+                  "text",
+                  "frame",
+                  "glare"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "roof",
+            "title": "سقف",
+            "order": 7,
+            "photoRequirements": [
+              {
+                "id": "car-roof",
+                "title": "نمای سقف",
+                "description": "تمام سطح سقف خودرو را در تصویر نشان دهید.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/car-roof.webp",
+                "instructions": [
+                  "از موقعیتی ایمن، گوشی را بالاتر بگیرید.",
+                  "بیشترین سطح سقف و گوشه‌های اصلی در کادر باشند.",
+                  "برای عکاسی روی خودرو نایستید."
+                ],
+                "distance": "۱ متر",
+                "height": "بالاتر از سقف",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "سقف کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "roof",
+                  "frame",
+                  "steady"
+                ]
+              }
+            ]
+          }
+        ],
+        "captureRequirements": {
+          "odometerRequirementId": "odometer-on",
+          "video360Required": true
+        }
+      }
+    },
+    "EvidenceRequestPage": {
+      "items": [
+        {
+          "id": "11111111-1111-4111-8111-111111111111",
+          "inspectionId": "insp_contract_001",
+          "version": 1,
+          "round": 1,
+          "status": "requested",
+          "items": [
+            {
+              "id": "11111111-1111-4111-8111-111111111111",
+              "kind": "photo",
+              "requirementId": "spec-plate",
+              "originalEvidenceId": "11111111-1111-4111-8111-111111111111",
+              "originalRevision": "client-revision-0001",
+              "reviewerReason": "شماره شاسی خوانا نیست.",
+              "state": "requested"
+            }
+          ],
+          "template": {
+            "photoPolicyVersion": 2,
+            "templateId": "body-image-guided",
+            "templateVersion": 2,
+            "sections": [
+              {
+                "id": "right",
+                "title": "نمای راست",
+                "order": 1,
+                "photoRequirements": [
+                  {
+                    "id": "front-45-right",
+                    "title": "جلو ۴۵° راست",
+                    "description": "جلوی خودرو و سمت راست به صورت کامل دیده شود.",
+                    "sampleImage": "/assets/inspection-vehicle/photo-guides/front-45-right.webp",
+                    "instructions": [
+                      "جلوی خودرو و سمت راست به طور کامل داخل کادر باشد.",
+                      "حدود ۳ متر از خودرو فاصله بگیرید.",
+                      "از زاویه ۴۵ درجه سمت راست عکس بگیرید."
+                    ],
+                    "distance": "۳ متر",
+                    "height": "کمر",
+                    "orientation": "landscape",
+                    "required": true,
+                    "status": "pending",
+                    "checks": [
+                      "واضح",
+                      "نور مناسب",
+                      "خودرو کامل در کادر"
+                    ],
+                    "guidanceTopics": [
+                      "frame",
+                      "distance",
+                      "angle"
+                    ]
+                  },
+                  {
+                    "id": "back-45-right",
+                    "title": "عقب ۴۵° راست",
+                    "description": "عقب خودرو و سمت راست به صورت کامل دیده شود.",
+                    "sampleImage": "/assets/inspection-vehicle/photo-guides/back-45-right.webp",
+                    "instructions": [
+                      "تمام قسمت عقب و سمت راست خودرو داخل کادر باشد.",
+                      "خودرو را از زاویه ۴۵ درجه ثبت کنید.",
+                      "در نور کافی و بدون سایه شدید عکاسی کنید."
+                    ],
+                    "distance": "۳ متر",
+                    "height": "کمر",
+                    "orientation": "landscape",
+                    "required": true,
+                    "status": "pending",
+                    "checks": [
+                      "واضح",
+                      "نور مناسب",
+                      "خودرو کامل در کادر"
+                    ],
+                    "guidanceTopics": [
+                      "frame",
+                      "angle",
+                      "glare"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "left",
+                "title": "نمای چپ",
+                "order": 2,
+                "photoRequirements": [
+                  {
+                    "id": "front-45-left",
+                    "title": "جلو ۴۵° چپ",
+                    "description": "جلوی خودرو و سمت چپ به صورت کامل دیده شود.",
+                    "sampleImage": "/assets/inspection-vehicle/photo-guides/front-45-left.webp",
+                    "instructions": [
+                      "جلوی خودرو و سمت چپ به طور کامل داخل کادر باشد.",
+                      "حدود ۳ متر از خودرو فاصله بگیرید.",
+                      "از زاویه ۴۵ درجه سمت چپ عکس بگیرید."
+                    ],
+                    "distance": "۳ متر",
+                    "height": "کمر",
+                    "orientation": "landscape",
+                    "required": true,
+                    "status": "pending",
+                    "checks": [
+                      "واضح",
+                      "نور مناسب",
+                      "خودرو کامل در کادر"
+                    ],
+                    "guidanceTopics": [
+                      "frame",
+                      "distance",
+                      "angle"
+                    ]
+                  },
+                  {
+                    "id": "back-45-left",
+                    "title": "عقب ۴۵° چپ",
+                    "description": "عقب خودرو و سمت چپ به صورت کامل دیده شود.",
+                    "sampleImage": "/assets/inspection-vehicle/photo-guides/back-45-left.webp",
+                    "instructions": [
+                      "تمام قسمت عقب و سمت چپ خودرو داخل کادر باشد.",
+                      "خودرو را از زاویه ۴۵ درجه ثبت کنید.",
+                      "در نور کافی و بدون سایه شدید عکاسی کنید."
+                    ],
+                    "distance": "۳ متر",
+                    "height": "کمر",
+                    "orientation": "landscape",
+                    "required": true,
+                    "status": "pending",
+                    "checks": [
+                      "واضح",
+                      "نور مناسب",
+                      "خودرو کامل در کادر"
+                    ],
+                    "guidanceTopics": [
+                      "frame",
+                      "angle",
+                      "glare"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "front",
+                "title": "جلو",
+                "order": 3,
+                "photoRequirements": [
+                  {
+                    "id": "front-plate",
+                    "title": "نمای مستقیم جلو با پلاک",
+                    "description": "یک عکس مستقیم از نمای جلوی خودرو بگیرید، به طوری که پلاک کاملاً مشخص و خوانا باشد.",
+                    "sampleImage": "/assets/inspection-vehicle/photo-guides/front-plate.webp",
+                    "instructions": [
+                      "مستقیم روبه‌روی خودرو بایستید؛ خودرو وسط کادر باشد.",
+                      "نمای کامل جلو را بدون برش و زاویه شدید ثبت کنید.",
+                      "پلاک بدون بازتاب نور و کاملاً خوانا باشد."
+                    ],
+                    "distance": "۳ متر",
+                    "height": "چراغ‌ها",
+                    "orientation": "landscape",
+                    "required": true,
+                    "status": "pending",
+                    "checks": [
+                      "واضح",
+                      "نور مناسب",
+                      "پلاک خوانا است"
+                    ],
+                    "guidanceTopics": [
+                      "angle",
+                      "frame",
+                      "text"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "rear",
+                "title": "عقب",
+                "order": 4,
+                "photoRequirements": [
+                  {
+                    "id": "rear-plate",
+                    "title": "نمای مستقیم عقب با پلاک",
+                    "description": "یک عکس مستقیم از نمای عقب خودرو بگیرید، به طوری که پلاک کاملاً مشخص و خوانا باشد.",
+                    "sampleImage": "/assets/inspection-vehicle/photo-guides/rear-plate.webp",
+                    "instructions": [
+                      "مستقیم پشت خودرو بایستید؛ خودرو وسط کادر باشد.",
+                      "تمام نمای عقب بدون برش و زاویه شدید داخل کادر باشد.",
+                      "پلاک کاملاً خوانا و بدون بازتاب باشد."
+                    ],
+                    "distance": "۳ متر",
+                    "height": "چراغ‌ها",
+                    "orientation": "landscape",
+                    "required": true,
+                    "status": "pending",
+                    "checks": [
+                      "واضح",
+                      "نور مناسب",
+                      "پلاک خوانا است"
+                    ],
+                    "guidanceTopics": [
+                      "angle",
+                      "frame",
+                      "text"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "cabin",
+                "title": "کابین",
+                "order": 5,
+                "photoRequirements": [
+                  {
+                    "id": "odometer-on",
+                    "title": "کیلومترشمار",
+                    "description": "خودرو را روشن کنید و تصویری واضح از کیلومترشمار بگیرید.",
+                    "sampleImage": "/assets/inspection-vehicle/photo-guides/odometer-on.webp",
+                    "instructions": [
+                      "خودرو را روشن و در حالت توقف نگه دارید.",
+                      "تمام صفحه کیلومترشمار در کادر باشد.",
+                      "عدد کیلومتر خوانا باشد؛ از بازتاب نور جلوگیری کنید."
+                    ],
+                    "distance": "نزدیک",
+                    "height": "داشبورد",
+                    "orientation": "landscape",
+                    "required": true,
+                    "status": "pending",
+                    "checks": [
+                      "واضح",
+                      "نور مناسب",
+                      "عدد کیلومتر خوانا است"
+                    ],
+                    "guidanceTopics": [
+                      "ignition",
+                      "frame",
+                      "glare"
+                    ]
+                  },
+                  {
+                    "id": "driver-interior",
+                    "title": "نمای داخل کابین از سمت راننده",
+                    "description": "از سمت راننده تصویری بگیرید که فضای داخلی خودرو به صورت واضح دیده شود.",
+                    "sampleImage": "/assets/inspection-vehicle/photo-guides/driver-interior.webp",
+                    "instructions": [
+                      "درِ سمت راننده را باز کنید.",
+                      "فرمان، داشبورد و صندلی‌ها دیده شوند.",
+                      "خیلی نزدیک نشوید؛ فضای داخلی کامل دیده شود."
+                    ],
+                    "distance": "۱ متر",
+                    "height": "درِ راننده",
+                    "orientation": "landscape",
+                    "required": true,
+                    "status": "pending",
+                    "checks": [
+                      "واضح",
+                      "نور مناسب",
+                      "کابین کامل در کادر"
+                    ],
+                    "guidanceTopics": [
+                      "interior",
+                      "frame",
+                      "distance"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "engine-details",
+                "title": "موتور و مشخصات",
+                "order": 6,
+                "photoRequirements": [
+                  {
+                    "id": "engine-bay",
+                    "title": "محفظه موتور",
+                    "description": "کاپوت را باز کنید و یک تصویر کامل و واضح از محفظه موتور بگیرید.",
+                    "sampleImage": "/assets/inspection-vehicle/photo-guides/engine-bay.webp",
+                    "instructions": [
+                      "خودرو متوقف باشد؛ کاپوت را کاملاً و ایمن باز کنید.",
+                      "تمام محفظه موتور دیده شود.",
+                      "گوشی ثابت و تصویر بدون تاری باشد."
+                    ],
+                    "distance": "۱ متر",
+                    "height": "سینه",
+                    "orientation": "landscape",
+                    "required": true,
+                    "status": "pending",
+                    "checks": [
+                      "واضح",
+                      "نور مناسب",
+                      "محفظه کامل در کادر"
+                    ],
+                    "guidanceTopics": [
+                      "hood",
+                      "frame",
+                      "steady"
+                    ]
+                  },
+                  {
+                    "id": "spec-plate",
+                    "title": "محل شماره شاسی خودرو",
+                    "description": "شماره شاسی خودرو — انتخاب یکی از چهار گزینه. فقط یک تصویر لازم است.",
+                    "sampleImage": "/assets/inspection-vehicle/photo-guides/spec-plate.webp",
+                    "instructions": [
+                      "از نزدیک روی پلاک مشخصات فوکوس کنید.",
+                      "تمام متن پلاک داخل کادر باشد.",
+                      "نوشته‌ها خوانا و بدون بازتاب نور باشند."
+                    ],
+                    "distance": "۳۰ سانتی‌متر",
+                    "height": "هم‌سطح پلاک",
+                    "orientation": "landscape",
+                    "choice": {
+                      "groupId": "vehicle-identification",
+                      "alternatives": [
+                        "pillar",
+                        "engine",
+                        "seat",
+                        "windshield"
+                      ]
+                    },
+                    "required": true,
+                    "status": "pending",
+                    "checks": [
+                      "واضح",
+                      "نور مناسب",
+                      "اطلاعات قابل خواندن است"
+                    ],
+                    "guidanceTopics": [
+                      "text",
+                      "frame",
+                      "glare"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "roof",
+                "title": "سقف",
+                "order": 7,
+                "photoRequirements": [
+                  {
+                    "id": "car-roof",
+                    "title": "نمای سقف",
+                    "description": "تمام سطح سقف خودرو را در تصویر نشان دهید.",
+                    "sampleImage": "/assets/inspection-vehicle/photo-guides/car-roof.webp",
+                    "instructions": [
+                      "از موقعیتی ایمن، گوشی را بالاتر بگیرید.",
+                      "بیشترین سطح سقف و گوشه‌های اصلی در کادر باشند.",
+                      "برای عکاسی روی خودرو نایستید."
+                    ],
+                    "distance": "۱ متر",
+                    "height": "بالاتر از سقف",
+                    "orientation": "landscape",
+                    "required": true,
+                    "status": "pending",
+                    "checks": [
+                      "واضح",
+                      "نور مناسب",
+                      "سقف کامل در کادر"
+                    ],
+                    "guidanceTopics": [
+                      "roof",
+                      "frame",
+                      "steady"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "captureRequirements": {
+              "odometerRequirementId": "odometer-on",
+              "video360Required": true
+            }
+          }
+        }
+      ]
+    },
+    "ResubmitRequest": {
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "requestVersion": 1,
+      "candidateEvidenceIds": [
+        "00000000-0000-4000-8000-000000000021"
+      ],
+      "expectedVersion": "AAAAAAAAB9E="
+    },
+    "FieldProposal": {
+      "expectedVersion": "AAAAAAAAB9E=",
+      "field": "plate",
+      "value": {
+        "firstTwoDigits": "12",
+        "letter": "ب",
+        "threeDigits": "345",
+        "regionDigits": "67"
+      }
+    },
+    "AssignmentRequest": {
+      "reviewerId": "11111111-1111-4111-8111-111111111111",
+      "reassign": true,
+      "expectedVersion": "AAAAAAAAB9E="
+    },
+    "ReviewerPolicy": {
+      "mode": "manual",
+      "capacities": [],
+      "expectedVersion": "AAAAAAAAB9E="
+    },
+    "EvidenceDecision": {
+      "evidenceId": "11111111-1111-4111-8111-111111111111",
+      "revision": "client-revision-0002",
+      "decision": "approved",
+      "expectedVersion": "AAAAAAAAB9E="
+    },
+    "FieldRequest": {
+      "field": "plate",
+      "customerReason": "رنگ ثبت‌شده با خودرو تطبیق ندارد.",
+      "expectedVersion": "AAAAAAAAB9E="
+    },
+    "FieldDecision": {
+      "decision": "approved",
+      "proposalVersion": "AAAAAAAAB9E=",
+      "expectedVersion": "AAAAAAAAB9E="
+    },
+    "NoteRequest": {
+      "text": "یادداشت نمونه برای کارکنان؛ عمومی نیست.",
+      "expectedVersion": "AAAAAAAAB9E="
+    },
+    "FinalDecision": {
+      "decision": "approved",
+      "expectedVersion": "AAAAAAAAB9E="
+    },
+    "Case": {
+      "caseId": "insp_contract_001",
+      "inspection": {
+        "inspection": {
+          "inspectionId": "insp_contract_001",
+          "sourceRequestId": "REQ-DEMO-001",
+          "trackingCode": "BDI-8F31K2",
+          "status": "UNDER_REVIEW",
+          "templateId": "body-image-guided",
+          "templateVersion": 2,
+          "photoPolicyVersion": 2,
+          "version": "AAAAAAAAB9E="
+        },
+        "photos": {
+          "completed": 11,
+          "required": 11
+        },
+        "odometer": {
+          "kilometers": 48320,
+          "updatedAt": "2026-10-26T09:00:00Z"
+        },
+        "video360": {
+          "accepted": true,
+          "durationSeconds": 48
+        },
+        "media": {
+          "uploaded": 12,
+          "required": 12,
+          "processing": 2
+        },
+        "readiness": {
+          "captureComplete": true,
+          "requiredMediaUploaded": true,
+          "odometerValid": true,
+          "factsConfirmed": true,
+          "canSubmit": true,
+          "blockingUploadFailures": false
+        },
+        "blockers": []
+      },
+      "version": "AAAAAAAAB9E=",
+      "evidence": [
+        {
+          "evidenceId": "11111111-1111-4111-8111-111111111111",
+          "evidenceVersionId": "22222222-2222-4222-8222-222222222222",
+          "inspectionId": "insp_contract_001",
+          "kind": "photo",
+          "requirementId": "spec-plate",
+          "alternativeId": "pillar",
+          "revision": "client-revision-0002",
+          "upload": "uploaded",
+          "verification": "processing",
+          "byteSize": 420000,
+          "mimeType": "image/jpeg",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "current": true,
+          "version": "AAAAAAAAB9E="
+        }
+      ],
+      "internalNotes": [],
+      "reference": "BDI-8F31K2",
+      "submittedAt": "2026-10-27T08:30:00Z",
+      "status": "in-review",
+      "template": {
+        "photoPolicyVersion": 2,
+        "templateId": "body-image-guided",
+        "templateVersion": 2,
+        "sections": [
+          {
+            "id": "right",
+            "title": "نمای راست",
+            "order": 1,
+            "photoRequirements": [
+              {
+                "id": "front-45-right",
+                "title": "جلو ۴۵° راست",
+                "description": "جلوی خودرو و سمت راست به صورت کامل دیده شود.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/front-45-right.webp",
+                "instructions": [
+                  "جلوی خودرو و سمت راست به طور کامل داخل کادر باشد.",
+                  "حدود ۳ متر از خودرو فاصله بگیرید.",
+                  "از زاویه ۴۵ درجه سمت راست عکس بگیرید."
+                ],
+                "distance": "۳ متر",
+                "height": "کمر",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "خودرو کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "frame",
+                  "distance",
+                  "angle"
+                ]
+              },
+              {
+                "id": "back-45-right",
+                "title": "عقب ۴۵° راست",
+                "description": "عقب خودرو و سمت راست به صورت کامل دیده شود.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/back-45-right.webp",
+                "instructions": [
+                  "تمام قسمت عقب و سمت راست خودرو داخل کادر باشد.",
+                  "خودرو را از زاویه ۴۵ درجه ثبت کنید.",
+                  "در نور کافی و بدون سایه شدید عکاسی کنید."
+                ],
+                "distance": "۳ متر",
+                "height": "کمر",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "خودرو کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "frame",
+                  "angle",
+                  "glare"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "left",
+            "title": "نمای چپ",
+            "order": 2,
+            "photoRequirements": [
+              {
+                "id": "front-45-left",
+                "title": "جلو ۴۵° چپ",
+                "description": "جلوی خودرو و سمت چپ به صورت کامل دیده شود.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/front-45-left.webp",
+                "instructions": [
+                  "جلوی خودرو و سمت چپ به طور کامل داخل کادر باشد.",
+                  "حدود ۳ متر از خودرو فاصله بگیرید.",
+                  "از زاویه ۴۵ درجه سمت چپ عکس بگیرید."
+                ],
+                "distance": "۳ متر",
+                "height": "کمر",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "خودرو کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "frame",
+                  "distance",
+                  "angle"
+                ]
+              },
+              {
+                "id": "back-45-left",
+                "title": "عقب ۴۵° چپ",
+                "description": "عقب خودرو و سمت چپ به صورت کامل دیده شود.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/back-45-left.webp",
+                "instructions": [
+                  "تمام قسمت عقب و سمت چپ خودرو داخل کادر باشد.",
+                  "خودرو را از زاویه ۴۵ درجه ثبت کنید.",
+                  "در نور کافی و بدون سایه شدید عکاسی کنید."
+                ],
+                "distance": "۳ متر",
+                "height": "کمر",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "خودرو کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "frame",
+                  "angle",
+                  "glare"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "front",
+            "title": "جلو",
+            "order": 3,
+            "photoRequirements": [
+              {
+                "id": "front-plate",
+                "title": "نمای مستقیم جلو با پلاک",
+                "description": "یک عکس مستقیم از نمای جلوی خودرو بگیرید، به طوری که پلاک کاملاً مشخص و خوانا باشد.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/front-plate.webp",
+                "instructions": [
+                  "مستقیم روبه‌روی خودرو بایستید؛ خودرو وسط کادر باشد.",
+                  "نمای کامل جلو را بدون برش و زاویه شدید ثبت کنید.",
+                  "پلاک بدون بازتاب نور و کاملاً خوانا باشد."
+                ],
+                "distance": "۳ متر",
+                "height": "چراغ‌ها",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "پلاک خوانا است"
+                ],
+                "guidanceTopics": [
+                  "angle",
+                  "frame",
+                  "text"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "rear",
+            "title": "عقب",
+            "order": 4,
+            "photoRequirements": [
+              {
+                "id": "rear-plate",
+                "title": "نمای مستقیم عقب با پلاک",
+                "description": "یک عکس مستقیم از نمای عقب خودرو بگیرید، به طوری که پلاک کاملاً مشخص و خوانا باشد.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/rear-plate.webp",
+                "instructions": [
+                  "مستقیم پشت خودرو بایستید؛ خودرو وسط کادر باشد.",
+                  "تمام نمای عقب بدون برش و زاویه شدید داخل کادر باشد.",
+                  "پلاک کاملاً خوانا و بدون بازتاب باشد."
+                ],
+                "distance": "۳ متر",
+                "height": "چراغ‌ها",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "پلاک خوانا است"
+                ],
+                "guidanceTopics": [
+                  "angle",
+                  "frame",
+                  "text"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "cabin",
+            "title": "کابین",
+            "order": 5,
+            "photoRequirements": [
+              {
+                "id": "odometer-on",
+                "title": "کیلومترشمار",
+                "description": "خودرو را روشن کنید و تصویری واضح از کیلومترشمار بگیرید.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/odometer-on.webp",
+                "instructions": [
+                  "خودرو را روشن و در حالت توقف نگه دارید.",
+                  "تمام صفحه کیلومترشمار در کادر باشد.",
+                  "عدد کیلومتر خوانا باشد؛ از بازتاب نور جلوگیری کنید."
+                ],
+                "distance": "نزدیک",
+                "height": "داشبورد",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "عدد کیلومتر خوانا است"
+                ],
+                "guidanceTopics": [
+                  "ignition",
+                  "frame",
+                  "glare"
+                ]
+              },
+              {
+                "id": "driver-interior",
+                "title": "نمای داخل کابین از سمت راننده",
+                "description": "از سمت راننده تصویری بگیرید که فضای داخلی خودرو به صورت واضح دیده شود.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/driver-interior.webp",
+                "instructions": [
+                  "درِ سمت راننده را باز کنید.",
+                  "فرمان، داشبورد و صندلی‌ها دیده شوند.",
+                  "خیلی نزدیک نشوید؛ فضای داخلی کامل دیده شود."
+                ],
+                "distance": "۱ متر",
+                "height": "درِ راننده",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "کابین کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "interior",
+                  "frame",
+                  "distance"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "engine-details",
+            "title": "موتور و مشخصات",
+            "order": 6,
+            "photoRequirements": [
+              {
+                "id": "engine-bay",
+                "title": "محفظه موتور",
+                "description": "کاپوت را باز کنید و یک تصویر کامل و واضح از محفظه موتور بگیرید.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/engine-bay.webp",
+                "instructions": [
+                  "خودرو متوقف باشد؛ کاپوت را کاملاً و ایمن باز کنید.",
+                  "تمام محفظه موتور دیده شود.",
+                  "گوشی ثابت و تصویر بدون تاری باشد."
+                ],
+                "distance": "۱ متر",
+                "height": "سینه",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "محفظه کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "hood",
+                  "frame",
+                  "steady"
+                ]
+              },
+              {
+                "id": "spec-plate",
+                "title": "محل شماره شاسی خودرو",
+                "description": "شماره شاسی خودرو — انتخاب یکی از چهار گزینه. فقط یک تصویر لازم است.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/spec-plate.webp",
+                "instructions": [
+                  "از نزدیک روی پلاک مشخصات فوکوس کنید.",
+                  "تمام متن پلاک داخل کادر باشد.",
+                  "نوشته‌ها خوانا و بدون بازتاب نور باشند."
+                ],
+                "distance": "۳۰ سانتی‌متر",
+                "height": "هم‌سطح پلاک",
+                "orientation": "landscape",
+                "choice": {
+                  "groupId": "vehicle-identification",
+                  "alternatives": [
+                    "pillar",
+                    "engine",
+                    "seat",
+                    "windshield"
+                  ]
+                },
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "اطلاعات قابل خواندن است"
+                ],
+                "guidanceTopics": [
+                  "text",
+                  "frame",
+                  "glare"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "roof",
+            "title": "سقف",
+            "order": 7,
+            "photoRequirements": [
+              {
+                "id": "car-roof",
+                "title": "نمای سقف",
+                "description": "تمام سطح سقف خودرو را در تصویر نشان دهید.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/car-roof.webp",
+                "instructions": [
+                  "از موقعیتی ایمن، گوشی را بالاتر بگیرید.",
+                  "بیشترین سطح سقف و گوشه‌های اصلی در کادر باشند.",
+                  "برای عکاسی روی خودرو نایستید."
+                ],
+                "distance": "۱ متر",
+                "height": "بالاتر از سقف",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "سقف کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "roof",
+                  "frame",
+                  "steady"
+                ]
+              }
+            ]
+          }
+        ],
+        "captureRequirements": {
+          "odometerRequirementId": "odometer-on",
+          "video360Required": true
+        }
+      },
+      "decisions": [
+        {
+          "id": "decision-example",
+          "requirementId": "spec-plate",
+          "revision": "client-revision-0002",
+          "evidenceId": "11111111-1111-4111-8111-111111111111",
+          "decision": "approved",
+          "actorId": "staff-example",
+          "at": "2026-10-27T08:30:00Z"
+        }
+      ],
+      "fieldCorrections": []
+    },
+    "HistoryPage": {
+      "items": [],
+      "nextCursor": null
+    },
+    "AdminWorkspace": {
+      "templates": [
+        {
+          "id": "template-example",
+          "title": "بازدید بدنه سدان نمونه",
+          "partner": "کارگزاری نمونه",
+          "currentPublishedId": "template-version-example",
+          "versions": [
+            {
+              "id": "template-version-example",
+              "version": 2,
+              "revision": 1,
+              "state": "published",
+              "snapshot": {
+                "photoPolicyVersion": 2,
+                "templateId": "body-image-guided",
+                "templateVersion": 2,
+                "sections": [
+                  {
+                    "id": "right",
+                    "title": "نمای راست",
+                    "order": 1,
+                    "photoRequirements": [
+                      {
+                        "id": "front-45-right",
+                        "title": "جلو ۴۵° راست",
+                        "description": "جلوی خودرو و سمت راست به صورت کامل دیده شود.",
+                        "sampleImage": "/assets/inspection-vehicle/photo-guides/front-45-right.webp",
+                        "instructions": [
+                          "جلوی خودرو و سمت راست به طور کامل داخل کادر باشد.",
+                          "حدود ۳ متر از خودرو فاصله بگیرید.",
+                          "از زاویه ۴۵ درجه سمت راست عکس بگیرید."
+                        ],
+                        "distance": "۳ متر",
+                        "height": "کمر",
+                        "orientation": "landscape",
+                        "required": true,
+                        "status": "pending",
+                        "checks": [
+                          "واضح",
+                          "نور مناسب",
+                          "خودرو کامل در کادر"
+                        ],
+                        "guidanceTopics": [
+                          "frame",
+                          "distance",
+                          "angle"
+                        ]
+                      },
+                      {
+                        "id": "back-45-right",
+                        "title": "عقب ۴۵° راست",
+                        "description": "عقب خودرو و سمت راست به صورت کامل دیده شود.",
+                        "sampleImage": "/assets/inspection-vehicle/photo-guides/back-45-right.webp",
+                        "instructions": [
+                          "تمام قسمت عقب و سمت راست خودرو داخل کادر باشد.",
+                          "خودرو را از زاویه ۴۵ درجه ثبت کنید.",
+                          "در نور کافی و بدون سایه شدید عکاسی کنید."
+                        ],
+                        "distance": "۳ متر",
+                        "height": "کمر",
+                        "orientation": "landscape",
+                        "required": true,
+                        "status": "pending",
+                        "checks": [
+                          "واضح",
+                          "نور مناسب",
+                          "خودرو کامل در کادر"
+                        ],
+                        "guidanceTopics": [
+                          "frame",
+                          "angle",
+                          "glare"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "left",
+                    "title": "نمای چپ",
+                    "order": 2,
+                    "photoRequirements": [
+                      {
+                        "id": "front-45-left",
+                        "title": "جلو ۴۵° چپ",
+                        "description": "جلوی خودرو و سمت چپ به صورت کامل دیده شود.",
+                        "sampleImage": "/assets/inspection-vehicle/photo-guides/front-45-left.webp",
+                        "instructions": [
+                          "جلوی خودرو و سمت چپ به طور کامل داخل کادر باشد.",
+                          "حدود ۳ متر از خودرو فاصله بگیرید.",
+                          "از زاویه ۴۵ درجه سمت چپ عکس بگیرید."
+                        ],
+                        "distance": "۳ متر",
+                        "height": "کمر",
+                        "orientation": "landscape",
+                        "required": true,
+                        "status": "pending",
+                        "checks": [
+                          "واضح",
+                          "نور مناسب",
+                          "خودرو کامل در کادر"
+                        ],
+                        "guidanceTopics": [
+                          "frame",
+                          "distance",
+                          "angle"
+                        ]
+                      },
+                      {
+                        "id": "back-45-left",
+                        "title": "عقب ۴۵° چپ",
+                        "description": "عقب خودرو و سمت چپ به صورت کامل دیده شود.",
+                        "sampleImage": "/assets/inspection-vehicle/photo-guides/back-45-left.webp",
+                        "instructions": [
+                          "تمام قسمت عقب و سمت چپ خودرو داخل کادر باشد.",
+                          "خودرو را از زاویه ۴۵ درجه ثبت کنید.",
+                          "در نور کافی و بدون سایه شدید عکاسی کنید."
+                        ],
+                        "distance": "۳ متر",
+                        "height": "کمر",
+                        "orientation": "landscape",
+                        "required": true,
+                        "status": "pending",
+                        "checks": [
+                          "واضح",
+                          "نور مناسب",
+                          "خودرو کامل در کادر"
+                        ],
+                        "guidanceTopics": [
+                          "frame",
+                          "angle",
+                          "glare"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "front",
+                    "title": "جلو",
+                    "order": 3,
+                    "photoRequirements": [
+                      {
+                        "id": "front-plate",
+                        "title": "نمای مستقیم جلو با پلاک",
+                        "description": "یک عکس مستقیم از نمای جلوی خودرو بگیرید، به طوری که پلاک کاملاً مشخص و خوانا باشد.",
+                        "sampleImage": "/assets/inspection-vehicle/photo-guides/front-plate.webp",
+                        "instructions": [
+                          "مستقیم روبه‌روی خودرو بایستید؛ خودرو وسط کادر باشد.",
+                          "نمای کامل جلو را بدون برش و زاویه شدید ثبت کنید.",
+                          "پلاک بدون بازتاب نور و کاملاً خوانا باشد."
+                        ],
+                        "distance": "۳ متر",
+                        "height": "چراغ‌ها",
+                        "orientation": "landscape",
+                        "required": true,
+                        "status": "pending",
+                        "checks": [
+                          "واضح",
+                          "نور مناسب",
+                          "پلاک خوانا است"
+                        ],
+                        "guidanceTopics": [
+                          "angle",
+                          "frame",
+                          "text"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "rear",
+                    "title": "عقب",
+                    "order": 4,
+                    "photoRequirements": [
+                      {
+                        "id": "rear-plate",
+                        "title": "نمای مستقیم عقب با پلاک",
+                        "description": "یک عکس مستقیم از نمای عقب خودرو بگیرید، به طوری که پلاک کاملاً مشخص و خوانا باشد.",
+                        "sampleImage": "/assets/inspection-vehicle/photo-guides/rear-plate.webp",
+                        "instructions": [
+                          "مستقیم پشت خودرو بایستید؛ خودرو وسط کادر باشد.",
+                          "تمام نمای عقب بدون برش و زاویه شدید داخل کادر باشد.",
+                          "پلاک کاملاً خوانا و بدون بازتاب باشد."
+                        ],
+                        "distance": "۳ متر",
+                        "height": "چراغ‌ها",
+                        "orientation": "landscape",
+                        "required": true,
+                        "status": "pending",
+                        "checks": [
+                          "واضح",
+                          "نور مناسب",
+                          "پلاک خوانا است"
+                        ],
+                        "guidanceTopics": [
+                          "angle",
+                          "frame",
+                          "text"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "cabin",
+                    "title": "کابین",
+                    "order": 5,
+                    "photoRequirements": [
+                      {
+                        "id": "odometer-on",
+                        "title": "کیلومترشمار",
+                        "description": "خودرو را روشن کنید و تصویری واضح از کیلومترشمار بگیرید.",
+                        "sampleImage": "/assets/inspection-vehicle/photo-guides/odometer-on.webp",
+                        "instructions": [
+                          "خودرو را روشن و در حالت توقف نگه دارید.",
+                          "تمام صفحه کیلومترشمار در کادر باشد.",
+                          "عدد کیلومتر خوانا باشد؛ از بازتاب نور جلوگیری کنید."
+                        ],
+                        "distance": "نزدیک",
+                        "height": "داشبورد",
+                        "orientation": "landscape",
+                        "required": true,
+                        "status": "pending",
+                        "checks": [
+                          "واضح",
+                          "نور مناسب",
+                          "عدد کیلومتر خوانا است"
+                        ],
+                        "guidanceTopics": [
+                          "ignition",
+                          "frame",
+                          "glare"
+                        ]
+                      },
+                      {
+                        "id": "driver-interior",
+                        "title": "نمای داخل کابین از سمت راننده",
+                        "description": "از سمت راننده تصویری بگیرید که فضای داخلی خودرو به صورت واضح دیده شود.",
+                        "sampleImage": "/assets/inspection-vehicle/photo-guides/driver-interior.webp",
+                        "instructions": [
+                          "درِ سمت راننده را باز کنید.",
+                          "فرمان، داشبورد و صندلی‌ها دیده شوند.",
+                          "خیلی نزدیک نشوید؛ فضای داخلی کامل دیده شود."
+                        ],
+                        "distance": "۱ متر",
+                        "height": "درِ راننده",
+                        "orientation": "landscape",
+                        "required": true,
+                        "status": "pending",
+                        "checks": [
+                          "واضح",
+                          "نور مناسب",
+                          "کابین کامل در کادر"
+                        ],
+                        "guidanceTopics": [
+                          "interior",
+                          "frame",
+                          "distance"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "engine-details",
+                    "title": "موتور و مشخصات",
+                    "order": 6,
+                    "photoRequirements": [
+                      {
+                        "id": "engine-bay",
+                        "title": "محفظه موتور",
+                        "description": "کاپوت را باز کنید و یک تصویر کامل و واضح از محفظه موتور بگیرید.",
+                        "sampleImage": "/assets/inspection-vehicle/photo-guides/engine-bay.webp",
+                        "instructions": [
+                          "خودرو متوقف باشد؛ کاپوت را کاملاً و ایمن باز کنید.",
+                          "تمام محفظه موتور دیده شود.",
+                          "گوشی ثابت و تصویر بدون تاری باشد."
+                        ],
+                        "distance": "۱ متر",
+                        "height": "سینه",
+                        "orientation": "landscape",
+                        "required": true,
+                        "status": "pending",
+                        "checks": [
+                          "واضح",
+                          "نور مناسب",
+                          "محفظه کامل در کادر"
+                        ],
+                        "guidanceTopics": [
+                          "hood",
+                          "frame",
+                          "steady"
+                        ]
+                      },
+                      {
+                        "id": "spec-plate",
+                        "title": "محل شماره شاسی خودرو",
+                        "description": "شماره شاسی خودرو — انتخاب یکی از چهار گزینه. فقط یک تصویر لازم است.",
+                        "sampleImage": "/assets/inspection-vehicle/photo-guides/spec-plate.webp",
+                        "instructions": [
+                          "از نزدیک روی پلاک مشخصات فوکوس کنید.",
+                          "تمام متن پلاک داخل کادر باشد.",
+                          "نوشته‌ها خوانا و بدون بازتاب نور باشند."
+                        ],
+                        "distance": "۳۰ سانتی‌متر",
+                        "height": "هم‌سطح پلاک",
+                        "orientation": "landscape",
+                        "choice": {
+                          "groupId": "vehicle-identification",
+                          "alternatives": [
+                            "pillar",
+                            "engine",
+                            "seat",
+                            "windshield"
+                          ]
+                        },
+                        "required": true,
+                        "status": "pending",
+                        "checks": [
+                          "واضح",
+                          "نور مناسب",
+                          "اطلاعات قابل خواندن است"
+                        ],
+                        "guidanceTopics": [
+                          "text",
+                          "frame",
+                          "glare"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "roof",
+                    "title": "سقف",
+                    "order": 7,
+                    "photoRequirements": [
+                      {
+                        "id": "car-roof",
+                        "title": "نمای سقف",
+                        "description": "تمام سطح سقف خودرو را در تصویر نشان دهید.",
+                        "sampleImage": "/assets/inspection-vehicle/photo-guides/car-roof.webp",
+                        "instructions": [
+                          "از موقعیتی ایمن، گوشی را بالاتر بگیرید.",
+                          "بیشترین سطح سقف و گوشه‌های اصلی در کادر باشند.",
+                          "برای عکاسی روی خودرو نایستید."
+                        ],
+                        "distance": "۱ متر",
+                        "height": "بالاتر از سقف",
+                        "orientation": "landscape",
+                        "required": true,
+                        "status": "pending",
+                        "checks": [
+                          "واضح",
+                          "نور مناسب",
+                          "سقف کامل در کادر"
+                        ],
+                        "guidanceTopics": [
+                          "roof",
+                          "frame",
+                          "steady"
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "captureRequirements": {
+                  "odometerRequirementId": "odometer-on",
+                  "video360Required": true
+                }
+              },
+              "updatedAt": "2026-10-27T08:30:00Z",
+              "updatedBy": "staff-example",
+              "publishedAt": "2026-10-27T08:30:00Z"
+            }
+          ]
+        }
+      ],
+      "staff": [
+        {
+          "staffId": "staff-example",
+          "name": "کارشناس نمونه",
+          "identifier": "source-subject-example",
+          "role": "reviewer",
+          "active": true,
+          "capacity": 8
+        }
+      ],
+      "version": "AAAAAAAAB9E=",
+      "audit": [
+        {
+          "id": "audit-example",
+          "at": "2026-10-27T08:30:00Z",
+          "actor": "staff-example",
+          "action": "template.published",
+          "resource": "template-version-example"
+        }
+      ],
+      "webhooks": [
+        {
+          "id": "webhook-example",
+          "label": "اعلان ارسال بازدید",
+          "endpoint": "https://brokerage.example.invalid/events/inspection",
+          "event": "inspection.submitted",
+          "enabled": false
+        }
+      ],
+      "assignmentPolicy": {
+        "mode": "manual",
+        "capacities": [],
+        "expectedVersion": "AAAAAAAAB9E="
+      }
+    },
+    "TemplateDraftRequest": {
+      "title": "نمونه قراردادی"
+    },
+    "TemplateSaveRequest": {
+      "expectedVersion": "AAAAAAAAB9E=",
+      "template": {
+        "photoPolicyVersion": 2,
+        "templateId": "body-image-guided",
+        "templateVersion": 2,
+        "sections": [
+          {
+            "id": "right",
+            "title": "نمای راست",
+            "order": 1,
+            "photoRequirements": [
+              {
+                "id": "front-45-right",
+                "title": "جلو ۴۵° راست",
+                "description": "جلوی خودرو و سمت راست به صورت کامل دیده شود.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/front-45-right.webp",
+                "instructions": [
+                  "جلوی خودرو و سمت راست به طور کامل داخل کادر باشد.",
+                  "حدود ۳ متر از خودرو فاصله بگیرید.",
+                  "از زاویه ۴۵ درجه سمت راست عکس بگیرید."
+                ],
+                "distance": "۳ متر",
+                "height": "کمر",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "خودرو کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "frame",
+                  "distance",
+                  "angle"
+                ]
+              },
+              {
+                "id": "back-45-right",
+                "title": "عقب ۴۵° راست",
+                "description": "عقب خودرو و سمت راست به صورت کامل دیده شود.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/back-45-right.webp",
+                "instructions": [
+                  "تمام قسمت عقب و سمت راست خودرو داخل کادر باشد.",
+                  "خودرو را از زاویه ۴۵ درجه ثبت کنید.",
+                  "در نور کافی و بدون سایه شدید عکاسی کنید."
+                ],
+                "distance": "۳ متر",
+                "height": "کمر",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "خودرو کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "frame",
+                  "angle",
+                  "glare"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "left",
+            "title": "نمای چپ",
+            "order": 2,
+            "photoRequirements": [
+              {
+                "id": "front-45-left",
+                "title": "جلو ۴۵° چپ",
+                "description": "جلوی خودرو و سمت چپ به صورت کامل دیده شود.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/front-45-left.webp",
+                "instructions": [
+                  "جلوی خودرو و سمت چپ به طور کامل داخل کادر باشد.",
+                  "حدود ۳ متر از خودرو فاصله بگیرید.",
+                  "از زاویه ۴۵ درجه سمت چپ عکس بگیرید."
+                ],
+                "distance": "۳ متر",
+                "height": "کمر",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "خودرو کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "frame",
+                  "distance",
+                  "angle"
+                ]
+              },
+              {
+                "id": "back-45-left",
+                "title": "عقب ۴۵° چپ",
+                "description": "عقب خودرو و سمت چپ به صورت کامل دیده شود.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/back-45-left.webp",
+                "instructions": [
+                  "تمام قسمت عقب و سمت چپ خودرو داخل کادر باشد.",
+                  "خودرو را از زاویه ۴۵ درجه ثبت کنید.",
+                  "در نور کافی و بدون سایه شدید عکاسی کنید."
+                ],
+                "distance": "۳ متر",
+                "height": "کمر",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "خودرو کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "frame",
+                  "angle",
+                  "glare"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "front",
+            "title": "جلو",
+            "order": 3,
+            "photoRequirements": [
+              {
+                "id": "front-plate",
+                "title": "نمای مستقیم جلو با پلاک",
+                "description": "یک عکس مستقیم از نمای جلوی خودرو بگیرید، به طوری که پلاک کاملاً مشخص و خوانا باشد.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/front-plate.webp",
+                "instructions": [
+                  "مستقیم روبه‌روی خودرو بایستید؛ خودرو وسط کادر باشد.",
+                  "نمای کامل جلو را بدون برش و زاویه شدید ثبت کنید.",
+                  "پلاک بدون بازتاب نور و کاملاً خوانا باشد."
+                ],
+                "distance": "۳ متر",
+                "height": "چراغ‌ها",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "پلاک خوانا است"
+                ],
+                "guidanceTopics": [
+                  "angle",
+                  "frame",
+                  "text"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "rear",
+            "title": "عقب",
+            "order": 4,
+            "photoRequirements": [
+              {
+                "id": "rear-plate",
+                "title": "نمای مستقیم عقب با پلاک",
+                "description": "یک عکس مستقیم از نمای عقب خودرو بگیرید، به طوری که پلاک کاملاً مشخص و خوانا باشد.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/rear-plate.webp",
+                "instructions": [
+                  "مستقیم پشت خودرو بایستید؛ خودرو وسط کادر باشد.",
+                  "تمام نمای عقب بدون برش و زاویه شدید داخل کادر باشد.",
+                  "پلاک کاملاً خوانا و بدون بازتاب باشد."
+                ],
+                "distance": "۳ متر",
+                "height": "چراغ‌ها",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "پلاک خوانا است"
+                ],
+                "guidanceTopics": [
+                  "angle",
+                  "frame",
+                  "text"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "cabin",
+            "title": "کابین",
+            "order": 5,
+            "photoRequirements": [
+              {
+                "id": "odometer-on",
+                "title": "کیلومترشمار",
+                "description": "خودرو را روشن کنید و تصویری واضح از کیلومترشمار بگیرید.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/odometer-on.webp",
+                "instructions": [
+                  "خودرو را روشن و در حالت توقف نگه دارید.",
+                  "تمام صفحه کیلومترشمار در کادر باشد.",
+                  "عدد کیلومتر خوانا باشد؛ از بازتاب نور جلوگیری کنید."
+                ],
+                "distance": "نزدیک",
+                "height": "داشبورد",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "عدد کیلومتر خوانا است"
+                ],
+                "guidanceTopics": [
+                  "ignition",
+                  "frame",
+                  "glare"
+                ]
+              },
+              {
+                "id": "driver-interior",
+                "title": "نمای داخل کابین از سمت راننده",
+                "description": "از سمت راننده تصویری بگیرید که فضای داخلی خودرو به صورت واضح دیده شود.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/driver-interior.webp",
+                "instructions": [
+                  "درِ سمت راننده را باز کنید.",
+                  "فرمان، داشبورد و صندلی‌ها دیده شوند.",
+                  "خیلی نزدیک نشوید؛ فضای داخلی کامل دیده شود."
+                ],
+                "distance": "۱ متر",
+                "height": "درِ راننده",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "کابین کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "interior",
+                  "frame",
+                  "distance"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "engine-details",
+            "title": "موتور و مشخصات",
+            "order": 6,
+            "photoRequirements": [
+              {
+                "id": "engine-bay",
+                "title": "محفظه موتور",
+                "description": "کاپوت را باز کنید و یک تصویر کامل و واضح از محفظه موتور بگیرید.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/engine-bay.webp",
+                "instructions": [
+                  "خودرو متوقف باشد؛ کاپوت را کاملاً و ایمن باز کنید.",
+                  "تمام محفظه موتور دیده شود.",
+                  "گوشی ثابت و تصویر بدون تاری باشد."
+                ],
+                "distance": "۱ متر",
+                "height": "سینه",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "محفظه کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "hood",
+                  "frame",
+                  "steady"
+                ]
+              },
+              {
+                "id": "spec-plate",
+                "title": "محل شماره شاسی خودرو",
+                "description": "شماره شاسی خودرو — انتخاب یکی از چهار گزینه. فقط یک تصویر لازم است.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/spec-plate.webp",
+                "instructions": [
+                  "از نزدیک روی پلاک مشخصات فوکوس کنید.",
+                  "تمام متن پلاک داخل کادر باشد.",
+                  "نوشته‌ها خوانا و بدون بازتاب نور باشند."
+                ],
+                "distance": "۳۰ سانتی‌متر",
+                "height": "هم‌سطح پلاک",
+                "orientation": "landscape",
+                "choice": {
+                  "groupId": "vehicle-identification",
+                  "alternatives": [
+                    "pillar",
+                    "engine",
+                    "seat",
+                    "windshield"
+                  ]
+                },
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "اطلاعات قابل خواندن است"
+                ],
+                "guidanceTopics": [
+                  "text",
+                  "frame",
+                  "glare"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "roof",
+            "title": "سقف",
+            "order": 7,
+            "photoRequirements": [
+              {
+                "id": "car-roof",
+                "title": "نمای سقف",
+                "description": "تمام سطح سقف خودرو را در تصویر نشان دهید.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/car-roof.webp",
+                "instructions": [
+                  "از موقعیتی ایمن، گوشی را بالاتر بگیرید.",
+                  "بیشترین سطح سقف و گوشه‌های اصلی در کادر باشند.",
+                  "برای عکاسی روی خودرو نایستید."
+                ],
+                "distance": "۱ متر",
+                "height": "بالاتر از سقف",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "سقف کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "roof",
+                  "frame",
+                  "steady"
+                ]
+              }
+            ]
+          }
+        ],
+        "captureRequirements": {
+          "odometerRequirementId": "odometer-on",
+          "video360Required": true
+        }
+      }
+    },
+    "PublicationRequest": {
+      "expectedVersion": "AAAAAAAAB9E=",
+      "action": "publish"
+    },
+    "SettingsDraft": {
+      "expectedVersion": "AAAAAAAAB9E=",
+      "identity": {
+        "brokerageName": "کارگزاری نمونه",
+        "appTitle": "بازدید خودرو",
+        "logo": null,
+        "favicon": null,
+        "publicEmail": "support@example.invalid",
+        "publicPhone": "نمونه قراردادی"
+      },
+      "theme": {
+        "primary": "#047857",
+        "secondary": "#475569",
+        "background": "#FFFFFF",
+        "neutral": "#64748B",
+        "onPrimary": "#FFFFFF",
+        "onBackground": "#0F172A",
+        "accent": "#F59E0B",
+        "haloColor": "#10B981",
+        "haloIntensity": 35
+      },
+      "images": {},
+      "template": {
+        "id": "body-image-guided",
+        "version": 2
+      }
+    },
+    "PublicSettings": {
+      "schemaVersion": 1,
+      "tenantId": "demo",
+      "version": 2,
+      "publishedAt": "2026-10-26T09:00:00Z",
+      "identity": {
+        "brokerageName": "کارگزاری نمونه",
+        "appTitle": "بازدید خودرو",
+        "logo": null,
+        "favicon": null,
+        "publicEmail": "support@example.invalid",
+        "publicPhone": "نمونه قراردادی"
+      },
+      "theme": {
+        "primary": "#047857",
+        "secondary": "#475569",
+        "background": "#FFFFFF",
+        "neutral": "#64748B",
+        "onPrimary": "#FFFFFF",
+        "onBackground": "#0F172A",
+        "accent": "#F59E0B",
+        "haloColor": "#10B981",
+        "haloIntensity": 35
+      },
+      "images": {
+        "landing": null,
+        "referral": null,
+        "otp": null,
+        "readiness": null,
+        "consent": null,
+        "submission": null
+      },
+      "application": {
+        "apiBaseUrl": "/api/bazdid",
+        "contractVersion": "1",
+        "template": {
+          "id": "body-image-guided",
+          "version": 2
+        },
+        "features": {
+          "nativeCaptureFallback": true,
+          "additionalEvidence": true,
+          "supportLink": false
+        },
+        "locationMap": {
+          "enabled": true,
+          "webMapKey": null,
+          "mapType": "dreamy",
+          "reverseGeocoding": "api",
+          "initialViewport": {
+            "latitude": 35.699739,
+            "longitude": 51.338097,
+            "zoom": 12
+          }
+        }
+      }
+    },
+    "SettingsWorkspace": {
+      "published": {
+        "schemaVersion": 1,
+        "tenantId": "demo",
+        "version": 2,
+        "publishedAt": "2026-10-26T09:00:00Z",
+        "identity": {
+          "brokerageName": "کارگزاری نمونه",
+          "appTitle": "بازدید خودرو",
+          "logo": null,
+          "favicon": null,
+          "publicEmail": "support@example.invalid",
+          "publicPhone": "نمونه قراردادی"
+        },
+        "theme": {
+          "primary": "#047857",
+          "secondary": "#475569",
+          "background": "#FFFFFF",
+          "neutral": "#64748B",
+          "onPrimary": "#FFFFFF",
+          "onBackground": "#0F172A",
+          "accent": "#F59E0B",
+          "haloColor": "#10B981",
+          "haloIntensity": 35
+        },
+        "images": {
+          "landing": null,
+          "referral": null,
+          "otp": null,
+          "readiness": null,
+          "consent": null,
+          "submission": null
+        },
+        "application": {
+          "apiBaseUrl": "/api/bazdid",
+          "contractVersion": "1",
+          "template": {
+            "id": "body-image-guided",
+            "version": 2
+          },
+          "features": {
+            "nativeCaptureFallback": true,
+            "additionalEvidence": true,
+            "supportLink": false
+          },
+          "locationMap": {
+            "enabled": true,
+            "webMapKey": null,
+            "mapType": "dreamy",
+            "reverseGeocoding": "api",
+            "initialViewport": {
+              "latitude": 35.699739,
+              "longitude": 51.338097,
+              "zoom": 12
+            }
+          }
+        }
+      },
+      "draft": {
+        "schemaVersion": 1,
+        "tenantId": "demo",
+        "version": 2,
+        "publishedAt": "2026-10-26T09:00:00Z",
+        "identity": {
+          "brokerageName": "کارگزاری نمونه",
+          "appTitle": "بازدید خودرو",
+          "logo": null,
+          "favicon": null,
+          "publicEmail": "support@example.invalid",
+          "publicPhone": "نمونه قراردادی"
+        },
+        "theme": {
+          "primary": "#047857",
+          "secondary": "#475569",
+          "background": "#FFFFFF",
+          "neutral": "#64748B",
+          "onPrimary": "#FFFFFF",
+          "onBackground": "#0F172A",
+          "accent": "#F59E0B",
+          "haloColor": "#10B981",
+          "haloIntensity": 35
+        },
+        "images": {
+          "landing": null,
+          "referral": null,
+          "otp": null,
+          "readiness": null,
+          "consent": null,
+          "submission": null
+        },
+        "application": {
+          "apiBaseUrl": "/api/bazdid",
+          "contractVersion": "1",
+          "template": {
+            "id": "body-image-guided",
+            "version": 2
+          },
+          "features": {
+            "nativeCaptureFallback": true,
+            "additionalEvidence": true,
+            "supportLink": false
+          },
+          "locationMap": {
+            "enabled": true,
+            "webMapKey": null,
+            "mapType": "dreamy",
+            "reverseGeocoding": "api",
+            "initialViewport": {
+              "latitude": 35.699739,
+              "longitude": 51.338097,
+              "zoom": 12
+            }
+          }
+        }
+      },
+      "version": "AAAAAAAAB9E="
+    },
+    "BrandUpload": {
+      "slot": "نمونه قراردادی",
+      "file": "نمونه قراردادی"
+    },
+    "BrandAsset": {
+      "assetId": "11111111-1111-4111-8111-111111111111",
+      "url": "/branding/example-brokerage-logo.webp",
+      "mimeType": "image/jpeg",
+      "byteSize": 420000,
+      "width": 320,
+      "height": 160
+    },
+    "StaffRolesRequest": {
+      "roles": [
+        "platform-admin"
+      ],
+      "active": true,
+      "expectedVersion": "AAAAAAAAB9E="
+    },
+    "WebhookRequest": {
+      "enabled": true,
+      "expectedVersion": "AAAAAAAAB9E="
+    },
+    "Health": {
+      "state": "healthy",
+      "checkedAt": "2026-10-26T09:00:00Z",
+      "components": []
+    },
+    "ReverseAddress": {
+      "formatted_address": "تهران، خیابان نمونه، محل بازدید"
+    },
+    "Problem": {
+      "type": "https://inspection.example.invalid/problems/UPLOAD_INCOMPLETE",
+      "title": "برخی فایل‌ها هنوز ارسال نشده‌اند.",
+      "status": 422,
+      "code": "UPLOAD_INCOMPLETE",
+      "traceId": "fixture-trace-001",
+      "errors": {
+        "evidence": [
+          "نسخه انتخاب‌شده هنوز رسید پایدار ندارد."
+        ]
+      }
+    },
+    "InspectionOrNone": {
+      "inspectionId": "insp_contract_001",
+      "sourceRequestId": "REQ-DEMO-001",
+      "trackingCode": "BDI-8F31K2",
+      "status": "DRAFT",
+      "templateId": "body-image-guided",
+      "templateVersion": 2,
+      "photoPolicyVersion": 2,
+      "version": "AAAAAAAAB9E="
+    },
+    "ReviewDecision": {
+      "id": "decision-example",
+      "requirementId": "spec-plate",
+      "revision": "client-revision-0002",
+      "evidenceId": "11111111-1111-4111-8111-111111111111",
+      "decision": "approved",
+      "actorId": "staff-example",
+      "at": "2026-10-27T08:30:00Z"
+    },
+    "FieldCorrection": {
+      "id": "field-example",
+      "field": "color",
+      "customerReason": "رنگ بدنه با تصویر مطابقت ندارد.",
+      "requestedAt": "2026-10-27T08:30:00Z",
+      "requestedBy": "staff-example",
+      "state": "requested"
+    },
+    "FinalReview": {
+      "kind": "approved",
+      "actorId": "staff-example",
+      "at": "2026-10-27T08:30:00Z"
+    },
+    "Forwarding": {
+      "phase": "ready"
+    },
+    "TemplateVersion": {
+      "id": "template-version-example",
+      "version": 2,
+      "revision": 1,
+      "state": "published",
+      "snapshot": {
+        "photoPolicyVersion": 2,
+        "templateId": "body-image-guided",
+        "templateVersion": 2,
+        "sections": [
+          {
+            "id": "right",
+            "title": "نمای راست",
+            "order": 1,
+            "photoRequirements": [
+              {
+                "id": "front-45-right",
+                "title": "جلو ۴۵° راست",
+                "description": "جلوی خودرو و سمت راست به صورت کامل دیده شود.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/front-45-right.webp",
+                "instructions": [
+                  "جلوی خودرو و سمت راست به طور کامل داخل کادر باشد.",
+                  "حدود ۳ متر از خودرو فاصله بگیرید.",
+                  "از زاویه ۴۵ درجه سمت راست عکس بگیرید."
+                ],
+                "distance": "۳ متر",
+                "height": "کمر",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "خودرو کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "frame",
+                  "distance",
+                  "angle"
+                ]
+              },
+              {
+                "id": "back-45-right",
+                "title": "عقب ۴۵° راست",
+                "description": "عقب خودرو و سمت راست به صورت کامل دیده شود.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/back-45-right.webp",
+                "instructions": [
+                  "تمام قسمت عقب و سمت راست خودرو داخل کادر باشد.",
+                  "خودرو را از زاویه ۴۵ درجه ثبت کنید.",
+                  "در نور کافی و بدون سایه شدید عکاسی کنید."
+                ],
+                "distance": "۳ متر",
+                "height": "کمر",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "خودرو کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "frame",
+                  "angle",
+                  "glare"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "left",
+            "title": "نمای چپ",
+            "order": 2,
+            "photoRequirements": [
+              {
+                "id": "front-45-left",
+                "title": "جلو ۴۵° چپ",
+                "description": "جلوی خودرو و سمت چپ به صورت کامل دیده شود.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/front-45-left.webp",
+                "instructions": [
+                  "جلوی خودرو و سمت چپ به طور کامل داخل کادر باشد.",
+                  "حدود ۳ متر از خودرو فاصله بگیرید.",
+                  "از زاویه ۴۵ درجه سمت چپ عکس بگیرید."
+                ],
+                "distance": "۳ متر",
+                "height": "کمر",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "خودرو کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "frame",
+                  "distance",
+                  "angle"
+                ]
+              },
+              {
+                "id": "back-45-left",
+                "title": "عقب ۴۵° چپ",
+                "description": "عقب خودرو و سمت چپ به صورت کامل دیده شود.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/back-45-left.webp",
+                "instructions": [
+                  "تمام قسمت عقب و سمت چپ خودرو داخل کادر باشد.",
+                  "خودرو را از زاویه ۴۵ درجه ثبت کنید.",
+                  "در نور کافی و بدون سایه شدید عکاسی کنید."
+                ],
+                "distance": "۳ متر",
+                "height": "کمر",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "خودرو کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "frame",
+                  "angle",
+                  "glare"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "front",
+            "title": "جلو",
+            "order": 3,
+            "photoRequirements": [
+              {
+                "id": "front-plate",
+                "title": "نمای مستقیم جلو با پلاک",
+                "description": "یک عکس مستقیم از نمای جلوی خودرو بگیرید، به طوری که پلاک کاملاً مشخص و خوانا باشد.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/front-plate.webp",
+                "instructions": [
+                  "مستقیم روبه‌روی خودرو بایستید؛ خودرو وسط کادر باشد.",
+                  "نمای کامل جلو را بدون برش و زاویه شدید ثبت کنید.",
+                  "پلاک بدون بازتاب نور و کاملاً خوانا باشد."
+                ],
+                "distance": "۳ متر",
+                "height": "چراغ‌ها",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "پلاک خوانا است"
+                ],
+                "guidanceTopics": [
+                  "angle",
+                  "frame",
+                  "text"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "rear",
+            "title": "عقب",
+            "order": 4,
+            "photoRequirements": [
+              {
+                "id": "rear-plate",
+                "title": "نمای مستقیم عقب با پلاک",
+                "description": "یک عکس مستقیم از نمای عقب خودرو بگیرید، به طوری که پلاک کاملاً مشخص و خوانا باشد.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/rear-plate.webp",
+                "instructions": [
+                  "مستقیم پشت خودرو بایستید؛ خودرو وسط کادر باشد.",
+                  "تمام نمای عقب بدون برش و زاویه شدید داخل کادر باشد.",
+                  "پلاک کاملاً خوانا و بدون بازتاب باشد."
+                ],
+                "distance": "۳ متر",
+                "height": "چراغ‌ها",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "پلاک خوانا است"
+                ],
+                "guidanceTopics": [
+                  "angle",
+                  "frame",
+                  "text"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "cabin",
+            "title": "کابین",
+            "order": 5,
+            "photoRequirements": [
+              {
+                "id": "odometer-on",
+                "title": "کیلومترشمار",
+                "description": "خودرو را روشن کنید و تصویری واضح از کیلومترشمار بگیرید.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/odometer-on.webp",
+                "instructions": [
+                  "خودرو را روشن و در حالت توقف نگه دارید.",
+                  "تمام صفحه کیلومترشمار در کادر باشد.",
+                  "عدد کیلومتر خوانا باشد؛ از بازتاب نور جلوگیری کنید."
+                ],
+                "distance": "نزدیک",
+                "height": "داشبورد",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "عدد کیلومتر خوانا است"
+                ],
+                "guidanceTopics": [
+                  "ignition",
+                  "frame",
+                  "glare"
+                ]
+              },
+              {
+                "id": "driver-interior",
+                "title": "نمای داخل کابین از سمت راننده",
+                "description": "از سمت راننده تصویری بگیرید که فضای داخلی خودرو به صورت واضح دیده شود.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/driver-interior.webp",
+                "instructions": [
+                  "درِ سمت راننده را باز کنید.",
+                  "فرمان، داشبورد و صندلی‌ها دیده شوند.",
+                  "خیلی نزدیک نشوید؛ فضای داخلی کامل دیده شود."
+                ],
+                "distance": "۱ متر",
+                "height": "درِ راننده",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "کابین کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "interior",
+                  "frame",
+                  "distance"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "engine-details",
+            "title": "موتور و مشخصات",
+            "order": 6,
+            "photoRequirements": [
+              {
+                "id": "engine-bay",
+                "title": "محفظه موتور",
+                "description": "کاپوت را باز کنید و یک تصویر کامل و واضح از محفظه موتور بگیرید.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/engine-bay.webp",
+                "instructions": [
+                  "خودرو متوقف باشد؛ کاپوت را کاملاً و ایمن باز کنید.",
+                  "تمام محفظه موتور دیده شود.",
+                  "گوشی ثابت و تصویر بدون تاری باشد."
+                ],
+                "distance": "۱ متر",
+                "height": "سینه",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "محفظه کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "hood",
+                  "frame",
+                  "steady"
+                ]
+              },
+              {
+                "id": "spec-plate",
+                "title": "محل شماره شاسی خودرو",
+                "description": "شماره شاسی خودرو — انتخاب یکی از چهار گزینه. فقط یک تصویر لازم است.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/spec-plate.webp",
+                "instructions": [
+                  "از نزدیک روی پلاک مشخصات فوکوس کنید.",
+                  "تمام متن پلاک داخل کادر باشد.",
+                  "نوشته‌ها خوانا و بدون بازتاب نور باشند."
+                ],
+                "distance": "۳۰ سانتی‌متر",
+                "height": "هم‌سطح پلاک",
+                "orientation": "landscape",
+                "choice": {
+                  "groupId": "vehicle-identification",
+                  "alternatives": [
+                    "pillar",
+                    "engine",
+                    "seat",
+                    "windshield"
+                  ]
+                },
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "اطلاعات قابل خواندن است"
+                ],
+                "guidanceTopics": [
+                  "text",
+                  "frame",
+                  "glare"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "roof",
+            "title": "سقف",
+            "order": 7,
+            "photoRequirements": [
+              {
+                "id": "car-roof",
+                "title": "نمای سقف",
+                "description": "تمام سطح سقف خودرو را در تصویر نشان دهید.",
+                "sampleImage": "/assets/inspection-vehicle/photo-guides/car-roof.webp",
+                "instructions": [
+                  "از موقعیتی ایمن، گوشی را بالاتر بگیرید.",
+                  "بیشترین سطح سقف و گوشه‌های اصلی در کادر باشند.",
+                  "برای عکاسی روی خودرو نایستید."
+                ],
+                "distance": "۱ متر",
+                "height": "بالاتر از سقف",
+                "orientation": "landscape",
+                "required": true,
+                "status": "pending",
+                "checks": [
+                  "واضح",
+                  "نور مناسب",
+                  "سقف کامل در کادر"
+                ],
+                "guidanceTopics": [
+                  "roof",
+                  "frame",
+                  "steady"
+                ]
+              }
+            ]
+          }
+        ],
+        "captureRequirements": {
+          "odometerRequirementId": "odometer-on",
+          "video360Required": true
+        }
+      },
+      "updatedAt": "2026-10-27T08:30:00Z",
+      "updatedBy": "staff-example",
+      "publishedAt": "2026-10-27T08:30:00Z"
+    },
+    "AdminTemplate": {
+      "id": "template-example",
+      "title": "بازدید بدنه سدان نمونه",
+      "partner": "کارگزاری نمونه",
+      "currentPublishedId": "template-version-example",
+      "versions": [
+        {
+          "id": "template-version-example",
+          "version": 2,
+          "revision": 1,
+          "state": "published",
+          "snapshot": {
+            "photoPolicyVersion": 2,
+            "templateId": "body-image-guided",
+            "templateVersion": 2,
+            "sections": [
+              {
+                "id": "right",
+                "title": "نمای راست",
+                "order": 1,
+                "photoRequirements": [
+                  {
+                    "id": "front-45-right",
+                    "title": "جلو ۴۵° راست",
+                    "description": "جلوی خودرو و سمت راست به صورت کامل دیده شود.",
+                    "sampleImage": "/assets/inspection-vehicle/photo-guides/front-45-right.webp",
+                    "instructions": [
+                      "جلوی خودرو و سمت راست به طور کامل داخل کادر باشد.",
+                      "حدود ۳ متر از خودرو فاصله بگیرید.",
+                      "از زاویه ۴۵ درجه سمت راست عکس بگیرید."
+                    ],
+                    "distance": "۳ متر",
+                    "height": "کمر",
+                    "orientation": "landscape",
+                    "required": true,
+                    "status": "pending",
+                    "checks": [
+                      "واضح",
+                      "نور مناسب",
+                      "خودرو کامل در کادر"
+                    ],
+                    "guidanceTopics": [
+                      "frame",
+                      "distance",
+                      "angle"
+                    ]
+                  },
+                  {
+                    "id": "back-45-right",
+                    "title": "عقب ۴۵° راست",
+                    "description": "عقب خودرو و سمت راست به صورت کامل دیده شود.",
+                    "sampleImage": "/assets/inspection-vehicle/photo-guides/back-45-right.webp",
+                    "instructions": [
+                      "تمام قسمت عقب و سمت راست خودرو داخل کادر باشد.",
+                      "خودرو را از زاویه ۴۵ درجه ثبت کنید.",
+                      "در نور کافی و بدون سایه شدید عکاسی کنید."
+                    ],
+                    "distance": "۳ متر",
+                    "height": "کمر",
+                    "orientation": "landscape",
+                    "required": true,
+                    "status": "pending",
+                    "checks": [
+                      "واضح",
+                      "نور مناسب",
+                      "خودرو کامل در کادر"
+                    ],
+                    "guidanceTopics": [
+                      "frame",
+                      "angle",
+                      "glare"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "left",
+                "title": "نمای چپ",
+                "order": 2,
+                "photoRequirements": [
+                  {
+                    "id": "front-45-left",
+                    "title": "جلو ۴۵° چپ",
+                    "description": "جلوی خودرو و سمت چپ به صورت کامل دیده شود.",
+                    "sampleImage": "/assets/inspection-vehicle/photo-guides/front-45-left.webp",
+                    "instructions": [
+                      "جلوی خودرو و سمت چپ به طور کامل داخل کادر باشد.",
+                      "حدود ۳ متر از خودرو فاصله بگیرید.",
+                      "از زاویه ۴۵ درجه سمت چپ عکس بگیرید."
+                    ],
+                    "distance": "۳ متر",
+                    "height": "کمر",
+                    "orientation": "landscape",
+                    "required": true,
+                    "status": "pending",
+                    "checks": [
+                      "واضح",
+                      "نور مناسب",
+                      "خودرو کامل در کادر"
+                    ],
+                    "guidanceTopics": [
+                      "frame",
+                      "distance",
+                      "angle"
+                    ]
+                  },
+                  {
+                    "id": "back-45-left",
+                    "title": "عقب ۴۵° چپ",
+                    "description": "عقب خودرو و سمت چپ به صورت کامل دیده شود.",
+                    "sampleImage": "/assets/inspection-vehicle/photo-guides/back-45-left.webp",
+                    "instructions": [
+                      "تمام قسمت عقب و سمت چپ خودرو داخل کادر باشد.",
+                      "خودرو را از زاویه ۴۵ درجه ثبت کنید.",
+                      "در نور کافی و بدون سایه شدید عکاسی کنید."
+                    ],
+                    "distance": "۳ متر",
+                    "height": "کمر",
+                    "orientation": "landscape",
+                    "required": true,
+                    "status": "pending",
+                    "checks": [
+                      "واضح",
+                      "نور مناسب",
+                      "خودرو کامل در کادر"
+                    ],
+                    "guidanceTopics": [
+                      "frame",
+                      "angle",
+                      "glare"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "front",
+                "title": "جلو",
+                "order": 3,
+                "photoRequirements": [
+                  {
+                    "id": "front-plate",
+                    "title": "نمای مستقیم جلو با پلاک",
+                    "description": "یک عکس مستقیم از نمای جلوی خودرو بگیرید، به طوری که پلاک کاملاً مشخص و خوانا باشد.",
+                    "sampleImage": "/assets/inspection-vehicle/photo-guides/front-plate.webp",
+                    "instructions": [
+                      "مستقیم روبه‌روی خودرو بایستید؛ خودرو وسط کادر باشد.",
+                      "نمای کامل جلو را بدون برش و زاویه شدید ثبت کنید.",
+                      "پلاک بدون بازتاب نور و کاملاً خوانا باشد."
+                    ],
+                    "distance": "۳ متر",
+                    "height": "چراغ‌ها",
+                    "orientation": "landscape",
+                    "required": true,
+                    "status": "pending",
+                    "checks": [
+                      "واضح",
+                      "نور مناسب",
+                      "پلاک خوانا است"
+                    ],
+                    "guidanceTopics": [
+                      "angle",
+                      "frame",
+                      "text"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "rear",
+                "title": "عقب",
+                "order": 4,
+                "photoRequirements": [
+                  {
+                    "id": "rear-plate",
+                    "title": "نمای مستقیم عقب با پلاک",
+                    "description": "یک عکس مستقیم از نمای عقب خودرو بگیرید، به طوری که پلاک کاملاً مشخص و خوانا باشد.",
+                    "sampleImage": "/assets/inspection-vehicle/photo-guides/rear-plate.webp",
+                    "instructions": [
+                      "مستقیم پشت خودرو بایستید؛ خودرو وسط کادر باشد.",
+                      "تمام نمای عقب بدون برش و زاویه شدید داخل کادر باشد.",
+                      "پلاک کاملاً خوانا و بدون بازتاب باشد."
+                    ],
+                    "distance": "۳ متر",
+                    "height": "چراغ‌ها",
+                    "orientation": "landscape",
+                    "required": true,
+                    "status": "pending",
+                    "checks": [
+                      "واضح",
+                      "نور مناسب",
+                      "پلاک خوانا است"
+                    ],
+                    "guidanceTopics": [
+                      "angle",
+                      "frame",
+                      "text"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "cabin",
+                "title": "کابین",
+                "order": 5,
+                "photoRequirements": [
+                  {
+                    "id": "odometer-on",
+                    "title": "کیلومترشمار",
+                    "description": "خودرو را روشن کنید و تصویری واضح از کیلومترشمار بگیرید.",
+                    "sampleImage": "/assets/inspection-vehicle/photo-guides/odometer-on.webp",
+                    "instructions": [
+                      "خودرو را روشن و در حالت توقف نگه دارید.",
+                      "تمام صفحه کیلومترشمار در کادر باشد.",
+                      "عدد کیلومتر خوانا باشد؛ از بازتاب نور جلوگیری کنید."
+                    ],
+                    "distance": "نزدیک",
+                    "height": "داشبورد",
+                    "orientation": "landscape",
+                    "required": true,
+                    "status": "pending",
+                    "checks": [
+                      "واضح",
+                      "نور مناسب",
+                      "عدد کیلومتر خوانا است"
+                    ],
+                    "guidanceTopics": [
+                      "ignition",
+                      "frame",
+                      "glare"
+                    ]
+                  },
+                  {
+                    "id": "driver-interior",
+                    "title": "نمای داخل کابین از سمت راننده",
+                    "description": "از سمت راننده تصویری بگیرید که فضای داخلی خودرو به صورت واضح دیده شود.",
+                    "sampleImage": "/assets/inspection-vehicle/photo-guides/driver-interior.webp",
+                    "instructions": [
+                      "درِ سمت راننده را باز کنید.",
+                      "فرمان، داشبورد و صندلی‌ها دیده شوند.",
+                      "خیلی نزدیک نشوید؛ فضای داخلی کامل دیده شود."
+                    ],
+                    "distance": "۱ متر",
+                    "height": "درِ راننده",
+                    "orientation": "landscape",
+                    "required": true,
+                    "status": "pending",
+                    "checks": [
+                      "واضح",
+                      "نور مناسب",
+                      "کابین کامل در کادر"
+                    ],
+                    "guidanceTopics": [
+                      "interior",
+                      "frame",
+                      "distance"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "engine-details",
+                "title": "موتور و مشخصات",
+                "order": 6,
+                "photoRequirements": [
+                  {
+                    "id": "engine-bay",
+                    "title": "محفظه موتور",
+                    "description": "کاپوت را باز کنید و یک تصویر کامل و واضح از محفظه موتور بگیرید.",
+                    "sampleImage": "/assets/inspection-vehicle/photo-guides/engine-bay.webp",
+                    "instructions": [
+                      "خودرو متوقف باشد؛ کاپوت را کاملاً و ایمن باز کنید.",
+                      "تمام محفظه موتور دیده شود.",
+                      "گوشی ثابت و تصویر بدون تاری باشد."
+                    ],
+                    "distance": "۱ متر",
+                    "height": "سینه",
+                    "orientation": "landscape",
+                    "required": true,
+                    "status": "pending",
+                    "checks": [
+                      "واضح",
+                      "نور مناسب",
+                      "محفظه کامل در کادر"
+                    ],
+                    "guidanceTopics": [
+                      "hood",
+                      "frame",
+                      "steady"
+                    ]
+                  },
+                  {
+                    "id": "spec-plate",
+                    "title": "محل شماره شاسی خودرو",
+                    "description": "شماره شاسی خودرو — انتخاب یکی از چهار گزینه. فقط یک تصویر لازم است.",
+                    "sampleImage": "/assets/inspection-vehicle/photo-guides/spec-plate.webp",
+                    "instructions": [
+                      "از نزدیک روی پلاک مشخصات فوکوس کنید.",
+                      "تمام متن پلاک داخل کادر باشد.",
+                      "نوشته‌ها خوانا و بدون بازتاب نور باشند."
+                    ],
+                    "distance": "۳۰ سانتی‌متر",
+                    "height": "هم‌سطح پلاک",
+                    "orientation": "landscape",
+                    "choice": {
+                      "groupId": "vehicle-identification",
+                      "alternatives": [
+                        "pillar",
+                        "engine",
+                        "seat",
+                        "windshield"
+                      ]
+                    },
+                    "required": true,
+                    "status": "pending",
+                    "checks": [
+                      "واضح",
+                      "نور مناسب",
+                      "اطلاعات قابل خواندن است"
+                    ],
+                    "guidanceTopics": [
+                      "text",
+                      "frame",
+                      "glare"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "roof",
+                "title": "سقف",
+                "order": 7,
+                "photoRequirements": [
+                  {
+                    "id": "car-roof",
+                    "title": "نمای سقف",
+                    "description": "تمام سطح سقف خودرو را در تصویر نشان دهید.",
+                    "sampleImage": "/assets/inspection-vehicle/photo-guides/car-roof.webp",
+                    "instructions": [
+                      "از موقعیتی ایمن، گوشی را بالاتر بگیرید.",
+                      "بیشترین سطح سقف و گوشه‌های اصلی در کادر باشند.",
+                      "برای عکاسی روی خودرو نایستید."
+                    ],
+                    "distance": "۱ متر",
+                    "height": "بالاتر از سقف",
+                    "orientation": "landscape",
+                    "required": true,
+                    "status": "pending",
+                    "checks": [
+                      "واضح",
+                      "نور مناسب",
+                      "سقف کامل در کادر"
+                    ],
+                    "guidanceTopics": [
+                      "roof",
+                      "frame",
+                      "steady"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "captureRequirements": {
+              "odometerRequirementId": "odometer-on",
+              "video360Required": true
+            }
+          },
+          "updatedAt": "2026-10-27T08:30:00Z",
+          "updatedBy": "staff-example",
+          "publishedAt": "2026-10-27T08:30:00Z"
+        }
+      ]
+    },
+    "StaffMember": {
+      "staffId": "staff-example",
+      "name": "کارشناس نمونه",
+      "identifier": "source-subject-example",
+      "role": "reviewer",
+      "active": true,
+      "capacity": 8
+    },
+    "AuditEntry": {
+      "id": "audit-example",
+      "at": "2026-10-27T08:30:00Z",
+      "actor": "staff-example",
+      "action": "template.published",
+      "resource": "template-version-example"
+    },
+    "Webhook": {
+      "id": "webhook-example",
+      "label": "اعلان ارسال بازدید",
+      "endpoint": "https://brokerage.example.invalid/events/inspection",
+      "event": "inspection.submitted",
+      "enabled": false
+    },
+    "NotificationEvent": {
+      "id": "event-example",
+      "tenantId": "brokerage-example",
+      "inspectionId": "insp_contract_001",
+      "trackingCode": "BDI-8F31K2",
+      "type": "review-approved",
+      "at": "2026-10-27T08:30:00Z"
+    },
+    "ForwardingSnapshot": {
+      "deliveryKey": "delivery-example",
+      "submissionId": "submission-example",
+      "sourceRequestId": "REQ-DEMO-001",
+      "inspectionId": "insp_contract_001",
+      "trackingCode": "BDI-8F31K2",
+      "decision": "approved",
+      "approvedAt": "2026-10-27T08:30:00Z",
+      "submittedAt": "2026-10-27T08:30:00Z",
+      "templateId": "body-image-guided",
+      "templateVersion": 2,
+      "location": {
+        "latitude": 35.699739,
+        "longitude": 51.338097,
+        "accuracyMeters": 8,
+        "formattedAddress": "تهران، خیابان نمونه، محل بازدید",
+        "buildingNumber": "نمونه قراردادی",
+        "unitFloor": "نمونه قراردادی",
+        "parkingDescription": "نمونه قراردادی"
+      },
+      "vehicle": {
+        "id": "11111111-1111-4111-8111-111111111111",
+        "make": "خودروی نمونه",
+        "model": "سدان نمونه",
+        "modelYear": 2024,
+        "color": "سفید",
+        "bodyColor": "#F1F5F9",
+        "plate": {
+          "firstTwoDigits": "12",
+          "letter": "ب",
+          "threeDigits": "345",
+          "regionDigits": "67"
+        },
+        "maskedVin": "DEMO••••••3456",
+        "confirmed": true,
+        "version": "AAAAAAAAB9E="
+      },
+      "odometer": {
+        "kilometers": 48320,
+        "updatedAt": "2026-10-26T09:00:00Z"
+      },
+      "media": [
+        {
+          "evidenceId": "11111111-1111-4111-8111-111111111111",
+          "evidenceVersionId": "22222222-2222-4222-8222-222222222222",
+          "inspectionId": "insp_contract_001",
+          "kind": "photo",
+          "requirementId": "spec-plate",
+          "alternativeId": "pillar",
+          "revision": "client-revision-0002",
+          "upload": "uploaded",
+          "verification": "processing",
+          "byteSize": 420000,
+          "mimeType": "image/jpeg",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "current": true,
+          "version": "AAAAAAAAB9E="
+        }
+      ]
+    },
+    "ForwardingJob": {
+      "jobId": "job-example",
+      "inspectionId": "insp_contract_001",
+      "submissionId": "submission-example",
+      "deliveryKey": "delivery-example",
+      "phase": "ready",
+      "attemptCount": 0,
+      "version": "version-example"
+    },
+    "DeliveryAcknowledgement": {
+      "deliveryKey": "delivery-example",
+      "inspectionId": "insp_contract_001",
+      "submissionId": "submission-example",
+      "accepted": true,
+      "acknowledgementId": "ack-example",
+      "acknowledgedAt": "2026-10-27T08:30:00Z"
+    }
+  }
+}

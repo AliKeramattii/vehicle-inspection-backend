@@ -1,0 +1,3108 @@
+{
+  "status": "PROPOSED",
+  "verifiedAt": "2026-10-26",
+  "operations": [
+    {
+      "id": "A01",
+      "purpose": "بارگذاری هویت نصب و نشانی‌های عمومی",
+      "screen": "شروع برنامه",
+      "actor": "خواننده عمومی تنظیمات همین نصب",
+      "input": "origin مورد اعتماد",
+      "output": "SiteBootstrap معتبر، نه هویت کاربر",
+      "validation": "ساختار SiteBootstrap، origin مجاز و URL عمومی معتبر؛ فایل هیچ کلید خصوصی، session یا هویت مشتری ندارد.",
+      "authorization": "بدون نشست؛ فقط داده عمومی مجاز نصب",
+      "tables": [],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "404 پیکربندی/فایل یافت نشد؛ 503 پیکربندی یا میزبان در دسترس نیست؛ داده خصوصی یا fallback موفق جعلی منتشر نشود.",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "A01 فایل عمومی واقعی؛ A02/F05 بارگذار واقعی و انتشار محلی؛ B11 مرز توسعه زنده مجاز. این مورد تضمین Backend تولید نیست",
+      "source": "src/config/site-settings.loader.ts",
+      "backend": "برای A01 فایل عمومی استقرار موجود کافی است؛ A02/F05 فقط یک projection عمومی از نسخه منتشرشده همان provider تنظیمات می‌خواهند، بدون نشست/SQL تجاری اضافه.",
+      "dependencies": "توافق هویت/نصب و قرارداد عمومی",
+      "endpointIds": [
+        "P00"
+      ],
+      "readTables": [],
+      "writeTables": [],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_FRONTEND_IMPLEMENTATION"
+      ],
+      "contractStatus": [
+        "CURRENT_FRONTEND_IMPLEMENTATION"
+      ],
+      "openDecisions": [
+        "D01",
+        "D02"
+      ]
+    },
+    {
+      "id": "A02",
+      "purpose": "خواندن تنظیمات منتشرشده",
+      "screen": "همه صفحه‌ها",
+      "actor": "خواننده عمومی تنظیمات همین نصب",
+      "input": "نصب و نسخه انتشار",
+      "output": "SiteSettings عمومی بدون راز",
+      "validation": "schemaVersion و tenant نصب و نسخه انتشار معتبر؛ projection فقط عمومی است و secret سرویس یا مسیر خصوصی ندارد.",
+      "authorization": "بدون نشست؛ فقط داده عمومی مجاز نصب",
+      "tables": [
+        "BrandingAssets",
+        "SiteSettings",
+        "SiteSettingsAssetLinks",
+        "SiteSettingsVersions"
+      ],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "404 پیکربندی/فایل یافت نشد؛ 503 پیکربندی یا میزبان در دسترس نیست؛ داده خصوصی یا fallback موفق جعلی منتشر نشود.",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "A01 فایل عمومی واقعی؛ A02/F05 بارگذار واقعی و انتشار محلی؛ B11 مرز توسعه زنده مجاز. این مورد تضمین Backend تولید نیست",
+      "source": "src/config/site-settings.loader.ts",
+      "backend": "برای A01 فایل عمومی استقرار موجود کافی است؛ A02/F05 فقط یک projection عمومی از نسخه منتشرشده همان provider تنظیمات می‌خواهند، بدون نشست/SQL تجاری اضافه.",
+      "dependencies": "توافق هویت/نصب و قرارداد عمومی",
+      "endpointIds": [
+        "P01"
+      ],
+      "readTables": [
+        "BrandingAssets",
+        "SiteSettings",
+        "SiteSettingsAssetLinks",
+        "SiteSettingsVersions"
+      ],
+      "writeTables": [],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_FRONTEND_IMPLEMENTATION"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D01",
+        "D02"
+      ]
+    },
+    {
+      "id": "A03",
+      "purpose": "تحویل هویت مشتری از سامانه بیمه",
+      "screen": "ورود از کارگزاری",
+      "actor": "source",
+      "input": "ticket یک‌بارمصرف و state",
+      "output": "CustomerSourceContext با شماره فقط‌خواندنی",
+      "validation": "issuer، audience، expiry، state/nonce و اتصال subject به sourceRequest؛ مصرف اتمیک بلیت یک‌بارمصرف و رد replay.",
+      "authorization": "بلیت معتبر مبدأ و ضد replay؛ روش نهایی نیازمند تصویب",
+      "tables": [
+        "AuditLogs",
+        "Customers",
+        "IdempotencyRecords",
+        "SourceInsuranceRequests"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/identity/source-context.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/identity/source-context.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "توافق هویت/نصب و قرارداد عمومی",
+      "endpointIds": [
+        "AU01"
+      ],
+      "readTables": [
+        "Customers",
+        "IdempotencyRecords",
+        "SourceInsuranceRequests"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "Customers",
+        "IdempotencyRecords",
+        "SourceInsuranceRequests"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات Customers,SourceInsuranceRequests,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D01",
+        "D02"
+      ]
+    },
+    {
+      "id": "A04",
+      "purpose": "ورود سازمانی کارکنان",
+      "screen": "ورود مدیریت و کارشناسی",
+      "actor": "staff-handoff",
+      "input": "ticket معتبر یا callback مورد توافق OIDC",
+      "output": "StaffSession شامل نقش و مجوزهای نصب",
+      "validation": "پروتکل SSO مصوب، issuer/audience/callback/PKCE یا بلیت محدود؛ نگاشت subject به نقش فعال از مرجع trusted.",
+      "authorization": "بلیت معتبر مبدأ و ضد replay؛ روش نهایی نیازمند تصویب",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "StaffRoleAssignments",
+        "StaffUsers"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/identity/staff-session.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/identity/staff-session.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "توافق هویت/نصب و قرارداد عمومی",
+      "endpointIds": [
+        "AU02"
+      ],
+      "readTables": [
+        "IdempotencyRecords",
+        "StaffRoleAssignments",
+        "StaffUsers"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "StaffRoleAssignments",
+        "StaffUsers"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات StaffUsers,StaffRoleAssignments,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D01",
+        "D02"
+      ]
+    },
+    {
+      "id": "A05",
+      "purpose": "بررسی تداوم نشست",
+      "screen": "بازگشت کاربر و حفاظت مسیرها",
+      "actor": "session",
+      "input": "نشست امن مرورگر",
+      "output": "نشست معتبر یا پاسخ انقضا",
+      "validation": "اعتبار نشست سرور، expiry/revocation و scope نصب؛ بازگردانی sessionStorage mock مدرک احراز هویت تولیدی نیست.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "Customers",
+        "SourceInsuranceRequests",
+        "StaffRoleAssignments",
+        "StaffUsers"
+      ],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "مرز فعلی src/features/identity/source-context.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/identity/source-context.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "توافق هویت/نصب و قرارداد عمومی",
+      "endpointIds": [
+        "AU03"
+      ],
+      "readTables": [
+        "Customers",
+        "SourceInsuranceRequests",
+        "StaffRoleAssignments",
+        "StaffUsers"
+      ],
+      "writeTables": [],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D01",
+        "D02"
+      ]
+    },
+    {
+      "id": "A06",
+      "purpose": "خروج و ابطال نشست",
+      "screen": "خروج مشتری یا کارکنان",
+      "actor": "session",
+      "input": "نشست جاری و حفاظت CSRF",
+      "output": "تأیید خروج و توقف دسترسی بعدی",
+      "validation": "نشست معتبر و ضد CSRF؛ ابطال سرور و cookie؛ logout سراسری مبدأ فقط طبق توافق.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "سرویس خروج/ابطال تولید وجود ندارد؛ قرارداد باید با تأمین‌کننده هویت توافق شود.",
+      "source": "src/features/identity/staff-session.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "توافق هویت/نصب و قرارداد عمومی",
+      "endpointIds": [
+        "AU04"
+      ],
+      "readTables": [],
+      "writeTables": [],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D01",
+        "D02"
+      ]
+    },
+    {
+      "id": "A07",
+      "purpose": "اعتبارسنجی معرفی‌نامه",
+      "screen": "ورود مشتری",
+      "actor": "source",
+      "input": "code و زمینه معتبر درخواست بیمه",
+      "output": "اعتبار، شریک یا خطای معرفی‌نامه",
+      "validation": "معرفی‌نامه معتبر، انقضا و اتصال به درخواست و شماره trusted؛ پاسخ نباید شماره دیگران را افشا کند.",
+      "authorization": "بلیت معتبر مبدأ و ضد replay؛ روش نهایی نیازمند تصویب",
+      "tables": [
+        "Customers",
+        "SourceInsuranceRequests"
+      ],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "مرز فعلی src/lib/api/repositories.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/lib/api/repositories.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "توافق هویت/نصب و قرارداد عمومی",
+      "endpointIds": [
+        "AU05"
+      ],
+      "readTables": [
+        "Customers",
+        "SourceInsuranceRequests"
+      ],
+      "writeTables": [],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D01",
+        "D02"
+      ]
+    },
+    {
+      "id": "A08",
+      "purpose": "صدور و ارسال دوباره چالش پیامکی",
+      "screen": "ورود و OTP",
+      "actor": "source",
+      "input": "زمینه هویت مبدأ و referralCode",
+      "output": "challengeId، انقضا، زمان ارسال دوباره و تعداد تلاش",
+      "validation": "همان شماره فقط‌خواندنی منبع، challenge/sourceRequest، cooldown و rate limit؛ هیچ شماره قابل‌ویرایش هویت نمی‌سازد.",
+      "authorization": "بلیت معتبر مبدأ و ضد replay؛ روش نهایی نیازمند تصویب",
+      "tables": [
+        "Customers",
+        "SourceInsuranceRequests"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/lib/api/repositories.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/lib/api/repositories.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "توافق هویت/نصب و قرارداد عمومی",
+      "endpointIds": [
+        "AU06"
+      ],
+      "readTables": [
+        "Customers",
+        "SourceInsuranceRequests"
+      ],
+      "writeTables": [],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D01",
+        "D02"
+      ]
+    },
+    {
+      "id": "A09",
+      "purpose": "تأیید چالش پیامکی",
+      "screen": "صفحه OTP",
+      "actor": "source",
+      "input": "challengeId و code در همان زمینه",
+      "output": "نشست محدود به درخواست و بازدید مجاز",
+      "validation": "challenge فعال، کد با طول مصوب، expiry و سقف تلاش؛ مصرف اتمیک؛ کد پنج‌رقمی mock قاعده تولیدی نیست.",
+      "authorization": "بلیت معتبر مبدأ و ضد replay؛ روش نهایی نیازمند تصویب",
+      "tables": [
+        "AuditLogs",
+        "Customers",
+        "IdempotencyRecords",
+        "SourceInsuranceRequests"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/lib/api/repositories.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/lib/api/repositories.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "توافق هویت/نصب و قرارداد عمومی",
+      "endpointIds": [
+        "AU07"
+      ],
+      "readTables": [
+        "Customers",
+        "SourceInsuranceRequests"
+      ],
+      "writeTables": [],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D01",
+        "D02"
+      ]
+    },
+    {
+      "id": "B01",
+      "purpose": "ساخت اولین تلاش بازدید",
+      "screen": "ورود مشتری جدید",
+      "actor": "customer",
+      "input": "sourceRequestId، کلید فرمان",
+      "output": "inspectionId، trackingCode و قالب پین‌شده",
+      "validation": "مالکیت درخواست مبدأ و قالب منتشرشده؛ عدم ایجاد current دوم؛ کلید ثابت و شماره attempt در تراکنش.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InspectionTemplates",
+        "Inspections",
+        "SourceInsuranceRequests",
+        "Vehicles"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/inspection-status/lifecycle-repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/inspection-status/lifecycle-repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "endpointIds": [
+        "I01"
+      ],
+      "readTables": [
+        "IdempotencyRecords",
+        "InspectionTemplates",
+        "Inspections",
+        "SourceInsuranceRequests",
+        "Vehicles"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "Inspections",
+        "Vehicles"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات Inspections,Vehicles,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "B02",
+      "purpose": "خواندن بازدید مجاز",
+      "screen": "حفاظت مسیر و ادامه بازدید",
+      "actor": "owner-staff",
+      "input": "inspectionId",
+      "output": "حقایق و نسخه بازدید با projection مجاز",
+      "validation": "شناسه opaque و اتصال مالک یا اختیار کارکنان؛ نسخه قالب و حقایق همان تلاش، نه رکورد ساختگی جدید.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "InspectionLocations",
+        "Inspections",
+        "Vehicles"
+      ],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "مرز فعلی src/lib/api/repositories.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/lib/api/repositories.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "endpointIds": [
+        "I02"
+      ],
+      "readTables": [
+        "InspectionLocations",
+        "Inspections",
+        "Vehicles"
+      ],
+      "writeTables": [],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "B03",
+      "purpose": "یافتن تلاش جاری همان درخواست",
+      "screen": "مراجعه دوباره مشتری",
+      "actor": "customer",
+      "input": "زمینه نشست و sourceRequestId",
+      "output": "تلاش قبلی و مقصد امن؛ بدون ایجاد خودکار",
+      "validation": "sourceRequest متعلق به subject نشست؛ پاسخ nullable برای نبود current؛ GET اجازه ساخت تلاش ندارد.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "Inspections",
+        "SourceInsuranceRequests"
+      ],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "مرز فعلی src/features/inspection-status/customer-entry.tsx؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/inspection-status/customer-entry.tsx",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "endpointIds": [
+        "I03"
+      ],
+      "readTables": [
+        "Inspections",
+        "SourceInsuranceRequests"
+      ],
+      "writeTables": [],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "B04",
+      "purpose": "پیگیری و جست‌وجوی مجاز",
+      "screen": "پیگیری مشتری و فهرست عملیات",
+      "actor": "owner-staff",
+      "input": "trackingCode یا فیلتر و cursor",
+      "output": "نتیجه محدود به مالک یا اختیار کارکنان",
+      "validation": "scope مشتری یا permission کارکنان، cursor و pageSize محدود؛ trackingCode به تنهایی مجوز نیست.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "Customers",
+        "Inspections",
+        "SourceInsuranceRequests"
+      ],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "مرز فعلی src/features/review-operations/model.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/review-operations/model.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "endpointIds": [
+        "I04"
+      ],
+      "readTables": [
+        "Customers",
+        "Inspections",
+        "SourceInsuranceRequests"
+      ],
+      "writeTables": [],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "B05",
+      "purpose": "خواندن قالب ثابت بازدید",
+      "screen": "عکاسی، راهنما و بازبینی",
+      "actor": "owner-staff",
+      "input": "inspectionId و نسخه پین‌شده",
+      "output": "هفت بخش، شناسه‌ها، انتخاب VIN و الزام‌های جداگانه",
+      "validation": "قالب immutable پین‌شده همین تلاش؛ requirementId‌های یکتا و گزینه‌های همان نسخه؛ نسخه قدیمی بازنویسی نشود.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "EvidenceRequirements",
+        "InspectionTemplates",
+        "RequirementAlternatives"
+      ],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "مرز فعلی src/lib/api/repositories.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/lib/api/repositories.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "endpointIds": [
+        "I05"
+      ],
+      "readTables": [
+        "EvidenceRequirements",
+        "InspectionTemplates",
+        "RequirementAlternatives"
+      ],
+      "writeTables": [],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "B06",
+      "purpose": "ثبت پذیرش نسخه شرایط",
+      "screen": "رضایت‌نامه",
+      "actor": "customer",
+      "input": "accepted=true و termsVersion",
+      "output": "رسید با زمان سرور",
+      "validation": "accepted=true، نسخه شرایط مجاز و عدم جعل زمان/هویت؛ رسید سرور و نسخه بازدید ثبت شود.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InspectionConsents"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/lib/api/repositories.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/lib/api/repositories.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "endpointIds": [
+        "I06"
+      ],
+      "readTables": [
+        "IdempotencyRecords",
+        "InspectionConsents"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InspectionConsents"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات InspectionConsents,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "B07",
+      "purpose": "ثبت محل تأییدشده",
+      "screen": "انتخاب موقعیت",
+      "actor": "customer",
+      "input": "مختصات، دقت، نشانی، پلاک ساختمان، واحد و توضیح پارک",
+      "output": "InspectionLocation و نسخه جدید",
+      "validation": "lat/lng محدود، accuracy غیرمنفی و رشته‌های محدود؛ نسخه و اجازه ویرایش؛ درخواست مجدد GPS لازم نیست.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InspectionLocations",
+        "Inspections"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/lib/media/inspection-facts-store.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/lib/media/inspection-facts-store.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "endpointIds": [
+        "I07"
+      ],
+      "readTables": [
+        "IdempotencyRecords",
+        "InspectionLocations",
+        "Inspections"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InspectionLocations",
+        "Inspections"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات InspectionLocations,Inspections,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "B08",
+      "purpose": "نمایش مشخصات خودرو",
+      "screen": "تأیید خودرو و خلاصه",
+      "actor": "owner-staff",
+      "input": "inspectionId",
+      "output": "Vehicle، پلاک ساختاریافته، VIN پوشانده‌شده",
+      "validation": "snapshot خودرو همین بازدید؛ پلاک ساختاریافته، VIN با projection مناسب و مجوز خواندن.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "Vehicles"
+      ],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "مرز فعلی src/lib/api/repositories.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/lib/api/repositories.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "endpointIds": [
+        "I08"
+      ],
+      "readTables": [
+        "Vehicles"
+      ],
+      "writeTables": [],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "B09",
+      "purpose": "تأیید خودرو یا اصلاح مجاز پلاک",
+      "screen": "هویت خودرو",
+      "actor": "customer",
+      "input": "حقایق تأییدشده یا IranianPlate و expectedVersion",
+      "output": "رسید تأیید و حقایق معتبر",
+      "validation": "IranianPlate segment‌ها، حقایق مجاز و نسخه؛ پس از ارسال تغییر آزاد ممنوع و field correction باید scoped باشد.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "Inspections",
+        "Vehicles"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/lib/api/repositories.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/lib/api/repositories.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "endpointIds": [
+        "I09",
+        "I10"
+      ],
+      "readTables": [
+        "IdempotencyRecords",
+        "Inspections",
+        "Vehicles"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "Inspections",
+        "Vehicles"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات Vehicles,Inspections,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "B10",
+      "purpose": "ثبت و ویرایش کیلومتر عددی",
+      "screen": "بازبینی عکس کیلومتر و خلاصه",
+      "actor": "customer",
+      "input": "kilometers صحیح، evidenceId اختیاری و نسخه",
+      "output": "OdometerReading عددی؛ نه فایل",
+      "validation": "kilometers صحیح و امن، صفر مجاز؛ evidenceId در صورت وجود به عکس کیلومتر همین بازدید؛ replacement عدد را خودکار پاک نکند.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "Inspections",
+        "OdometerReadings"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/lib/media/capture-data-store.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/lib/media/capture-data-store.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "endpointIds": [
+        "I11",
+        "I12"
+      ],
+      "readTables": [
+        "IdempotencyRecords",
+        "Inspections",
+        "OdometerReadings"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "Inspections",
+        "OdometerReadings"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات OdometerReadings,Inspections,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "B11",
+      "purpose": "دریافت نشانی فارسی مختصات",
+      "screen": "انتخاب موقعیت",
+      "actor": "customer",
+      "input": "lat و lng",
+      "output": "formatted_address یا خطای قابل بازیابی",
+      "validation": "مختصات محدود، مجوز و quota درخواست؛ کلید خصوصی Neshan فقط سرور مرکزی و پاسخ عمومی نشانی فارسی.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "A01 فایل عمومی واقعی؛ A02/F05 بارگذار واقعی و انتشار محلی؛ B11 مرز توسعه زنده مجاز. این مورد تضمین Backend تولید نیست",
+      "source": "src/lib/map/reverse-geocoder.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A03/A05؛ قالب منتشرشده و مالکیت درخواست",
+      "endpointIds": [
+        "M01"
+      ],
+      "readTables": [],
+      "writeTables": [],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_FRONTEND_IMPLEMENTATION"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "C01",
+      "purpose": "ثبت نسخه مدرک و قرارداد انتقال",
+      "screen": "مرکز ارسال عکس و ویدیو",
+      "actor": "customer",
+      "input": "kind، requirementId، alternativeId، revision و فراداده",
+      "output": "شناسه ثابت مدرک، نسخه و UploadTicket",
+      "validation": "kind و revision ثابت؛ requirement عضو قالب پین‌شده؛ spec-plate نسخه ۲ دقیقاً یک alternative معتبر؛ video فاقد photoId؛ فراداده نوع/اندازه و scope اصلاح.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "EvidenceVersions",
+        "IdempotencyRecords",
+        "InspectionEvidence",
+        "MediaFiles",
+        "UploadSessions"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/upload/upload-transport.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/upload/upload-transport.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A03/A05، B01/B05؛ سیاست نوع/اندازه و فضای خصوصی",
+      "endpointIds": [
+        "EV01"
+      ],
+      "readTables": [
+        "EvidenceVersions",
+        "IdempotencyRecords",
+        "InspectionEvidence",
+        "MediaFiles",
+        "UploadSessions"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "EvidenceVersions",
+        "IdempotencyRecords",
+        "InspectionEvidence",
+        "MediaFiles",
+        "UploadSessions"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "رزرو مسیر نسخه در metadata؛ هنوز هیچ بایتی از مرورگر دریافت نشده است.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات InspectionEvidence,EvidenceVersions,MediaFiles,UploadSessions,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "C02",
+      "purpose": "انتقال بایت‌های رسانه",
+      "screen": "مرکز ارسال",
+      "actor": "upload-owner",
+      "input": "uploadId و جریان Blob بدون Base64",
+      "output": "بایت دریافت‌شده در staging؛ هنوز تأیید نهایی انتقال نیست",
+      "validation": "upload session متعلق به همان نسخه، expiry و سقف stream؛ signature/hash واقعی در سرور؛ فایل بدون Base64 و بدون مسیر دلخواه نوشته شود.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "EvidenceVersions",
+        "IdempotencyRecords",
+        "MediaFiles",
+        "UploadSessions"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/upload/upload-coordinator.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/upload/upload-coordinator.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A03/A05، B01/B05؛ سیاست نوع/اندازه و فضای خصوصی",
+      "endpointIds": [
+        "EV02"
+      ],
+      "readTables": [
+        "EvidenceVersions",
+        "IdempotencyRecords",
+        "MediaFiles",
+        "UploadSessions"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "EvidenceVersions",
+        "IdempotencyRecords",
+        "MediaFiles",
+        "UploadSessions"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "نوشتن stream محدود در staging همان uploadId؛ بدون بازنویسی اصل خوب.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات UploadSessions,MediaFiles,EvidenceVersions,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "C03",
+      "purpose": "تأیید دریافت پایدار فایل",
+      "screen": "مرکز ارسال",
+      "actor": "upload-owner",
+      "input": "evidenceId، revision و اندازه/هش مورد توافق",
+      "output": "رسید باینری و وضعیت پردازش جدا",
+      "validation": "بایت پایدار، اندازه و hash سرور، revision هدف و receipt قابل بازیابی؛ پردازش جدا؛ اصل خوب قبل از موفقیت حفظ شود.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "EvidenceVersions",
+        "IdempotencyRecords",
+        "MediaFiles",
+        "MediaProcessingJobs",
+        "UploadSessions"
+      ],
+      "stateEffect": "پس از hash/size و دوام فایل، رسید uploaded ثبت می‌شود؛ processing/verified مستقل‌اند. کاندیدای دور اصلاح تا resubmit تأییدشده جای اصل را نمی‌گیرد.",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/upload/upload-transport.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/upload/upload-transport.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A03/A05، B01/B05؛ سیاست نوع/اندازه و فضای خصوصی",
+      "endpointIds": [
+        "EV03"
+      ],
+      "readTables": [
+        "EvidenceVersions",
+        "IdempotencyRecords",
+        "MediaFiles",
+        "MediaProcessingJobs",
+        "UploadSessions"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "EvidenceVersions",
+        "IdempotencyRecords",
+        "MediaFiles",
+        "MediaProcessingJobs",
+        "UploadSessions"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "verify/hash/flush، انتشار فایل همان نسخه و در صورت تصویب enqueue مشتق؛ SQL و filesystem نیاز به reconciliation دارند.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات UploadSessions,MediaFiles,EvidenceVersions,MediaProcessingJobs,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "C04",
+      "purpose": "بازخوانی و تطبیق وضعیت مدارک",
+      "screen": "مرکز ارسال، refresh و خلاصه",
+      "actor": "owner-staff",
+      "input": "inspectionId، current/history و cursor",
+      "output": "نسخه‌ها و رسیدهای همان بازدید",
+      "validation": "scope پرونده/نسخه و cursor محدود؛ نمایش current/history دقیق؛ localBlobKey مرجع فایل سرور نیست.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "EvidenceVersions",
+        "InspectionEvidence",
+        "MediaFiles"
+      ],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "مرز فعلی src/features/upload/queue-repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/upload/queue-repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A03/A05، B01/B05؛ سیاست نوع/اندازه و فضای خصوصی",
+      "endpointIds": [
+        "EV04"
+      ],
+      "readTables": [
+        "EvidenceVersions",
+        "InspectionEvidence",
+        "MediaFiles"
+      ],
+      "writeTables": [],
+      "filesRead": "فایل/مشتق خصوصی همان نسخه با مجوز؛ فقط در صورت نیاز و بدون بارگذاری گروهی بایت‌ها.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "C05",
+      "purpose": "خواندن نتیجه پردازش مدرک",
+      "screen": "مرکز ارسال و بازبینی",
+      "actor": "owner-staff",
+      "input": "شناسه نسخه مورد انتظار",
+      "output": "processing یا نتیجه معتبر با دلیل عمومی",
+      "validation": "processing از upload و تصمیم کارشناس جدا؛ فقط وضعیت نسخه مجاز و بدون درصد ساختگی برگردد.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "EvidenceReviews",
+        "EvidenceVersions",
+        "MediaFiles",
+        "MediaProcessingJobs"
+      ],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "مرز فعلی src/features/upload/upload-transport.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/upload/upload-transport.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A03/A05، B01/B05؛ سیاست نوع/اندازه و فضای خصوصی",
+      "endpointIds": [
+        "EV04"
+      ],
+      "readTables": [
+        "EvidenceVersions",
+        "MediaFiles",
+        "MediaProcessingJobs"
+      ],
+      "writeTables": [],
+      "filesRead": "فایل/مشتق خصوصی همان نسخه با مجوز؛ فقط در صورت نیاز و بدون بارگذاری گروهی بایت‌ها.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "C06",
+      "purpose": "نمایش امن عکس یا پخش ویدیو",
+      "screen": "بازبینی مشتری و کارشناس",
+      "actor": "owner-staff",
+      "input": "شناسه مدرک/نسخه و Range برای ویدیو",
+      "output": "جریان مجاز فایل یا thumbnail؛ بدون مسیر دیسک",
+      "validation": "مجوز هر درخواست و Range، نسخه دقیق و path containment؛ MIME/nosniff و 206/416 صحیح؛ فایل خصوصی عمومی نشود.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "EvidenceVersions",
+        "MediaFiles",
+        "ReviewerAssignments"
+      ],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "مرز فعلی src/features/upload/upload-preview.tsx؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/upload/upload-preview.tsx",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A03/A05، B01/B05؛ سیاست نوع/اندازه و فضای خصوصی",
+      "endpointIds": [
+        "EV05"
+      ],
+      "readTables": [
+        "EvidenceVersions",
+        "MediaFiles",
+        "ReviewerAssignments"
+      ],
+      "writeTables": [],
+      "filesRead": "فایل/مشتق خصوصی همان نسخه با مجوز؛ فقط در صورت نیاز و بدون بارگذاری گروهی بایت‌ها.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "C07",
+      "purpose": "لغو انتقال نسخه منسوخ",
+      "screen": "تعویض مدرک و صف ارسال",
+      "actor": "upload-owner",
+      "input": "نسخه قبلی و expectedVersion",
+      "output": "لغو انتقال نامعتبر بدون حذف نسخه پذیرفته‌شده",
+      "validation": "فقط session منسوخ مجاز با CAS لغو شود؛ فایل پذیرفته‌شده یا snapshot قبلی حذف نشود.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "EvidenceVersions",
+        "IdempotencyRecords",
+        "UploadSessions"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/upload/upload-coordinator.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/upload/upload-coordinator.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A03/A05، B01/B05؛ سیاست نوع/اندازه و فضای خصوصی",
+      "endpointIds": [
+        "EV06"
+      ],
+      "readTables": [
+        "EvidenceVersions",
+        "IdempotencyRecords",
+        "UploadSessions"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "EvidenceVersions",
+        "IdempotencyRecords",
+        "UploadSessions"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "توقف session منسوخ؛ فایل current یا تاریخچه حذف نمی‌شود.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات UploadSessions,EvidenceVersions,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "D01",
+      "purpose": "خلاصه و آمادگی ارسال",
+      "screen": "مرور نهایی",
+      "actor": "customer",
+      "input": "inspectionId",
+      "output": "خلاصه مشتق، شمارنده و دلیل موانع",
+      "validation": "خلاصه از همان منابع مشتق؛ ۱۱ عکس قالب تازه، کیلومتر معتبر و ویدیو جدا؛ شمار فایل از قالب، نه عدد ثابت.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "EvidenceVersions",
+        "InspectionEvidence",
+        "Inspections",
+        "OdometerReadings"
+      ],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "مرز فعلی src/features/submission/summary-source.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/submission/summary-source.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "B01-B10، C01-C06؛ نسخه دقیق و آمادگی سرور",
+      "endpointIds": [
+        "I12"
+      ],
+      "readTables": [
+        "EvidenceVersions",
+        "InspectionEvidence",
+        "Inspections",
+        "OdometerReadings"
+      ],
+      "writeTables": [],
+      "filesRead": "فایل/مشتق خصوصی همان نسخه با مجوز؛ فقط در صورت نیاز و بدون بارگذاری گروهی بایت‌ها.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "D02",
+      "purpose": "ارسال رسمی بازدید",
+      "screen": "خلاصه و CTA نهایی",
+      "actor": "customer",
+      "input": "expectedVersion و Idempotency-Key",
+      "output": "رسید پایدار و قفل snapshot",
+      "validation": "آمادگی سروری، receipt همه نسخه‌های هدف، کیلومتر، قفل و CAS؛ processing/uploaded/verified با سیاست باینری سازگار و local/queued/failed مسدود.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InspectionStatusHistory",
+        "InspectionSubmissions",
+        "Inspections",
+        "SubmissionEvidence"
+      ],
+      "stateEffect": "snapshot نسخه‌های دقیق، رسید پایدار و قفل submitted؛ پردازش غیرنهایی مانع باینری نیست، retake و نسخه نامعتبر مانع‌اند.",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/submission/submission-service.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/submission/submission-service.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "B01-B10، C01-C06؛ نسخه دقیق و آمادگی سرور",
+      "endpointIds": [
+        "I13"
+      ],
+      "readTables": [
+        "IdempotencyRecords",
+        "InspectionSubmissions",
+        "Inspections",
+        "SubmissionEvidence"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InspectionStatusHistory",
+        "InspectionSubmissions",
+        "Inspections",
+        "SubmissionEvidence"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات InspectionSubmissions,SubmissionEvidence,Inspections,InspectionStatusHistory,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "D03",
+      "purpose": "بازیابی نتیجه ارسال نامطمئن",
+      "screen": "بارگذاری دوباره خلاصه یا رسید",
+      "actor": "customer",
+      "input": "همان کلید و همان payload ارسال",
+      "output": "همان رسید؛ نه بازدید یا ارسال جدید",
+      "validation": "همان کلید و بدنه فرمان قبلی با احراز مجدد مجوز؛ بازیابی receipt پیش از رد نسخه کهنه؛ ارسال تکراری نسازد.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "IdempotencyRecords",
+        "InspectionSubmissions"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/submission/submission-service.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/submission/submission-service.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "B01-B10، C01-C06؛ نسخه دقیق و آمادگی سرور",
+      "endpointIds": [
+        "I13"
+      ],
+      "readTables": [
+        "IdempotencyRecords",
+        "InspectionSubmissions"
+      ],
+      "writeTables": [],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "D04",
+      "purpose": "وضعیت و رسید مشتری",
+      "screen": "پیگیری و بازگشت پس از ارسال",
+      "actor": "owner-staff",
+      "input": "inspectionId مجاز",
+      "output": "چرخه عمر، دلایل عمومی و تأیید مقصد در صورت وجود",
+      "validation": "همان inspection و رسید موجود؛ submit و upload و review و forwarding جدا؛ نبود رسید مجوز ادعای موفقیت نیست.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "CorrectionRequests",
+        "ForwardingJobs",
+        "InspectionStatusHistory",
+        "Inspections"
+      ],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "مرز فعلی src/features/inspection-status/status-service.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/inspection-status/status-service.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "B01-B10، C01-C06؛ نسخه دقیق و آمادگی سرور",
+      "endpointIds": [
+        "I14"
+      ],
+      "readTables": [
+        "CorrectionRequests",
+        "ForwardingJobs",
+        "InspectionStatusHistory",
+        "Inspections"
+      ],
+      "writeTables": [],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "D05",
+      "purpose": "درخواست دقیق مدرک تکمیلی",
+      "screen": "فهرست اصلاحات",
+      "actor": "owner-staff",
+      "input": "inspectionId و requestId/version",
+      "output": "اقلام مشخص، دلیل و نسخه اصلی",
+      "validation": "requestId/version متعلق به همین بازدید و مشتری؛ reason عمومی و اقلام فعال دقیق؛ اطلاعات خصوصی کارشناس حذف شود.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "CorrectionItems",
+        "CorrectionRequests",
+        "InspectionSubmissions"
+      ],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "مرز فعلی src/features/additional-evidence/request-repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/additional-evidence/request-repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "B01-B10، C01-C06؛ نسخه دقیق و آمادگی سرور",
+      "endpointIds": [
+        "R01"
+      ],
+      "readTables": [
+        "CorrectionItems",
+        "CorrectionRequests",
+        "InspectionSubmissions"
+      ],
+      "writeTables": [],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "D06",
+      "purpose": "پیوند نسخه جایگزین به قلم درخواست",
+      "screen": "بازبینی اصلاح عکس/ویدیو",
+      "actor": "customer / upload-owner / customer-request",
+      "input": "requestId، itemId، version و candidateRevision",
+      "output": "پیشرفت همان قلم؛ اصل پذیرفته‌شده محفوظ",
+      "validation": "candidate به request/item/requirement/revision مجاز وصل باشد؛ هیچ قلم اضافی یا job قدیمی pointer اصل را تغییر ندهد.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "CorrectionItems",
+        "EvidenceVersions",
+        "IdempotencyRecords",
+        "MediaFiles",
+        "UploadSessions"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/additional-evidence/request-service.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/additional-evidence/request-service.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "B01-B10، C01-C06؛ نسخه دقیق و آمادگی سرور",
+      "endpointIds": [
+        "EV01",
+        "EV03",
+        "R02"
+      ],
+      "readTables": [
+        "CorrectionItems",
+        "EvidenceVersions",
+        "IdempotencyRecords",
+        "MediaFiles",
+        "UploadSessions"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "CorrectionItems",
+        "EvidenceVersions",
+        "IdempotencyRecords",
+        "MediaFiles",
+        "UploadSessions"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات EvidenceVersions,MediaFiles,UploadSessions,CorrectionItems,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "D07",
+      "purpose": "ارسال دوباره اصلاحات مشخص",
+      "screen": "مرکز ارسال اصلاحات",
+      "actor": "customer-request",
+      "input": "requestVersion و candidateEvidenceIds تأییدشده",
+      "output": "SupplementalReceipt با همان کد پیگیری",
+      "validation": "نسخه درخواست و receipt تمام اقلام خواسته‌شده؛ promotion اتمیک؛ اقلام تأییدشده خارج از scope ثابت بمانند.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "CorrectionItems",
+        "CorrectionRequests",
+        "IdempotencyRecords",
+        "InspectionEvidence",
+        "InspectionStatusHistory",
+        "InspectionSubmissions",
+        "Inspections",
+        "SubmissionEvidence"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/additional-evidence/request-service.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/additional-evidence/request-service.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "B01-B10، C01-C06؛ نسخه دقیق و آمادگی سرور",
+      "endpointIds": [
+        "R03"
+      ],
+      "readTables": [
+        "CorrectionItems",
+        "CorrectionRequests",
+        "IdempotencyRecords",
+        "InspectionEvidence",
+        "InspectionSubmissions",
+        "Inspections",
+        "SubmissionEvidence"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "CorrectionItems",
+        "CorrectionRequests",
+        "IdempotencyRecords",
+        "InspectionEvidence",
+        "InspectionStatusHistory",
+        "InspectionSubmissions",
+        "Inspections",
+        "SubmissionEvidence"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات CorrectionRequests,CorrectionItems,InspectionEvidence,InspectionSubmissions,SubmissionEvidence,Inspections,InspectionStatusHistory,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "D08",
+      "purpose": "پیشنهاد اصلاح فیلد خواسته‌شده",
+      "screen": "ویرایش پلاک، رنگ یا سال",
+      "actor": "customer-request",
+      "input": "taskId، نسخه و مقدار union تایپ‌شده",
+      "output": "پیشنهاد ثبت‌شده؛ بدون بازکردن سایر فیلدها",
+      "validation": "field از union مجاز همان task و نوع مقدار درست؛ فقط scope خواسته‌شده و CAS؛ درخواست جدید ضمنی ایجاد نشود.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "CorrectionItems",
+        "IdempotencyRecords"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/inspection-status/lifecycle-repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/inspection-status/lifecycle-repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "B01-B10، C01-C06؛ نسخه دقیق و آمادگی سرور",
+      "endpointIds": [
+        "R04"
+      ],
+      "readTables": [
+        "CorrectionItems",
+        "IdempotencyRecords"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "CorrectionItems",
+        "IdempotencyRecords"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات CorrectionItems,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "D09",
+      "purpose": "تلاش تازه پس از رد کامل",
+      "screen": "صفحه رد و تأیید شروع دوباره",
+      "actor": "customer",
+      "input": "شناسه تلاش ردشده، نسخه و کلید ثابت",
+      "output": "بازدید جدید خالی با previousAttemptId",
+      "validation": "فقط رد کامل و فرمان صریح مالک؛ current/attempt اتمیک؛ تلاش جدید خالی و تاریخچه قبلی immutable.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InspectionStatusHistory",
+        "Inspections",
+        "SourceInsuranceRequests",
+        "Vehicles"
+      ],
+      "stateEffect": "یک inspectionId/attempt تازه، با previousAttemptId و فضای مدرک خالی؛ وضعیت و فایل تلاش ردشده عوض نمی‌شود.",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/inspection-status/lifecycle-repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/inspection-status/lifecycle-repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "B01-B10، C01-C06؛ نسخه دقیق و آمادگی سرور",
+      "endpointIds": [
+        "I15"
+      ],
+      "readTables": [
+        "IdempotencyRecords",
+        "Inspections",
+        "SourceInsuranceRequests",
+        "Vehicles"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InspectionStatusHistory",
+        "Inspections",
+        "Vehicles"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات Inspections,Vehicles,InspectionStatusHistory,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "E01",
+      "purpose": "فهرست پرونده‌ها و آمار واقعی",
+      "screen": "داشبورد و صف عملیات",
+      "actor": "owner-staff",
+      "input": "جست‌وجو، وضعیت، cursor و اندازه صفحه",
+      "output": "فهرست مجاز و شمارش در همان scope",
+      "validation": "فیلتر، cursor و scope کارکنان؛ آمار از query واقعی، نه مقدار نمایشی ثابت؛ حد pageSize.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "Inspections",
+        "ReviewerAssignments",
+        "StaffUsers"
+      ],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "مرز فعلی src/features/review-operations/repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/review-operations/repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A04/A05، D02؛ ارجاع و نسخه پرونده",
+      "endpointIds": [
+        "I04"
+      ],
+      "readTables": [
+        "Inspections",
+        "ReviewerAssignments",
+        "StaffUsers"
+      ],
+      "writeTables": [],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "E02",
+      "purpose": "پرونده ارجاع‌شده و جزئیات",
+      "screen": "محیط شواهد کارشناس",
+      "actor": "case-read",
+      "input": "caseId و نسخه",
+      "output": "خلاصه، مدارک و یادداشت صرفاً کارکنان",
+      "validation": "ارجاع فعال کارشناس یا مجوز خواندن مدیر؛ projection نقش و نسخه پرونده؛ مدیر حق تصمیم ضمنی ندارد.",
+      "authorization": "نشست کارکنان؛ کارشناس دارای ارجاع یا مدیر دارای مجوز خواندن همان پرونده. پاسخ براساس نقش پالایش شود؛ یادداشت خصوصی فقط با اختیار صریح و تصمیم فقط برای کارشناس مجاز است.",
+      "tables": [
+        "EvidenceReviews",
+        "Inspections",
+        "InternalNotes",
+        "ReviewerAssignments"
+      ],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "مرز فعلی src/features/review-operations/repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/review-operations/repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A04/A05، D02؛ ارجاع و نسخه پرونده",
+      "endpointIds": [
+        "RV01"
+      ],
+      "readTables": [
+        "EvidenceReviews",
+        "Inspections",
+        "InternalNotes",
+        "ReviewerAssignments"
+      ],
+      "writeTables": [],
+      "filesRead": "فایل/مشتق خصوصی همان نسخه با مجوز؛ فقط در صورت نیاز و بدون بارگذاری گروهی بایت‌ها.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "E03",
+      "purpose": "ارجاع و ارجاع مجدد",
+      "screen": "مدیریت کارشناسان",
+      "actor": "admin",
+      "input": "inspectionId، reviewerId، reassign و نسخه",
+      "output": "ارجاع فعال و ثبت رویداد یا خطای ظرفیت",
+      "validation": "staff فعال، permission ارجاع، ظرفیت و سیاست؛ reassignment با CAS و audit؛ تصمیم کارشناس قبلی بعد از جابه‌جایی رد شود.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InspectionStatusHistory",
+        "Inspections",
+        "ReviewerAssignments",
+        "StaffUsers"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/review-operations/model.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/review-operations/model.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A04/A05، D02؛ ارجاع و نسخه پرونده",
+      "endpointIds": [
+        "RV02"
+      ],
+      "readTables": [
+        "IdempotencyRecords",
+        "Inspections",
+        "ReviewerAssignments",
+        "StaffUsers"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InspectionStatusHistory",
+        "Inspections",
+        "ReviewerAssignments"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات ReviewerAssignments,Inspections,InspectionStatusHistory,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "E04",
+      "purpose": "تنظیم حالت و ظرفیت ارجاع",
+      "screen": "مدیریت کارشناسان",
+      "actor": "admin / admin-read",
+      "input": "manual/random، ظرفیت و expectedVersion",
+      "output": "سیاست ارجاع معتبر و بار کاری",
+      "validation": "mode از manual/random، ظرفیت صحیح و نسخه workspace؛ random در سرور و اختیار مدیریت لازم.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "StaffOperationsSettings",
+        "StaffUsers"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/review-operations/repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/review-operations/repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A04/A05، D02؛ ارجاع و نسخه پرونده",
+      "endpointIds": [
+        "RV03",
+        "AD01"
+      ],
+      "readTables": [
+        "IdempotencyRecords",
+        "StaffOperationsSettings",
+        "StaffUsers"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "StaffOperationsSettings",
+        "StaffUsers"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات StaffOperationsSettings,StaffUsers,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "E05",
+      "purpose": "تصمیم درباره یک نسخه مدرک",
+      "screen": "کارشناس، عکس یا ویدیو",
+      "actor": "assigned-reviewer",
+      "input": "evidenceId، revision، تصمیم، دلیل و نسخه پرونده",
+      "output": "ReviewDecision و در صورت رد درخواست دقیق",
+      "validation": "نسخه دقیق مدرک و پرونده، ارجاع فعال؛ دلیل عمومی برای رد/retake اجباری؛ نسخه جدید با پاسخ قدیمی overwrite نشود.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "CorrectionItems",
+        "CorrectionRequests",
+        "EvidenceReviews",
+        "IdempotencyRecords",
+        "InspectionStatusHistory",
+        "Inspections"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/review-operations/repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/review-operations/repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A04/A05، D02؛ ارجاع و نسخه پرونده",
+      "endpointIds": [
+        "RV04"
+      ],
+      "readTables": [
+        "CorrectionItems",
+        "CorrectionRequests",
+        "EvidenceReviews",
+        "IdempotencyRecords",
+        "Inspections"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "CorrectionItems",
+        "CorrectionRequests",
+        "EvidenceReviews",
+        "IdempotencyRecords",
+        "InspectionStatusHistory",
+        "Inspections"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات EvidenceReviews,CorrectionRequests,CorrectionItems,Inspections,InspectionStatusHistory,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "E06",
+      "purpose": "درخواست اصلاح مشخصات خودرو",
+      "screen": "کارشناس و مشخصات",
+      "actor": "assigned-reviewer",
+      "input": "field از plate/color/modelYear و دلیل عمومی",
+      "output": "قلم اصلاح محدود با زمان و عامل سرور",
+      "validation": "field فقط plate/color/modelYear و دلیل روشن؛ task مستقل از رد کلی و مدرک دیگر؛ کارشناس باید ارجاع فعال داشته باشد.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "CorrectionItems",
+        "CorrectionRequests",
+        "IdempotencyRecords",
+        "InspectionStatusHistory",
+        "Inspections"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/review-operations/repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/review-operations/repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A04/A05، D02؛ ارجاع و نسخه پرونده",
+      "endpointIds": [
+        "RV05"
+      ],
+      "readTables": [
+        "CorrectionItems",
+        "CorrectionRequests",
+        "IdempotencyRecords",
+        "Inspections"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "CorrectionItems",
+        "CorrectionRequests",
+        "IdempotencyRecords",
+        "InspectionStatusHistory",
+        "Inspections"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات CorrectionRequests,CorrectionItems,Inspections,InspectionStatusHistory,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "E07",
+      "purpose": "بررسی پیشنهاد اصلاح فیلد",
+      "screen": "کارشناس و اصلاحات",
+      "actor": "assigned-reviewer",
+      "input": "taskId، نسخه پیشنهاد و تصمیم",
+      "output": "تأیید projection بررسی‌شده؛ snapshot اولیه ثابت",
+      "validation": "همان task/proposalVersion و مجوز؛ کد فعلی approve دارد، reopen هنوز تصمیم باز است و مسیر فرضی اجراشده نیست.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "CorrectionItems",
+        "IdempotencyRecords",
+        "Inspections",
+        "Vehicles"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/review-operations/repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/review-operations/repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A04/A05، D02؛ ارجاع و نسخه پرونده",
+      "endpointIds": [
+        "RV06"
+      ],
+      "readTables": [
+        "CorrectionItems",
+        "IdempotencyRecords",
+        "Inspections",
+        "Vehicles"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "CorrectionItems",
+        "IdempotencyRecords",
+        "Inspections",
+        "Vehicles"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات CorrectionItems,Vehicles,Inspections,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "E08",
+      "purpose": "ثبت یادداشت خصوصی",
+      "screen": "پرونده کارشناس",
+      "actor": "assigned-reviewer",
+      "input": "متن، نسخه و کلید فرمان",
+      "output": "یادداشت کارکنان، بدون انتشار برای مشتری",
+      "validation": "متن محدود و private واقعی، اختیار مشاهده/نوشتن و نسخه؛ در DTO مشتری یا گزارش عمومی نیاید.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InternalNotes"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/review-operations/repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/review-operations/repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A04/A05، D02؛ ارجاع و نسخه پرونده",
+      "endpointIds": [
+        "RV07"
+      ],
+      "readTables": [
+        "IdempotencyRecords",
+        "InternalNotes"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InternalNotes"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات InternalNotes,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "E09",
+      "purpose": "تصمیم جداگانه کل بازدید",
+      "screen": "اقدام نهایی کارشناس",
+      "actor": "assigned-reviewer",
+      "input": "approved/rejected، دلیل رد و نسخه",
+      "output": "تصمیم کل؛ تأیید مساوی تحویل به کارگزاری نیست",
+      "validation": "تصمیم کل جدا از تک‌مدرک؛ approved فقط پس از آمادگی همه اقلام؛ rejected نیازمند دلیل؛ تأیید outbox می‌سازد نه FORWARDED.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "ForwardingJobs",
+        "IdempotencyRecords",
+        "InspectionReviews",
+        "InspectionStatusHistory",
+        "Inspections"
+      ],
+      "stateEffect": "تأیید کل فقط پس از تأیید همه نسخه‌های لازم و فیلدها؛ outbox پایدار ایجاد می‌شود، FORWARDED تا ack معتبر ممنوع.",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/review-operations/repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/review-operations/repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A04/A05، D02؛ ارجاع و نسخه پرونده",
+      "endpointIds": [
+        "RV08"
+      ],
+      "readTables": [
+        "ForwardingJobs",
+        "IdempotencyRecords",
+        "InspectionReviews",
+        "Inspections"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "ForwardingJobs",
+        "IdempotencyRecords",
+        "InspectionReviews",
+        "InspectionStatusHistory",
+        "Inspections"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات InspectionReviews,Inspections,InspectionStatusHistory,ForwardingJobs,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "E10",
+      "purpose": "تاریخچه نسخه‌ها و تصمیم‌ها",
+      "screen": "تاریخچه پرونده",
+      "actor": "case-read",
+      "input": "caseId و cursor مجاز",
+      "output": "رویدادها و ارجاع‌های نسخه دقیق",
+      "validation": "مجوز خواندن پرونده، cursor و projection نقش؛ نسخه‌ها و تصمیم‌ها حذف نشوند؛ private notes به نقش غیرمجاز نرسند.",
+      "authorization": "نشست کارکنان؛ کارشناس دارای ارجاع یا مدیر دارای مجوز خواندن همان پرونده. پاسخ براساس نقش پالایش شود؛ یادداشت خصوصی فقط با اختیار صریح و تصمیم فقط برای کارشناس مجاز است.",
+      "tables": [
+        "AuditLogs",
+        "EvidenceReviews",
+        "EvidenceVersions",
+        "InspectionStatusHistory"
+      ],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "مرز فعلی src/features/review-operations/repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/review-operations/repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A04/A05، D02؛ ارجاع و نسخه پرونده",
+      "endpointIds": [
+        "RV09"
+      ],
+      "readTables": [
+        "EvidenceReviews",
+        "EvidenceVersions",
+        "InspectionStatusHistory"
+      ],
+      "writeTables": [],
+      "filesRead": "فایل/مشتق خصوصی همان نسخه با مجوز؛ فقط در صورت نیاز و بدون بارگذاری گروهی بایت‌ها.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "F01",
+      "purpose": "خواندن محیط مدیریت و قالب‌ها",
+      "screen": "مدیریت",
+      "actor": "admin-read",
+      "input": "مجوز، فیلتر و نسخه",
+      "output": "قالب، کاربران و سیاست قابل مشاهده",
+      "validation": "permission‌های مجزا، نسخه workspace و projection مجاز؛ مدیر همان نصب، نه مالک کلید مرکزی نقشه.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "InspectionTemplates",
+        "StaffRoleAssignments",
+        "StaffUsers"
+      ],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "مرز فعلی src/features/admin/repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/admin/repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "endpointIds": [
+        "AD01"
+      ],
+      "readTables": [
+        "InspectionTemplates",
+        "StaffRoleAssignments",
+        "StaffUsers"
+      ],
+      "writeTables": [],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "F02",
+      "purpose": "ایجاد قالب یا پیش‌نویس",
+      "screen": "ویرایشگر قالب",
+      "actor": "template-editor",
+      "input": "عنوان، قالب مبنا، نسخه و کلید فرمان",
+      "output": "پیش‌نویس جدید؛ قالب منتشرشده دست‌نخورده",
+      "validation": "عنوان و قالب مبنا معتبر و نسخه جدید مستقل؛ هیچ قالب پین‌شده تاریخی درجا تغییر نکند.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "EvidenceRequirements",
+        "IdempotencyRecords",
+        "InspectionTemplates",
+        "RequirementAlternatives"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/admin/repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/admin/repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "endpointIds": [
+        "AD02"
+      ],
+      "readTables": [
+        "EvidenceRequirements",
+        "IdempotencyRecords",
+        "InspectionTemplates",
+        "RequirementAlternatives"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "EvidenceRequirements",
+        "IdempotencyRecords",
+        "InspectionTemplates",
+        "RequirementAlternatives"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات InspectionTemplates,EvidenceRequirements,RequirementAlternatives,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "F03",
+      "purpose": "ویرایش و ذخیره پیش‌نویس",
+      "screen": "ویرایشگر قالب",
+      "actor": "template-editor",
+      "input": "PhotographyTemplate معتبر و expectedRevision",
+      "output": "پیش‌نویس ذخیره‌شده یا خطای فیلد/تعارض",
+      "validation": "Zod فعلی کامل شامل راهنماها، شناسه‌های یکتا، ۱۱ عکس و گروه یک‌ازچهار؛ expectedRevision و حالت draft.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "EvidenceRequirements",
+        "IdempotencyRecords",
+        "InspectionTemplates",
+        "RequirementAlternatives"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/admin/repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/admin/repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "endpointIds": [
+        "AD03"
+      ],
+      "readTables": [
+        "EvidenceRequirements",
+        "IdempotencyRecords",
+        "InspectionTemplates",
+        "RequirementAlternatives"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "EvidenceRequirements",
+        "IdempotencyRecords",
+        "InspectionTemplates",
+        "RequirementAlternatives"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات InspectionTemplates,EvidenceRequirements,RequirementAlternatives,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "F04",
+      "purpose": "انتشار یا بایگانی نسخه قالب",
+      "screen": "مدیر سایت",
+      "actor": "admin",
+      "input": "نسخه مورد انتظار و action مجاز",
+      "output": "انتشار immutable؛ بازدیدهای پین‌شده ثابت",
+      "validation": "فقط draft معتبر منتشر یا نسخه مجاز بایگانی شود؛ قالب پین‌شده قابل خواندن بماند؛ CAS و audit.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InspectionTemplates"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/admin/repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/admin/repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "endpointIds": [
+        "AD04"
+      ],
+      "readTables": [
+        "IdempotencyRecords",
+        "InspectionTemplates"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "InspectionTemplates"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات InspectionTemplates,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "F05",
+      "purpose": "خواندن عمومی برند",
+      "screen": "صفحات مشتری",
+      "actor": "خواننده عمومی تنظیمات همین نصب",
+      "input": "نسخه منتشرشده نصب",
+      "output": "همان نتیجه A02؛ نه مخزن دوم",
+      "validation": "همان projection عمومی A02؛ هیچ store یا endpoint رقیب برای برند ساخته نشود.",
+      "authorization": "بدون نشست؛ فقط داده عمومی مجاز نصب",
+      "tables": [
+        "BrandingAssets",
+        "SiteSettings",
+        "SiteSettingsAssetLinks",
+        "SiteSettingsVersions"
+      ],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "404 پیکربندی/فایل یافت نشد؛ 503 پیکربندی یا میزبان در دسترس نیست؛ داده خصوصی یا fallback موفق جعلی منتشر نشود.",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "A01 فایل عمومی واقعی؛ A02/F05 بارگذار واقعی و انتشار محلی؛ B11 مرز توسعه زنده مجاز. این مورد تضمین Backend تولید نیست",
+      "source": "src/config/site-settings.loader.ts",
+      "backend": "برای A01 فایل عمومی استقرار موجود کافی است؛ A02/F05 فقط یک projection عمومی از نسخه منتشرشده همان provider تنظیمات می‌خواهند، بدون نشست/SQL تجاری اضافه.",
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "endpointIds": [
+        "P01"
+      ],
+      "readTables": [
+        "BrandingAssets",
+        "SiteSettings",
+        "SiteSettingsAssetLinks",
+        "SiteSettingsVersions"
+      ],
+      "writeTables": [],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_FRONTEND_IMPLEMENTATION"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "F06",
+      "purpose": "خواندن و ذخیره پیش‌نویس تنظیمات",
+      "screen": "تنظیمات سایت",
+      "actor": "admin",
+      "input": "فیلدهای مجاز برند/محتوا و expectedRevision",
+      "output": "workspace پیش‌نویس با نسخه CAS",
+      "validation": "whitelist متن/برند، قالب، URL و contrast؛ API base و Neshan مرکزی از فرم عادی قابل تغییر نیستند؛ CAS draft.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "SiteSettings",
+        "SiteSettingsAssetLinks",
+        "SiteSettingsVersions"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/config/site-settings.repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/config/site-settings.repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "endpointIds": [
+        "AD05",
+        "AD06"
+      ],
+      "readTables": [
+        "IdempotencyRecords",
+        "SiteSettings",
+        "SiteSettingsAssetLinks",
+        "SiteSettingsVersions"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "SiteSettings",
+        "SiteSettingsAssetLinks",
+        "SiteSettingsVersions"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات SiteSettings,SiteSettingsVersions,SiteSettingsAssetLinks,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "F07",
+      "purpose": "انتشار تنظیمات یا بازنشانی بصری پیش‌نویس",
+      "screen": "تنظیمات سایت",
+      "actor": "admin",
+      "input": "نسخه و کلید انتشار؛ reset یک ویرایش draft است",
+      "output": "نسخه عمومی جدید و تاریخچه",
+      "validation": "publish با CAS و اعتبار کامل؛ reset فقط draft بصری است، نه حذف مدارک/بازدید/تنظیمات مرکزی.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "SiteSettings",
+        "SiteSettingsVersions"
+      ],
+      "stateEffect": "reset بصری فقط پیش‌نویس را ویرایش می‌کند؛ فقط انتشار، نسخه عمومی جدید می‌سازد.",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/config/site-settings.repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/config/site-settings.repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "endpointIds": [
+        "AD07"
+      ],
+      "readTables": [
+        "IdempotencyRecords",
+        "SiteSettings",
+        "SiteSettingsVersions"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "SiteSettings",
+        "SiteSettingsVersions"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات SiteSettings,SiteSettingsVersions,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "F08",
+      "purpose": "بارگذاری دارایی برند و حل مرجع",
+      "screen": "تنظیمات تصاویر",
+      "actor": "admin",
+      "input": "File، slot و فراداده نوع/اندازه",
+      "output": "assetId و URL عمومی مجاز برای برند",
+      "validation": "slot مجاز، اندازه، signature، ابعاد و نوع امن فایل؛ SVG خام نامطمئن ممنوع؛ لوگوی کارگزاری از هویت برنامه جدا.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "BrandingAssets",
+        "IdempotencyRecords",
+        "SiteSettingsAssetLinks"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/admin/assets/asset-repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/admin/assets/asset-repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "endpointIds": [
+        "AD08"
+      ],
+      "readTables": [
+        "BrandingAssets",
+        "IdempotencyRecords",
+        "SiteSettingsAssetLinks"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "BrandingAssets",
+        "IdempotencyRecords"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ایجاد فایل برند sanitised در مسیر عمومی مجاز برند؛ این استثنا برای لوگو است، نه رسانه بازدید.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات BrandingAssets,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "F09",
+      "purpose": "سازگاری تنظیمات قدیمی برند",
+      "screen": "پنل قدیمی برندینگ",
+      "actor": "admin",
+      "input": "payload اعتبارسنجی‌شده قدیمی و نسخه",
+      "output": "تبدیل به همان draft/publication F06/F07",
+      "validation": "تبدیل payload قدیمی به همان schema جدید، whitelist و CAS؛ مسیر مستقل ذخیره حقیقت ایجاد نشود.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "SiteSettings",
+        "SiteSettingsAssetLinks",
+        "SiteSettingsVersions"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/admin/repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/admin/repository.ts",
+      "backend": "نام مستعار مهاجرتی به F06/F07؛ منبع تنظیمات و جدول جدا ساخته نشود.",
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "endpointIds": [
+        "AD06"
+      ],
+      "readTables": [
+        "IdempotencyRecords",
+        "SiteSettings",
+        "SiteSettingsAssetLinks",
+        "SiteSettingsVersions"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "SiteSettings",
+        "SiteSettingsAssetLinks",
+        "SiteSettingsVersions"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات SiteSettings,SiteSettingsVersions,SiteSettingsAssetLinks,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "F10",
+      "purpose": "نقش و فعال‌بودن کارکنان",
+      "screen": "مدیریت دسترسی",
+      "actor": "admin-read / admin",
+      "input": "staffId، نقش مجاز و نسخه",
+      "output": "نقش نصب و audit؛ نه خودارتقایی مرورگر",
+      "validation": "staffId همان نصب، نقش/فعال‌بودن مجاز و جلوگیری از ارتقای بی‌اختیار؛ هویت SSO در Frontend ساخته نشود.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "StaffRoleAssignments",
+        "StaffUsers"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/admin/repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/admin/repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "endpointIds": [
+        "AD01",
+        "AD09"
+      ],
+      "readTables": [
+        "IdempotencyRecords",
+        "StaffRoleAssignments",
+        "StaffUsers"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "StaffRoleAssignments",
+        "StaffUsers"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات StaffUsers,StaffRoleAssignments,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "F11",
+      "purpose": "فعال‌سازی وب‌هوک ازپیش‌تعریف‌شده",
+      "screen": "تنظیمات عملیات",
+      "actor": "admin",
+      "input": "شناسه whitelist، enabled و نسخه",
+      "output": "تنظیم رویداد سروری؛ نه URL دلخواه مشتری",
+      "validation": "فقط webhook ازپیش‌تعریف‌شده whitelist؛ مقصد و credential دلخواه مرورگر مردود؛ تغییر enabled با مجوز و CAS.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "WebhookSubscriptions"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "مرز فعلی src/features/admin/repository.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/admin/repository.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "endpointIds": [
+        "AD10"
+      ],
+      "readTables": [
+        "IdempotencyRecords",
+        "WebhookSubscriptions"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "WebhookSubscriptions"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات WebhookSubscriptions,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "F12",
+      "purpose": "سلامت، ذخیره‌سازی و سیاست قابل مشاهده",
+      "screen": "مدیریت زیرساخت",
+      "actor": "admin",
+      "input": "نشست مجاز",
+      "output": "سلامت واقعی و خلاصه غیرمحرمانه یا unavailable",
+      "validation": "اندازه‌گیری واقعی فضای فایل/صف/worker و وضعیت dependency؛ secret یا physical root در پاسخ نیاید؛ نبود تحلیل با موفقیت جعل نشود.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "مرز فعلی src/features/admin/operational-snapshot.tsx؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/admin/operational-snapshot.tsx",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "A04/A05؛ مجوز و CAS تنظیمات/قالب",
+      "endpointIds": [
+        "AD11"
+      ],
+      "readTables": [],
+      "writeTables": [],
+      "filesRead": "فایل/مشتق خصوصی همان نسخه با مجوز؛ فقط در صورت نیاز و بدون بارگذاری گروهی بایت‌ها.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D04",
+        "D08"
+      ]
+    },
+    {
+      "id": "G01",
+      "purpose": "اعلان رویداد وضعیت",
+      "screen": "کارگر سرور",
+      "actor": "کارگر سرور یا مدیر دارای مجوز عملیاتی؛ مشتری فقط projection امن",
+      "input": "eventId و گیرنده مجاز",
+      "output": "تأیید درگاه یا خطا و audit",
+      "validation": "eventId یکتا، گیرنده مجاز، ترجیحات/رضایت و payload بدون راز؛ اعلان به معنی تغییر تصمیم نیست.",
+      "authorization": "tenant از نصب و نشست معتبر؛ اتصال subject/sourceRequest/inspection و برای Reviewer ارجاع فعال. کارگر سرور یا مدیر دارای مجوز عملیاتی؛ مشتری فقط projection امن",
+      "tables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "Inspections",
+        "NotificationOutbox",
+        "WebhookSubscriptions"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "فقط type/projection فعلی؛ هیچ انتقال واقعی یا درگاه اعلان پیاده نشده است.",
+      "source": "src/features/inspection-status/integration-contracts.ts",
+      "backend": "کارگر/رویداد سروری؛ endpoint مرورگر ندارد. تولید outbox، ارسال به درگاه/سامانه بیمه و تأیید دریافت طبق فصل ۱۴.",
+      "dependencies": "E09؛ snapshot و مقصد/تأیید مقصد مورد توافق",
+      "endpointIds": [],
+      "readTables": [
+        "IdempotencyRecords",
+        "Inspections",
+        "NotificationOutbox",
+        "WebhookSubscriptions"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "IdempotencyRecords",
+        "NotificationOutbox"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات NotificationOutbox,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D11",
+        "D12"
+      ]
+    },
+    {
+      "id": "G02",
+      "purpose": "ایجاد کار تحویل نسخه تأییدشده",
+      "screen": "تراکنش تأیید کل",
+      "actor": "کارگر سرور یا مدیر دارای مجوز عملیاتی؛ مشتری فقط projection امن",
+      "input": "snapshot تأییدشده و مقصد whitelist",
+      "output": "یک outbox پایدار برای همان تأیید",
+      "validation": "snapshot همان تصمیم approved، inspection/submission یکسان و مقصد whitelist؛ ایجاد outbox اتمیک با تصمیم.",
+      "authorization": "tenant از نصب و نشست معتبر؛ اتصال subject/sourceRequest/inspection و برای Reviewer ارجاع فعال. کارگر سرور یا مدیر دارای مجوز عملیاتی؛ مشتری فقط projection امن",
+      "tables": [
+        "AuditLogs",
+        "ForwardingJobs",
+        "IdempotencyRecords",
+        "InspectionReviews",
+        "InspectionStatusHistory",
+        "InspectionSubmissions",
+        "Inspections"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "فقط type/projection فعلی؛ هیچ انتقال واقعی یا درگاه اعلان پیاده نشده است.",
+      "source": "src/features/inspection-status/integration-contracts.ts",
+      "backend": "کارگر/رویداد سروری؛ endpoint مرورگر ندارد. تولید outbox، ارسال به درگاه/سامانه بیمه و تأیید دریافت طبق فصل ۱۴.",
+      "dependencies": "E09؛ snapshot و مقصد/تأیید مقصد مورد توافق",
+      "endpointIds": [],
+      "readTables": [
+        "ForwardingJobs",
+        "IdempotencyRecords",
+        "InspectionReviews",
+        "InspectionSubmissions",
+        "Inspections"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "ForwardingJobs",
+        "IdempotencyRecords",
+        "InspectionStatusHistory",
+        "Inspections"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات ForwardingJobs,Inspections,InspectionStatusHistory,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D11",
+        "D12"
+      ]
+    },
+    {
+      "id": "G03",
+      "purpose": "ارسال به سامانه بیمه و تأیید دریافت",
+      "screen": "کارگر سرور",
+      "actor": "کارگر سرور یا مدیر دارای مجوز عملیاتی؛ مشتری فقط projection امن",
+      "input": "deliveryKey و نسخه‌های تأییدشده",
+      "output": "acknowledgementId/time معتبر یا خطای طبقه‌بندی‌شده",
+      "validation": "deliveryKey ثابت، احراز مقصد و پاسخ معتبر؛ HTTP200 به تنهایی رسید نیست؛ ack/query و retry طبقه‌بندی‌شده.",
+      "authorization": "tenant از نصب و نشست معتبر؛ اتصال subject/sourceRequest/inspection و برای Reviewer ارجاع فعال. کارگر سرور یا مدیر دارای مجوز عملیاتی؛ مشتری فقط projection امن",
+      "tables": [
+        "AuditLogs",
+        "ForwardingAttempts",
+        "ForwardingJobs",
+        "IdempotencyRecords",
+        "InspectionStatusHistory",
+        "Inspections",
+        "MediaFiles"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "فقط type/projection فعلی؛ هیچ انتقال واقعی یا درگاه اعلان پیاده نشده است.",
+      "source": "src/features/inspection-status/integration-contracts.ts",
+      "backend": "کارگر/رویداد سروری؛ endpoint مرورگر ندارد. تولید outbox، ارسال به درگاه/سامانه بیمه و تأیید دریافت طبق فصل ۱۴.",
+      "dependencies": "E09؛ snapshot و مقصد/تأیید مقصد مورد توافق",
+      "endpointIds": [],
+      "readTables": [
+        "ForwardingAttempts",
+        "ForwardingJobs",
+        "IdempotencyRecords",
+        "Inspections",
+        "MediaFiles"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "ForwardingAttempts",
+        "ForwardingJobs",
+        "IdempotencyRecords",
+        "InspectionStatusHistory",
+        "Inspections"
+      ],
+      "filesRead": "فایل/مشتق خصوصی همان نسخه با مجوز؛ فقط در صورت نیاز و بدون بارگذاری گروهی بایت‌ها.",
+      "filesWritten": "خواندن/stream نسخه‌های snapshot approved به مقصد whitelist؛ نه کپی Base64 و نه حذف اصل.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات ForwardingJobs,ForwardingAttempts,Inspections,InspectionStatusHistory,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D11",
+        "D12"
+      ]
+    },
+    {
+      "id": "G04",
+      "purpose": "بازیابی عملیاتی ارسال به کارگزاری",
+      "screen": "مدیر مجاز",
+      "actor": "admin-operations",
+      "input": "jobId، نسخه و کلید retry",
+      "output": "صف مجدد همان job؛ بدون عکاسی دوباره",
+      "validation": "همان job معتبر و permission عملیاتی؛ lease، نسخه و retryable بودن؛ job جدید برای همان تحویل نسازد.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "AuditLogs",
+        "ForwardingAttempts",
+        "ForwardingJobs",
+        "IdempotencyRecords"
+      ],
+      "stateEffect": "فرمان تراکنشی و audit مطابق خروجی؛ جدول انتقال فصل ۱۱ حاکم است",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "Idempotency-Key پایدار + hash درخواست + scope و expectedVersion؛ همان کلید/بدنه همان نتیجه، بدنه متفاوت 409؛ retry نامطمئن همان فرمان",
+      "mock": "projection شکست/انتظار موجود است؛ فرمان retry سرور و ارسال واقعی هنوز پیاده نشده است.",
+      "source": "src/features/inspection-status/integration-contracts.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "E09؛ snapshot و مقصد/تأیید مقصد مورد توافق",
+      "endpointIds": [
+        "FW01"
+      ],
+      "readTables": [
+        "ForwardingAttempts",
+        "ForwardingJobs",
+        "IdempotencyRecords"
+      ],
+      "writeTables": [
+        "AuditLogs",
+        "ForwardingJobs",
+        "IdempotencyRecords"
+      ],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "پیشنهادی: احراز scope/CAS، ثبت فرمان و تغییرات ForwardingJobs,AuditLogs,IdempotencyRecords در تراکنش کوتاه؛ I/O یا شبکه بیرون تراکنش و از طریق receipt/outbox/lease بازیابی شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D11",
+        "D12"
+      ]
+    },
+    {
+      "id": "G05",
+      "purpose": "نمایش وضعیت تحویل",
+      "screen": "مشتری و کارکنان مجاز",
+      "actor": "owner-staff",
+      "input": "زمینه بازدید",
+      "output": "همان projection در D04/E01، با ack واقعی",
+      "validation": "نمایش از D04 و فقط پس از ack معتبر FORWARDED؛ وضعیت داخلی credential/خطای خام نشت نکند.",
+      "authorization": "نشست امن HttpOnly/Secure؛ نقش، مالکیت و ارجاع سمت سرور؛ نه localStorage/URL",
+      "tables": [
+        "ForwardingJobs"
+      ],
+      "stateEffect": "خواندن بدون تغییر چرخه عمر",
+      "errors": "400/422 اعتبارسنجی ساختاریافته؛ 401 نشست؛ 403 اختیار؛ 404 منبع نامرئی؛ 409 تعارض نسخه/کلید؛ 429 زمان retry؛ 5xx خطای موقت بدون حذف داده",
+      "idempotency": "خواندن قابل تکرار؛ backoff محدود روی خطای موقت و رعایت Retry-After",
+      "mock": "مرز فعلی src/features/inspection-status/lifecycle-model.ts؛ رفتار تجاری محلی/mock است",
+      "source": "src/features/inspection-status/lifecycle-model.ts",
+      "backend": "پیشنهاد نیازمند تصویب؛ سرویس ASP.NET با احراز هویت/مجوز، DTO معتبر و SQL metadata/فایل خصوصی در صورت ارتباط",
+      "dependencies": "E09؛ snapshot و مقصد/تأیید مقصد مورد توافق",
+      "endpointIds": [
+        "I14"
+      ],
+      "readTables": [
+        "ForwardingJobs"
+      ],
+      "writeTables": [],
+      "filesRead": "ندارد؛ URL راهنما و برند فقط reference عمومی مجاز است، نه بایت مدرک.",
+      "filesWritten": "ندارد؛ اثر این عملیات روی داده یا نشست است، نه تولید/حذف رسانه.",
+      "transaction": "خواندن scope دار بدون تغییر چرخه؛ نشست/چالش در provider هویت مصوب مدیریت می‌شود و جدول خیالی به SQL اضافه نمی‌شود.",
+      "currentStatus": [
+        "CURRENT_MOCK"
+      ],
+      "contractStatus": [
+        "PROPOSED_BACKEND_CONTRACT",
+        "PENDING_BACKEND_APPROVAL"
+      ],
+      "openDecisions": [
+        "D11",
+        "D12"
+      ]
+    }
+  ]
+}
