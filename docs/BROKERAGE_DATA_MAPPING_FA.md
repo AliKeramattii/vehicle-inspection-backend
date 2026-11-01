@@ -6,27 +6,36 @@
 
 نتیجه می‌تواند `Found`، `NotFound`، `Ambiguous`، `Ineligible` یا `Unavailable` باشد. هیچ‌کدام نباید به‌صورت خودکار به fixture تبدیل شوند. کد تکراری بدون قاعدهٔ یکتایی مصوب، انتخاب تصادفی درخواست را مجاز نمی‌کند. timeout یا خطای SQL با «اطلاعات مفقود» یکی نیست.
 
-credential خواندن مبدأ از credential نوشتن BAZDID جدا باشد؛ DBA به viewهای مصوب یا اشیای دقیق مجوز SELECT می‌دهد. فهرست schema/table/column اکنون **نامعلوم** است. نه query آزمایشی روی Production نوشته می‌شود و نه ساخت/تغییر جدول آن مجاز است. هیچ FK به جدول مبدأ تا شناخت schema پیشنهاد اجرایی نمی‌شود.
+credential خواندن مبدأ از credential نوشتن BAZDID جدا باشد؛ DBA به viewهای مصوب یا اشیای دقیق مجوز SELECT می‌دهد. ممیزی Checkpoint 1.5 نام صریح `Duber.OrderSales` و چند property/رابطه را در سورس یافت؛ **schema جاری سرور، ستون‌های فیزیکی و مرجع authoritative هنوز تأیید نشده‌اند**. نه query آزمایشی روی Production نوشته می‌شود و نه ساخت/تغییر جدول آن مجاز است. هیچ FK به جدول مبدأ تا شناخت schema پیشنهاد اجرایی نمی‌شود.
 
-## دفتر mapping لازم از تیم کارگزاری
+## دفتر mapping مبتنی بر شاهد — Checkpoint 1.5
 
-تمام ردیف‌ها باید پیش از adapter واقعی با نام واقعی، نوع، nullability، نمونهٔ ساختگی و مسئول تأیید تکمیل شوند.
+مبنای این جدول آرشیو خصوصیِ ممیزی‌شده در `2026-11-01` است؛ hash و حدود جست‌وجو در [گزارش ممیزی](DUBERFRONT_CODE_AUDIT_FA.md) ثبت شده‌اند. `P` در مسیرهای زیر برابر `DuberFront/Duber` است. «صریح سورس» یعنی نگاشت EF مشاهده شده؛ «مدل سورس» یعنی property/رابطه دیده شده و نام ستون فیزیکی صرفاً از convention قابل حدس است. هیچ‌کدام تأیید پایگاه زنده نیستند. نام property مقصد، پیشنهاد قرارداد آینده است و هنوز پیاده نشده است.
 
-| کلید منطقی | نیاز و mapping مقصد | وضعیت مبدأ |
-|---|---|---|
-| `brokerageId` / `sourceSystem` | context معتبر از تنظیمات نصب؛ نه ورودی مرورگر | شناسه و حوزهٔ یکتایی نامعلوم |
-| `sourceCustomerId` | رشتهٔ پایدار در `BAZDIDCustomerLinks`؛ حفظ بدون cast اجباری | جدول/ستون/join نامعلوم |
-| `sourceRequestId` | رشتهٔ پایدار و یکتا در context همان tenant | جدول/ستون/join نامعلوم |
-| `referralCode` | شاخص درخواست بیمه؛ normalization و lookup مصوب | ستون، حساسیت به case و uniqueness نامعلوم |
-| `trustedMobile` | منبع trusted برای OTP؛ masked در UI؛ plaintext حداقلی | ستون، ارتباط مالک و وضعیت تأیید نامعلوم |
-| `requestEligibility` | مجاز/بسته/لغو؛ بازبینی پیش از OTP و ایجاد/ارسال طبق قرارداد | وضعیت‌ها و قواعد نامعلوم |
-| `sourceVehicleReference` | شناسهٔ خارجی اختیاری در snapshot | منبع/نیاز واقعی نامعلوم |
-| `make`, `model` | نام سازنده و مدل؛ مدل UI `Vehicle.make/model` | جدول یا کد lookup نامعلوم |
-| `modelYear` | `Vehicle.year`؛ نوع تقویم و بازه باید روشن شود | mapping و معنی صفر نامعلوم |
-| `color`, `bodyColor` | `colorName` و hex اختیاری؛ رنگ ساختگی پیش‌فرض ممنوع | mapping کد رنگ نامعلوم |
-| `plate` | چهار segment معتبر؛ حرف «الف» تا سه نویسه | فرمت ذخیره و تجزیه نامعلوم |
-| `vin` / `chassisNumber` | مقدار trusted در صورت نیاز؛ `maskedVin → vinMasked` در UI | تفاوت VIN استاندارد و شاسی قدیمی نامعلوم |
-| `sourceVersion` / `retrievedAt` | تغییر موبایل/مالک/خودرو و جلوگیری از snapshot کهنه | rowversion/زمان معتبر منبع نامعلوم |
+«مشروط» در ستون Manual فقط دربارهٔ فیلد خودروست: adapter مصوب باید همان فیلد را صریحاً `Missing` گزارش کند و ورودی با اعتبارسنجی مستقل ذخیره شود. نبود mapping، خطای منبع یا ادعای مرورگر، Missing نیست. تمام ردیف‌ها پیش از adapter واقعی به نام/نوع/nullability فیزیکی، نمونهٔ ساختگی و مسئول تأیید نیاز دارند.
+
+| نیاز BAZDID | فیلد یا API مشاهده‌شده | مسیر دقیق شاهد در ZIP | اطمینان/وضعیت | property پیشنهادی DTO | فقط‌خواندنی | Manual | اطلاعات مفقود |
+|---|---|---|---|---|---|---|---|
+| tenant و منبع | دو context و دو کلید اتصال | `P/Startup.cs:73–77` | منبع authoritative حل‌نشده | `BrokerageId`, `SourceSystem` | بله؛ تنظیم سرور | خیر | context/پایگاه منتخب و حوزهٔ یکتایی |
+| شناسهٔ درخواست | `OrderSales.Id` از نوع `long`؛ نگاشت `Duber.OrderSales` | `P/Models/OrderSales.cs:17`؛ `P/Models/DuberContext.cs:2578–2589`؛ `P/Models/irisdbContext.cs:2586–2597` | صریح سورس برای جدول؛ ستون جاری تأییدنشده | `SourceRequestId` رشته | بله | خیر | کلید/نوع واقعی و یکتایی در هر منبع |
+| شناسهٔ مشتری | `OrderSales.CustomerId → Customer.Id`؛ `int? → int` | `P/Models/OrderSales.cs:18`؛ `P/Models/Customer.cs:22`؛ `P/Models/DuberContext.cs:2884–2887` | رابطهٔ سورس؛ جدول Customer صریح نیست | `SourceCustomerId` رشته | بله | خیر | schema/table مشتری، nullable و مالکیت معتبر |
+| کد معرفی | resolver یا ستون شش‌کاراکتری تأیید نشد؛ `TakhfifCheck` تخفیف است | `P/Controllers/carbodyinsuranceController.cs:3147–3155`؛ `P/Controllers/HomeController.cs:8254–8267` | حل‌نشده؛ نمایش Id در verifyOrder کافی نیست | `ReferralCode` | بله؛ حل سمت سرور | خیر | صدور، انتقال، lookup، case، انقضا و uniqueness |
+| موبایل معتبر | `Customer.Mobile` و snapshot در `OrderSales.Mobile` | `P/Models/Customer.cs:26`؛ `P/Models/OrderSales.cs:55`؛ `P/Areas/Agents/Views/AgentHome/DetailsOrder.cshtml:70` | دو candidate؛ اولویت UI اثبات اعتبار نیست | `TrustedMobile` | بله؛ نمایش masked | خیر | اولویت، verified بودن، تعارض و تغییر مالک/شماره |
+| مرجع خودرو | `OrderSales.CarId` | `P/Models/OrderSales.cs:20` | مدل سورس | `SourceVehicleReference` | بله | خیر؛ زمینهٔ سرور | معنای شناسه و کاربرد موردنیاز |
+| سازنده | `Car.CompanyId/Company → CompanyCar.Name` | `P/Models/Car.cs:17,34`؛ `P/Models/CompanyCar.cs:15` | مدل/رابطهٔ سورس | `Vehicle.Make` | اگر معتبر | مشروط | schema lookup، join جاری و اعتبار مقدار |
+| مدل | `Car.Name` از رابطهٔ CarId | `P/Models/Car.cs:16`؛ `P/Controllers/CustomersController.cs:827–887` | مدل و مصرف سورس | `Vehicle.Model` | اگر معتبر | مشروط | schema lookup و normalization نام/کد |
+| سال | `CarYearSakhtId → CarYearSakht.Name` رشته؛ FK سال نیست | `P/Models/OrderSales.cs:21`؛ `P/Models/CarYearSakht.cs:13–14` | مدل سورس | `Vehicle.ModelYear` | اگر معتبر | مشروط | تقویم، parsing، بازه و sentinel |
+| رنگ | منبع قابل اتکا برای نیاز BAZDID تأیید نشد | `P/Models/OrderSales.cs` و مدل‌های lookup بررسی‌شده | حل‌نشده؛ غیبت در ممیزی، Missing نیست | `Vehicle.ColorName`, `ColorHex` | اگر معتبر | مشروط پس از mapping | فیلد/enum و سیاست Missing؛ hex اختیاری |
+| پلاک | `OrderSales.Pelak` رشته | `P/Models/OrderSales.cs:202` | مدل سورس | `Vehicle.Plate` | اگر معتبر | مشروط | تجزیهٔ چهار segment و پلاک غیرمعمول |
+| VIN | `OrderSales.VinNumber` | `P/Models/OrderSales.cs:237` | مدل سورس | `Vehicle.Vin`, `VinMasked` | اگر معتبر | مشروط | نیاز به full VIN، validation و masking |
+| شاسی | `OrderSales.ShasiNumber`؛ مستقل از VIN | `P/Models/OrderSales.cs:235` | مدل سورس | `Vehicle.ChassisNumber` | اگر معتبر | مشروط | تفاوت شاسی قدیمی/VIN و سیاست نمایش |
+| کیلومتر | منبع کارگزاری برای این جریان فرض نشده | `P/Models/OrderSales.cs`؛ قرارداد مستقل BAZDID | ورودی مشتری طبق قاعدهٔ قطعی | `Kilometers` | خیر | بله؛ اعتبارسنجی عدد صحیح | سقف مصوب؛ صفر معتبر است |
+| مجازبودن درخواست | propertyهای `Status/TypeOrder`؛ معنی مجاز برای BAZDID مشخص نیست | `P/Models/OrderSales.cs` | مدل سورس؛ semantics حل‌نشده | `RequestEligibility` | بله | خیر | نوع بیمه، وضعیت لغو/بسته و زمان بازبینی |
+| نسخه/تازگی | rowversion یا زمان تغییر قابل اتکا تأیید نشد | `P/Models/OrderSales.cs`؛ `P/Models/DuberContext.cs` | حل‌نشده | `SourceVersion`, `RetrievedAtUtc` | بله | خیر | نسخهٔ منبع؛ زمان دریافت UTC را خود Backend می‌سازد و جای نسخه نیست |
+
+`OrderSales.Mobile` در EF حداکثر ۱۵ نویسه و غیرUnicode است (`DuberContext.cs:2730–2732`)؛ `Customer.Mobile` در همان مدل required با سقف ۱۵ است (`672–674`). این‌ها قید مدل سورسند، نه DDL تحویل‌شده. schema/table صریح برای Customer/Car/CompanyCar/CarYearSakht و override نام ستون‌های منتخب مشاهده نشد؛ `dbo` یا نام جدول قراردادی به query تبدیل نمی‌شود. view/SP/API آماده برای referral نیز تأیید نشده است.
+
+شناسهٔ `long` درخواست در مرز adapter بدون کاهش به `int` یا عدد JavaScript حمل می‌شود؛ رشتهٔ opaque همراه tenant/source حفظ شود. انتخاب یکی از دو context یا fallback میان آن‌ها بدون تصویب ممنوع است. FK به اشیای ناشناخته ساخته نمی‌شود؛ عدم تطابق موبایل/مالک باید fail-closed باشد.
 
 برای هر فیلد، `ZeroMeansMissing`، whitespace، sentinel، enum، encoding، mapping تقویم، اعتبارسنجی و سیاست refresh جدا ثبت شود. هیچ فرض کلی «۰ یعنی خالی» نداریم. شناسهٔ خارجی باید دقیقاً با semantics مبدأ حفظ شود؛ trim یا upper روی شناسهٔ opaque بدون قرارداد مجاز نیست.
 
