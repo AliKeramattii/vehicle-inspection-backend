@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-01",
+  "authorization": "USER_APPROVED_ARCHIVE_FREE_PUBLISH_WITH_LOCAL_ORIGINAL_HISTORY",
+  "originalLocalOnlyBranch": "local-original-history-2026-11-01",
+  "originalHead": "7e2d83ddeb33475d07f70f4471cd09e466f853a4",
+  "exportedHeadBeforeManifest": "870be97f1fac406d98c3416403716a66dbe3581c",
+  "originalArchivePreservedLocally": true,
+  "archiveBlobExcludedFromPublishedHistory": true,
+  "applicationAndOtherTreeBytesUnchanged": true,
+  "commits": [
+    {
+      "originalCommit": "196c000ed2c51ae54fe567bb2af8e4f44adae4ca",
+      "publishedCommit": "2ddf17a90f973695763c1b5021a3a03d54bf298c",
+      "publishedTree": "6b00216784c1aea4a27fcd319a1ea4be4bd50f79",
+      "onlyRemovedPath": "docs/reference/BACKEND_HANDOVER_ESSENTIAL_FA.zip"
+    },
+    {
+      "originalCommit": "1029465016815b46cf388b4f8264aa819f1532b6",
+      "publishedCommit": "2c9195cea353d28faf6eb506ba54174ee6769d23",
+      "publishedTree": "24caceb1190da45cc960a981e03c79f302630b59",
+      "onlyRemovedPath": "docs/reference/BACKEND_HANDOVER_ESSENTIAL_FA.zip"
+    },
+    {
+      "originalCommit": "21873168a89ae120e2057cc3d4eaf9196d684fb4",
+      "publishedCommit": "613d3514b7b419ca4be317291142b3d585893028",
+      "publishedTree": "6d0e734c8035eec083135c4f5e7c39e1bd0edc50",
+      "onlyRemovedPath": "docs/reference/BACKEND_HANDOVER_ESSENTIAL_FA.zip"
+    },
+    {
+      "originalCommit": "3c52503b345d3bc782feda8a5ca6effadb4ce65a",
+      "publishedCommit": "dafb037a0765eea19c9f7949a2f672fb279b6c5a",
+      "publishedTree": "bf670006ffe923aab19419cb913fe0d5ccd689f0",
+      "onlyRemovedPath": "docs/reference/BACKEND_HANDOVER_ESSENTIAL_FA.zip"
+    },
+    {
+      "originalCommit": "7e2d83ddeb33475d07f70f4471cd09e466f853a4",
+      "publishedCommit": "870be97f1fac406d98c3416403716a66dbe3581c",
+      "publishedTree": "0a8234fc51508094e3d71b935af8787c2f8ccbd9",
+      "onlyRemovedPath": "docs/reference/BACKEND_HANDOVER_ESSENTIAL_FA.zip"
+    }
+  ]
+}
