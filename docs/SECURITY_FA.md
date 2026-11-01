@@ -1,5 +1,11 @@
 # طرح امنیت و مدیریت کارکنان آینده
 
+## وضعیت واقعی Checkpoint 1
+
+health، خطای JSON امن، correlation سروری، logging بدون body/query/exception message، validation startup، CORS origin دقیق بدون credential، HTTPS redirect و HSTS opt-in پیاده شده‌اند. Swagger فقط Development/Testing و با منع query remote definition است؛ Production حتی با flag روشن آن را ثبت نمی‌کند. هیچ auth/cookie/CSRF/SQL/SMS/media عملیاتی وجود ندارد؛ بخش‌های مربوط زیر طرح آینده‌اند.
+
+**audit پاک نیست:** در گراف API، ۹ بسته با ۱۰ ارتباط advisory، از جمله Critical برای Kestrel، گزارش شده‌اند. [گزارش و محدودیت‌ها](checkpoint1/DEPENDENCY_SECURITY_FA.md). پشته برای انتشار عمومی تأیید امنیتی ندارد؛ صفر warning کامپایل با صفر آسیب‌پذیری برابر نیست.
+
 ## محدودیت پشته و شرط انتشار
 
 `netcoreapp2.1` الزام پروژه است و تغییر نمی‌کند. پایان پشتیبانی `2021-08-21` یعنی دریافت وصله‌های امنیتی و پشتیبانی این نسل متوقف شده است؛ نصب آخرین patch تاریخی یا موفقیت build آن را ایمن نمی‌کند. [اعلام رسمی Microsoft](https://devblogs.microsoft.com/dotnet/net-core-2-1-will-reach-end-of-support-on-august-21-2021/).

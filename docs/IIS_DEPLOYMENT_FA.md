@@ -1,6 +1,6 @@
 # طرح استقرار IIS و PathBase
 
-وضعیت: **راهنمای طراحی؛ هیچ IIS، سرور یا برنامهٔ کارگزاری تغییر نکرده است.** دامنه‌های مثال تنظیمات واقعی نیستند؛ root فیزیکی، pool، گواهی و secret باید از زیرساخت تحویل شوند.
+وضعیت: **در Checkpoint 1، artifact محلی publish و template ساخته شده؛ هیچ IIS، سرور یا برنامهٔ کارگزاری تغییر نکرده است.** راهنمای اجرایی و دستورهای واقعی در [deployment/iis](../deployment/iis/README.md) هستند. PathBase در Kestrel واقعی و metadata شبیه‌سازی‌شدهٔ IIS آزموده شده؛ ANCM واقعی هنوز آزموده نشده است. دامنه‌های مثال تنظیمات واقعی نیستند.
 
 ## Application مستقل و مدل hosting
 
@@ -39,6 +39,8 @@ Swagger UI از URL نسبی نسبت به محل UI استفاده کند؛ net
 IIS integration و forwarded-header اعتمادشده → تنظیم PathBase فقط در حالت غیر-IIS مصوب → correlation و exception handling امن → HTTPS/HSTS طبق محیط → CORS → cookie policy → authentication → rate/authorization/antiforgery با طراحی مناسب endpoint → MVC (`UseMvc`). در 2.1 از الگوی Endpoint Routing نسخه‌های جدید استفاده نشود. CORS باید preflight را پیش از challenge احراز ببیند؛ CSRF mutationها با filter/validator سروری اعمال شود.
 
 ## TLS، مرورگر و اعتماد به header
+
+پیاده‌سازی فعلی، در Production به HTTPS redirect نیاز دارد. HSTS با `Bazdid:HstsEnabled` به‌طور پیش‌فرض false است و فقط در Production و پس از هماهنگی policy کل host فعال می‌شود؛ روشن/خاموش‌بودن آن آزمون دارد. CORS فعلی فقط read-only و بدون credential است؛ بخش cookie/CSRF زیر طرح مراحل احراز هویت آینده است و اکنون فعال نشده است. Swagger در Production همواره غیرفعال است.
 
 Backend و Frontend فقط HTTPS با گواهی معتبر و TLS policy مصوب میزبان باشند. redirect یا HSTS سراسری سایت که برنامه‌های دیگر را تحت تأثیر می‌گذارد بدون هماهنگی تغییر نکند. پشت proxy تنها proxyهای مشخص در `KnownProxies/KnownNetworks` قابل اعتمادند؛ `X-Forwarded-For/Proto/Host` از اینترنت پذیرفته نشوند. AllowedHosts و origin نصب از تنظیم trusted هستند.
 

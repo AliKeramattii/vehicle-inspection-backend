@@ -1,5 +1,7 @@
 # احراز هویت، هویت مستعار و نشست
 
+وضعیت در پایان Checkpoint 1: این سند همچنان **طراحی آینده** است؛ هیچ OTP، Session، cookie authentication یا CSRF عملیاتی ساخته نشده است. تنظیمات رزروشده فعال نمی‌شوند و `Authentication:Enabled=true` startup را رد می‌کند. در foundation، CORS read-only بدون credential است.
+
 ## جریان تأییدشده و طرح پیشنهادی
 
 ```mermaid

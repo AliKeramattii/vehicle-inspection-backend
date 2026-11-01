@@ -1,6 +1,16 @@
 # راهبرد آزمون و کنترل کیفیت
 
-این سند برنامهٔ آزمون آینده است؛ در Phase 0 فقط کنترل مستندات/منابع انجام می‌شود. هیچ قبولی build، runtime، SQL یا deployment بدون اجرای واقعی ثبت نمی‌شود.
+این سند راهبرد کلی و آزمون‌های آینده را حفظ می‌کند. در Checkpoint 1، **۱۵ آزمون واحد و ۲۸ آزمون integration، جمعاً ۴۳ آزمون، موفق اجرا شدند**. build با SDK 2.1.818 صفر warning/error و smoke واقعی health/Swagger روی loopback موفق بود. SQL و IIS/ANCM واقعی آزموده نشده‌اند. [گزارش شواهد](CHECKPOINT1_IMPLEMENTATION_FA.md).
+
+## اجرای فعلی Checkpoint 1
+
+```powershell
+dotnet restore Bazdid.sln --locked-mode
+dotnet build Bazdid.sln --configuration Release --no-restore
+dotnet test Bazdid.sln --configuration Release --no-build --no-restore
+```
+
+این فرمان‌ها واقعاً exit code صفر داشتند. unit شامل اعتبارسنجی محیط/base/origin و integration شامل startup، liveness، JSON، 404، عدم افشای خطا/log، correlation، Swagger UI/JS/JSON و مسیر درست، خاموش‌بودن Production، CORS، HTTPS redirect، HSTS اختیاری و metadata شبیه‌سازی‌شدهٔ IIS است. خطای عمدی فقط در controller متعلق به پروژهٔ تست تزریق می‌شود؛ endpoint تشخیصی در API منتشرشده نداریم. آزمون DB/SMS/upload فعلاً وجود ندارد چون آن قابلیت‌ها پیاده نشده‌اند.
 
 ## سطوح و محیط
 
@@ -39,7 +49,7 @@ OpenAPI همان implementation با نمونهٔ واقعی responseها تطب
 
 واحد: قواعد دامنه و مرزهای خطا پوشش داده شوند؛ تست کپی عین implementation ساخته نشود. Integration: SQL و فایل در race/failure مستقل بررسی شوند، نه فقط happy path. Staging: مسیر عمومی prefixدار، SSL/CORS/cookie/CSRF، privacy، recycle، دو instance در صورت نیاز و restore با شواهد ثبت شوند. تست‌های موفق صرفاً برای افزایش شمار تکرار نشوند؛ تغییر تازه یا نگرانی حل‌نشده دلیل اجرای مجدد است.
 
-هر گزارش شامل نسخهٔ commit، SDK/runtime/SQL، محیط غیرحساس، فرمان واقعی، نتیجه/exit code، پوشش و محدودیت باشد. خطای محیط جدا از شکست assertion ثبت می‌شود. هیچ test command برنامه اکنون منتشر نمی‌شود چون هنوز پروژه‌ای نیست؛ در Checkpoint 1 فقط دستورهای واقعاً اجراشده به README اضافه می‌شوند.
+هر گزارش شامل نسخهٔ commit، SDK/runtime/SQL در صورت استفاده، محیط غیرحساس، فرمان واقعی، نتیجه/exit code، پوشش و محدودیت باشد. خطای محیط جدا از شکست assertion ثبت می‌شود. دستورهای فعلی در README ثبت شده‌اند؛ اضافه‌شدن تست‌های SQL/رسانه و پذیرش staging واقعی در checkpoint مربوط انجام می‌شود.
 
 ## کنترل Phase 0
 

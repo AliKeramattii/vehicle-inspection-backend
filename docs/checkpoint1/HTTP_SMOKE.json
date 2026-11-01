@@ -1,0 +1,19 @@
+{
+    "Date":  "2026-11-01",
+    "Hosting":  "Kestrel",
+    "Environment":  "Development",
+    "BaseUrl":  "http://127.0.0.1:5081/API/BAZDID",
+    "HealthStatus":  200,
+    "HealthBody":  "{\"status\":\"alive\"}",
+    "SwaggerJsonStatus":  200,
+    "SwaggerVersion":  "2.0",
+    "SwaggerBasePath":  "/API/BAZDID",
+    "SwaggerPaths":  [
+                         "/health/live"
+                     ],
+    "SwaggerUiStatus":  200,
+    "RelativeSwaggerLink":  true,
+    "DoublePrefixStatus":  404,
+    "SwaggerRemoteQueryStatus":  400,
+    "Result":  "PASS"
+}

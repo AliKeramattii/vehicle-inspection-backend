@@ -1,6 +1,6 @@
 # نقشهٔ قرارداد و پیاده‌سازی API
 
-وضعیت همهٔ مسیرهای این سند **پیشنهادی برای Phase 1** است. سرویس تجاری موجود تأیید نشده و OpenAPI اجرایی هنوز تولید نشده است. مبنای مقایسه [endpointهای مرجع](reference/contracts/endpoints.json) و [schemaهای مرجع](reference/contracts/schemas.json) است؛ ۵۵ ترکیب HTTP تاریخی الزام به ساخت همهٔ آن‌ها نیست.
+در Checkpoint 1 فقط `GET /API/BAZDID/health/live` و Swagger غیرتولیدی واقعاً پیاده و آزموده شده‌اند. تمام مسیرهای تجاری این سند **پیشنهاد آینده** هستند. Swagger 2.0 تولیدشده از همین برنامه فقط health را دارد؛ ۵۵ endpoint تاریخی وارد آن نشده‌اند. مبنای مقایسهٔ آینده [endpointهای مرجع](reference/contracts/endpoints.json) و [schemaها](reference/contracts/schemas.json) است.
 
 ## پایه و قواعد مشترک
 
@@ -83,6 +83,12 @@ PUT فقط فیلدهای مجاز دستی را دارد؛ نه کل object ف�
 AU01/AU02 (ticket مشتری/کارکنان) برای شروع لازم نیستند؛ ورود قطعی مشتری referral/OTP است. I04 فهرست فراگیر، R01–R04، I15، RV01–RV09، AD01–AD11 و FW01 در Checkpoint 8 یا پس از نیاز واقعی قرار می‌گیرند. P01 public settings و M01 reverse map به نیاز integration وابسته‌اند؛ provider برند و Neshan مرکزی موجود را با نسخهٔ تکراری جایگزین نکنید. P00 یعنی `/site-bootstrap.json` فایل عمومی Frontend موجود است و endpoint تجاری BAZDID نیست؛ منتقل یا بازتعریف نمی‌شود.
 
 ## OpenAPI و تحویل Frontend
+
+وضعیت واقعی Checkpoint 1: UI در `/API/BAZDID/swagger/index.html` و JSON در `/API/BAZDID/swagger/v1/swagger.json` روی Development/Testing و با flag فعال موجودند؛ Production همواره 404 است. JSON مقدار `swagger=2.0`، `basePath=/API/BAZDID` و فقط `/health/live` دارد. UI از URL نسبی `v1/swagger.json` استفاده می‌کند؛ queryهای اسناد برای جلوگیری از تغییر remote definition رد می‌شوند. هیچ endpoint خطای آزمایشی در artifact واقعی وجود ندارد؛ fault فقط در assembly تست تزریق می‌شود.
+
+پاسخ health واقعی `{"status":"alive"}` است. خطای واقعی 404/500 شکل `code/message/correlationId`، header `X-Correlation-ID` و `no-store` دارد؛ stack و پیام داخلی افشا نمی‌شود. CORS کنونی فقط GET/HEAD/OPTIONS و بدون credential است؛ ورود cookie/CSRF هنوز پیاده نشده‌اند.
+
+`v1` اکنون نسخهٔ سند قرارداد foundation است، نه prefix تازه در route. endpointها نسبت به PathBase تعریف می‌شوند. تغییرهای additive سازگار در همین سند نسخه‌بندی می‌شوند؛ تغییر breaking آینده به قرارداد و مسیر نسخهٔ مجزا و دورهٔ هم‌زیستی مصوب نیاز دارد. هیچ package versioning یا `/v1` تکراری در Checkpoint 1 اضافه نشده است.
 
 Swashbuckle نامزد نسل 4، سند **Swagger 2.0** تولید می‌کند؛ compatibility به معنی اثبات OpenAPI 3 نیست. DTO واقعی، enum، nullability، نسخه، خطای فیلد، CSRF، cookie و `Idempotency-Key`، stream باینری و محدودیت‌ها باید در سند همان برنامه توضیح داده شوند. Swagger 2.0 توان مدل‌کردن کامل بعضی union/nullها را ندارد؛ توضیح و نمونهٔ مکمل معتبر لازم است، نه schema گمراه‌کننده.
 

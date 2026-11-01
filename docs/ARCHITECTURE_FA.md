@@ -1,6 +1,6 @@
 # معماری پیشنهادی و سازگاری محیط
 
-وضعیت: **پیشنهاد برای بازبینی؛ کد هنوز ایجاد نشده است.** معماری یک برنامهٔ ماژولار، با یک deployable و دو پروژهٔ آزمون است. microservice، message broker یا لایه‌های متعدد project برای دامنهٔ فعلی لازم نیست.
+وضعیت: **foundation معماری در Checkpoint 1 پیاده شده است؛ قابلیت‌های تجاری این سند برای مراحل بعدند.** یک deployable به‌همراه دو پروژهٔ آزمون داریم. Controller/Contracts/Configuration/Middleware کد فعال دارند؛ Application/Domain/Infrastructure فعلاً مرز مستند و فاقد کد تجاری‌اند. microservice یا message broker اضافه نشده است.
 
 ```mermaid
 flowchart LR
@@ -13,7 +13,9 @@ flowchart LR
   Source --> Broker["دادهٔ موجود کارگزاری؛ schema نامعلوم"]
 ```
 
-## ساختار پیشنهادی پس از تصویب
+## ساختار مصوب و توسعهٔ تدریجی
+
+`Bazdid.sln`، سه project، `global.json`، `Directory.Build.props` و `NuGet.Config` ساخته شده‌اند. جزئیات `Authentication/Brokerage/Sql/Media/Fixtures` در درخت زیر مربوط به مراحل بعدند و هنوز پیاده نشده‌اند.
 
 ```text
 Bazdid.sln
@@ -58,13 +60,13 @@ scriptهای BAZDID در آینده شماره‌دار، دارای checksum و
 
 ## ابزار محلی و نیاز ساخت
 
-بررسی واقعی `2026-11-01`: Windows `10.0.26200`، `win-x64`؛ Git `2.55.0.windows.3`. SDKهای نصب‌شده: `2.1.818`، `3.1.426`، `8.0.427`، `9.0.320`، `10.0.302`، `10.0.400` و `10.0.403`. Runtimeهای لازم `Microsoft.NETCore.App 2.1.30` و `Microsoft.AspNetCore.App 2.1.30` موجودند. انتخاب پیش‌فرض فعلی SDK برابر `10.0.403` است؛ `global.json` وجود ندارد. pin در Checkpoint 1 لازم است.
+بررسی واقعی `2026-11-01`: Windows `10.0.26200`، `win-x64`؛ Git `2.55.0.windows.3`. SDKهای نصب‌شده: `2.1.818`، `3.1.426`، `8.0.427`، `9.0.320`، `10.0.302`، `10.0.400` و `10.0.403`. Runtimeهای `Microsoft.NETCore.App 2.1.30` و `Microsoft.AspNetCore.App 2.1.30` موجودند. `global.json` اکنون SDK `2.1.818` را انتخاب می‌کند و runtimeconfig واقعی `Microsoft.AspNetCore.App 2.1.30` است. SDK جدید فقط برای audit خواندنی به‌کار رفته، نه build یا تغییر target.
 
 مبنای ساخت پیشنهادی SDK `2.1.818`، Runtime `2.1.30`، C# `7.3` و editor دلخواه با CLI قدیمی است؛ وجود Visual Studio جدید، سازگاری پروژهٔ قدیمی را تضمین نمی‌کند. نسخه‌ها و نیاز Hosting Bundle در [صفحهٔ رسمی .NET Core 2.1](https://dotnet.microsoft.com/en-us/download/dotnet/2.1) آمده‌اند. دسترسی restore به feed معتبر، صحت TLS، cache بسته‌ها و انتشار x64 باید در محیط جدا و بدون راز Production آزمایش شوند.
 
 ## ماتریس dependency پیشنهادی
 
-نسخه‌های زیر **نامزد سازگار از نظر target** هستند، نه مجموعهٔ restore/build/security تأییدشده. هیچ بسته‌ای نصب نشده است. در Checkpoint 1، گراف کامل، advisoryها و سازگاری واقعی بررسی و نسخه‌های دقیق ثبت شوند.
+در Checkpoint 1، `Microsoft.AspNetCore.App 2.1.30`، `Swashbuckle.AspNetCore 4.0.1` و `Newtonsoft.Json 13.0.4` واقعاً restore/build/run شده‌اند. نسخه‌های مستقیم و transitive در lockfileها ثبت و audit شده‌اند؛ **audit پاک نیست**. گزینه‌های SQL/EF/Dapper جدول زیر هنوز صرفاً نامزد مراحل بعدند و مستقیم به پروژه اضافه نشده‌اند. [نسخه‌ها و یافته‌های واقعی](checkpoint1/DEPENDENCY_SECURITY_FA.md).
 
 | جزء | پیشنهاد و مدرک |
 |---|---|
@@ -75,7 +77,7 @@ scriptهای BAZDID در آینده شماره‌دار، دارای checksum و
 | گزینهٔ EF | صرفاً مقایسه: `Microsoft.EntityFrameworkCore.SqlServer 2.1.14` با target `netstandard2.0`؛ [metadata بسته](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.SqlServer/2.1.14) |
 | گزینهٔ Dapper | صرفاً در صورت نیاز: `1.60.6` با target `netstandard1.3`؛ [metadata بسته](https://www.nuget.org/packages/Dapper/1.60.6) |
 | logging، cookie، antiforgery، Data Protection | قابلیت‌های سازگار پشتهٔ 2.1؛ dependencyهای جدید صرفاً برای تقلید APIهای جدید افزوده نشوند |
-| آزمون | xUnit و TestHost از نسل سازگار 2.1؛ نسخهٔ دقیق runner/Test SDK/TestHost پس از بررسی واقعی در Checkpoint 1 تعیین شود |
+| آزمون | `xunit 2.4.1`، `xunit.runner.visualstudio 2.4.1`، `Microsoft.NET.Test.Sdk 15.9.0` و `Microsoft.AspNetCore.TestHost 2.1.1`؛ مجموع ۴۳ آزمون روی Runtime 2.1 موفق |
 
 `UseRouting/UseEndpoints`، Minimal APIs، `IWebHostEnvironment`، `TimeProvider`، `RandomNumberGenerator.GetBytes(int)` و `CryptographicOperations.FixedTimeEquals` در این هدف قابل فرض نیستند؛ معادل سازگار و مقایسهٔ ثابت‌زمان بازبینی‌شده لازم است. از SDK جدید برای توجیه تغییر target استفاده نشود.
 
