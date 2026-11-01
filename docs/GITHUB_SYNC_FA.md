@@ -1,6 +1,6 @@
 # اتصال GitHub و سیاست انتشار امن
 
-تاریخ `2026-11-01`؛ دامنهٔ این وظیفه فقط Git و مستندات است. Checkpoint 1 تکمیل شده و Checkpoint 2 شروع نشده است. رفتار برنامه، endpoint و SQL تغییری نمی‌کنند.
+گزارش اولیه در `2026-11-01` فقط Git و مستندات بود؛ در آن زمان Checkpoint 1 تکمیل و Checkpoint 2 شروع نشده بود. بخش‌های اولیه شاهد تاریخی همان انتشارند؛ وضعیت تأییدشدهٔ جدید 2C در انتهای این سند ثبت شده است.
 
 ## مقصد و نتیجهٔ بررسی اولیه
 
@@ -68,3 +68,13 @@ export اجرا شد و [نقشهٔ کامل SHAها](GIT_HISTORY_EXPORT.json) �
 checkpointهای بعدیِ مجاز و اعتبارسنجی‌شده به همین مخزن commit/push شوند. پیش از ارسال، fetch، URL، تغییرات و تمام تاریخچهٔ reachable **همان branch ارسالی** بررسی شوند؛ branch اصلیِ صرفاً محلی نباید وارد بررسی به‌عنوان محتوای مجاز ارسال شود. `git push --all`، `git push --mirror` و ارسال branch `local-original-history-2026-11-01` ممنوع‌اند. هیچ tag یا ref حامل تاریخچهٔ خصوصی منتشر نشود.
 
 force push، حذف commit remote، reset مخرب، ایجاد مخزن دیگر و شروع Checkpoint 2 مجاز نیستند. در تعارض تاریخچهٔ تازهٔ remote، ابتدا آن را حفظ و راهکار امن branch/PR یا merge را بررسی کنید. گزارش نهایی هر وظیفه فارسی و دارای نتیجهٔ واقعی Git/test/build و وضعیت مرحله باشد. این وظیفه چون فقط Git/مستندات است، تست اجرایی تازه نمی‌طلبد؛ ۴۳ آزمون Checkpoint 1 نتیجهٔ تاریخی است، نه اجرای دوبارهٔ این وظیفه.
+
+## انتشار تأییدشدهٔ Checkpoint 2C
+
+مجوز مستقل `553dc9cd-5abe-4eb0-9856-ee1763d5250b` فقط provisioning محلی 2C را پوشش داد؛ منع شروع Checkpoint 2 در گزارش تاریخی بالا، وضعیت این مجوز جدید نیست. commit پیاده‌سازی `bf1c3c759d163ee716947af46f074b20d60fc043` شامل ۲۳ فایل بررسی‌شده به `origin/main` در همین مقصد مجاز با push عادی ارسال شد. پس از ارسال، `ls-remote` و `origin/main` و HEAD محلی همین SHA را نشان دادند و اختلاف ancestry برابر `0/0` بود. remote فقط `main` داشت؛ branch اصلِ محلی ارسال نشد.
+
+با ابزار GitHub در همین commit، [walkthrough 2C](implementation/CHECKPOINT-02C-DATABASE-CREATION_FA.md) و [شاهد schema](checkpoint2c/SCHEMA_VERIFICATION.json) خوانده شدند. blob SHAهای remote به‌ترتیب `8879b0fef32ac56cfc91a9e8afc1fff98f89cb8a` و `017aaeda77c65d50b350310775b98cee909d6db7` دقیقاً با Git محلی برابر بودند؛ بنابراین مشاهدهٔ فایل‌ها جدا از موفقیت transport احراز شد. SHA اول مربوط به نسخهٔ walkthrough در commit پیاده‌سازی است؛ این گزارش تکمیلی، متن آن را به‌روز می‌کند.
+
+پیش از انتشار، مقصد/refs، محتوای بسته و تاریخچهٔ reachable بررسی شدند؛ blob ZIP خصوصی از ancestry ارسالی قابل دسترسی نبود و هیچ archive، فایل پایگاه/backup، credential یا خروجی bin/obj به بسته اضافه نشد. branch `local-original-history-2026-11-01` بدون تغییر روی `7e2d83ddeb33475d07f70f4471cd09e466f853a4` ماند. فایل untracked کاربر `src/Bazdid.Api/Properties/launchSettings.json` با همان hash اولیه حفظ شد و جزو commit نیست؛ worktree کاملاً خالی گزارش نمی‌شود.
+
+نتیجهٔ اجرایی تازهٔ این checkpoint: ۳۵ آزمون SQL rollback-only، چهار آزمون guard و ۴۳ آزمون برنامه موفق؛ build صفر warning/error. [شواهد تجمیعی](checkpoint2c/PROVISIONING_SUMMARY.json) تفکیک آن‌ها را ثبت می‌کند. پیشرفت **15% + 2 = 17%** است؛ 2D شروع نشده و O24 و حساب‌های runtime کم‌اختیار بازند. این ثبت نهاییِ صرفاً مستنداتی با commit جدا ارسال می‌شود؛ SHA همان commit و آخرین تطبیق remote در گزارش تحویل از Git واقعی خوانده می‌شوند تا سند به SHA خودش ارجاع دوری ندهد.

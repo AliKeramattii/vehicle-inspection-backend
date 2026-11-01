@@ -126,7 +126,7 @@ SELECT name,OBJECT_NAME(parent_object_id) AS ParentTable,
 FROM sys.foreign_keys WHERE OBJECT_NAME(parent_object_id) LIKE N'BAZDID%';
 ```
 
-برای جزئیات ترتیب ستون index/FK و trusted بودن قیود از [query کامل metadata](../../database/verification/checkpoint2c_metadata.sql) استفاده کنید. snapshotها، داده یا backup نیستند و credential ندارند. فایل‌های mdf/ldf/log خصوصی خارج Git ماندند؛ منبع کارگزاری/Frontend تغییر نکرد. فقط بستهٔ بررسی‌شده commit/push می‌شود؛ SHA/HEAD و فایل remote در گزارش تحویل و Git واقعی احراز شوند.
+برای جزئیات ترتیب ستون index/FK و trusted بودن قیود از [query کامل metadata](../../database/verification/checkpoint2c_metadata.sql) استفاده کنید. snapshotها، داده یا backup نیستند و credential ندارند. فایل‌های mdf/ldf/log خصوصی خارج Git ماندند؛ منبع کارگزاری/Frontend تغییر نکرد. بستهٔ بررسی‌شده در commit `bf1c3c759d163ee716947af46f074b20d60fc043` با push عادی به `origin/main` ارسال شد؛ HEAD محلی/remote برابر و خود walkthrough و شاهد schema از GitHub با blob SHA برابر خوانده شدند. جزئیات و تمایز commit پیاده‌سازی از commit تکمیل گزارش در [گزارش همگام‌سازی](../GITHUB_SYNC_FA.md) ثبت است.
 
 [PROVISIONING_SUMMARY.json](../checkpoint2c/PROVISIONING_SUMMARY.json) مرجع تجمیعیِ مجوز، تنظیمات، hash فایل‌های بازبینی‌شده و تفکیک آزمون SQL/برنامه است. کنترل پیش از commit: ۲۳ فایل بسته، ۱۰ Markdown، ۱۴۳ پیوند محلی و یک anchor معتبر؛ ۱۲۲ فایل فعلی و ۱۵۰ blob تاریخی main بدون هشدار راز باقی‌مانده اسکن شدند. ۴۸ واحد SQL شامل ۳۵ CASE و شش نمونهٔ خواندنی مستندات parse شدند؛ پنج بلوک PowerShell و ابزار نیز از نظر syntax صحیح‌اند. این کنترل استاتیک از اجرای واقعی ۳۵ آزمون SQL و ۴۳ آزمون برنامه جداست. فایل untracked کاربر با hash ثابت حفظ و از staging کنار گذاشته شد.
 
