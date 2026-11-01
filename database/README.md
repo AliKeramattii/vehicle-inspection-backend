@@ -1,19 +1,32 @@
 # پایگاه داده
 
-در Checkpoint 2A/2B، فقط کشف محلی و آماده‌سازی برای بازبینی مجاز است. هیچ پایگاه، جدول، نقش یا migration اجرا نشده است. فایل‌های `docs/reference/sql/` پیشنهاد تاریخی‌اند و نباید اجرا شوند.
+در Checkpoint 2C و با مجوز صریح مالک، `BAZDID_Development` و فقط سه جدول dbo روی SQL Server 2019 محلی ایجاد و تأیید شدند. compatibility برابر ۱۵۰، collation برابر `SQL_Latin1_General_CP1_CI_AS`، recovery برابر SIMPLE و شمار ردیف هر سه جدول پس از ۳۵ آزمون rollback-only صفر است. هیچ role/login/user/grant، journal، Info یا جدول auth/media ایجاد نشد. فایل‌های `docs/reference/sql/` تاریخی‌اند و اجرا نشده‌اند.
 
 | فایل | وضعیت و کاربرد |
 |---|---|
 | [server_inventory.sql](discovery/server_inventory.sql) | فقط‌خواندنی؛ روی master محلی مصوب اجرا و خروجی آن ثبت شد |
 | [source_object_metadata.sql](discovery/source_object_metadata.sql) | فقط‌خواندنی و بسته تا تعیین نام/مجوز واقعی؛ روی کارگزاری اجرا نشده |
-| [create_development_database.review.sql](proposals/create_development_database.review.sql) | پیش‌نویس ساخت پایگاه تست؛ اجرا نشده |
-| [initial_tables.review.sql](proposals/initial_tables.review.sql) | پیش‌نویس سه جدول BAZDID، بدون seed یا migration اجرایی؛ اجرا نشده |
+| [create_development_database.review.sql](proposals/create_development_database.review.sql) | ساخت DB فقط با نسخهٔ حافظه‌ای مجاز اجرا شد؛ فایل همچنان بسته است |
+| [initial_tables.review.sql](proposals/initial_tables.review.sql) | نسخهٔ final سه جدول و CHECKهای اصلاح‌شده؛ اجرا از ابتدا و اصلاح محدود در walkthrough ثبت است؛ فایل بسته می‌ماند |
+| [repair_tenant_checks.review.sql](proposals/repair_tenant_checks.review.sql) | شاهد اصلاح سه CHECK tenant در همین 2C، با WITH CHECK و transaction؛ فایل بسته است |
 | [permissions.review.sql](proposals/permissions.review.sql) | پیش‌نویس دو نقش و حساب‌های Windows ازپیش‌مصوب؛ اجرا نشده |
+| [Invoke-BazdidDevelopmentDatabase.ps1](tools/Invoke-BazdidDevelopmentDatabase.ps1) | ابزار محدود Inspect/CreateDatabase/CreateTables/RepairTenantChecks/Verify/Test؛ بدون SQL یا مقصد دلخواه |
+| [schema_expected.json](verification/schema_expected.json) و [checkpoint2c_metadata.sql](verification/checkpoint2c_metadata.sql) | قرارداد و تطبیق مستقیم schema واقعی، index/FK/CHECK/column و شمار صفر |
+| [checkpoint2c_rollback_cases.sql](verification/checkpoint2c_rollback_cases.sql) | ۳۵ CASE ساختگی؛ فقط از ابزار با transaction/rollback مستقل اجرا شود، نه مستقیم |
 
-تمام فایل‌های `.review.sql` با `@AllowDdl = 0` و مرجع تصویب NULL بسته‌اند. تغییر flag مجوز ایجاد نمی‌کند؛ بازبینی schema، تأیید تازهٔ مالک، احراز دوبارهٔ مقصد و حساب اجرای DDL لازم است. این فایل‌ها از startup برنامه فراخوانی نمی‌شوند.
+تمام `.review.sql`ها با `@AllowDdl = 0` و approval NULL بسته‌اند. ابزار برای DDL فقط با switch صریح، شناسهٔ مجوز و hash فایل بازبینی‌شده، دو مقدار را در حافظه مجاز می‌کند؛ فایل source باز نمی‌شود. هویت همان ماشین/Windows/Shared memory، major version ۱۵، instance دقیق، نبود linked server/Cluster/HADR/DB کاربری دیگر و defaults/دیسک دوباره کنترل می‌شوند. هیچ DROP/overwrite/attach یا reset خودکار وجود ندارد. روی پایگاه موجود CreateDatabase و روی schema موجود CreateTables متوقف می‌شوند؛ تغییر flag، مجوز جدید نمی‌سازد. هیچ فایل از startup برنامه فراخوانی نمی‌شود.
 
 برای کشف فقط‌خواندنی، در SSMS با Windows Authentication به `lpc:.\SQLSERVER2019` و پایگاه `master` متصل شوید و فقط فایل inventory را اجرا کنید. مسیر نصب موجود `sqlcmd` برابر `C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\SQLCMD.EXE` است؛ در صورت استفاده، همین مقصد/پایگاه و Windows Authentication و توقف روی خطا انتخاب شوند. گزینهٔ ApplicationIntent جای مجوز SELECT را نمی‌گیرد.
 
-پیش‌نیاز مرحلهٔ بعد: SQL instance محلی تأییدشده، بررسی patch/مجوز استفاده/فضای دیسک و model توسط DBA، تعیین recovery و schema تست، دو هویت Windows مستقلِ کم‌اختیار، secret store/ACL و TLS مصوب، schema بازبینی‌شده و مجوز صریح DDL. در این میزبان ابزارها نصب‌اند؛ نصب یا شروع خودکار سرویس انجام نمی‌شود. روی میزبان تازه، نسخه/edition، پیش‌نیاز سیستم‌عامل، مجوز استفاده، patch و ابزار رسمی باید پیش از نصب توسط زیرساخت تصویب شوند.
+برای بررسی تحویل 2C از ریشهٔ مخزن:
 
-[گزارش 2A/2B](../docs/CHECKPOINT2A_2B_REPORT_FA.md) نتایج واقعی و [طراحی داده](../docs/DATABASE_DESIGN_FA.md) ستون‌ها، اتصال‌ها، fixture، قیود و محدودیت‌ها را ثبت می‌کنند. rollback اجرایی و آزمایش مجوزها به 2C–2G و تصویب بعدی تعلق دارند؛ این بسته هیچ DROP یا cleanup پایگاه ندارد.
+```powershell
+.\database\tools\Invoke-BazdidDevelopmentDatabase.ps1 -Action Inspect
+.\database\tools\Invoke-BazdidDevelopmentDatabase.ps1 -Action Verify
+```
+
+Verify این مرحله، پایگاه خالیِ تحویل 2C را انتظار دارد و هیچ دادهٔ موجودی پاک نمی‌کند. برای Test، فایل CASEها باید بازبینی و hash آن به ابزار همراه switch ApproveRollbackTests و مرجع مجوز داده شود؛ تست مستقیم مجاز نیست. counterهای identity/rowversion با rollback ممکن است جلو بروند؛ ردیفی باقی نمانده و reseed لازم نیست.
+
+پیش‌نیاز SQL runtime آینده: دو هویت Windows مستقل و کم‌اختیارِ مصوب، آزمون permission مؤثر، secret store/ACL، TLS معتبر و حل سازگاری client در O24. این هویت‌ها تحویل نشده‌اند؛ sysadmin provisioning برای برنامه ممنوع است. patch موتور RTM باید توسط DBA بازبینی شود. هیچ نرم‌افزار یا سرویسی نصب/تغییر نشد؛ روی میزبان تازه نصب نیازمند تصویب جداست.
+
+[walkthrough 2C](../docs/implementation/CHECKPOINT-02C-DATABASE-CREATION_FA.md) توالی واقعی، hashها، خطا و رفع آن، تنظیم فایل‌ها، فرمان‌های بازتولید و VS Code را دارد؛ [schema واقعی](../docs/checkpoint2c/SCHEMA_VERIFICATION.json) و [نتایج rollback](../docs/checkpoint2c/ROLLBACK_TEST_RESULTS.json) شاهدند. [طراحی داده](../docs/DATABASE_DESIGN_FA.md) بقیهٔ جدول‌های آینده را از سه جدول ساخته‌شده تفکیک می‌کند. ارتقای migration/repository و آزمون permission runtime هنوز انجام نشده؛ در پایان 2C توقف می‌شود و 2D شروع نشده است.

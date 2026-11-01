@@ -2,7 +2,7 @@
 
 این مخزن مستقل، پایهٔ توسعهٔ Backend برنامهٔ فارسی خودبازدید خودرو برای کارگزاری بیمه است. Frontend موجود در `C:\Projects\vehicle-inspection-integrated` فقط مرجع خواندنی است؛ دو مخزن ادغام نمی‌شوند.
 
-**وضعیت در 2026-11-01: Checkpoint 2A/2B در دامنهٔ کشف و آماده‌سازی کامل است؛ پیشرفت کل 15%.** API واقعی همچنان فقط foundation مرحلهٔ 1 است. پایگاه `BAZDID_Development` در آخرین کشف وجود نداشت؛ SQL runtime، OTP، Session، بازدید و upload پیاده نشده‌اند. scriptهای تازه صرفاً کشف خواندنی یا پیش‌نویس بازبینی‌اند و SQL مرجع تاریخی اجرا نشده است. 2C به تصویب صریح بعدی نیاز دارد.
+**وضعیت در 2026-11-01: Checkpoint 2C برای provisioning محلی تکمیل شد؛ پیشرفت کل 17%.** پایگاه `BAZDID_Development` و سه جدول dbo با metadata و ۳۵ آزمون SQL rollback-only تأیید شدند؛ هیچ ردیف تست باقی نماند. API همچنان foundation مرحلهٔ 1 است؛ SQL runtime، 2D، OTP، Session، بازدید و upload پیاده نشده‌اند. O24 و حساب‌های کم‌اختیار برنامه بازند؛ schema کارگزاری/Production تأیید نشده است. [فرایند واقعی و شواهد 2C](docs/implementation/CHECKPOINT-02C-DATABASE-CREATION_FA.md).
 
 ## فناوری و میزبانی
 
@@ -45,11 +45,11 @@ vehicle-inspection-backend/
   src/Bazdid.Api/                # WebHost + Startup + health و زیرساخت
   tests/Bazdid.UnitTests/
   tests/Bazdid.IntegrationTests/
-  database/                     # discovery فقط‌خواندنی و proposals بسته برای بازبینی
+  database/                     # discovery، reviewهای بسته، ابزار محلی و verification 2C
   deployment/iis/               # راهنما و web.config.example
 ```
 
-یک پروژهٔ API و دو پروژهٔ آزمون ساخته شده‌اند. پوشه‌های Application/Domain/Infrastructure فعلاً مرز مستند دارند و کد تجاری صوری ندارند. جدول‌های BAZDID یا adapter خواندن مبدأ هنوز ساخته نشده‌اند.
+یک پروژهٔ API و دو پروژهٔ آزمون ساخته شده‌اند. پوشه‌های Application/Domain/Infrastructure فعلاً مرز مستند دارند و کد تجاری صوری ندارند. سه جدول اولیه فقط در پایگاه توسعهٔ محلی ساخته شده‌اند؛ adapter مبدأ و repository برنامه هنوز ساخته نشده‌اند. برای metadata و شمار ردیف صفرِ تحویل 2C، از ریشه `.\database\tools\Invoke-BazdidDevelopmentDatabase.ps1 -Action Verify` را اجرا کنید؛ DDL مجدد یا reset خودکار وجود ندارد.
 
 ## ابزار و دستورهای بررسی‌شده
 

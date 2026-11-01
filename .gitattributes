@@ -4,3 +4,5 @@
 .gitignore text eol=lf
 .gitattributes text eol=lf
 docs/reference/** -text
+# ثبات بایت فایل‌های SQL/ابزار و hash بازبینی بین checkoutهای Windows
+database/** text eol=lf

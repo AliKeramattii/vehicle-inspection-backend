@@ -1,0 +1,537 @@
+{
+    "Status":  "Passed",
+    "Database":  "BAZDID_Development",
+    "TestCount":  35,
+    "Cases":  [
+                  {
+                      "Name":  "ValidInsertsAndDefaults",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+
+                                               ],
+                      "ObservedErrorNumbers":  [
+
+                                               ],
+                      "ConstraintNames":  [
+
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "DuplicateCustomerPrimaryKey",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+                                                   2627
+                                               ],
+                      "ObservedErrorNumbers":  [
+                                                   2627,
+                                                   3621
+                                               ],
+                      "ConstraintNames":  [
+                                              "PK_BAZDIDCustomerLinks"
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "DuplicateCustomerSourceKey",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+                                                   2601,
+                                                   2627
+                                               ],
+                      "ObservedErrorNumbers":  [
+                                                   2627,
+                                                   3621
+                                               ],
+                      "ConstraintNames":  [
+                                              "UQ_BAZDIDCustomerLinks_Source"
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "DuplicateRequestPrimaryKey",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+                                                   2627
+                                               ],
+                      "ObservedErrorNumbers":  [
+                                                   2627,
+                                                   3621
+                                               ],
+                      "ConstraintNames":  [
+                                              "PK_BAZDIDRequestContexts"
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "DuplicateRequestSourceKey",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+                                                   2601,
+                                                   2627
+                                               ],
+                      "ObservedErrorNumbers":  [
+                                                   2627,
+                                                   3621
+                                               ],
+                      "ConstraintNames":  [
+                                              "UQ_BAZDIDRequestContexts_Source"
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "MissingCustomerForeignKey",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+                                                   547
+                                               ],
+                      "ObservedErrorNumbers":  [
+                                                   547,
+                                                   3621
+                                               ],
+                      "ConstraintNames":  [
+                                              "FK_BAZDIDRequestContexts_Customer"
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "CrossTenantForeignKey",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+                                                   547
+                                               ],
+                      "ObservedErrorNumbers":  [
+                                                   547,
+                                                   3621
+                                               ],
+                      "ConstraintNames":  [
+                                              "FK_BAZDIDRequestContexts_Customer"
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "CrossSourceForeignKey",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+                                                   547
+                                               ],
+                      "ObservedErrorNumbers":  [
+                                                   547,
+                                                   3621
+                                               ],
+                      "ConstraintNames":  [
+                                              "FK_BAZDIDRequestContexts_Customer"
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "MultipleRequestsForOneCustomer",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+
+                                               ],
+                      "ObservedErrorNumbers":  [
+
+                                               ],
+                      "ConstraintNames":  [
+
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "SameSourceIdentityAcrossTenants",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+
+                                               ],
+                      "ObservedErrorNumbers":  [
+
+                                               ],
+                      "ConstraintNames":  [
+
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "CustomerIdentifierCasePreserved",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+
+                                               ],
+                      "ObservedErrorNumbers":  [
+
+                                               ],
+                      "ConstraintNames":  [
+
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "CustomerIdentifierTrailingSpacePreserved",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+
+                                               ],
+                      "ObservedErrorNumbers":  [
+
+                                               ],
+                      "ConstraintNames":  [
+
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "RequestIdentifierCaseAndSpacePreserved",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+
+                                               ],
+                      "ObservedErrorNumbers":  [
+
+                                               ],
+                      "ConstraintNames":  [
+
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "LargeSourceIdentifierRoundTrip",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+
+                                               ],
+                      "ObservedErrorNumbers":  [
+
+                                               ],
+                      "ConstraintNames":  [
+
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "CustomerRowVersionAndStaleUpdate",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+
+                                               ],
+                      "ObservedErrorNumbers":  [
+
+                                               ],
+                      "ConstraintNames":  [
+
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "RequestRowVersionAndStaleUpdate",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+
+                                               ],
+                      "ObservedErrorNumbers":  [
+
+                                               ],
+                      "ConstraintNames":  [
+
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "EmptyCustomerIdentifierRejected",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+                                                   547
+                                               ],
+                      "ObservedErrorNumbers":  [
+                                                   547,
+                                                   3621
+                                               ],
+                      "ConstraintNames":  [
+                                              "CK_BAZDIDCustomerLinks_Source"
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "NullCustomerIdentifierRejected",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+                                                   515
+                                               ],
+                      "ObservedErrorNumbers":  [
+                                                   515,
+                                                   3621
+                                               ],
+                      "ConstraintNames":  [
+
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "InvalidTenantAlphabetRejected",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+                                                   547
+                                               ],
+                      "ObservedErrorNumbers":  [
+                                                   547,
+                                                   3621
+                                               ],
+                      "ConstraintNames":  [
+                                              "CK_BAZDIDCustomerLinks_Tenant"
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "TenantUnderscoresAcceptedInAllTables",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+
+                                               ],
+                      "ObservedErrorNumbers":  [
+
+                                               ],
+                      "ConstraintNames":  [
+
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "UnicodeTenantRejected",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+                                                   547
+                                               ],
+                      "ObservedErrorNumbers":  [
+                                                   547,
+                                                   3621
+                                               ],
+                      "ConstraintNames":  [
+                                              "CK_BAZDIDCustomerLinks_Tenant"
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "UnicodeOpaqueSourceIdentifierPreserved",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+
+                                               ],
+                      "ObservedErrorNumbers":  [
+
+                                               ],
+                      "ConstraintNames":  [
+
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "InvalidEligibilityRejected",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+                                                   547
+                                               ],
+                      "ObservedErrorNumbers":  [
+                                                   547,
+                                                   3621
+                                               ],
+                      "ConstraintNames":  [
+                                              "CK_BAZDIDRequestContexts_Eligibility"
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "CustomerTimestampOrderRejected",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+                                                   547
+                                               ],
+                      "ObservedErrorNumbers":  [
+                                                   547,
+                                                   3621
+                                               ],
+                      "ConstraintNames":  [
+                                              "CK_BAZDIDCustomerLinks_Time"
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "RequestTimestampOrderRejected",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+                                                   547
+                                               ],
+                      "ObservedErrorNumbers":  [
+                                                   547,
+                                                   3621
+                                               ],
+                      "ConstraintNames":  [
+                                              "CK_BAZDIDRequestContexts_Time"
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "ReferralHmacWithoutKeyRejected",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+                                                   547
+                                               ],
+                      "ObservedErrorNumbers":  [
+                                                   547,
+                                                   3621
+                                               ],
+                      "ConstraintNames":  [
+                                              "CK_BAZDIDRequestContexts_Referral"
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "IdentityKeyWithoutHmacRejected",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+                                                   547
+                                               ],
+                      "ObservedErrorNumbers":  [
+                                                   547,
+                                                   3621
+                                               ],
+                      "ConstraintNames":  [
+                                              "CK_BAZDIDRequestContexts_Identity"
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "PreviousIdentityHmacWithoutKeyRejected",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+                                                   547
+                                               ],
+                      "ObservedErrorNumbers":  [
+                                                   547,
+                                                   3621
+                                               ],
+                      "ConstraintNames":  [
+                                              "CK_BAZDIDRequestContexts_PreviousIdentity"
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "PairedSyntheticHmacFieldsAccepted",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+
+                                               ],
+                      "ObservedErrorNumbers":  [
+
+                                               ],
+                      "ConstraintNames":  [
+
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "ReferralHashNotAssumedUnique",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+
+                                               ],
+                      "ObservedErrorNumbers":  [
+
+                                               ],
+                      "ConstraintNames":  [
+
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "AuditInvalidActorRejected",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+                                                   547
+                                               ],
+                      "ObservedErrorNumbers":  [
+                                                   547,
+                                                   3621
+                                               ],
+                      "ConstraintNames":  [
+                                              "CK_BAZDIDAuditLogs_Actor"
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "AuditInvalidCorrelationRejected",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+                                                   547
+                                               ],
+                      "ObservedErrorNumbers":  [
+                                                   547,
+                                                   3621
+                                               ],
+                      "ConstraintNames":  [
+                                              "CK_BAZDIDAuditLogs_Correlation"
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "AuditShortCorrelationRejected",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+                                                   547
+                                               ],
+                      "ObservedErrorNumbers":  [
+                                                   547,
+                                                   3621
+                                               ],
+                      "ConstraintNames":  [
+                                              "CK_BAZDIDAuditLogs_Correlation"
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "AnonymousAuditWithoutContextAccepted",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+
+                                               ],
+                      "ObservedErrorNumbers":  [
+
+                                               ],
+                      "ConstraintNames":  [
+
+                                          ],
+                      "RolledBack":  true
+                  },
+                  {
+                      "Name":  "ParentDeleteDoesNotCascade",
+                      "Status":  "Passed",
+                      "ExpectedErrorNumbers":  [
+                                                   547
+                                               ],
+                      "ObservedErrorNumbers":  [
+                                                   547,
+                                                   3621
+                                               ],
+                      "ConstraintNames":  [
+                                              "FK_BAZDIDRequestContexts_Customer"
+                                          ],
+                      "RolledBack":  true
+                  }
+              ],
+    "RollbackVerifiedAfterEveryCase":  true,
+    "FinalRowCounts":  [
+                           {
+                               "TableName":  "BAZDIDCustomerLinks",
+                               "RowCount":  0
+                           },
+                           {
+                               "TableName":  "BAZDIDRequestContexts",
+                               "RowCount":  0
+                           },
+                           {
+                               "TableName":  "BAZDIDAuditLogs",
+                               "RowCount":  0
+                           }
+                       ],
+    "IdentityAndRowVersionCountersMayAdvance":  true,
+    "ApplicationSqlIntegrationTested":  false
+}

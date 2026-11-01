@@ -1,0 +1,516 @@
+{
+  "Database": "BAZDID_Development",
+  "Compatibility": 150,
+  "Collation": "SQL_Latin1_General_CP1_CI_AS",
+  "Recovery": "SIMPLE",
+  "Schema": "dbo",
+  "Tables": {
+    "BAZDIDCustomerLinks": {
+      "Columns": [
+        {
+          "Name": "Id",
+          "Type": "uniqueidentifier",
+          "MaxLength": 16,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false
+        },
+        {
+          "Name": "BrokerageId",
+          "Type": "nvarchar",
+          "MaxLength": 64,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false,
+          "Collation": "Latin1_General_100_BIN2"
+        },
+        {
+          "Name": "SourceSystem",
+          "Type": "nvarchar",
+          "MaxLength": 64,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false,
+          "Collation": "Latin1_General_100_BIN2"
+        },
+        {
+          "Name": "SourceCustomerId",
+          "Type": "nvarchar",
+          "MaxLength": 256,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false,
+          "Collation": "Latin1_General_100_BIN2"
+        },
+        {
+          "Name": "SourceCustomerIdKey",
+          "Type": "varbinary",
+          "MaxLength": 256,
+          "IsComputed": true,
+          "IsIdentity": false,
+          "IsPersisted": true,
+          "Expression": "CONVERTvarbinary256SourceCustomerId"
+        },
+        {
+          "Name": "CreatedAtUtc",
+          "Type": "datetime2",
+          "MaxLength": 7,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false,
+          "Scale": 3,
+          "Default": "SYSUTCDATETIME"
+        },
+        {
+          "Name": "UpdatedAtUtc",
+          "Type": "datetime2",
+          "MaxLength": 7,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false,
+          "Scale": 3,
+          "Default": "SYSUTCDATETIME"
+        },
+        {
+          "Name": "RowVersion",
+          "Type": "timestamp",
+          "MaxLength": 8,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false
+        }
+      ],
+      "Indexes": [
+        {
+          "Name": "PK_BAZDIDCustomerLinks",
+          "Keys": [
+            "Id"
+          ],
+          "Unique": true,
+          "PrimaryKey": true,
+          "UniqueConstraint": false,
+          "Filter": null
+        },
+        {
+          "Name": "UQ_BAZDIDCustomerLinks_Source",
+          "Keys": [
+            "BrokerageId",
+            "SourceSystem",
+            "SourceCustomerIdKey"
+          ],
+          "Unique": true,
+          "PrimaryKey": false,
+          "UniqueConstraint": true,
+          "Filter": null
+        },
+        {
+          "Name": "UQ_BAZDIDCustomerLinks_TenantId",
+          "Keys": [
+            "BrokerageId",
+            "SourceSystem",
+            "Id"
+          ],
+          "Unique": true,
+          "PrimaryKey": false,
+          "UniqueConstraint": true,
+          "Filter": null
+        }
+      ],
+      "Checks": [
+        "CK_BAZDIDCustomerLinks_Source",
+        "CK_BAZDIDCustomerLinks_Tenant",
+        "CK_BAZDIDCustomerLinks_Time"
+      ]
+    },
+    "BAZDIDRequestContexts": {
+      "Columns": [
+        {
+          "Name": "Id",
+          "Type": "uniqueidentifier",
+          "MaxLength": 16,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false
+        },
+        {
+          "Name": "BrokerageId",
+          "Type": "nvarchar",
+          "MaxLength": 64,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false,
+          "Collation": "Latin1_General_100_BIN2"
+        },
+        {
+          "Name": "SourceSystem",
+          "Type": "nvarchar",
+          "MaxLength": 64,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false,
+          "Collation": "Latin1_General_100_BIN2"
+        },
+        {
+          "Name": "CustomerLinkId",
+          "Type": "uniqueidentifier",
+          "MaxLength": 16,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false
+        },
+        {
+          "Name": "SourceRequestId",
+          "Type": "nvarchar",
+          "MaxLength": 256,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false,
+          "Collation": "Latin1_General_100_BIN2"
+        },
+        {
+          "Name": "SourceRequestIdKey",
+          "Type": "varbinary",
+          "MaxLength": 256,
+          "IsComputed": true,
+          "IsIdentity": false,
+          "IsPersisted": true,
+          "Expression": "CONVERTvarbinary256SourceRequestId"
+        },
+        {
+          "Name": "ReferralLookupHmac",
+          "Type": "binary",
+          "MaxLength": 32,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": true
+        },
+        {
+          "Name": "ReferralKeyId",
+          "Type": "varchar",
+          "MaxLength": 32,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": true,
+          "Collation": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "Name": "IdentityHmac",
+          "Type": "binary",
+          "MaxLength": 32,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": true
+        },
+        {
+          "Name": "IdentityKeyId",
+          "Type": "varchar",
+          "MaxLength": 32,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": true,
+          "Collation": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "Name": "PreviousIdentityHmac",
+          "Type": "binary",
+          "MaxLength": 32,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": true
+        },
+        {
+          "Name": "PreviousIdentityKeyId",
+          "Type": "varchar",
+          "MaxLength": 32,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": true,
+          "Collation": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "Name": "EligibilityStatus",
+          "Type": "varchar",
+          "MaxLength": 16,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false,
+          "Collation": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "Name": "SourceVersion",
+          "Type": "nvarchar",
+          "MaxLength": 256,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": true,
+          "Collation": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "Name": "SourceRetrievedAtUtc",
+          "Type": "datetime2",
+          "MaxLength": 7,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false,
+          "Scale": 3
+        },
+        {
+          "Name": "CreatedAtUtc",
+          "Type": "datetime2",
+          "MaxLength": 7,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false,
+          "Scale": 3,
+          "Default": "SYSUTCDATETIME"
+        },
+        {
+          "Name": "UpdatedAtUtc",
+          "Type": "datetime2",
+          "MaxLength": 7,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false,
+          "Scale": 3,
+          "Default": "SYSUTCDATETIME"
+        },
+        {
+          "Name": "RowVersion",
+          "Type": "timestamp",
+          "MaxLength": 8,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false
+        }
+      ],
+      "Indexes": [
+        {
+          "Name": "PK_BAZDIDRequestContexts",
+          "Keys": [
+            "Id"
+          ],
+          "Unique": true,
+          "PrimaryKey": true,
+          "UniqueConstraint": false,
+          "Filter": null
+        },
+        {
+          "Name": "UQ_BAZDIDRequestContexts_Source",
+          "Keys": [
+            "BrokerageId",
+            "SourceSystem",
+            "SourceRequestIdKey"
+          ],
+          "Unique": true,
+          "PrimaryKey": false,
+          "UniqueConstraint": true,
+          "Filter": null
+        },
+        {
+          "Name": "IX_BAZDIDRequestContexts_Customer",
+          "Keys": [
+            "CustomerLinkId"
+          ],
+          "Unique": false,
+          "PrimaryKey": false,
+          "UniqueConstraint": false,
+          "Filter": null
+        },
+        {
+          "Name": "IX_BAZDIDRequestContexts_Referral",
+          "Keys": [
+            "BrokerageId",
+            "SourceSystem",
+            "ReferralKeyId",
+            "ReferralLookupHmac"
+          ],
+          "Unique": false,
+          "PrimaryKey": false,
+          "UniqueConstraint": false,
+          "Filter": "ReferralLookupHmacISNOTNULL"
+        }
+      ],
+      "Checks": [
+        "CK_BAZDIDRequestContexts_Source",
+        "CK_BAZDIDRequestContexts_Tenant",
+        "CK_BAZDIDRequestContexts_Eligibility",
+        "CK_BAZDIDRequestContexts_Referral",
+        "CK_BAZDIDRequestContexts_Identity",
+        "CK_BAZDIDRequestContexts_PreviousIdentity",
+        "CK_BAZDIDRequestContexts_Time"
+      ]
+    },
+    "BAZDIDAuditLogs": {
+      "Columns": [
+        {
+          "Name": "Id",
+          "Type": "bigint",
+          "MaxLength": 8,
+          "IsComputed": false,
+          "IsIdentity": true,
+          "IsNullable": false
+        },
+        {
+          "Name": "OccurredAtUtc",
+          "Type": "datetime2",
+          "MaxLength": 7,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false,
+          "Scale": 3,
+          "Default": "SYSUTCDATETIME"
+        },
+        {
+          "Name": "BrokerageId",
+          "Type": "nvarchar",
+          "MaxLength": 64,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false,
+          "Collation": "Latin1_General_100_BIN2"
+        },
+        {
+          "Name": "SourceSystem",
+          "Type": "nvarchar",
+          "MaxLength": 64,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false,
+          "Collation": "Latin1_General_100_BIN2"
+        },
+        {
+          "Name": "RequestContextId",
+          "Type": "uniqueidentifier",
+          "MaxLength": 16,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": true
+        },
+        {
+          "Name": "ActorType",
+          "Type": "varchar",
+          "MaxLength": 16,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false,
+          "Collation": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "Name": "ActorId",
+          "Type": "uniqueidentifier",
+          "MaxLength": 16,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": true
+        },
+        {
+          "Name": "ActionCode",
+          "Type": "varchar",
+          "MaxLength": 64,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false,
+          "Collation": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "Name": "OutcomeCode",
+          "Type": "varchar",
+          "MaxLength": 32,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false,
+          "Collation": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "Name": "ResourceType",
+          "Type": "varchar",
+          "MaxLength": 32,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false,
+          "Collation": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "Name": "ResourceId",
+          "Type": "uniqueidentifier",
+          "MaxLength": 16,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": true
+        },
+        {
+          "Name": "CorrelationId",
+          "Type": "char",
+          "MaxLength": 32,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": false,
+          "Collation": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        {
+          "Name": "MetadataCode",
+          "Type": "varchar",
+          "MaxLength": 64,
+          "IsComputed": false,
+          "IsIdentity": false,
+          "IsNullable": true,
+          "Collation": "SQL_Latin1_General_CP1_CI_AS"
+        }
+      ],
+      "Indexes": [
+        {
+          "Name": "PK_BAZDIDAuditLogs",
+          "Keys": [
+            "Id"
+          ],
+          "Unique": true,
+          "PrimaryKey": true,
+          "UniqueConstraint": false,
+          "Filter": null
+        },
+        {
+          "Name": "IX_BAZDIDAuditLogs_RequestTime",
+          "Keys": [
+            "RequestContextId",
+            "OccurredAtUtc",
+            "Id"
+          ],
+          "Unique": false,
+          "PrimaryKey": false,
+          "UniqueConstraint": false,
+          "Filter": null
+        },
+        {
+          "Name": "IX_BAZDIDAuditLogs_Correlation",
+          "Keys": [
+            "CorrelationId"
+          ],
+          "Unique": false,
+          "PrimaryKey": false,
+          "UniqueConstraint": false,
+          "Filter": null
+        }
+      ],
+      "Checks": [
+        "CK_BAZDIDAuditLogs_Tenant",
+        "CK_BAZDIDAuditLogs_Actor",
+        "CK_BAZDIDAuditLogs_Correlation"
+      ]
+    }
+  },
+  "ForeignKey": {
+    "Name": "FK_BAZDIDRequestContexts_Customer",
+    "Parent": "BAZDIDRequestContexts",
+    "Referenced": "BAZDIDCustomerLinks",
+    "ParentColumns": [
+      "BrokerageId",
+      "SourceSystem",
+      "CustomerLinkId"
+    ],
+    "ReferencedColumns": [
+      "BrokerageId",
+      "SourceSystem",
+      "Id"
+    ]
+  }
+}

@@ -19,6 +19,8 @@ BEGIN
 END;
 IF DB_NAME() <> @TestDatabase OR DB_ID() <= 4 OR @TestDatabase NOT LIKE N'BAZDID[_]%'
    OR @TestDatabase IS NULL OR @ExpectedInstance IS NULL
+   OR @TestDatabase <> N'BAZDID_Development' OR @ExpectedInstance <> N'SQLSERVER2019'
+   OR COALESCE(CONVERT(int,SERVERPROPERTY('ProductMajorVersion')),0) <> 15
    OR COALESCE(IS_SRVROLEMEMBER('sysadmin'), 0) <> 1
    OR CONVERT(int, SERVERPROPERTY('IsClustered')) <> 0
    OR CONVERT(int, SERVERPROPERTY('IsHadrEnabled')) <> 0
@@ -50,8 +52,8 @@ BEGIN TRY
         CONSTRAINT UQ_BAZDIDCustomerLinks_TenantId UNIQUE (BrokerageId, SourceSystem, Id),
         CONSTRAINT CK_BAZDIDCustomerLinks_Source CHECK (DATALENGTH(SourceCustomerId) > 0),
         CONSTRAINT CK_BAZDIDCustomerLinks_Tenant CHECK (
-            LEN(BrokerageId) > 0 AND BrokerageId NOT LIKE N'%[^A-Za-z0-9_-]%'
-            AND LEN(SourceSystem) > 0 AND SourceSystem NOT LIKE N'%[^A-Za-z0-9_-]%'),
+            LEN(BrokerageId) > 0 AND REPLACE(BrokerageId,N'-',N'') NOT LIKE N'%[^A-Za-z0-9_]%'
+            AND LEN(SourceSystem) > 0 AND REPLACE(SourceSystem,N'-',N'') NOT LIKE N'%[^A-Za-z0-9_]%'),
         CONSTRAINT CK_BAZDIDCustomerLinks_Time CHECK (UpdatedAtUtc >= CreatedAtUtc)
     );
     CREATE TABLE dbo.BAZDIDRequestContexts (
@@ -79,8 +81,8 @@ BEGIN TRY
             REFERENCES dbo.BAZDIDCustomerLinks (BrokerageId, SourceSystem, Id),
         CONSTRAINT CK_BAZDIDRequestContexts_Source CHECK (DATALENGTH(SourceRequestId) > 0),
         CONSTRAINT CK_BAZDIDRequestContexts_Tenant CHECK (
-            LEN(BrokerageId) > 0 AND BrokerageId NOT LIKE N'%[^A-Za-z0-9_-]%'
-            AND LEN(SourceSystem) > 0 AND SourceSystem NOT LIKE N'%[^A-Za-z0-9_-]%'),
+            LEN(BrokerageId) > 0 AND REPLACE(BrokerageId,N'-',N'') NOT LIKE N'%[^A-Za-z0-9_]%'
+            AND LEN(SourceSystem) > 0 AND REPLACE(SourceSystem,N'-',N'') NOT LIKE N'%[^A-Za-z0-9_]%'),
         CONSTRAINT CK_BAZDIDRequestContexts_Eligibility CHECK (EligibilityStatus IN ('Eligible', 'Ineligible', 'Unknown')),
         CONSTRAINT CK_BAZDIDRequestContexts_Referral CHECK (
             (ReferralLookupHmac IS NULL AND ReferralKeyId IS NULL) OR (ReferralLookupHmac IS NOT NULL AND ReferralKeyId IS NOT NULL)),
@@ -111,8 +113,8 @@ BEGIN TRY
         MetadataCode varchar(64) NULL,
         CONSTRAINT PK_BAZDIDAuditLogs PRIMARY KEY CLUSTERED (Id),
         CONSTRAINT CK_BAZDIDAuditLogs_Tenant CHECK (
-            LEN(BrokerageId) > 0 AND BrokerageId NOT LIKE N'%[^A-Za-z0-9_-]%'
-            AND LEN(SourceSystem) > 0 AND SourceSystem NOT LIKE N'%[^A-Za-z0-9_-]%'),
+            LEN(BrokerageId) > 0 AND REPLACE(BrokerageId,N'-',N'') NOT LIKE N'%[^A-Za-z0-9_]%'
+            AND LEN(SourceSystem) > 0 AND REPLACE(SourceSystem,N'-',N'') NOT LIKE N'%[^A-Za-z0-9_]%'),
         CONSTRAINT CK_BAZDIDAuditLogs_Actor CHECK (ActorType IN ('System', 'Anonymous', 'Customer', 'Staff')),
         CONSTRAINT CK_BAZDIDAuditLogs_Correlation CHECK (
             CorrelationId COLLATE Latin1_General_100_BIN2 NOT LIKE '%[^0-9a-f]%' AND LEN(CorrelationId) = 32)

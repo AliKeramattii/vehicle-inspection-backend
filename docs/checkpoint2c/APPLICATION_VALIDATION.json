@@ -1,0 +1,28 @@
+﻿{
+    "Sdk":  "2.1.818",
+    "Restore":  {
+                    "Command":  "dotnet restore Bazdid.sln --locked-mode",
+                    "ExitCode":  0
+                },
+    "Build":  {
+                  "Command":  "dotnet build Bazdid.sln --configuration Release --no-restore",
+                  "ExitCode":  0,
+                  "Warnings":  0,
+                  "Errors":  0
+              },
+    "Tests":  {
+                  "Command":  "dotnet test Bazdid.sln --configuration Release --no-build --no-restore",
+                  "ExitCode":  0,
+                  "AssemblyTotals":  [
+                                         15,
+                                         28
+                                     ],
+                  "AssemblyPassed":  [
+                                         15,
+                                         28
+                                     ],
+                  "Total":  43,
+                  "Passed":  43
+              },
+    "ApplicationSqlRepositoryTested":  false
+}

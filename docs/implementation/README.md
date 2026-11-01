@@ -1,6 +1,6 @@
 # راهنمای فرایند پیاده‌سازی Backend
 
-این صفحه، نقطهٔ ورود به توضیح «چگونه انجام شد» است. گزارش‌های معتبر قبلی در جای خود می‌مانند و محتوا دوباره کپی نمی‌شود. تاریخ نگهداری `2026-11-01`؛ مبنای شروع این وظیفه `a2e0958`؛ پیشرفت کل **15%** و سهم تغییر سیاست مستندات **0** است. SQL و Checkpoint 2C در این وظیفه اجرا/شروع نشده‌اند.
+این صفحه، نقطهٔ ورود به توضیح «چگونه انجام شد» است. گزارش‌های معتبر قبلی در جای خود می‌مانند و محتوا دوباره کپی نمی‌شود. وضعیت `2026-11-01`: provisioning واقعی 2C کامل و پیشرفت کل **17%** است؛ سهم سیاست مستندات صفر بود. آخرین اجرا و شواهد SQL در راهنمای 2C زیر ثبت‌اند؛ 2D شروع نشده است.
 
 ## مراحل دارای کار واقعی
 
@@ -10,8 +10,9 @@
 | 1 | [فرایند foundation و اجرای محلی](../CHECKPOINT1_IMPLEMENTATION_FA.md)، [شاهد HTTP](../checkpoint1/HTTP_SMOKE.json)، [audit](../checkpoint1/DEPENDENCY_SECURITY_FA.md) | API نسل 2.1، health و خطا/config/Swagger؛ build/test/run/publish محلی | [کد 613d351](https://github.com/AliKeramattii/vehicle-inspection-backend/commit/613d351)، [گزارش dafb037](https://github.com/AliKeramattii/vehicle-inspection-backend/commit/dafb037) |
 | 1.5 | [روش ممیزی DuberFront](../DUBERFRONT_CODE_AUDIT_FA.md)، [ماتریس نگاشت](../BROKERAGE_DATA_MAPPING_FA.md) | central directory، خواندن محدود متن، شاهدهای مسیر و ابهام‌های mapping؛ بدون اجرای source | [2e217a0](https://github.com/AliKeramattii/vehicle-inspection-backend/commit/2e217a0) |
 | 2A/2B | [فرایند کشف و آماده‌سازی](../CHECKPOINT2A_2B_REPORT_FA.md)، [راهنمای فایل‌های SQL](../../database/README.md)، [طراحی سه جدول](../DATABASE_DESIGN_FA.md) | metadata محلی و پیش‌نویس‌های بسته برای بازبینی؛ بدون ساخت DB/جدول/نقش یا repository | [a2e0958](https://github.com/AliKeramattii/vehicle-inspection-backend/commit/a2e0958) |
+| 2C | [ساخت و verification پایگاه](CHECKPOINT-02C-DATABASE-CREATION_FA.md)، [metadata](../checkpoint2c/SCHEMA_VERIFICATION.json)، [۳۵ آزمون SQL](../checkpoint2c/ROLLBACK_TEST_RESULTS.json)، [آزمون برنامه](../checkpoint2c/APPLICATION_VALIDATION.json) | DB محلی و فقط سه جدول، اصلاح CHECK با WITH CHECK و صفر ردیف پس از rollback؛ بدون SQL runtime | SHA بسته از Git واقعی و گزارش تحویل خوانده شود |
 
-گزارشی برای 2C، احراز هویت، Info، media، submit، کارکنان یا deployment واقعی ایجاد نشده است؛ این قابلیت‌ها هنوز پیاده نشده‌اند. طراحی آینده در اسناد معماری/PLAN باقی می‌ماند. به‌ویژه `BAZDID_Development` و جدول‌های آن در آخرین کشف وجود نداشتند؛ [آموزش VS Code](../guides/VSCODE_SQLSERVER_SETUP_FA.md) ادعای وجود آن‌ها نیست.
+گزارشی برای پیاده‌سازی 2D، احراز هویت، Info، media، submit، کارکنان یا deployment واقعی ایجاد نشده است؛ این قابلیت‌ها هنوز پیاده نشده‌اند. نبود DB در گزارش تاریخی 2A/2B و توقف قبلی 2D، مربوط به پیش از مجوز/اجرای 2C بود؛ اکنون پایگاه و سه جدول واقعاً وجود دارند و خالی‌اند. [آموزش VS Code](../guides/VSCODE_SQLSERVER_SETUP_FA.md) راه مشاهده است و اجرای تصویری VS Code را ادعا نمی‌کند.
 
 ## شیوهٔ استفاده و نگهداری
 
@@ -24,6 +25,6 @@
 
 فهرست بیست موضوع اجباری و استثنای موارد نامرتبط فقط در [قاعدهٔ دائمی AGENTS](../../AGENTS.md#implementation-walkthrough) نگهداری می‌شود. برای مراحل تاریخی، فقدان command log کامل با بازسازی حدسی پوشانده نمی‌شود. SHAهای قدیمی و عبارت‌های «remote وجود نداشت» در گزارش‌ها وضعیت همان زمان‌اند؛ [نقشهٔ تاریخچه](../GIT_HISTORY_EXPORT.json) و [گزارش GitHub](../GITHUB_SYNC_FA.md) تبدیل تاریخچه را توضیح می‌دهند.
 
-## کنترل همین تغییر مستنداتی
+## ثبت تاریخی کنترل سیاست مستندات؛ پیش از 2C
 
-این وظیفه فقط سیاست، فهرست راهنماها، آموزش ابزار و تکمیل محدود گزارش‌های قبلی است. SQL، build/test برنامه و runtime دوباره اجرا نشدند؛ ۴۳ آزمون ثبت‌شده مربوط به اجرای قبلی 2A/2B هستند. ۱۲۷ پیوند/یک anchor، fence و تطابق نمونهٔ source در ۱۰ Markdown تأیید شدند. پنج نمونهٔ SQL فقط‌خواندنی و پنج بلوک PowerShell فقط parse شدند و اجرا نشدند؛ اسکن ۱۱۱ فایل/۱۳۹ blob تاریخی main هشدار راز باقی‌مانده نداشت. diff مستنداتی است و درصد تغییر ندارد. نتیجهٔ نهایی همگام‌سازی امن main و SHA از Git واقعی و گزارش تحویل خوانده شوند؛ [PLAN](../../PLAN.md) شاهد کنترل این نگهداری است.
+در وظیفهٔ سیاست مستندات، فقط راهنما و گزارش‌ها تکمیل و SQL/build/test دوباره اجرا نشدند؛ ۴۳ آزمون آن زمان شاهد 2A/2B بود. ۱۲۷ پیوند/یک anchor، نمونهٔ source و ۱۰ Markdown تأیید شدند؛ پنج SQL فقط‌خواندنی و پنج PowerShell فقط parse شدند، اسکن ۱۱۱ فایل/۱۳۹ blob هشدار راز نداشت و سهم پیشرفت صفر بود. این آمار تاریخی است؛ اجرای واقعی و آزمون تازهٔ provisioning 2C در ردیف و walkthrough خودش ثبت است. SHA و همگام‌سازی از Git و تحویل مربوط خوانده شوند؛ [PLAN](../../PLAN.md) مرجع پیشرفت جاری است.

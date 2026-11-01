@@ -1,6 +1,6 @@
 # برنامهٔ مرجع پیاده‌سازی Backend بازدید
 
-تاریخ: `2026-11-01`؛ مخزن: `C:\Projects\vehicle-inspection-backend`. **Checkpoint 0، 1 و 1.5 کامل‌اند؛ فقط Checkpoint 2A/2B طبق پیوست `66aec801-d9a2-4943-a6e3-418104144dba` و پاسخ تکمیلی کاربر مجاز شده‌اند.** کشف محلی و آماده‌سازی scriptها انجام می‌شود؛ اجرای DDL، migration، repository و شروع 2C–2G مجوز تازه می‌خواهند. مقصد تست تأییدشده `(local)\SQLSERVER2019` / `BAZDID_Development` با Windows Authentication است؛ پایگاه هنوز ساخته نشده است.
+تاریخ: `2026-11-01`؛ مخزن: `C:\Projects\vehicle-inspection-backend`. **Checkpoint 2C طبق مجوز صریح `553dc9cd-5abe-4eb0-9856-ee1763d5250b` در دامنهٔ provisioning محلی تکمیل شد؛ پیشرفت 17%.** پایگاه `BAZDID_Development` و فقط سه جدول dbo روی `(local)\SQLSERVER2019` با Windows Authentication ساخته و با metadata و transactionهای rollback-only تأیید شدند. 2D–2G، SQL runtime، auth و Production شروع نشده‌اند. نقش‌ها/حساب‌های برنامه و O24 باقی‌اند و مانع تکمیل DDL مجاز این مرحله نبودند.
 
 ## هدف، معماری و وابستگی
 
@@ -10,8 +10,8 @@
 flowchart LR
   C0["0: برنامه‌ریزی"] --> A["اجازهٔ صریح کاربر"]
   A --> C1["1: اسکلت"] --> C15["1.5: ممیزی سورس و نگاشت"]
-  C15 --> AB["2A/2B: کشف محلی و آماده‌سازی"] --> G2["بازبینی schema و تصویب DDL/2C"]
-  G2 --> C2["2C–2G: SQL تست و adapter"] --> C3["3: احراز و نشست"]
+  C15 --> AB["2A/2B: کشف محلی و آماده‌سازی"] --> G2["2C: ساخت و verification تست محلی"]
+  G2 --> C2["2D–2G: reader، SQL runtime و پذیرش"] --> C3["3: احراز و نشست"]
   C3 --> C4["4: اطلاعات و بازدید حداقلی"] --> C5["5: گردش بازدید"] --> C6["6: رسانه"] --> C7["7: ارسال و رسید"]
   C7 --> C9["9: یکپارچه‌سازی مشتری و staging"]
   C7 --> C8["8: ماژول‌های بعدی با اجازهٔ جدا"]
@@ -28,8 +28,9 @@ flowchart LR
 - [x] تصویب صریح کاربر برای Checkpoint 1 در پیوست `9a55d0f7-876a-466b-b0d7-355974f22b9d`، تاریخ `2026-11-01`.
 - [x] Phase 1 / Checkpoint 1: اسکلت ASP.NET Core 2.1؛ restore/build، ۴۳ آزمون، HTTP واقعی loopback و publish محلی موفق.
 - [x] Checkpoint 1.5: ممیزی امن DuberFront، ماتریس نگاشت مبتنی بر شاهد، تصمیم‌های باز و برنامهٔ SQL؛ طبق پیوست `a325fb13-5239-47f3-9898-b258aed137e3` در `2026-11-01`. گزارش و کنترل‌های این بسته در [DUBERFRONT_CODE_AUDIT_FA.md](docs/DUBERFRONT_CODE_AUDIT_FA.md) است؛ هیچ پیاده‌سازی SQL آغاز نشد.
-- [x] Checkpoint 2A/2B در دامنهٔ کشف محلی/آماده‌سازی برای بازبینی؛ محیط عملیاتی تست هنوز provision نشده و schema کارگزاری حل نشده است. [گزارش واقعی](docs/CHECKPOINT2A_2B_REPORT_FA.md).
-- [ ] Phase 1 / Checkpoint 2 کامل: اجرای مصوب SQL تست و adapter مبدأ؛ 2C–2G هنوز شروع نشده‌اند.
+- [x] Checkpoint 2A/2B در دامنهٔ کشف/آماده‌سازی؛ نبود DB در زمان تحویل آن‌ها تاریخی است و سپس در 2C ساخته شد. schema کارگزاری همچنان حل نشده است. [گزارش همان مرحله](docs/CHECKPOINT2A_2B_REPORT_FA.md).
+- [x] Checkpoint 2C: provisioning پایگاه و سه جدول؛ ۳۵ آزمون SQL rollback-only، verification metadata و ۴۳ آزمون موجود برنامه موفق؛ [walkthrough و شواهد](docs/implementation/CHECKPOINT-02C-DATABASE-CREATION_FA.md).
+- [ ] Phase 1 / Checkpoint 2 کامل: 2D–2G و SQL runtime/adapter واقعی هنوز اجرا نشده‌اند.
 - [ ] Phase 1 / Checkpoint 3: OTP و session.
 - [ ] Phase 1 / Checkpoint 4: اطلاعات و `BAZDIDInfo`.
 - [ ] Phase 1 / Checkpoint 5: گردش بازدید و سیاست مدرک.
@@ -69,9 +70,9 @@ flowchart LR
 - **اعتبارسنجی:** ۳۱ پیوند Markdown و ۳۱ کنترل ساختاری شاهد عبور کردند؛ ۱۰۳ فایل نسخهٔ قابل انتشار و ۱۲۱ blob تاریخی main بدون هشدار راز باقی‌مانده بررسی شدند. تنها fixture URL اعتبارسنجیِ تست موجود جداگانه تأیید شد. diff فقط پنج سند است و hash آرشیو تغییر نکرده؛ fetch پیش از commit اختلاف `0/0` با origin/main داشت. source/API/SQL و رفتار برنامه تغییر نمی‌کنند؛ ۴۳ آزمون موفق، نتیجهٔ تاریخی Checkpoint 1 است.
 - **نقطهٔ توقف:** پس از ثبت و همگام‌سازی همین بسته توقف؛ بسته‌های زیر برنامه‌اند و مجوز اجرا نیستند.
 
-## Checkpoint 2 — SQL Server تست و adapter کارگزاری؛ فقط 2A/2B مجاز
+## Checkpoint 2 — SQL Server تست و adapter کارگزاری؛ تا provisioning مرحلهٔ 2C
 
-- **پیش‌نیاز اجرا:** بازبینی خروجی 2A/2B، schema/حساب‌ها و تصویب تازهٔ DDL و 2C؛ Production ممنوع. مجوز فعلی فقط metadata محلی و پیش‌نویس‌های قابل بازبینی را پوشش می‌دهد.
+- **پیش‌نیاز ادامه:** 2C محلی اجرا و تأیید شد؛ دامنهٔ بعدی به دستور جدا و بررسی دوبارهٔ پیش‌نیاز نیاز دارد. Production، هویت‌های runtime و reader واقعی مجوز/قرارداد جدا می‌خواهند.
 - **دامنه:** connection factory، transaction، scriptهای شماره‌دار تست، تفکیک source read/BAZDID write، قرارداد منطقی reader و fixture کاملاً ساختگی. adapter واقعی فقط با mapping و مجوز جدا.
 - **جدول‌ها:** `BAZDIDCustomerLinks`، `BAZDIDRequestContexts` و `BAZDIDAuditLogs` در پایگاه تست؛ schema مالک با DBA. journal اختیاری SQL نیاز به نام و تصویب تازه دارد.
 - **APIها:** endpoint عمومی جدید ندارد؛ resolver از طریق service داخلی و آزمون adapter کنترل می‌شود.
@@ -85,7 +86,7 @@ flowchart LR
 
 - [x] **2A — کشف محلی و ثبت ابهام منبع:** اتصال Windows روی shared memory به همان رایانه موفق بود؛ SQL Server Standard x64 نسخهٔ `15.0.2000.5 / RTM`، چهار پایگاه سیستمی با compatibility `150` و collation `SQL_Latin1_General_CP1_CI_AS` مشاهده شدند. پایگاه کاربری و linked server وجود نداشت؛ Cluster/HADR غیرفعال بود. فقط master catalog خوانده شد. script فقط‌خواندنیِ metadata شیء برای DBA آماده است؛ تعیین authoritative context، schema جاری، referral، trusted mobile و eligibility در O01/O20–O22 باز می‌ماند و Production خوانده نشده است.
 - [x] **2B — آماده‌سازی برای بازبینی:** کاربر نام `BAZDID_Development` و Windows Authentication محلی را تأیید کرد؛ DB_ID آن NULL است و پایگاه ساخته نشده. طرح سه جدول، factory/مجوز/fixture و scriptهای ساخت پایگاه، سه جدول و نقش‌ها آماده شدند؛ تمام DDLها با flag صفر بسته‌اند. حساب فعلی sysadmin فقط برای discovery استفاده شد؛ دو حساب کم‌اختیار برنامه هنوز تعیین/ساخته/آزموده نشده‌اند. این تکمیل، آماده‌سازی است و provision شدن محیط تست را ادعا نمی‌کند.
-- [ ] **2C — طراحی و scriptهای اولیه:** پیش از افزودن SQL client، سازگاری دقیق با .NET Core 2.1 و وابستگی‌ها/امنیت بررسی و نسخه pin شود. طرح فقط `BAZDIDCustomerLinks`، `BAZDIDRequestContexts` و `BAZDIDAuditLogs` را با نوع، nullability، طول، UTC، constraint، index و `rowversion` متناسب نهایی کند. schema مالک با DBA مصوب؛ تاریخچهٔ migration در صورت تصویب نیز پیشوند BAZDID داشته باشد. هیچ تغییر به جدول/index مبدأ، FK حدسی یا DDL خودکار startup مجاز نیست.
+- [x] **2C — provisioning محلی طبق دامنهٔ تازهٔ مالک:** فقط `dbo.BAZDIDCustomerLinks`، `dbo.BAZDIDRequestContexts` و `dbo.BAZDIDAuditLogs` ساخته شدند. compatibility 150، collation مصوب محلی و SIMPLE؛ ۳۹ ستون، ۱۰ index، سه PK، سه unique، یک FK، ۱۳ CHECK trusted/فعال، دو rowversion و دو computed key تأیید شدند. عیب alphabet در CHECKهای tenant در همان سه جدول با WITH CHECK رفع و ۳۵ CASE با rollback و صفر ردیف نهایی موفق شدند. نقش/حساب جدید یا journal ساخته نشد؛ O24 طبق دستور جدید به SQL runtime آینده موکول شد و dependency برنامه تغییر نکرد.
 - [ ] **2D — reader و قرارداد:** `IBrokerageRequestReader` و snapshot از ماتریس نگاشت پیاده شوند؛ حالت‌های Found/NotFound/Ambiguous/Ineligible/Unavailable و Missing/Invalid جدا باشند. fixture مستقل `A4K9P2` فقط Development/Test و بدون SMS باشد. real reader فقط پس از تصویب mapping/مجوز، با SQL پارامتری و SELECT محدود به اشیای دقیق ساخته شود؛ وجود نام `Duber.OrderSales` در source به‌تنهایی مجوز query نیست.
 - [ ] **2E — طرح persistence اطلاعات:** قرارداد snapshot و فهرست فیلدهای نهایی `BAZDIDInfo`، مقدار/منشأ/وضعیت اعتبار، شناسه و نسخهٔ منبع، زمان دریافت UTC، رفتار Missing/Invalid/zero و refresh مشخص شوند. ذخیرهٔ نهایی و منشأ هر فیلد باید transaction و کنترل نسخه داشته باشد و به Session متکی نباشد. این بسته طرح ورودی Checkpoint 4 را آماده می‌کند؛ ساخت/نوشتن `BAZDIDInfo` همچنان در Checkpoint 4 است و scope سه جدول اولیه افزایش نمی‌یابد.
 - [ ] **2F — قیود و آزمون:** یکتایی linkage در حوزهٔ tenant/source و شناسه‌های مبدأ، ارتباط BAZDID درخواست/مشتری و indexهای lookup با نمونه‌های ساختگی بازبینی شوند؛ bigint درخواست در adapter به رشتهٔ دقیق تبدیل شود. unit برای normalization/نتایج/missing-vs-zero و شناسهٔ بزرگ؛ integration روی SQL Server تست واقعی برای یک مشتری/دو درخواست، مشتری null، موبایل متعارض، referral مبهم، timeout، منع نوشتن مبدأ، transaction، concurrency و idempotency موردنیاز همین repositories اجرا شود. SQLite/InMemory جای این شواهد نیست.
@@ -108,7 +109,7 @@ build تازه با SDK `2.1.818` صفر warning/error و هر ۴۳ آزمون �
 | 0 | 3% | 3% |
 | 1 | 6% | 6% |
 | 1.5 | 3% | 3% |
-| 2 | 12% | 3% فقط بررسی/آماده‌سازی 2A/2B |
+| 2 | 12% | 5% شامل 2A/2B و provisioning واقعی 2C |
 | 3 | 12% | 0% |
 | 4 | 10% | 0% |
 | 5 | 8% | 0% |
@@ -116,9 +117,9 @@ build تازه با SDK `2.1.818` صفر warning/error و هر ۴۳ آزمون �
 | 7 | 8% | 0% |
 | 8 | 12% | 0% |
 | 9 | 10% | 0% |
-| مجموع | 100% | **15%** |
+| مجموع | 100% | **17%** |
 
-مبنای پیش از این وظیفه `12%` بود. سهم 2A و 2B هرکدام `1.5` واحد درصد بابت پذیرش کشف واقعی و بستهٔ آماده‌سازیِ مجاز است؛ ساخت پایگاه/جدول، حل mapping واقعی یا اجرای SQL client بابت این سهم محاسبه نشده‌اند. تقسیم برنامه‌ریزیِ ۹ واحد باقیماندهٔ Checkpoint 2: `2C=2`، `2D=3`، `2E=1`، `2F=2`، `2G=1`. پس از تکمیل واقعی 2C و مجوزهایش، برآورد کل **17%** است؛ پس از تکمیل تمام Checkpoint 2، **24%**. این‌ها پیش‌بینی‌اند و اکنون امتیاز محسوب نمی‌شوند.
+مبنای پیش از 2A/2B برابر `12%` و سهم آن‌ها هرکدام `1.5` بود؛ سپس 2C با دامنهٔ صریح provisioning و شاهد واقعی `2` واحد کسب کرد: **15% + 2 = 17%**. از وزن ۱۲واحدی Checkpoint 2 هنوز ۷ واحد باقی است. پیشنهاد اولیه، 2D را سه واحد فرض می‌کرد؛ درخواست بعدی مالک برای reader ساختگی/قراردادها و فقط مرز SQL، هدف تجمعی `19%` را پیشنهاد کرد. بنابراین برآورد مشروط آن دو واحد است و یک واحدِ بخش SQL واقعیِ موکول‌شده هنوز تخصیص پذیرش ندارد؛ به کار ناتمام امتیاز داده نمی‌شود. وزن کل Checkpoint 2 و هدف پایان آن **24%** تغییر نکرده‌اند؛ تفکیک باقیمانده پیش از پذیرش دامنه‌های بعدی ثبت شود. این تغییر، مجوز شروع 2D یا SQL واقعی نیست.
 
 ## Checkpoint 3 — احراز هویت و نشست
 
@@ -235,6 +236,8 @@ build تازه با SDK `2.1.818` صفر warning/error و هر ۴۳ آزمون �
 
 ### بررسی مستقل پیش‌نیاز 2D — توقف به‌علت تکمیل‌نشدن 2C
 
+این بخش، ثبت تاریخیِ پیش از مجوز 2C است؛ فقدان پایگاه در آن زمان صحیح بود. وضعیت جدید و رفع مانع provisioning در بخش 2C پایین و walkthrough آن ثبت شده است؛ 2D همچنان اجرا نشده است.
+
 در `2026-11-01`، پیوست `3c739830-e19a-4456-beac-0d6f003b18a4` اجرای 2D را **فقط پس از احراز مستقل تکمیل 2C** مجاز کرد و در صورت ناقص‌بودن آن توقف خواست. مبنای Git این بررسی `7da8a42` بود؛ پس از fetch، HEAD و origin/main اختلاف `0/0` داشتند. فایل ثبت‌نشدهٔ `src/Bazdid.Api/Properties/launchSettings.json` از قبل وجود داشت و خارج از این کار حفظ شد.
 
 بررسی تازه با Windows Authentication به `lpc:.\SQLSERVER2019` فقط master catalog را خواند: InstanceName برابر `SQLSERVER2019`، نسخهٔ `15.0.2000.5`، transport برابر Shared memory و تطبیق ماشین با رایانهٔ محلی موفق بود. هویت بررسی sysadmin و دارای VIEW ANY DATABASE بود؛ بنابراین فقدان پایگاه ناشی از محدودیت دید catalog نبود. `DB_ID(N'BAZDID_Development')` مقدار NULL داد؛ فقط چهار پایگاه سیستمی در فهرستِ محدود بررسی دیده شدند. هیچ پایگاه کارگزاری یا ردیف تجاری خوانده نشد. استثنای TrustServerCertificate فقط برای همین اتصال metadata روی lpc محلی بود و به تنظیمات برنامه منتقل نشد.
@@ -252,7 +255,15 @@ build تازه با SDK `2.1.818` صفر warning/error و هر ۴۳ آزمون �
 
 کار لازم قبل از تلاش دوبارهٔ 2D: تصویب و اجرای جداگانهٔ 2C؛ نهایی‌سازی schema و SQL client، ساخت مصوب پایگاه و سه جدول، احراز کلید/index/constraint/FK و آزمون‌های واقعی/مجوزهای مربوط، ثبت walkthrough و پذیرش در PLAN. این درخواست مجوز تکمیل پنهانی 2C یا ایجاد DB/جدول نیست. **پیشرفت قبلی 15% + سهم این بررسی 0 = فعلی 15%**؛ پیش‌نیاز تغییر baseline به ۱۷٪ محقق نشده و 2D انجام نشده است. گام پیشنهادی بعد، 2C با تصویب صریح جداگانه است.
 
-آخرین checkpoint فنیِ مجاز **2A/2B** است؛ کشف و آماده‌سازی انجام شده و درصد کل **15%** است. [گزارش این مرحله](docs/CHECKPOINT2A_2B_REPORT_FA.md) نتیجهٔ SQL محلی و محدودیت‌ها را ثبت می‌کند. foundation تغییر نکرده؛ build و ۴۳ آزمون در 2A/2B موفق اجرا شدند و در نگهداری مستندات تکرار نشدند. schema کارگزاری، حساب‌های برنامه و سازگاری client بازند؛ audit امنیت پاک نیست و IIS واقعی آزموده نشده است. پیش از 2C، schema/scriptها و مجوز صریح DDL/ادامه لازم‌اند؛ هیچ پایگاه/جدول/نقش یا migration اجرا نشده است. OTP و استقرار واقعی خارج دامنه‌اند. برای ادامه [AI_CONTINUATION_FA.md](docs/AI_CONTINUATION_FA.md) را بخوانید.
+### تحویل Checkpoint 2C و توقف
+
+مجوز جدید مالک فقط DB محلی و سه جدول را پوشش داد. هویت SQL Server 2019 همان ماشین/Shared memory/Windows، نبود DB هدف و هر DB کاربری دیگر، نبود linked server/Cluster/HADR، defaults model و بیش از ۲۰۰ GiB فضای آزاد تازه بررسی شد. CREATE DATABASE و transaction ساخت سه جدول با فایل‌های guarded و نسخهٔ صرفاً حافظه‌ایِ مجاز اجرا شدند؛ reviewهای commitشونده همچنان flag صفر دارند. فقط یک اصلاح محدود سه CHECK لازم شد و هیچ constraint غیرفعال نشد.
+
+شواهد واقعی در [walkthrough 2C](docs/implementation/CHECKPOINT-02C-DATABASE-CREATION_FA.md)، [schema](docs/checkpoint2c/SCHEMA_VERIFICATION.json)، [۳۵ آزمون SQL](docs/checkpoint2c/ROLLBACK_TEST_RESULTS.json) و [restore/build/43 آزمون برنامه](docs/checkpoint2c/APPLICATION_VALIDATION.json) هستند. build صفر warning/error و هر سه فرمان exit صفر داشتند. تست‌های موجود برنامه، SQL repository یا permission runtime را ثابت نمی‌کنند. جدول‌ها صفر ردیف دارند؛ identity/rowversion counter ممکن است جلو رفته باشند.
+
+کنترل بسته پیش از commit: ۲۳ فایل، ۱۰ Markdown، ۱۴۳ پیوند محلی/یک anchor معتبر و اسکن ۱۲۲ فایل فعلی/۱۵۰ blob تاریخی main بدون هشدار راز باقی‌مانده. ۴۸ واحد SQL و پنج نمونهٔ PowerShell parse شدند؛ چهار آزمون منفی guard بدون mutation موفق بودند. source/runtime/dependency تغییر نکرده و فایل کاربر ثابت ماند؛ هیچ آرشیو، دادهٔ DB یا backup به بسته اضافه نشده است. این اعتبارسنجی جای آزمون‌های واقعی SQL و برنامه نیست و شواهد هرکدام جدا هستند.
+
+فقط schema/provisioning بخش O25 محلی حل شد. دو principal کم‌اختیار مصوب تحویل نشده‌اند؛ هیچ role/login/user یا grant ساخته/اعمال نشد. O24 برای runtime حل نشده و با System.Data در PowerShell دور زده یا بسته اعلام نمی‌شود. schema کارگزاری همچنان ناشناخته، audit امنیت قبلی پاک‌نشده و IIS واقعی آزموده‌نشده است. فایل untracked کاربر حفظ و API/Frontend/dependency دست‌نخورده‌اند. **پیشرفت 17%؛ توقف پس از 2C.** گام بعد 2D در درخواست جداگانه و پس از احراز دوبارهٔ این پیش‌نیاز است؛ برآورد پیشنهادی مالک پس از پذیرش آن ۱۹٪ است. برای ادامه [AI_CONTINUATION_FA.md](docs/AI_CONTINUATION_FA.md) را بخوانید.
 
 ## وظیفهٔ مستقل GitHub و گزارش‌دهی
 

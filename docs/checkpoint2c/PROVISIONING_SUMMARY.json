@@ -1,0 +1,82 @@
+{
+  "Date": "2026-11-01",
+  "AuthorizationReference": "553dc9cd-5abe-4eb0-9856-ee1763d5250b",
+  "StartingCommit": "da56c2d641aab928083f473b25d6539bb6766a34",
+  "Target": {
+    "Instance": "SQLSERVER2019",
+    "Database": "BAZDID_Development",
+    "ProductVersion": "15.0.2000.5",
+    "Transport": "Shared memory",
+    "Authentication": "Windows/NTLM",
+    "MachineMatchesLocal": true,
+    "UnexpectedUserDatabases": 0,
+    "LinkedServers": 0,
+    "ClusterOrHadrEnabled": false,
+    "DatabaseAbsentBeforeCreation": true,
+    "ModelUserObjectsBeforeCreation": 0
+  },
+  "DatabaseConfiguration": {
+    "name": "BAZDID_Development",
+    "compatibility_level": 150,
+    "collation_name": "SQL_Latin1_General_CP1_CI_AS",
+    "recovery_model_desc": "SIMPLE",
+    "state_desc": "ONLINE",
+    "is_read_only": false,
+    "is_auto_close_on": false,
+    "is_auto_shrink_on": false,
+    "page_verify_option_desc": "CHECKSUM"
+  },
+  "ExecutedDdl": [
+    {
+      "Action": "CreateDatabase",
+      "Sha256": "B9D042F0C31A6812C7F961DB24F54ED5FB781B538E69D6E12033766E4B02867B"
+    },
+    {
+      "Action": "CreateInitialTablesBeforeRepair",
+      "Sha256": "72BC89B64BC6EBBA76C381E48FD2993879DE7CA73CC7152C2535F0C62E4ECEB6"
+    },
+    {
+      "Action": "RepairTenantChecksWithCheck",
+      "Sha256": "8FAB224AAEB75AC85DBB82642631E3D297489272025FEEA47544E831F892D32C"
+    }
+  ],
+  "CurrentReviewedFileSha256": {
+    "database/proposals/create_development_database.review.sql": "b9d042f0c31a6812c7f961db24f54ed5fb781b538e69d6e12033766e4b02867b",
+    "database/proposals/initial_tables.review.sql": "297e1a12a1c8168310006cc53b336125e0d2b08c0cd9e928f657328017ffb9fc",
+    "database/proposals/repair_tenant_checks.review.sql": "8fab224aaeb75ac85dbb82642631e3d297489272025feea47544e831f892d32c",
+    "database/proposals/permissions.review.sql": "ebd64f297d0fa0061cae5041ea43422975978d839397ab9128e025f17116f907",
+    "database/verification/checkpoint2c_metadata.sql": "b6f4364846c1ff33d93589d6f59610e15803a1ece0f8bf38e1775b8e75597c66",
+    "database/verification/checkpoint2c_rollback_cases.sql": "ef247fdc4e485fbcdd570a1e60195e504a14bb6a122d939cd8b8dfbd6c0aba1d",
+    "database/verification/schema_expected.json": "9a746f6dcb10bb819b334081cd4bc9b11192bd2172e959b52c1b5bf367f8615b",
+    "database/tools/Invoke-BazdidDevelopmentDatabase.ps1": "5bbe155a572ba03296b08b67859b70e028e26dc09cbe99401abafb28e6e59a07"
+  },
+  "ReviewFilesRemainGuarded": true,
+  "PersistedBusinessTables": 3,
+  "SqlRollbackTestsPassed": 35,
+  "ExecutionGuardTestsPassed": 4,
+  "FinalRowCounts": [
+    {
+      "TableName": "BAZDIDCustomerLinks",
+      "RowCount": 0
+    },
+    {
+      "TableName": "BAZDIDRequestContexts",
+      "RowCount": 0
+    },
+    {
+      "TableName": "BAZDIDAuditLogs",
+      "RowCount": 0
+    }
+  ],
+  "ApplicationTestsPassed": 43,
+  "ApplicationSqlRepositoryTested": false,
+  "RuntimeDependenciesChanged": false,
+  "RuntimeRolesOrPrincipalsCreated": false,
+  "PermissionsScriptExecuted": false,
+  "ProductionAccessed": false,
+  "Checkpoint2DStarted": false,
+  "PreviousProgressPercent": 15,
+  "ProgressEarned": 2,
+  "CurrentProgressPercent": 17,
+  "ScopeExplanationFa": "شاهد تجمیعی اجرای محلی؛ schema و rollback SQL جدا از آزمون برنامه و بدون ادعای SQL runtime یا permission account برنامه است."
+}

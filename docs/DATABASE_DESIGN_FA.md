@@ -1,6 +1,6 @@
 # طرح پیشنهادی SQL Server
 
-**وضعیت 2A/2B: metadata محلی خوانده شد؛ DDL اجرا نشده است.** مقصد نهایی SQL Server موجود کارگزاری است و نسخه/schema واقعی آن هنوز تأیید نشده‌اند. instance محلی تست `SQLSERVER2019` نسخهٔ `15.0.2000.5` دارد؛ چهار پایگاه سیستمی با compatibility برابر `150` و collation برابر `SQL_Latin1_General_CP1_CI_AS` موجودند. `BAZDID_Development` هنوز وجود ندارد؛ مقدار ۱۵۰/این collation برای آن فقط پیشنهاد است. [گزارش شواهد](CHECKPOINT2A_2B_REPORT_FA.md). طرح تاریخی [۳۷ جدول](reference/sql/schema-manifest.json) پیشنهاد کامل محصول است و یکجا اجرا نمی‌شود.
+**وضعیت 2C: سه جدول اولیه در `BAZDID_Development` ساخته و روی SQL Server واقعی بررسی شدند.** instance محلی `SQLSERVER2019` نسخهٔ `15.0.2000.5` دارد؛ پایگاه تازه با compatibility `150`، collation برابر `SQL_Latin1_General_CP1_CI_AS` و recovery برابر SIMPLE است. چهار پایگاه سیستمی از نظر تنظیمات بررسی‌شده تغییر نکردند. این، schema کارگزاری یا SQL runtime برنامه نیست؛ نسخه/schema Production هنوز تأیید نشده‌اند. [فرایند و شواهد واقعی 2C](implementation/CHECKPOINT-02C-DATABASE-CREATION_FA.md). طرح تاریخی [۳۷ جدول](reference/sql/schema-manifest.json) پیشنهاد محصول است و یکجا اجرا نمی‌شود.
 
 ## اصول و تصمیم پیشنهادی
 
@@ -10,9 +10,11 @@ ADO.NET و SQL پارامتری، connection کوتاه‌عمر، timeout/cance
 
 شناسه‌های داخلی `uniqueidentifier` تصادفی سمت سرور، شناسهٔ خارجی رشته با طول مصوب mapping و زمان‌ها UTC با `datetime2(3)` پیشنهاد می‌شوند. فیلد nullable واقعاً `NULL` است. نسخهٔ هم‌زمانی `rowversion`، opaque و در DTO به base64 منتقل می‌شود؛ زمان یا عدد قابل افزایش در مرورگر نیست. هزینهٔ random GUID index در تست حجم سنجیده شود؛ clustered index فیزیکی الزاماً PK GUID نیست.
 
-## سه جدول اولیه — طراحی قابل بازبینی در 2A/2B
+## سه جدول اولیه — طراحی اجرا و آزموده‌شده در 2C محلی
 
-کاربر در پاسخ تکمیلی همین مرحله، آماده‌کردن script سه جدول را برای بازبینی مجاز کرد و اجرای هر DDL را به تصویب بعدی موکول کرد. [پیش‌نویس جدول‌ها](../database/proposals/initial_tables.review.sql) فقط برای پایگاه خالیِ محلی است. `dbo` پیشنهاد همین تست است؛ schema کارگزاری هنوز مصوب نیست. تمام طول‌ها و نام‌های این بخش، **طراحی BAZDID** هستند و mapping فیزیکی کارگزاری محسوب نمی‌شوند. هیچ master مشتری، موبایل plaintext، referral خام یا رسانه‌ای ذخیره نمی‌شود.
+در 2A/2B فقط script برای بازبینی تهیه شد؛ سپس مالک در `553dc9cd-5abe-4eb0-9856-ee1763d5250b` اجرای محدود پایگاه/سه جدول را صریحاً مجاز کرد. schema تست محلی **dbo** است. [نسخهٔ نهایی guarded جدول‌ها](../database/proposals/initial_tables.review.sql) با وضعیت واقعی تطبیق داده شد؛ اصلاح CHECK tenant در بخش بعد شرح دارد. تمام طول‌ها و نام‌های زیر BAZDID متعلق به این schema محلی هستند و mapping فیزیکی کارگزاری محسوب نمی‌شوند. هیچ master مشتری، موبایل plaintext، referral خام یا رسانه‌ای ذخیره نمی‌شود؛ همهٔ داده‌های آزمایش rollback شدند.
+
+verification واقعی ۳ جدول/۳۹ ستون/۱۰ index، سه PK، سه unique، یک FK و ۱۳ CHECK فعال و trusted را تأیید کرد. دو rowversion، دو computed persisted، زمان UTC، حفظ case/فاصله/Unicode/شناسهٔ بزرگ و ۳۵ CASEِ rollback-only آزموده شدند. عبارت قدیمی `[^A-Za-z0-9_-]` خط تیره/زیرخط را رد می‌کرد؛ سه CHECK با `REPLACE(value,N'-',N'') NOT LIKE N'%[^A-Za-z0-9_]%'` و WITH CHECK تصحیح شدند. این REPLACE فقط در آزمون alphabet است و شناسهٔ ذخیره‌شده را تغییر نمی‌دهد. [metadata](checkpoint2c/SCHEMA_VERIFICATION.json) و [نتایج SQL](checkpoint2c/ROLLBACK_TEST_RESULTS.json) جزئیات واقعی را دارند؛ parser به‌تنهایی معیار نبود.
 
 ### `BAZDIDCustomerLinks`
 
@@ -70,7 +72,7 @@ unique روی `(BrokerageId, SourceSystem, SourceRequestIdKey)`؛ index برای
 | `CorrelationId` | `char(32) NOT NULL` | CHECK حروف hex کوچک؛ تولید سروری |
 | `MetadataCode` | `varchar(64) NULL` | کد allowlist؛ exception/query/mobile/OTP در آن قرار نمی‌گیرد |
 
-indexهای `(RequestContextId, OccurredAtUtc, Id)` و `CorrelationId`؛ uniqueness تجاری اضافه ندارد. FK اجباری audit به منبع/actor/context پیشنهاد نمی‌شود تا ثبت تلاش ناموفق و حفظ تاریخچه ممکن بماند؛ صحت context/actor در برنامه کنترل می‌شود. rowversion برای ردیف append-only نیاز نیست؛ INSERT اتمیک و منع UPDATE/DELETE مبنای concurrency است. account نوشتن فقط INSERT audit دارد؛ خواندن/export/retention مسیر مدیریتی جدا می‌خواهد. تغییر حساس و audit مرتبط در transaction مشترک‌اند.
+indexهای `(RequestContextId, OccurredAtUtc, Id)` و `CorrelationId`؛ uniqueness تجاری اضافه ندارد. FK اجباری audit به منبع/actor/context ساخته نشد تا ثبت تلاش ناموفق و حفظ تاریخچه ممکن بماند؛ صحت context/actor در برنامهٔ آینده کنترل می‌شود. rowversion برای ردیف append-only نیاز نیست. طرح account نوشتن فقط INSERT audit است؛ در 2C هیچ role/user/grant ایجاد نشده و منع UPDATE/DELETE برای runtime هنوز باید با account کم‌اختیار عملیاتی/آزموده شود. خواندن/export/retention مسیر مدیریتی جدا می‌خواهد؛ CHECKهای داده جای permission را نمی‌گیرند.
 
 ## اتصال، مجوز و SQL client آینده
 
@@ -83,13 +85,13 @@ indexهای `(RequestContextId, OccurredAtUtc, Id)` و `CorrelationId`؛ uniquen
 
 **بررسی نسخهٔ بسته در `2026-11-01`:** نسخهٔ فعلی lockfile، `System.Data.SqlClient 4.5.3` انتقالی با قید framework برابر `[4.5.3,4.6.0)` است. pin پیشنهادی برای آزمایش سازگاری بعدی `System.Data.SqlClient 4.8.6` است؛ NuGet برای آن target مستقیم `.NETCoreApp 2.1` و وابستگی‌های حداقل `Microsoft.Win32.Registry 4.7.0`، `runtime.native.System.Data.SqlClient.sni 4.7.0`، `System.Diagnostics.DiagnosticSource 4.7.0`، `System.Security.Principal.Windows 4.7.0` و `System.Text.Encoding.CodePages 4.7.0` را اعلام می‌کند. [metadata رسمی بسته](https://www.nuget.org/packages/System.Data.SqlClient/4.8.6).
 
-این pin در **طرح** ثابت است؛ هیچ PackageReference/lockfile تغییر نکرده. افزودن 4.8.6 از قید framework فعلی خارج است و تا حل تعارض گراف، بررسی تمام وابستگی‌های انتقالی و SNI، audit و restore/build/runtime واقعی با SDK 2.1.818 در 2C تأیید اجرایی ندارد. هشدار dependency نباید پنهان یا سرکوب شود. `System.Data.SqlClient` deprecated است؛ [وضعیت رسمی](https://www.nuget.org/packages/System.Data.SqlClient/4.9.1). جایگزین `Microsoft.Data.SqlClient 2.1.7` نیز target 2.1 دارد ولی dependencyهای Identity/SNI بیشتری می‌آورد و خودش خارج پشتیبانی است؛ جایگزینی خودکار مصوب نیست. [بستهٔ جایگزین](https://www.nuget.org/packages/Microsoft.Data.SqlClient/2.1.7)، [چرخهٔ پشتیبانی](https://learn.microsoft.com/en-us/sql/connect/ado-net/sqlclient-driver-support-lifecycle). سازگاری TFM با پشتیبانی امنیتی برابر نیست؛ هیچ ORM جدیدی لازم نیست.
+این pin در **طرح** ثابت است؛ هیچ PackageReference/lockfile تغییر نکرده. افزودن 4.8.6 از قید framework فعلی خارج است و تا حل تعارض گراف، بررسی انتقالی‌ها/SNI، audit و restore/build/runtime واقعی در checkpoint مربوط به SQL runtime تأیید اجرایی ندارد. طبق مجوز جدید مالک، 2C فقط provisioning بود و این تعارض برای DDL از System.Data در PowerShell لازم نبود؛ O24 باز است. هشدار dependency پنهان یا سرکوب نشد. `System.Data.SqlClient` deprecated است؛ [وضعیت رسمی](https://www.nuget.org/packages/System.Data.SqlClient/4.9.1). جایگزین `Microsoft.Data.SqlClient 2.1.7` نیز target 2.1 دارد ولی dependencyهای Identity/SNI بیشتری می‌آورد و خودش خارج پشتیبانی است؛ جایگزینی خودکار مصوب نیست. [بستهٔ جایگزین](https://www.nuget.org/packages/Microsoft.Data.SqlClient/2.1.7)، [چرخهٔ پشتیبانی](https://learn.microsoft.com/en-us/sql/connect/ado-net/sqlclient-driver-support-lifecycle). سازگاری TFM با پشتیبانی امنیتی برابر نیست؛ هیچ ORM جدیدی لازم نیست.
 
 ## fixture و آماده‌سازی تست؛ بدون seed
 
 زنجیرهٔ ساختگی: `TEST-BROKERAGE / A4K9P2 → TEST-REQUEST-001 → TEST-CUSTOMER-001 → 09000000001`. شماره صرفاً fixture است و ادعای رزروشده‌بودن ندارد. OTP برابر `12345` فقط برای Development/Testing آینده است؛ هیچ SMS، seed، challenge یا منطق OTP در این مرحله اجرا/پیاده نشده. حالت دو درخواست برای یک مشتری، missing/zero، مشتری null، موبایل متعارض و شناسهٔ bigint بزرگ نیز باید ساخته شوند؛ اطلاعات Production به تست کپی نمی‌شود.
 
-اجرای بعدی پیش از DDL به تصویب schema، patch/گواهی/حساب‌ها و نام مقصد نیاز دارد؛ [ساخت پایگاه](../database/proposals/create_development_database.review.sql) و سه جدول/مجوزها همگی با flag صفر بسته‌اند. پس از تصویب، ابتدا پایگاه خالی، سپس schema و مجوز کمینه و آزمون SQL واقعی بررسی می‌شوند. تست unit قرارداد reader و normalization جداست. rollback عملیاتی، بازاعمال، concurrency، CAS، منع write مبدأ، مجوز مؤثر و توقف روی مقصد اشتباه در 2C–2G اثبات می‌شوند؛ parser جای این آزمون‌ها نیست. هیچ `BAZDIDInfo`، migration journal، OTP یا جدول دیگر اکنون ساخته نمی‌شود.
+اجرای محدود 2C انجام شد؛ فایل‌های [ساخت پایگاه](../database/proposals/create_development_database.review.sql)، جدول‌ها و repair همچنان flag صفر دارند و فقط نسخهٔ حافظه‌ایِ مجاز با hash کنترل‌شده اجرا شد. پایگاه موجود خودکار جایگزین یا reset نمی‌شود. metadata، رفتار قیود، rowversion/CAS SQL و rollback همین schema روی موتور واقعی تأیید شدند؛ migration ارتقایی، بازاعمال از نسخهٔ کسب‌وکاری، concurrency بین repositoryها، منع write مبدأ و permission مؤثر runtime هنوز اجرا نشده‌اند. هیچ `BAZDIDInfo`، journal، OTP یا جدول دیگری ساخته نشد. حساب‌ها، patch/TLS و O24 برای دامنهٔ بعدی باقی‌اند.
 
 ## ۱۷ جدول پیشنهادی مشتری؛ ساخت تدریجی
 

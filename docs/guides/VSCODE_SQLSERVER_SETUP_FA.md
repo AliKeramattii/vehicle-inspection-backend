@@ -1,6 +1,6 @@
 # راهنمای SQL Server در VS Code برای توسعهٔ بازدید
 
-این آموزش برای Windows محلی و یادگیری بررسی **فقط‌خواندنی** است؛ تاریخ `2026-11-01`. در این وظیفه SQL اجرا یا اتصال VS Code آزمایش نشده است. بررسی CLI فقط نصب `ms-mssql.mssql@1.47.0` را تأیید کرد. اطلاعات پایگاه از [کشف واقعی 2A/2B](../CHECKPOINT2A_2B_REPORT_FA.md) آمده‌اند: SQL Server Standard `15.0.2000.5`، فقط چهار پایگاه سیستمی، و **نبود `BAZDID_Development` و هر سه جدول پیشنهادی**. وضعیت زنده ممکن است بعداً تغییر کند.
+این آموزش برای Windows محلی و بررسی **فقط‌خواندنی** است؛ تاریخ `2026-11-01`. طبق [اجرای واقعی 2C](../implementation/CHECKPOINT-02C-DATABASE-CREATION_FA.md)، `BAZDID_Development` اکنون روی SQL Server Standard `15.0.2000.5` ساخته شده و فقط سه جدول BAZDID دارد؛ metadata و ۳۵ آزمون rollback-only تأیید شدند و هیچ ردیفی باقی نماند. نبود پایگاه در [کشف تاریخی 2A/2B](../CHECKPOINT2A_2B_REPORT_FA.md) مربوط به قبل از این ساخت است. افزونهٔ `ms-mssql.mssql@1.47.0` در نگهداری قبلی با CLI تأیید شد؛ اتصال/نمایش VS Code در 2C آزمایش نشده و SQL مجاز آن با ابزار PowerShell اجرا شد. وضعیت زنده را پیش از کار دوباره احراز کنید.
 
 ## ۱. افزونهٔ رسمی و بازکردن Explorer
 
@@ -21,7 +21,7 @@
 | User/Password | برای حساب جاری Windows چیزی وارد نمی‌شود |
 | Encrypt | روشن؛ برای اتصال شبکه‌ای گواهی معتبر و `Trust Server Certificate=False` لازم است |
 
-Windows Authentication از هویت جاری Windows استفاده می‌کند؛ همان حساب باید در SQL مجوز داشته باشد. پس از کنترل مقصد، با Test connection و سپس Connect می‌توان اتصال را بررسی کرد. این دو عمل در وظیفهٔ نگهداری مستندات اجرا نشده‌اند. [تنظیم اتصال و احراز Windows در مستندات Microsoft](https://learn.microsoft.com/en-us/sql/tools/visual-studio-code-extensions/mssql/mssql-database-connections).
+Windows Authentication از هویت جاری Windows استفاده می‌کند؛ همان حساب باید در SQL مجوز داشته باشد. پس از کنترل مقصد، با Test connection و سپس Connect می‌توان اتصال را بررسی کرد. این اتصالِ VS Code در 2C اجرا/ثبت نشده است. [تنظیم اتصال و احراز Windows در مستندات Microsoft](https://learn.microsoft.com/en-us/sql/tools/visual-studio-code-extensions/mssql/mssql-database-connections).
 
 در کشف قبلی، اتصال موفقِ اثبات‌شده **`lpc:.\SQLSERVER2019`** روی Shared memory با PowerShell بود؛ اتصال `localhost\SQLSERVER2019` از VS Code هنوز شاهد اجرای ثبت‌شده ندارد. برای تکرار دقیق مقصد محلی می‌توان پروفایل جدا با همین مقدار lpc ساخت. [server_inventory.sql](../../database/discovery/server_inventory.sql) فقط در master با Shared memory اجازهٔ خواندن می‌دهد؛ پروفایل localhost ممکن است transport دیگری انتخاب کند و guard آن را رد کند. guard را حذف نکنید.
 
@@ -29,7 +29,7 @@ Windows Authentication از هویت جاری Windows استفاده می‌کن
 
 ## ۳. اولین query فقط‌خواندنی
 
-از Explorer روی اتصال، New Query را انتخاب کنید؛ فایل باید در حالت زبان SQL باشد. نام اتصال و پایگاهِ editor را بررسی کنید، فقط بلوک موردنظر را انتخاب و فرمان Execute Query (در نسخهٔ نصب‌شده با عنوان `Execute Query (MSSQL)`، در مستندات با `MS SQL: Execute Query`) یا `Ctrl+Shift+E` را بزنید. نتیجه در بخش Results ظاهر می‌شود؛ انتخاب‌نکردن متن ممکن است تمام فایل را اجرا کند. این نمونه‌ها **دستور اجرای دستیِ بعدی** هستند و در این وظیفه اجرا نشده‌اند. [روش رسمی اجرای query](https://learn.microsoft.com/en-us/sql/tools/visual-studio-code-extensions/mssql/mssql-run-first-query).
+از Explorer روی اتصال، New Query را انتخاب کنید؛ فایل باید در حالت زبان SQL باشد. نام اتصال و پایگاهِ editor را بررسی کنید، فقط بلوک موردنظر را انتخاب و فرمان Execute Query (در نسخهٔ نصب‌شده با عنوان `Execute Query (MSSQL)`، در مستندات با `MS SQL: Execute Query`) یا `Ctrl+Shift+E` را بزنید. نتیجه در Results ظاهر می‌شود؛ انتخاب‌نکردن متن ممکن است تمام فایل را اجرا کند. این بلوک‌ها راه اجرای دستی‌اند و خروجی VS Code برای آن‌ها در این مرحله ثبت نشده است. [روش رسمی اجرای query](https://learn.microsoft.com/en-us/sql/tools/visual-studio-code-extensions/mssql/mssql-run-first-query).
 
 ابتدا زمینهٔ اتصال را ببینید:
 
@@ -53,19 +53,19 @@ ORDER BY database_id;
 SELECT DB_ID(N'BAZDID_Development') AS TestDatabaseId;
 ```
 
-در آخرین اجرای ثبت‌شدهٔ 2A/2B، مقدار TestDatabaseId برابر NULL بود و چهار پایگاه سیستمی compatibility برابر ۱۵۰ و collation برابر `SQL_Latin1_General_CP1_CI_AS` داشتند. NULL با حساب محدود می‌تواند از نبود دید metadata نیز ناشی شود؛ به‌تنهایی همیشه اثبات نبود پایگاه نیست. حساب کشف قبلی sysadmin و دارای دید کامل catalog بود.
+در اجرای تاریخی 2A/2B مقدار TestDatabaseId برابر NULL بود؛ پس از ساخت 2C مقدار مشاهده‌شده ۵ و پایگاه دارای compatibility ۱۵۰ و collation برابر `SQL_Latin1_General_CP1_CI_AS` بود. شناسهٔ عددی روی نصب دیگر ثابت فرض نشود. NULL با حساب محدود می‌تواند از نبود دید metadata نیز ناشی شود؛ به‌تنهایی همیشه اثبات نبود پایگاه نیست. حساب بررسی sysadmin و دارای دید کامل catalog بود؛ account برنامه نخواهد بود.
 
 ## ۴. Databases، Refresh و انتخاب پایگاه تست
 
 در Object Explorer اتصال را باز و Databases را expand کنید. برای دریافت فهرست تازه، روی گره اتصال/Databases راست‌کلیک و Refresh را انتخاب کنید؛ فیلتر فعال هم ممکن است نام‌ها را پنهان کند. Refresh فقط نمای ابزار را تازه می‌کند و پایگاه نمی‌سازد.
 
-**فقط بعد از ساخت مصوب در checkpoint جداگانه**، `BAZDID_Development` را در Explorer انتخاب و New Query را از همان گره باز کنید؛ یا از `MS SQL: Use Database` پایگاه را تغییر دهید. با `SELECT DB_NAME()` زمینه را دوباره احراز کنید. اکنون نبود این نام طبیعی است؛ با Table Designer، Publish، Import یا دستور CREATE آن را خودسرانه ایجاد نکنید.
+ساخت مصوب در 2C انجام شده است؛ `BAZDID_Development` را انتخاب و New Query را از همان گره باز کنید یا با `MS SQL: Use Database` زمینه را تغییر دهید. با `SELECT DB_NAME()` انتخاب را دوباره احراز کنید. مسیر مورد انتظار `SQLSERVER2019 > Databases > BAZDID_Development > Tables` است. اگر دیده نمی‌شود، اتصال/مجوز/Refresh را بررسی کنید؛ با CREATE، Publish یا Import دوباره‌سازی خودکار انجام ندهید.
 
-سه فایل [ساخت پایگاه](../../database/proposals/create_development_database.review.sql)، [جدول‌ها](../../database/proposals/initial_tables.review.sql) و [مجوزها](../../database/proposals/permissions.review.sql) هنوز پیش‌نویس بازبینی‌اند: `@AllowDdl=0` و مرجع approval برابر NULL است. اجرای آن‌ها یا تغییر flag نیازمند تصویب جداگانهٔ schema و Checkpoint 2C/DDL است. بازکردن فایل برای مطالعه، مجوز Execute آن نیست. [راهنمای پایگاه](../../database/README.md) وضعیت هر فایل را دارد.
+فایل‌های [ساخت پایگاه](../../database/proposals/create_development_database.review.sql)، [جدول‌ها](../../database/proposals/initial_tables.review.sql) و repair در repository همچنان `@AllowDdl=0` و approval برابر NULL دارند. در 2C فقط نسخهٔ حافظه‌ایِ مجاز و hashشده اجرا شد؛ [مجوزها](../../database/proposals/permissions.review.sql) اصلاً اجرا نشده‌اند. بازکردن فایل مجوز Execute یا تغییر flag نیست و پایگاه موجود نباید خودسرانه بازسازی شود. [راهنمای پایگاه](../../database/README.md) وضعیت دقیق فایل‌ها و ابزار محدود را دارد.
 
 ## ۵. مشاهدهٔ جدول‌ها، ستون‌ها، کلیدها و داده
 
-بخش بعد تنها برای زمانی است که پایگاه و schema با مجوز ساخته شده‌اند؛ اکنون نتیجهٔ وجود جدول ادعا نمی‌شود. از گره پایگاه، Tables را باز کنید. جدول را expand کنید تا Columns و بخش‌های کلید/index/رابطهٔ موجود در نسخهٔ افزونه دیده شوند. برای فهرست مستقل از ظاهر ابزار، در **پایگاه تست مصوب** queryهای زیر را اجرا کنید:
+سه جدول `dbo.BAZDIDCustomerLinks`، `dbo.BAZDIDRequestContexts` و `dbo.BAZDIDAuditLogs` با metadata مستقیم تأیید شده‌اند. از گره پایگاه Tables را باز و جدول را expand کنید تا Columns و بخش‌های کلید/index/رابطهٔ موجود در نسخهٔ افزونه دیده شوند. برای فهرست مستقل از ظاهر ابزار، در **پایگاه تست مصوب** queryهای زیر را اجرا کنید:
 
 ```sql
 SELECT s.name AS SchemaName, t.name AS TableName
@@ -104,7 +104,7 @@ FROM sys.foreign_keys AS fk
 WHERE fk.parent_object_id = OBJECT_ID(N'dbo.BAZDIDRequestContexts', N'U');
 ```
 
-برای دیدن چند ردیف ساختگی، پس از احراز وجود جدول و مجوز SELECT حساب بازبین، از projection محدود استفاده کنید. این نمونه روی جدول موجودِ آینده و دادهٔ synthetic است؛ پیش از وجود جدول، خطای Invalid object طبیعی خواهد بود:
+برای مشاهدهٔ دادهٔ synthetic بعدی، پس از احراز مجوز SELECT حساب بازبین، از projection محدود استفاده کنید. در تحویل 2C هر سه جدول صفر ردیف دارند و نتیجهٔ این SELECT خالی است؛ seed یا رکورد دائمی تست ایجاد نشده:
 
 ```sql
 SELECT TOP (20) Id, OccurredAtUtc, ActionCode, OutcomeCode
@@ -132,4 +132,4 @@ ORDER BY Id DESC;
 
 اتصال تست را با نام و گروه واضح نگه دارید و پیش از Execute، اتصال editor و DatabaseName را ببینید. Application Intent یا رنگ پروفایل، جای مجوز واقعی فقط‌خواندنی نیست. این راهنما هیچ دسترسی Production ایجاد نمی‌کند؛ جدول‌های مشتری/درخواست کارگزاری و دادهٔ واقعی باز/کپی/ویرایش نشوند.
 
-پروفایل را در تنظیمات شخصی ابزار نگه دارید؛ password، token، connection string محرمانه، فایل export نتایج یا `.vscode/settings.json` دارای اتصال واقعی وارد Git نشود. نمونه‌های این سند credential ندارند. مسیر بعدی، بازبینی و تصویب صریح 2C است؛ پیشرفت کل فعلی همچنان **15%** می‌ماند.
+پروفایل را در تنظیمات شخصی ابزار نگه دارید؛ password، token، connection string محرمانه، فایل export نتایج یا `.vscode/settings.json` دارای اتصال واقعی وارد Git نشود. نمونه‌های این سند credential ندارند. 2C کامل و پیشرفت کل **17%** است؛ گام بعد 2D در درخواست جداگانه و با بررسی مستقل پیش‌نیازهاست و این راهنما آن را شروع نمی‌کند.

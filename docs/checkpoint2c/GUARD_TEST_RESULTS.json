@@ -1,0 +1,28 @@
+﻿{
+    "Status":  "Passed",
+    "TestCount":  4,
+    "Cases":  [
+                  {
+                      "Name":  "DdlWithoutApprovalRejected",
+                      "Status":  "Passed",
+                      "MutationExecuted":  false
+                  },
+                  {
+                      "Name":  "ChangedDdlHashRejected",
+                      "Status":  "Passed",
+                      "MutationExecuted":  false
+                  },
+                  {
+                      "Name":  "ExistingDatabaseNotRecreated",
+                      "Status":  "Passed",
+                      "MutationExecuted":  false
+                  },
+                  {
+                      "Name":  "RollbackTestsWithoutApprovalRejected",
+                      "Status":  "Passed",
+                      "MutationExecuted":  false
+                  }
+              ],
+    "DdlExecuted":  false,
+    "TestDmlExecuted":  false
+}
