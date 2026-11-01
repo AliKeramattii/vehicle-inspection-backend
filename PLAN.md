@@ -1,6 +1,6 @@
 # برنامهٔ مرجع پیاده‌سازی Backend بازدید
 
-تاریخ: `2026-11-01`؛ مخزن: `C:\Projects\vehicle-inspection-backend`. **Phase 0 و Checkpoint 1 کامل‌اند؛ Checkpoint 1.5 شامل ممیزی سورس مرجع، آماده‌سازی نگاشت و همگام‌سازی GitHub است.** دامنهٔ مجاز در Checkpoint 1.5 پایان می‌یابد؛ شروع Checkpoint 2 اجازهٔ تازه و پایگاه تست مصوب می‌خواهد. این مجوز، تصویب Production یا schemaهای آینده نیست.
+تاریخ: `2026-11-01`؛ مخزن: `C:\Projects\vehicle-inspection-backend`. **Checkpoint 0، 1 و 1.5 کامل‌اند؛ فقط Checkpoint 2A/2B طبق پیوست `66aec801-d9a2-4943-a6e3-418104144dba` و پاسخ تکمیلی کاربر مجاز شده‌اند.** کشف محلی و آماده‌سازی scriptها انجام می‌شود؛ اجرای DDL، migration، repository و شروع 2C–2G مجوز تازه می‌خواهند. مقصد تست تأییدشده `(local)\SQLSERVER2019` / `BAZDID_Development` با Windows Authentication است؛ پایگاه هنوز ساخته نشده است.
 
 ## هدف، معماری و وابستگی
 
@@ -10,7 +10,8 @@
 flowchart LR
   C0["0: برنامه‌ریزی"] --> A["اجازهٔ صریح کاربر"]
   A --> C1["1: اسکلت"] --> C15["1.5: ممیزی سورس و نگاشت"]
-  C15 --> G2["مجوز تازه و پایگاه تست مصوب"] --> C2["2: SQL تست و adapter"] --> C3["3: احراز و نشست"]
+  C15 --> AB["2A/2B: کشف محلی و آماده‌سازی"] --> G2["بازبینی schema و تصویب DDL/2C"]
+  G2 --> C2["2C–2G: SQL تست و adapter"] --> C3["3: احراز و نشست"]
   C3 --> C4["4: اطلاعات و بازدید حداقلی"] --> C5["5: گردش بازدید"] --> C6["6: رسانه"] --> C7["7: ارسال و رسید"]
   C7 --> C9["9: یکپارچه‌سازی مشتری و staging"]
   C7 --> C8["8: ماژول‌های بعدی با اجازهٔ جدا"]
@@ -27,7 +28,8 @@ flowchart LR
 - [x] تصویب صریح کاربر برای Checkpoint 1 در پیوست `9a55d0f7-876a-466b-b0d7-355974f22b9d`، تاریخ `2026-11-01`.
 - [x] Phase 1 / Checkpoint 1: اسکلت ASP.NET Core 2.1؛ restore/build، ۴۳ آزمون، HTTP واقعی loopback و publish محلی موفق.
 - [x] Checkpoint 1.5: ممیزی امن DuberFront، ماتریس نگاشت مبتنی بر شاهد، تصمیم‌های باز و برنامهٔ SQL؛ طبق پیوست `a325fb13-5239-47f3-9898-b258aed137e3` در `2026-11-01`. گزارش و کنترل‌های این بسته در [DUBERFRONT_CODE_AUDIT_FA.md](docs/DUBERFRONT_CODE_AUDIT_FA.md) است؛ هیچ پیاده‌سازی SQL آغاز نشد.
-- [ ] Phase 1 / Checkpoint 2: SQL تست و adapter مبدأ.
+- [x] Checkpoint 2A/2B در دامنهٔ کشف محلی/آماده‌سازی برای بازبینی؛ محیط عملیاتی تست هنوز provision نشده و schema کارگزاری حل نشده است. [گزارش واقعی](docs/CHECKPOINT2A_2B_REPORT_FA.md).
+- [ ] Phase 1 / Checkpoint 2 کامل: اجرای مصوب SQL تست و adapter مبدأ؛ 2C–2G هنوز شروع نشده‌اند.
 - [ ] Phase 1 / Checkpoint 3: OTP و session.
 - [ ] Phase 1 / Checkpoint 4: اطلاعات و `BAZDIDInfo`.
 - [ ] Phase 1 / Checkpoint 5: گردش بازدید و سیاست مدرک.
@@ -67,9 +69,9 @@ flowchart LR
 - **اعتبارسنجی:** ۳۱ پیوند Markdown و ۳۱ کنترل ساختاری شاهد عبور کردند؛ ۱۰۳ فایل نسخهٔ قابل انتشار و ۱۲۱ blob تاریخی main بدون هشدار راز باقی‌مانده بررسی شدند. تنها fixture URL اعتبارسنجیِ تست موجود جداگانه تأیید شد. diff فقط پنج سند است و hash آرشیو تغییر نکرده؛ fetch پیش از commit اختلاف `0/0` با origin/main داشت. source/API/SQL و رفتار برنامه تغییر نمی‌کنند؛ ۴۳ آزمون موفق، نتیجهٔ تاریخی Checkpoint 1 است.
 - **نقطهٔ توقف:** پس از ثبت و همگام‌سازی همین بسته توقف؛ بسته‌های زیر برنامه‌اند و مجوز اجرا نیستند.
 
-## Checkpoint 2 — SQL Server تست و adapter کارگزاری؛ هنوز شروع نشده
+## Checkpoint 2 — SQL Server تست و adapter کارگزاری؛ فقط 2A/2B مجاز
 
-- **پیش‌نیاز:** بازبینی Checkpoint 1.5، مجوز تازهٔ کاربر، مقصد پایگاه تست و نسخه/compatibility معلوم، اختیار مجاز تست و بازبینی طرح linkage؛ Production ممنوع.
+- **پیش‌نیاز اجرا:** بازبینی خروجی 2A/2B، schema/حساب‌ها و تصویب تازهٔ DDL و 2C؛ Production ممنوع. مجوز فعلی فقط metadata محلی و پیش‌نویس‌های قابل بازبینی را پوشش می‌دهد.
 - **دامنه:** connection factory، transaction، scriptهای شماره‌دار تست، تفکیک source read/BAZDID write، قرارداد منطقی reader و fixture کاملاً ساختگی. adapter واقعی فقط با mapping و مجوز جدا.
 - **جدول‌ها:** `BAZDIDCustomerLinks`، `BAZDIDRequestContexts` و `BAZDIDAuditLogs` در پایگاه تست؛ schema مالک با DBA. journal اختیاری SQL نیاز به نام و تصویب تازه دارد.
 - **APIها:** endpoint عمومی جدید ندارد؛ resolver از طریق service داخلی و آزمون adapter کنترل می‌شود.
@@ -81,8 +83,8 @@ flowchart LR
 
 ### بسته‌های اجرایی پیشنهادی Checkpoint 2 پس از تصویب
 
-- [ ] **2A — رفع ابهام منبع و metadata:** DBA مرجع authoritative از بین دو context، نگاشت referral، اولویت موبایل معتبر و eligibility را تعیین کند. نسخه با `SERVERPROPERTY('ProductVersion')` و compatibility/collation از metadata پایگاه مصوب شناسایی شود؛ خروجی حداقلی `sys.schemas/tables/columns/foreign_keys/indexes` نام، نوع، nullability، کلیدها و indexهای اشیای مرتبط را تأیید کند. در این checkpoint تحلیلی هیچ‌یک اجرا نشده‌اند؛ metadata قرارداد دادهٔ مشتری نیست.
-- [ ] **2B — محیط تست مستقل:** نام/شناسهٔ مقصد SQL Server، نسخه، compatibility، collation و حساب‌های کم‌اختیار ثبت شوند؛ داده‌ها کاملاً ساختگی باشند. SELECT مبدأ و DML اشیای BAZDID تفکیک شوند؛ اتصال‌های آرشیو و دادهٔ Production وارد محیط تست نشوند. نبود منبع مصوب، adapter واقعی را بسته نگه می‌دارد و تست مصنوعی را مبدأ واقعی معرفی نمی‌کند.
+- [x] **2A — کشف محلی و ثبت ابهام منبع:** اتصال Windows روی shared memory به همان رایانه موفق بود؛ SQL Server Standard x64 نسخهٔ `15.0.2000.5 / RTM`، چهار پایگاه سیستمی با compatibility `150` و collation `SQL_Latin1_General_CP1_CI_AS` مشاهده شدند. پایگاه کاربری و linked server وجود نداشت؛ Cluster/HADR غیرفعال بود. فقط master catalog خوانده شد. script فقط‌خواندنیِ metadata شیء برای DBA آماده است؛ تعیین authoritative context، schema جاری، referral، trusted mobile و eligibility در O01/O20–O22 باز می‌ماند و Production خوانده نشده است.
+- [x] **2B — آماده‌سازی برای بازبینی:** کاربر نام `BAZDID_Development` و Windows Authentication محلی را تأیید کرد؛ DB_ID آن NULL است و پایگاه ساخته نشده. طرح سه جدول، factory/مجوز/fixture و scriptهای ساخت پایگاه، سه جدول و نقش‌ها آماده شدند؛ تمام DDLها با flag صفر بسته‌اند. حساب فعلی sysadmin فقط برای discovery استفاده شد؛ دو حساب کم‌اختیار برنامه هنوز تعیین/ساخته/آزموده نشده‌اند. این تکمیل، آماده‌سازی است و provision شدن محیط تست را ادعا نمی‌کند.
 - [ ] **2C — طراحی و scriptهای اولیه:** پیش از افزودن SQL client، سازگاری دقیق با .NET Core 2.1 و وابستگی‌ها/امنیت بررسی و نسخه pin شود. طرح فقط `BAZDIDCustomerLinks`، `BAZDIDRequestContexts` و `BAZDIDAuditLogs` را با نوع، nullability، طول، UTC، constraint، index و `rowversion` متناسب نهایی کند. schema مالک با DBA مصوب؛ تاریخچهٔ migration در صورت تصویب نیز پیشوند BAZDID داشته باشد. هیچ تغییر به جدول/index مبدأ، FK حدسی یا DDL خودکار startup مجاز نیست.
 - [ ] **2D — reader و قرارداد:** `IBrokerageRequestReader` و snapshot از ماتریس نگاشت پیاده شوند؛ حالت‌های Found/NotFound/Ambiguous/Ineligible/Unavailable و Missing/Invalid جدا باشند. fixture مستقل `A4K9P2` فقط Development/Test و بدون SMS باشد. real reader فقط پس از تصویب mapping/مجوز، با SQL پارامتری و SELECT محدود به اشیای دقیق ساخته شود؛ وجود نام `Duber.OrderSales` در source به‌تنهایی مجوز query نیست.
 - [ ] **2E — طرح persistence اطلاعات:** قرارداد snapshot و فهرست فیلدهای نهایی `BAZDIDInfo`، مقدار/منشأ/وضعیت اعتبار، شناسه و نسخهٔ منبع، زمان دریافت UTC، رفتار Missing/Invalid/zero و refresh مشخص شوند. ذخیرهٔ نهایی و منشأ هر فیلد باید transaction و کنترل نسخه داشته باشد و به Session متکی نباشد. این بسته طرح ورودی Checkpoint 4 را آماده می‌کند؛ ساخت/نوشتن `BAZDIDInfo` همچنان در Checkpoint 4 است و scope سه جدول اولیه افزایش نمی‌یابد.
@@ -90,6 +92,33 @@ flowchart LR
 - [ ] **2G — rollback و پذیرش:** scriptهای شماره‌دار forward/revert فقط برای اشیای BAZDID با guard مقصد تست و پیش‌شرط نسخه آماده و پیش از اجرا بازبینی شوند؛ حفظ داده و backup لازم در طرح درج شود. ساخت از صفر، اجرای تکراری کنترل‌شده، rollback و بازاعمال روی تست اثبات شوند؛ حذف/تغییر جدول مبدأ یا اجرای Production مجاز نیست. خروجی واقعی آزمون، طرح/تفاوت schema و محدودیت‌ها پیش از تکمیل checkpoint ثبت شوند.
 
 endpoint عمومی تازه، OTP، cookie احراز هویت، آپلود و ماژول کارکنان در این بسته‌ها پیاده نمی‌شوند. موارد O01/O02/O20 تا O22 در دفتر تصمیم‌ها، gateهای adapter واقعی و محیط تست را مشخص می‌کنند.
+
+### پذیرش و نقطهٔ توقف 2A/2B
+
+مجوز تکمیلی کاربر صریح است: فقط کشف metadata محلی، تهیهٔ script پایگاه و جدول‌ها برای بازبینی و **عدم اجرای DDL تا تصویب تازه**. scriptهای [database/discovery](database/discovery/server_inventory.sql) و [پیش‌نویس‌ها](database/README.md) runtime برنامه را تغییر نمی‌دهند؛ migration قابل اجرا یا repository ساخته نشده است. نبود پایگاه کارگزاری در instance محلی در زمان کشف، تأیید schema Production یا تضمین وضعیت آینده نیست؛ پیش‌شرط مقصد قبل از هر اجرای بعدی دوباره بررسی شود.
+
+build تازه با SDK `2.1.818` صفر warning/error و هر ۴۳ آزمون موجود، شامل ۱۵ unit و ۲۸ integration، موفق بودند. پنج SQL با `TSql150Parser` بدون خطای syntax بررسی شدند؛ دو discovery از نظر tokenهای تغییر داده/DDL فقط‌خواندنی‌اند و سه پیش‌نویس guard پیش‌فرض بسته دارند. ۶۴ پیوند، scope سیزده فایل، ۱۰۹ فایل فعلی و ۱۲۶ blob تاریخی main بررسی شدند؛ هشدار راز باقی‌مانده صفر است. parser و TestServer، رفتار constraint/permission/SQL Server برنامه یا IIS را اثبات نمی‌کنند. SQL client جدید نصب یا به پروژه اضافه نشده؛ pin پیشنهادی 4.8.6 به‌دلیل قید framework به gate سازگاری 2C نیاز دارد. شواهد در [گزارش 2A/2B](docs/CHECKPOINT2A_2B_REPORT_FA.md) آمده‌اند؛ SHA/همگام‌سازی نهایی از Git و گزارش تحویل خوانده شود.
+
+### درصد کل پیشرفت Backend؛ قاعدهٔ دائمی
+
+در پایان هر checkpoint، درصد فعلی، مبنای وزن‌دهی، معیارهای تکمیل و برآورد مشروط مرحلهٔ بعد در PLAN و گزارش نهایی بیاید. کار ناتمام امتیاز ندارد؛ این درصد معیار آمادگی Production نیست. تغییر وزن به توضیح تغییر دامنه نیاز دارد.
+
+| checkpoint | وزن از کل | سهم تکمیل‌شدهٔ فعلی |
+|---|---|---|
+| 0 | 3% | 3% |
+| 1 | 6% | 6% |
+| 1.5 | 3% | 3% |
+| 2 | 12% | 3% فقط بررسی/آماده‌سازی 2A/2B |
+| 3 | 12% | 0% |
+| 4 | 10% | 0% |
+| 5 | 8% | 0% |
+| 6 | 16% | 0% |
+| 7 | 8% | 0% |
+| 8 | 12% | 0% |
+| 9 | 10% | 0% |
+| مجموع | 100% | **15%** |
+
+مبنای پیش از این وظیفه `12%` بود. سهم 2A و 2B هرکدام `1.5` واحد درصد بابت پذیرش کشف واقعی و بستهٔ آماده‌سازیِ مجاز است؛ ساخت پایگاه/جدول، حل mapping واقعی یا اجرای SQL client بابت این سهم محاسبه نشده‌اند. تقسیم برنامه‌ریزیِ ۹ واحد باقیماندهٔ Checkpoint 2: `2C=2`، `2D=3`، `2E=1`، `2F=2`، `2G=1`. پس از تکمیل واقعی 2C و مجوزهایش، برآورد کل **17%** است؛ پس از تکمیل تمام Checkpoint 2، **24%**. این‌ها پیش‌بینی‌اند و اکنون امتیاز محسوب نمی‌شوند.
 
 ## Checkpoint 3 — احراز هویت و نشست
 
@@ -183,7 +212,7 @@ endpoint عمومی تازه، OTP، cookie احراز هویت، آپلود و 
 
 ## نقطهٔ تحویل و ادامه
 
-آخرین کار مجاز فعلی **Checkpoint 1.5** است؛ [گزارش ممیزی](docs/DUBERFRONT_CODE_AUDIT_FA.md) و ماتریس mapping، نتیجه و ابهام‌های آن را ثبت می‌کنند. foundation دست‌نخورده است؛ ۴۳ آزمون موفق و build صفر warning/error متعلق به [اجرای Checkpoint 1](docs/CHECKPOINT1_IMPLEMENTATION_FA.md) است و در این تغییر مستنداتی تکرار نشده. audit امنیت پاک نیست و IIS واقعی آزموده نشده است. Checkpoint 2 شروع نشده؛ پیش از آن بازبینی، مجوز تازهٔ کاربر، مقصد پایگاه تست و نسخه/compatibility SQL لازم‌اند. OTP، جدول SQL و استقرار واقعی همچنان خارج دامنه‌اند. برای ادامه پس از قطع نشست، [AI_CONTINUATION_FA.md](docs/AI_CONTINUATION_FA.md) را بخوانید.
+آخرین کار مجاز فعلی **Checkpoint 2A/2B** است؛ کشف و آماده‌سازی انجام شده و درصد کل **15%** است. [گزارش این مرحله](docs/CHECKPOINT2A_2B_REPORT_FA.md) نتیجهٔ SQL محلی، آزمون تازه و محدودیت‌ها را ثبت می‌کند. foundation تغییر نکرده؛ build و ۴۳ آزمون این بار هم موفق اجرا شدند. schema کارگزاری، حساب‌های برنامه و سازگاری client بازند؛ audit امنیت پاک نیست و IIS واقعی آزموده نشده است. پیش از 2C، schema/scriptها و مجوز صریح DDL/ادامه لازم‌اند؛ هیچ پایگاه/جدول/نقش یا migration اجرا نشده است. OTP و استقرار واقعی خارج دامنه‌اند. برای ادامه [AI_CONTINUATION_FA.md](docs/AI_CONTINUATION_FA.md) را بخوانید.
 
 ## وظیفهٔ مستقل GitHub و گزارش‌دهی
 

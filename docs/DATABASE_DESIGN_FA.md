@@ -1,6 +1,6 @@
 # طرح پیشنهادی SQL Server
 
-**وضعیت: طراحی، بدون DDL جدید یا اجرای SQL.** SQL Server موجود کارگزاری مقصد نهایی است، اما نسخه، compatibility، collation، schema و نام اشیای مبدأ نامعلوم‌اند. طرح تاریخی [۳۷ جدول](reference/sql/schema-manifest.json) یک پیشنهاد کامل محصول بود؛ اجرای یکجای آن برای شروع مشتری توصیه نمی‌شود.
+**وضعیت 2A/2B: metadata محلی خوانده شد؛ DDL اجرا نشده است.** مقصد نهایی SQL Server موجود کارگزاری است و نسخه/schema واقعی آن هنوز تأیید نشده‌اند. instance محلی تست `SQLSERVER2019` نسخهٔ `15.0.2000.5` دارد؛ چهار پایگاه سیستمی با compatibility برابر `150` و collation برابر `SQL_Latin1_General_CP1_CI_AS` موجودند. `BAZDID_Development` هنوز وجود ندارد؛ مقدار ۱۵۰/این collation برای آن فقط پیشنهاد است. [گزارش شواهد](CHECKPOINT2A_2B_REPORT_FA.md). طرح تاریخی [۳۷ جدول](reference/sql/schema-manifest.json) پیشنهاد کامل محصول است و یکجا اجرا نمی‌شود.
 
 ## اصول و تصمیم پیشنهادی
 
@@ -9,6 +9,87 @@
 ADO.NET و SQL پارامتری، connection کوتاه‌عمر، timeout/cancellation، transaction صریح و retry محدود برای عملیات واقعاً قابل تکرار پیشنهاد می‌شود. account برنامه DDL ندارد. script شماره‌دار فقط در پایگاه تست مصوب اجرا می‌شود؛ پیش از Production، diff و permission و backup/restore باید تصویب شوند. schema قدیمی مرجع با نام‌های بدون پیشوند قابل اجرا نیست.
 
 شناسه‌های داخلی `uniqueidentifier` تصادفی سمت سرور، شناسهٔ خارجی رشته با طول مصوب mapping و زمان‌ها UTC با `datetime2(3)` پیشنهاد می‌شوند. فیلد nullable واقعاً `NULL` است. نسخهٔ هم‌زمانی `rowversion`، opaque و در DTO به base64 منتقل می‌شود؛ زمان یا عدد قابل افزایش در مرورگر نیست. هزینهٔ random GUID index در تست حجم سنجیده شود؛ clustered index فیزیکی الزاماً PK GUID نیست.
+
+## سه جدول اولیه — طراحی قابل بازبینی در 2A/2B
+
+کاربر در پاسخ تکمیلی همین مرحله، آماده‌کردن script سه جدول را برای بازبینی مجاز کرد و اجرای هر DDL را به تصویب بعدی موکول کرد. [پیش‌نویس جدول‌ها](../database/proposals/initial_tables.review.sql) فقط برای پایگاه خالیِ محلی است. `dbo` پیشنهاد همین تست است؛ schema کارگزاری هنوز مصوب نیست. تمام طول‌ها و نام‌های این بخش، **طراحی BAZDID** هستند و mapping فیزیکی کارگزاری محسوب نمی‌شوند. هیچ master مشتری، موبایل plaintext، referral خام یا رسانه‌ای ذخیره نمی‌شود.
+
+### `BAZDIDCustomerLinks`
+
+هدف: یک linkage به مشتری خارجی در محدودهٔ tenant/source؛ بدون تکثیر پروفایل یا credential مشتری.
+
+| ستون | نوع و nullability | قاعده |
+|---|---|---|
+| `Id` | `uniqueidentifier NOT NULL` | PK؛ تصادفی سمت سرور، بدون default مرورگر |
+| `BrokerageId`, `SourceSystem` | هرکدام `nvarchar(32) NOT NULL` | شناسهٔ تنظیم‌شدهٔ سرور؛ collation برابر `Latin1_General_100_BIN2`؛ CHECK غیرخالی و حروف ASCII/رقم/خط تیره/زیرخط؛ شکل canonical در برنامه |
+| `SourceCustomerId` | `nvarchar(128) NOT NULL` | opaque؛ حفظ UTF-16 دقیق، CHECK طول بایتی مثبت؛ طول واقعی پس از mapping بازبینی شود |
+| `SourceCustomerIdKey` | computed persisted از `CONVERT(varbinary(256), SourceCustomerId)` | کلید مقایسهٔ دقیق، بدون trim/case folding؛ بایت رسانه یا credential نیست |
+| `CreatedAtUtc`, `UpdatedAtUtc` | هرکدام `datetime2(3) NOT NULL` | default برابر `SYSUTCDATETIME()`؛ CHECK ترتیب زمان؛ UpdatedAt در UPDATE صریح تغییر می‌کند |
+| `RowVersion` | `rowversion NOT NULL` | CAS در repository آینده؛ زمان نیست |
+
+قید unique روی `(BrokerageId, SourceSystem, SourceCustomerIdKey)` و unique کمکی روی `(BrokerageId, SourceSystem, Id)` برای FK همان tenant است. `BIN2` به‌تنهایی تمایز trailing space در مقایسهٔ رشته‌ای SQL را تضمین نمی‌کند؛ کلید محاسبه‌شدهٔ بایتی، مورد `A` و `A ` را جدا نگه می‌دارد. با سقف پیشنهادی طول‌ها، کلید unique اصلی ۳۸۴ بایت است. PK از نوع clustered GUID صرفاً مبنای تست کم‌حجم است؛ هزینهٔ index/fragmentation پیش از حجم واقعی سنجیده شود. FK به Customer کارگزاری ساخته نمی‌شود.
+
+### `BAZDIDRequestContexts`
+
+هدف: linkage یک درخواست بیمه به مشتریِ حل‌شده؛ یک مشتری می‌تواند چند context داشته باشد. درخواست بدون مالک قابل تأیید، با ساخت مشتری حدسی وارد این جدول نمی‌شود.
+
+| ستون | نوع و nullability | قاعده |
+|---|---|---|
+| `Id` | `uniqueidentifier NOT NULL` | PK؛ تولید سروری |
+| `BrokerageId`, `SourceSystem` | هرکدام `nvarchar(32) NOT NULL` | همان قرارداد و collation جدول links |
+| `CustomerLinkId` | `uniqueidentifier NOT NULL` | FK ترکیبی با tenant/source به links؛ بدون cascade |
+| `SourceRequestId` | `nvarchar(128) NOT NULL` | شناسهٔ opaque؛ `OrderSales.Id` در صورت تصویب mapping، بدون کاهش bigint به int/عدد JavaScript رشته می‌شود |
+| `SourceRequestIdKey` | computed persisted از `CONVERT(varbinary(256), SourceRequestId)` | کلید unique همراه tenant/source؛ حفظ مقایسهٔ دقیق |
+| `ReferralLookupHmac` | `binary(32) NULL` | HMAC-SHA256 با purpose/key جدا و ورودی قاب‌بندی‌شدهٔ tenant/source/code؛ lookup است، مجوز نیست |
+| `ReferralKeyId` | `varchar(32) NULL` | فقط همراه HMAC مقدار دارد؛ key در SQL نیست |
+| `IdentityHmac`, `PreviousIdentityHmac` | هرکدام `binary(32) NULL` | شناسهٔ مستعار جاری/قبلی؛ تا پیاده‌سازی احراز مقداردهی نمی‌شوند |
+| `IdentityKeyId`, `PreviousIdentityKeyId` | هرکدام `varchar(32) NULL` | هر زوج hash/keyId با CHECK هم‌زمان NULL یا non-NULL |
+| `EligibilityStatus` | `varchar(16) NOT NULL` | `Eligible/Ineligible/Unknown`؛ نگاشت Status منبع نیست و Unknown مجوز ورود نمی‌دهد |
+| `SourceVersion` | `nvarchar(128) NULL` | نسخهٔ opaque مصوب؛ نبود نسخه، زمان دریافت را معادل آن نمی‌کند |
+| `SourceRetrievedAtUtc` | `datetime2(3) NOT NULL` | زمان دریافت trusted snapshot سمت سرور |
+| `CreatedAtUtc`, `UpdatedAtUtc` | هرکدام `datetime2(3) NOT NULL` | default UTC، CHECK ترتیب و UPDATE صریح |
+| `RowVersion` | `rowversion NOT NULL` | UPDATE با Id/tenant/نسخهٔ مورد انتظار؛ صفر ردیف موفقیت نیست |
+
+unique روی `(BrokerageId, SourceSystem, SourceRequestIdKey)`؛ index برای `CustomerLinkId` و index فیلترشدهٔ غیرunique برای `(BrokerageId, SourceSystem, ReferralKeyId, ReferralLookupHmac)` پیشنهاد شد. uniqueness کد معرفی هنوز نامعلوم است؛ چند نتیجه باید `Ambiguous` بماند. index hash نباید باعث انتخاب اولین درخواست شود. FK داخلی ترکیبی از اتصال مشتری tenant دیگر جلوگیری می‌کند؛ هیچ FK به OrderSales کارگزاری وجود ندارد. refresh موبایل/مالک/eligibility و ابطال چالش/نشست در طراحی Checkpoint 3 با transaction همسو خواهد شد.
+
+### `BAZDIDAuditLogs`
+
+هدف: رویداد حداقلی append-only، مستقل از حفظ دائمی ردیف منبع و بدون payload آزاد.
+
+| ستون | نوع و nullability | قاعده |
+|---|---|---|
+| `Id` | `bigint IDENTITY(1,1) NOT NULL` | PK clustered؛ ترتیب تخصیص شناسه تضمین ترتیب commit نیست |
+| `OccurredAtUtc` | `datetime2(3) NOT NULL` | default UTC؛ ساعت سرور مبناست |
+| `BrokerageId`, `SourceSystem` | هرکدام `nvarchar(32) NOT NULL` | context معتبر تنظیمات؛ collation BIN2 |
+| `RequestContextId` | `uniqueidentifier NULL` | مرجع داخلی اختیاری؛ resolve ناموفق ممکن است context نداشته باشد |
+| `ActorType` | `varchar(16) NOT NULL` | CHECK برابر `System/Anonymous/Customer/Staff` |
+| `ActorId` | `uniqueidentifier NULL` | شناسهٔ داخلی معتبر؛ نه header یا payload مشتری |
+| `ActionCode` | `varchar(64) NOT NULL` | کد allowlist، بدون متن آزاد |
+| `OutcomeCode`, `ResourceType` | هرکدام `varchar(32) NOT NULL` | کدهای محدود و اعتبارسنجی‌شده |
+| `ResourceId` | `uniqueidentifier NULL` | شناسهٔ داخلی؛ نه referral یا شناسهٔ خام بیرونی |
+| `CorrelationId` | `char(32) NOT NULL` | CHECK حروف hex کوچک؛ تولید سروری |
+| `MetadataCode` | `varchar(64) NULL` | کد allowlist؛ exception/query/mobile/OTP در آن قرار نمی‌گیرد |
+
+indexهای `(RequestContextId, OccurredAtUtc, Id)` و `CorrelationId`؛ uniqueness تجاری اضافه ندارد. FK اجباری audit به منبع/actor/context پیشنهاد نمی‌شود تا ثبت تلاش ناموفق و حفظ تاریخچه ممکن بماند؛ صحت context/actor در برنامه کنترل می‌شود. rowversion برای ردیف append-only نیاز نیست؛ INSERT اتمیک و منع UPDATE/DELETE مبنای concurrency است. account نوشتن فقط INSERT audit دارد؛ خواندن/export/retention مسیر مدیریتی جدا می‌خواهد. تغییر حساس و audit مرتبط در transaction مشترک‌اند.
+
+## اتصال، مجوز و SQL client آینده
+
+- factory اتصال read و write مستقل می‌سازد؛ اتصال باز singleton یا داخل Session نگهداری نمی‌شود. هر عملیات با `using` و reader/command/transaction مشخص پایان می‌یابد و pooling اتصال را مدیریت می‌کند.
+- کلیدهای پیشنهادی آینده `ConnectionStrings:BrokerageRead` و `ConnectionStrings:BazdidWrite` هستند؛ مقدار هر محیط از secret store/فایل ACLدار یا environment حفاظت‌شده می‌آید. اکنون در runtime ثبت یا فعال نشده‌اند. نام پایگاه قابل تنظیم و هنگام اجرا با مقصد مصوب تطبیق داده می‌شود؛ هیچ اتصال آرشیو استفاده نمی‌شود.
+- Windows Authentication با دو هویت کم‌اختیار مستقل پیشنهاد شد؛ مالک اجرای script، account برنامه نیست. [پیش‌نویس مجوز](../database/proposals/permissions.review.sql) نه login می‌سازد و نه رمز دارد. خواننده فقط SELECT شیء ساختگی/مصوب را می‌گیرد؛ writer فقط SELECT/INSERT/UPDATE دو جدول linkage و INSERT audit دارد؛ account برنامه DDL، db_owner و sysadmin نمی‌گیرد. مجوز مؤثر، نقش‌های ارثی و دسترسی دو حساب باید در مرحلهٔ بعد آزموده شوند.
+- SQL با `SqlParameter` دارای نوع/طول صریح است؛ نام schema/table از mapping مصوب allowlist می‌آید، نه ورودی مرورگر. `AddWithValue`، الحاق مقدار و انتخاب نام شیء از URL مجاز نیستند. برای هر command timeout محدود و cancellation درخواست منتقل می‌شود؛ ConnectTimeout مستقل است. برای تست، مقادیر اولیهٔ پیشنهادی ۵ ثانیهٔ اتصال/۱۰ ثانیهٔ command پس از سنجش بازبینی شوند.
+- repository یک transaction صریح روی همان اتصال برای تغییرهای مرتبط می‌گیرد؛ تعامل read منبع و write BAZDID، transaction توزیع‌شدهٔ خودکار ایجاد نمی‌کند. constraint/rowversion مبنای race است و نتیجهٔ مبهم timeout با retry کور به موفقیت تبدیل نمی‌شود. deadlock/timeout/unique conflict به خطای دامنهٔ امن نگاشت می‌شوند؛ SqlException.Message، connection string یا parameter در log نمی‌آید. retry فقط برای عملیات واقعاً idempotent و با سقف/مهلت مشخص طراحی شود.
+- برای اتصال شبکه‌ای، `Encrypt=True` و `TrustServerCertificate=False` و گواهی/نام معتبر لازم است. تنها اتصال metadata همین مرحله روی `lpc` و shared memory با Windows Authentication و `Encrypt=True; TrustServerCertificate=True` انجام شد؛ این استثنای محلی به تنظیمات برنامه یا Production منتقل نمی‌شود.
+
+**بررسی نسخهٔ بسته در `2026-11-01`:** نسخهٔ فعلی lockfile، `System.Data.SqlClient 4.5.3` انتقالی با قید framework برابر `[4.5.3,4.6.0)` است. pin پیشنهادی برای آزمایش سازگاری بعدی `System.Data.SqlClient 4.8.6` است؛ NuGet برای آن target مستقیم `.NETCoreApp 2.1` و وابستگی‌های حداقل `Microsoft.Win32.Registry 4.7.0`، `runtime.native.System.Data.SqlClient.sni 4.7.0`، `System.Diagnostics.DiagnosticSource 4.7.0`، `System.Security.Principal.Windows 4.7.0` و `System.Text.Encoding.CodePages 4.7.0` را اعلام می‌کند. [metadata رسمی بسته](https://www.nuget.org/packages/System.Data.SqlClient/4.8.6).
+
+این pin در **طرح** ثابت است؛ هیچ PackageReference/lockfile تغییر نکرده. افزودن 4.8.6 از قید framework فعلی خارج است و تا حل تعارض گراف، بررسی تمام وابستگی‌های انتقالی و SNI، audit و restore/build/runtime واقعی با SDK 2.1.818 در 2C تأیید اجرایی ندارد. هشدار dependency نباید پنهان یا سرکوب شود. `System.Data.SqlClient` deprecated است؛ [وضعیت رسمی](https://www.nuget.org/packages/System.Data.SqlClient/4.9.1). جایگزین `Microsoft.Data.SqlClient 2.1.7` نیز target 2.1 دارد ولی dependencyهای Identity/SNI بیشتری می‌آورد و خودش خارج پشتیبانی است؛ جایگزینی خودکار مصوب نیست. [بستهٔ جایگزین](https://www.nuget.org/packages/Microsoft.Data.SqlClient/2.1.7)، [چرخهٔ پشتیبانی](https://learn.microsoft.com/en-us/sql/connect/ado-net/sqlclient-driver-support-lifecycle). سازگاری TFM با پشتیبانی امنیتی برابر نیست؛ هیچ ORM جدیدی لازم نیست.
+
+## fixture و آماده‌سازی تست؛ بدون seed
+
+زنجیرهٔ ساختگی: `TEST-BROKERAGE / A4K9P2 → TEST-REQUEST-001 → TEST-CUSTOMER-001 → 09000000001`. شماره صرفاً fixture است و ادعای رزروشده‌بودن ندارد. OTP برابر `12345` فقط برای Development/Testing آینده است؛ هیچ SMS، seed، challenge یا منطق OTP در این مرحله اجرا/پیاده نشده. حالت دو درخواست برای یک مشتری، missing/zero، مشتری null، موبایل متعارض و شناسهٔ bigint بزرگ نیز باید ساخته شوند؛ اطلاعات Production به تست کپی نمی‌شود.
+
+اجرای بعدی پیش از DDL به تصویب schema، patch/گواهی/حساب‌ها و نام مقصد نیاز دارد؛ [ساخت پایگاه](../database/proposals/create_development_database.review.sql) و سه جدول/مجوزها همگی با flag صفر بسته‌اند. پس از تصویب، ابتدا پایگاه خالی، سپس schema و مجوز کمینه و آزمون SQL واقعی بررسی می‌شوند. تست unit قرارداد reader و normalization جداست. rollback عملیاتی، بازاعمال، concurrency، CAS، منع write مبدأ، مجوز مؤثر و توقف روی مقصد اشتباه در 2C–2G اثبات می‌شوند؛ parser جای این آزمون‌ها نیست. هیچ `BAZDIDInfo`، migration journal، OTP یا جدول دیگر اکنون ساخته نمی‌شود.
 
 ## ۱۷ جدول پیشنهادی مشتری؛ ساخت تدریجی
 

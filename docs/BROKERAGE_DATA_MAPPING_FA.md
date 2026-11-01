@@ -8,6 +8,14 @@
 
 credential خواندن مبدأ از credential نوشتن BAZDID جدا باشد؛ DBA به viewهای مصوب یا اشیای دقیق مجوز SELECT می‌دهد. ممیزی Checkpoint 1.5 نام صریح `Duber.OrderSales` و چند property/رابطه را در سورس یافت؛ **schema جاری سرور، ستون‌های فیزیکی و مرجع authoritative هنوز تأیید نشده‌اند**. نه query آزمایشی روی Production نوشته می‌شود و نه ساخت/تغییر جدول آن مجاز است. هیچ FK به جدول مبدأ تا شناخت schema پیشنهاد اجرایی نمی‌شود.
 
+## نتیجهٔ کشف محلی Checkpoint 2A/2B
+
+در `2026-11-01` با مجوز صریح کاربر، فقط master catalog در `(local)\SQLSERVER2019` و Windows Authentication خوانده شد. چهار پایگاه سیستمی وجود داشتند و `BAZDID_Development` موجود نبود؛ هیچ پایگاه/شیء کارگزاری روی این instance مشاهده یا خوانده نشد. بنابراین تمام confidenceهای جدول زیر همچنان **شاهد سورس** هستند و به physical mapping تأییدشده ارتقا نمی‌یابند. نام instance، نسخه و compatibility محلی، مشخصات سرور کارگزاری محسوب نمی‌شوند.
+
+[نمونهٔ metadata برای DBA](../database/discovery/source_object_metadata.sql) با مجوز صفر و نام پایگاه/schema/table برابر NULL بسته است. پس از تصویب مقصد و شیء واقعی، برای هر شیء جداگانه schema، column/type/nullability، FK و index را بدون خواندن ردیف تجاری برمی‌گرداند؛ definition/default literal یا credential خروجی ندارد. آن فایل در این وظیفه اجرا نشده است. نبود نتیجه با فقدان مجوز metadata یکی نیست و هیچ `dbo.Customer` یا join حدسی ساخته نمی‌شود.
+
+اقلام لازم از DBA/مالک: انتخاب context/پایگاه authoritative، metadata حداقلی و پاک‌شدهٔ اشیای واقعی، تعریف صدور/uniqueness/lifecycle referral، اولویت و verified بودن موبایل، eligibility و نسخهٔ منبع، mapping خودرو/سال/رنگ و Missing/Invalid/ZeroMeansMissing هر فیلد. Production access در این مرحله مجاز نیست و credential آرشیو استفاده نمی‌شود. تعارض موبایل به انتخاب خودکار یکی از دو مقدار منجر نمی‌شود. [گزارش مرحله](CHECKPOINT2A_2B_REPORT_FA.md).
+
 ## دفتر mapping مبتنی بر شاهد — Checkpoint 1.5
 
 مبنای این جدول آرشیو خصوصیِ ممیزی‌شده در `2026-11-01` است؛ hash و حدود جست‌وجو در [گزارش ممیزی](DUBERFRONT_CODE_AUDIT_FA.md) ثبت شده‌اند. `P` در مسیرهای زیر برابر `DuberFront/Duber` است. «صریح سورس» یعنی نگاشت EF مشاهده شده؛ «مدل سورس» یعنی property/رابطه دیده شده و نام ستون فیزیکی صرفاً از convention قابل حدس است. هیچ‌کدام تأیید پایگاه زنده نیستند. نام property مقصد، پیشنهاد قرارداد آینده است و هنوز پیاده نشده است.
