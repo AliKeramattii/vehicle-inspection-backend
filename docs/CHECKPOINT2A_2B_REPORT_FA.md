@@ -2,6 +2,18 @@
 
 تاریخ `2026-11-01`؛ مبنای Git در شروع `2e217a0` و worktree پاک بود. مجوز پیوست `66aec801-d9a2-4943-a6e3-418104144dba` فقط 2A/2B است. کاربر در پاسخ تکمیلی، instance محلی، Windows Authentication و نام `BAZDID_Development` را تأیید و **اجرای هر DDL را تا تصویب صریح بعدی ممنوع کرد**. script اولیهٔ جدول‌ها نیز با همین پاسخ فقط برای بازبینی آماده شد.
 
+## چگونه بررسی انجام شد
+
+۱. وضعیت Git، اسناد معماری/امنیت/نگاشت و گزارش ممیزی خوانده شد. سرویس و رجیستری instance و ابزارهای نصب‌شده با بررسی خواندنی Windows شناسایی شدند؛ هیچ سرویس یا نصب تازه‌ای شروع نشد.
+۲. پس از تأیید صریح مقصد توسط کاربر، ابزار موقت PowerShell از System.Data موجود، Windows Authentication، اتصال محدود به `lpc:.\SQLSERVER2019` و master، ConnectTimeout پنج و CommandTimeout ده ثانیه استفاده کرد؛ connection string چاپ نشد.
+۳. ابتدا فرادادهٔ سرور/همان رایانه، catalog پایگاه‌ها و linked server بررسی شد؛ سپس متن نهایی [server_inventory.sql](../database/discovery/server_inventory.sql) روی همان اتصال فقط‌خواندنی اجرا شد. هیچ database کارگزاری باز نشد. نتیجهٔ دقیق در جدول پایین است.
+۴. چون پایگاه تست وجود نداشت و DDL مجاز نبود، سه جدول فقط طراحی و scriptهای بستهٔ پایگاه/schema/مجوز تهیه شدند. [source_object_metadata.sql](../database/discovery/source_object_metadata.sql) با نام‌ها و مجوز حل‌نشده برای DBA آماده ماند و اجرا نشد.
+۵. SQLها با parser نصب‌شده parse و متن discovery از نظر نبود tokenهای تغییر داده کنترل شد؛ build/تست‌های موجود، پیوندها، scope و اسکن راز بررسی و بسته در main ثبت شد. این کنترل syntax با اجرای schema فرق دارد.
+
+خطای واقعیِ ابزار موقت قبل از Open، `Keyword not supported: 'DataSource'` بود؛ setter دیکشنری ConnectionStringBuilder در PowerShell به کلید دقیق `['Data Source']` تغییر کرد و اتصال بعدی موفق شد. مقدار حساس یا credential به خطا/گزارش اضافه نشد. ابزار موقت حذف شده است؛ فرمان ناموجود آن به‌عنوان ابزار دائمی معرفی نمی‌شود.
+
+برای مرور یا اجرای دستیِ خواندن در **وظیفهٔ جداگانه با مجوز مربوط**، [راهنمای VS Code](guides/VSCODE_SQLSERVER_SETUP_FA.md) و [راهنمای فایل‌های SQL](../database/README.md) مسیر اتصال/انتخاب master/metadata را توضیح می‌دهند. دستورهای ساخت DB/جدول، migration، آزمون مجوز مؤثر دو account، repository/transaction و recovery هنوز اجرا نشده‌اند؛ روشِ آزموده‌شدهٔ آن‌ها باید پس از پیاده‌سازی مصوب به گزارش اضافه شود. [فهرست walkthroughها](implementation/README.md) مرجع ورود است. در نگهداری فعلی مستندات، هیچ SQL دوباره اجرا نشده است.
+
 ## یافته‌های واقعی SQL
 
 | مورد | نتیجهٔ بررسی واقعی |

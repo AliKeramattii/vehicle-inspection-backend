@@ -4,6 +4,41 @@
 
 **نتیجه: foundation ساخته، build، run، test و محلی publish شد؛ Checkpoint 2 شروع نشده است.** هیچ جدول SQL، OTP، session عملیاتی، upload، تغییر Frontend یا استقرار کارگزاری انجام نشده است.
 
+این وضعیت، تاریخِ پایان Checkpoint 1 است؛ [PLAN فعلی](../PLAN.md) و [فهرست walkthroughها](implementation/README.md) مراحل بعدی را نشان می‌دهند. SHAهای اصلی این گزارش با [نقشهٔ انتشار بدون ZIP](GIT_HISTORY_EXPORT.json) به تاریخچهٔ GitHub متناظر می‌شوند؛ بخش Git پایین، ادعای وضعیت remote امروز نیست.
+
+## چگونه foundation ساخته و خوانده می‌شود
+
+مسئلهٔ این مرحله، ایجاد یک پایهٔ قابل اجرای مستقل روی نسل 2.1 بود تا قرارداد HTTP و ایمنی زیرساخت قبل از احراز/SQL واقعی آزموده شوند. ترتیب کلیِ قابل اتکا از شواهد همین گزارش چنین است؛ log کامل تک‌تک ویرایش‌های توسعه ثبت نشده است:
+
+۱. وجود SDK/Runtime بررسی و با [global.json](../global.json) و [Directory.Build.props](../Directory.Build.props) نسخه و C# پین شد؛ [csproj API](../src/Bazdid.Api/Bazdid.Api.csproj) و دو پروژهٔ آزمون، گراف lock و feed رسمی را مشخص کردند.
+۲. [Program.cs](../src/Bazdid.Api/Program.cs) میزبان WebHost را ساخت و [Startup.cs](../src/Bazdid.Api/Startup.cs) validation تنظیمات، DI/MVC، JSON، CORS و Swagger محیط غیرتولیدی را ثبت کرد. لایه‌های آینده فقط README داشتند.
+۳. middlewareهای correlation، خطای JSON و کنترل PathBase همراه [HealthController](../src/Bazdid.Api/Controllers/HealthController.cs) افزوده شدند؛ route کنترلر نسبی ماند تا prefix دوباره اضافه نشود.
+۴. [آزمون تنظیمات](../tests/Bazdid.UnitTests/FoundationOptionsTests.cs) و [آزمون HTTP](../tests/Bazdid.IntegrationTests/FoundationHttpTests.cs) کنترل‌های واقعی را پوشش دادند؛ restore از lock، build و تست‌ها اجرا شدند.
+۵. Kestrel در Development روی loopback اجرا و health/Swagger و مسیرهای خطا با HTTP بررسی شدند؛ سپس publish محلی و audit انجام و نتیجه/محدودیت‌ها ثبت شد. فرمان‌های اجراشده و نتایج در بخش‌های پایین هستند.
+
+فلو درخواست واقعی: `WebHost → CorrelationMiddleware → ExceptionMiddleware/StatusCodePages → PathBase/کنترل پایه → HTTPS/HSTS مشروط و CORS → Swagger یا MVC`. برای health، MVC متد Get را فراخوانی و قرارداد [LivenessResponse](../src/Bazdid.Api/Contracts/LivenessResponse.cs) را به JSON تبدیل می‌کند. خطای ناشناخته از middleware پاسخ امن می‌گیرد؛ مسیر بی‌route از StatusCodePages به JSON خطا تبدیل می‌شود. جزئیات کد در source کامل است.
+
+قطعهٔ واقعی متد health، بدون وابستگی به SQL یا دادهٔ مشتری:
+
+```csharp
+public ActionResult<LivenessResponse> Get()
+{
+    Response.Headers["Cache-Control"] = "no-store";
+    return new LivenessResponse();
+}
+```
+
+پس از restore/build و فرمان startup ثبت‌شده در پایین، در ترمینال دوم می‌توان این **دستورهای بازآزمایی پیشنهادی** را اجرا کرد؛ شکل دقیق این بلوک به‌عنوان command log تاریخی ادعا نمی‌شود:
+
+```powershell
+Invoke-WebRequest -UseBasicParsing 'http://127.0.0.1:5081/API/BAZDID/health/live' |
+    Select-Object StatusCode, Content
+Invoke-WebRequest -UseBasicParsing 'http://127.0.0.1:5081/API/BAZDID/swagger/v1/swagger.json' |
+    Select-Object StatusCode, Content
+```
+
+معیار دستی: health برابر ۲۰۰ و `{"status":"alive"}`؛ Swagger JSON فقط health را با basePath درست نشان دهد. URLهای ناشناخته/پایهٔ دوباره طبق جدول پایین بررسی شوند؛ درخواستِ خطای ۴۰۰/۴۰۴ در Windows PowerShell ممکن است exception ابزار بدهد و HTTP status باید از response بررسی شود. پورت 5081 آزاد و محیط Development لازم است؛ این مراحل را به Production تعمیم ندهید. آزمون کامل و محدودیت امنیت در گزارش‌های لینک‌شده‌اند؛ در وظیفهٔ نگهداری مستندات دوباره اجرا نشده‌اند.
+
 ## ساختار و فایل‌های اجرایی
 
 ```text

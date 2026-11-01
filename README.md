@@ -2,7 +2,7 @@
 
 این مخزن مستقل، پایهٔ توسعهٔ Backend برنامهٔ فارسی خودبازدید خودرو برای کارگزاری بیمه است. Frontend موجود در `C:\Projects\vehicle-inspection-integrated` فقط مرجع خواندنی است؛ دو مخزن ادغام نمی‌شوند.
 
-**وضعیت در 2026-11-01: Checkpoint 1 با اجازهٔ صریح کاربر پیاده و محلی آزموده شده است.** API واقعی فقط liveness، زیرساخت خطا/log/config و Swagger محیط غیرتولیدی دارد. SQL، OTP، Session، بازدید و upload هنوز پیاده نشده‌اند. SQL داخل پوشهٔ مرجع، پیشنهاد تاریخی اجرا‌نشده است.
+**وضعیت در 2026-11-01: Checkpoint 2A/2B در دامنهٔ کشف و آماده‌سازی کامل است؛ پیشرفت کل 15%.** API واقعی همچنان فقط foundation مرحلهٔ 1 است. پایگاه `BAZDID_Development` در آخرین کشف وجود نداشت؛ SQL runtime، OTP، Session، بازدید و upload پیاده نشده‌اند. scriptهای تازه صرفاً کشف خواندنی یا پیش‌نویس بازبینی‌اند و SQL مرجع تاریخی اجرا نشده است. 2C به تصویب صریح بعدی نیاز دارد.
 
 ## فناوری و میزبانی
 
@@ -10,14 +10,19 @@
 
 پشتیبانی .NET Core 2.1 در `2021-08-21` پایان یافته است. انتشار عمومی نیازمند بررسی امنیت و پذیرش صریح ریسک است. [اعلام رسمی Microsoft](https://devblogs.microsoft.com/dotnet/net-core-2-1-will-reach-end-of-support-on-august-21-2021/).
 
-## ترتیب مطالعه
+## راهنمای مطالعهٔ توسعه‌دهنده
 
-۱. [قواعد عامل‌ها](AGENTS.md) و [برنامهٔ مرجع](PLAN.md).
-۲. [زمینهٔ پروژه](docs/PROJECT_CONTEXT_FA.md)، [معماری و محیط](docs/ARCHITECTURE_FA.md) و [قواعد کسب‌وکار](docs/BUSINESS_RULES_FA.md).
-۳. [طراحی داده](docs/DATABASE_DESIGN_FA.md)، [نگاشت کارگزاری](docs/BROKERAGE_DATA_MAPPING_FA.md)، [هویت و نشست](docs/AUTH_AND_SESSION_FA.md) و [نقشهٔ API](docs/API_IMPLEMENTATION_FA.md).
-۴. [رسانه](docs/MEDIA_STORAGE_FA.md)، [امنیت](docs/SECURITY_FA.md) و [IIS](docs/IIS_DEPLOYMENT_FA.md).
-۵. [آزمون‌ها](docs/TESTING_STRATEGY_FA.md)، [پذیرش Phase 1](docs/PHASE1_ACCEPTANCE_FA.md)، [تصمیم‌های باز](docs/OPEN_DECISIONS_FA.md) و [ادامهٔ کار عامل](docs/AI_CONTINUATION_FA.md).
-۶. [گزارش Checkpoint 1](docs/CHECKPOINT1_IMPLEMENTATION_FA.md)، [یافته‌های امنیت dependency](docs/checkpoint1/DEPENDENCY_SECURITY_FA.md)، [شناسنامهٔ منابع](docs/SOURCE_REFERENCES_FA.md) و [اعتبارسنجی تاریخی Phase 0](docs/PHASE0_VALIDATION_FA.md). اسناد بزرگ تاریخی فقط به تناسب نیاز خوانده شوند.
+| موضوع | محل مطالعه |
+|---|---|
+| معماری و قواعد | [معماری](docs/ARCHITECTURE_FA.md)، [زمینه](docs/PROJECT_CONTEXT_FA.md)، [قواعد کسب‌وکار](docs/BUSINESS_RULES_FA.md) و [امنیت](docs/SECURITY_FA.md) |
+| چگونه پیاده شد | [فهرست walkthroughها و شواهد مراحل](docs/implementation/README.md)؛ به‌روزرسانی فرایند بعد از هر پیاده‌سازی اجباری است |
+| راه‌اندازی و بررسی پایگاه | [VS Code و SQL Server](docs/guides/VSCODE_SQLSERVER_SETUP_FA.md)، [وضعیت scriptها](database/README.md)، [طراحی داده](docs/DATABASE_DESIGN_FA.md) و [نگاشت](docs/BROKERAGE_DATA_MAPPING_FA.md) |
+| API و قرارداد | [قرارداد اجراشده/طرح آینده](docs/API_IMPLEMENTATION_FA.md)؛ Swagger واقعیِ محیط محلی پایین همین صفحه معرفی شده است |
+| آزمون و پذیرش | [راهبرد و فرمان‌ها](docs/TESTING_STRATEGY_FA.md)، [پذیرش](docs/PHASE1_ACCEPTANCE_FA.md) و [audit dependency](docs/checkpoint1/DEPENDENCY_SECURITY_FA.md) |
+| میزبانی و استقرار | [راهنمای IIS](docs/IIS_DEPLOYMENT_FA.md)؛ استقرار واقعی هنوز انجام نشده است |
+| پیشرفت و گام بعد | [PLAN](PLAN.md)، [تصمیم‌های باز](docs/OPEN_DECISIONS_FA.md)، [AGENTS](AGENTS.md) و [ادامهٔ نشست](docs/AI_CONTINUATION_FA.md) |
+
+طرح‌های [احراز هویت](docs/AUTH_AND_SESSION_FA.md) و [رسانه](docs/MEDIA_STORAGE_FA.md) با رفتار فعلی اشتباه نشوند. منشأ منابع در [SOURCE_REFERENCES_FA.md](docs/SOURCE_REFERENCES_FA.md) ثبت است؛ اسناد تاریخی بزرگ فقط به تناسب نیاز خوانده شوند.
 
 ## ساختار فعلی و آینده
 
@@ -34,11 +39,13 @@ vehicle-inspection-backend/
   .gitattributes                   # حفظ بایت مرجع‌ها و پایان خط اسناد تازه
   docs/
     *_FA.md
+    implementation/             # فهرست فرایندها با ارجاع به گزارش‌های واقعی
+    guides/                     # آموزش عملی ابزار؛ بدون مجوز اجرای DDL
     reference/                  # منابع تحویل‌شده؛ قرارداد اجرایی نیستند
   src/Bazdid.Api/                # WebHost + Startup + health و زیرساخت
   tests/Bazdid.UnitTests/
   tests/Bazdid.IntegrationTests/
-  database/                     # فقط README؛ بدون SQL اجرایی
+  database/                     # discovery فقط‌خواندنی و proposals بسته برای بازبینی
   deployment/iis/               # راهنما و web.config.example
 ```
 
