@@ -1,6 +1,6 @@
 # اتصال GitHub و سیاست انتشار امن
 
-گزارش اولیه در `2026-11-01` فقط Git و مستندات بود؛ در آن زمان Checkpoint 1 تکمیل و Checkpoint 2 شروع نشده بود. بخش‌های اولیه شاهد تاریخی همان انتشارند؛ وضعیت تأییدشدهٔ جدید 2C در انتهای این سند ثبت شده است.
+گزارش اولیه در `2026-11-01` فقط Git و مستندات بود؛ در آن زمان Checkpoint 1 تکمیل و Checkpoint 2 شروع نشده بود. بخش‌های اولیه شاهد تاریخی همان انتشارند؛ وضعیت تأییدشدهٔ 2C و سپس 2D در انتهای این سند ثبت شده است.
 
 ## مقصد و نتیجهٔ بررسی اولیه
 
@@ -78,3 +78,21 @@ force push، حذف commit remote، reset مخرب، ایجاد مخزن دیگ�
 پیش از انتشار، مقصد/refs، محتوای بسته و تاریخچهٔ reachable بررسی شدند؛ blob ZIP خصوصی از ancestry ارسالی قابل دسترسی نبود و هیچ archive، فایل پایگاه/backup، credential یا خروجی bin/obj به بسته اضافه نشد. branch `local-original-history-2026-11-01` بدون تغییر روی `7e2d83ddeb33475d07f70f4471cd09e466f853a4` ماند. فایل untracked کاربر `src/Bazdid.Api/Properties/launchSettings.json` با همان hash اولیه حفظ شد و جزو commit نیست؛ worktree کاملاً خالی گزارش نمی‌شود.
 
 نتیجهٔ اجرایی تازهٔ این checkpoint: ۳۵ آزمون SQL rollback-only، چهار آزمون guard و ۴۳ آزمون برنامه موفق؛ build صفر warning/error. [شواهد تجمیعی](checkpoint2c/PROVISIONING_SUMMARY.json) تفکیک آن‌ها را ثبت می‌کند. پیشرفت **15% + 2 = 17%** است؛ 2D شروع نشده و O24 و حساب‌های runtime کم‌اختیار بازند. این ثبت نهاییِ صرفاً مستنداتی با commit جدا ارسال می‌شود؛ SHA همان commit و آخرین تطبیق remote در گزارش تحویل از Git واقعی خوانده می‌شوند تا سند به SHA خودش ارجاع دوری ندهد.
+
+## انتشار تأییدشدهٔ Checkpoint 2D
+
+در `2026-11-02` با مجوز `2df8399e-d511-49b7-af28-a075f801dd57`، commit پیاده‌سازی `30112f104d9def9a5ea91cfd56b78d21e581685a` شامل ۳۲ فایل بررسی‌شده از مبنای `b495b10`، با push عادی به همان origin/main ارسال شد. پس از ارسال، HEAD محلی، origin/main و ls-remote همین SHA را داشتند و اختلاف ancestry برابر `0/0` بود. remote فقط main داشت؛ هیچ force، tag یا branch اصل خصوصی ارسال نشد.
+
+ابزار متصل GitHub در خواندن فایل‌ها خطای transport داد؛ بنابراین API عمومی GitHub برای همان commit خوانده شد و محتوای base64 هر سه فایل در دسترس بود. blob SHAهای زیر با Git محلی برابر بودند:
+
+| فایل | blob SHA تأییدشده در commit پیاده‌سازی |
+|---|---|
+| [قرارداد reader](../src/Bazdid.Api/Domain/Brokerage/BrokerageContracts.cs) | `06a677d6ee34c3244995df439ea908da34921a55` |
+| [walkthrough 2D](implementation/CHECKPOINT-02D-BROKERAGE-READER_FA.md) | `5e312789a9c068d6adffd99743006e0f53a0756f` |
+| [شاهد آزمون برنامه](checkpoint2d/APPLICATION_VALIDATION.json) | `6f2665946a759e739b6fbe6b191535d8de53bcfc` |
+
+این SHAهای blob به نسخهٔ commit پیاده‌سازی اشاره دارند؛ walkthrough و این گزارش در commit مستنداتی بعدی تکمیل می‌شوند. آخرین SHA و تطبیق HEAD پس از آن از Git واقعی در گزارش نهایی ثبت می‌شوند تا ارجاع دوری به SHA خود سند ایجاد نشود.
+
+کنترل پیش از commit پیاده‌سازی: ۳۲ فایل، ۱۳ Markdown، ۱۴۲ پیوند محلی/یک anchor، اسکن ۱۳۶ فایل فعلی و ۱۷۶ blob تاریخی main، بدون هشدار راز باقی‌مانده؛ fixture URL آزمون قدیمی origin جدا تأیید شد. ZIP خصوصی از ancestry قابل ارسال غایب، branch اصل محلی روی SHA قبلی و فایل untracked کاربر با hash اولیه محفوظ بود. هیچ source اختصاصی، backup، فایل پایگاه، credential یا دادهٔ واقعی اضافه نشد؛ package/lockfile/target و SQL scriptها تغییر نکردند.
+
+نتیجهٔ 2D: restore/build موفق با صفر warning/error؛ **۶۵ unit + ۴۳ integration = ۱۰۸ موفق**؛ smoke Kestrel واقعی و verification خواندنی DB قبل/بعد موفق. integration حافظه‌ای/DI/TestServer با SQL واقعی متفاوت است؛ آزمون‌های SQL 2C دوباره اجرا نشدند. [فرایند و محدودیت‌ها](implementation/CHECKPOINT-02D-BROKERAGE-READER_FA.md). **17% + 2 = 19%**؛ O24/O26 و mapping واقعی بازند؛ 2E–2G و auth/OTP/Session/Info/media شروع نشدند. تکمیل این ثبت Git سهم پیشرفت تازه ندارد.
