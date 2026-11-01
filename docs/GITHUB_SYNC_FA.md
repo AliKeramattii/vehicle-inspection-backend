@@ -45,9 +45,23 @@ export اجرا شد و [نقشهٔ کامل SHAها](GIT_HISTORY_EXPORT.json) �
 - [x] مجوز پاک‌سازی تاریخچهٔ ارسالی با حفظ اصل فقط محلی دریافت شد.
 - [x] export پاک‌شده و نقشهٔ SHAها ساخته و بررسی شد؛ اصل فقط محلی است.
 - [x] main پاک‌شده با پنج commit و ۱۱۷ blob یکتا دوباره اسکن شد؛ archive یا مسیر ممنوع نداشت و تنها candidate همان fixture آزمون بود. commitهای مستندات افزوده نیز پیش از ارسال بررسی می‌شوند.
-- [ ] push معمولی فقط `main` و راستی‌آزمایی remote و فایل‌ها انجام شود.
+- [x] push عادی فقط `main` با exit code صفر انجام شد؛ upstream برابر `origin/main` است و remote فقط branch `main` دارد.
 
-تا زمانی که دو مورد آخر بررسی نشده‌اند، این سند ادعای upload موفق ندارد. نتایج نهایی در همین بخش تکمیل می‌شوند.
+## نتیجهٔ واقعی انتشار و راستی‌آزمایی
+
+نخستین push واقعی در `2026-11-01` موفق بود و پس از fetch، HEAD محلی و `origin/main` هر دو برابر `0537ae642241ca0f2012d59e4d433f6cd3e86a7a` بودند. این SHA مربوط به اولین انتشار بررسی‌شده است؛ این گزارش نیز در commit مستندات بعدی تکمیل می‌شود و آخرین SHA را باید از `git log -1` و `git ls-remote origin refs/heads/main` خواند تا ارجاع دوری به commit خود سند ایجاد نشود.
+
+شش commit نخستِ ارسال‌شده: `2ddf17a`، `2c9195c`، `613d351`، `dafb037`، `870be97` و `0537ae6`. commit نهاییِ همین گزارش به‌صورت fast-forward معمولی ارسال می‌شود. هیچ force push، حذف commit remote، ارسال tag یا branch اصلی انجام نشده است. اصل تمام پنج commit محلی قبل از export در branch نگهداری اصل موجود و از `main` منتشرشده غیرقابل‌دسترسی از مسیر ancestry است.
+
+راستی‌آزمایی مستقل:
+
+- fetch و `ls-remote --symref`، branch پیش‌فرض و upstream `main` را تأیید کردند؛ tree منتشرشده ۱۰۲ فایل tracked دارد.
+- با ابزار GitHub، `AGENTS.md`، `PLAN.md`، `README.md`، `Bazdid.sln` و فایل نمایندهٔ هرکدام از `src/Bazdid.Api/`، `tests/`، `docs/` و `deployment/iis/` از SHA منتشرشده خوانده شدند.
+- درخواست مستقیم GitHub برای ZIP در همان SHA، پاسخ 404 داد؛ blob ZIP در هیچ commit reachable از `origin/main` وجود ندارد.
+- tree/history منتشرشده archive، env واقعی، certificate، رسانه، backup یا bin/obj/artifacts ندارد؛ هر نگاشت SHA از روی ancestry کنترل شد.
+- مقایسهٔ `main` با branch اصل برای `src/`، `tests/`، solution، SDK/config ساخت، `database/` و `deployment/` هیچ تفاوتی نداشت. هیچ endpoint، SQL، migration یا رفتار برنامه تغییر نکرده است.
+
+آزمون اجرایی/build/runtime در این وظیفه دوباره اجرا نشد؛ فقط کنترل Git، اسکن تاریخچه و اعتبارسنجی اسناد انجام شد. نتیجهٔ ۴۳ آزمون و build موفق مربوط به Checkpoint 1 است. نگرانی‌های امنیت dependencyهای EOL و وابستگی پایگاه تست برای Checkpoint 2 همچنان باقی‌اند؛ مانع احراز هویت Git برای این انتشار وجود نداشت.
 
 ## ادامهٔ امن
 
