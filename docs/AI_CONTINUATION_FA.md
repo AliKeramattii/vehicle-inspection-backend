@@ -25,3 +25,9 @@ hash یا commit تحویل را از Git واقعی بخوانید؛ آن را 
 foundation از نو ساخته نشود: `Bazdid.sln`، API و دو پروژهٔ تست موجودند؛ build و ۴۳ آزمون و HTTP واقعی health/Swagger و publish موفق‌اند. ANCM واقعی و Production security آزموده/تأیید نشده‌اند؛ audit شامل Critical/High است. آخرین commitهای واقعی را از Git بخوانید؛ گزارش تاریخی Phase 0 را وضعیت امروز نگیرید.
 
 گام بعد از اجازهٔ تازه، **2 — SQL Server تست و adapter مبدأ** است. پیش از DDL، مقصد/نسخه/compatibility و اختیار پایگاه تست باید معلوم باشد. schema واقعی مبدأ حدس زده نشود؛ fixture synthetic فقط در دامنهٔ مجاز بعدی ساخته شود. OTP در Checkpoint 3 و upload/staff/Production در مراحل بعد باقی می‌مانند.
+
+## گزارش نهایی و همگام‌سازی
+
+پس از هر وظیفه، گزارش نهایی کاملاً فارسی و مطابق ۱۳ دستهٔ [سیاست اجباری AGENTS.md](../AGENTS.md) باشد؛ شناسه‌ها و فرمان‌ها انگلیسی می‌مانند. ادعای آزمون/build/push بدون نتیجهٔ واقعی ممنوع است. آزمون‌های تاریخی Checkpoint 1 به معنی اجرای دوباره در وظیفهٔ Git نیستند.
+
+مقصد مجاز `origin` برابر `https://github.com/AliKeramattii/vehicle-inspection-backend.git` است. [GITHUB_SYNC_FA.md](GITHUB_SYNC_FA.md) را پیش از push بخوانید: کاربر در `2026-11-01` حذف ZIP از تمام تاریخچهٔ ارسالی و نگهداری اصل فقط محلی را صریحاً مجاز کرد؛ SHAهای جدید با اصل متفاوت‌اند. `.gitignore` یا حذف فایل فقط در commit جدید، تاریخچه را پاک نمی‌کند. branch `local-original-history-2026-11-01` هرگز push یا merge به نسخهٔ انتشار نشود؛ `--all` و `--mirror` ممنوع‌اند. checkpointهای بعدیِ مجاز پس از validation و مرور تاریخچه به همین مقصد push و HEAD و فایل‌های remote بررسی شوند؛ تاریخچهٔ مستقل remote حفظ شود.

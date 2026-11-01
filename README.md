@@ -88,3 +88,9 @@ restore/build موفق و ۴۳ آزمون موفق‌اند؛ build نهایی �
 بسته‌های اصلی `Microsoft.AspNetCore.App 2.1.30`، `Swashbuckle.AspNetCore 4.0.1` و `Newtonsoft.Json 13.0.4` هستند؛ نسخه‌های تست و lockfileها در [گزارش dependency](docs/checkpoint1/DEPENDENCY_SECURITY_FA.md) ثبت‌اند. audit واقعی، ۹ بستهٔ دارای هشدار در گراف API، از جمله Critical برای Kestrel، نشان داد. **Production تأیید امنیتی ندارد.**
 
 Checkpoint 1 نقطهٔ توقف است. گام بعدی فقط پس از **اجازهٔ تازهٔ کاربر**، Checkpoint 2 و تعیین پایگاه تست/نسخه SQL است؛ هیچ SQL، OTP، تغییر Frontend یا استقرار واقعی به‌طور خودکار شروع نمی‌شود.
+
+## GitHub و گزارش‌دهی فارسی
+
+مخزن مقصد مجاز [AliKeramattii/vehicle-inspection-backend](https://github.com/AliKeramattii/vehicle-inspection-backend) است. `origin` به URL همین مخزن وصل شده است؛ وضعیت ارسال و تطبیق HEADها فقط از [گزارش همگام‌سازی](docs/GITHUB_SYNC_FA.md) خوانده شود و وجود remote به‌معنی push موفق فرض نشود.
+
+پس از هر وظیفهٔ Codex، گزارش نهایی باید طبق [سیاست اجباری AGENTS.md](AGENTS.md) فارسی باشد و تغییر، فایل، آزمون/build، امنیت، Git، مرحلهٔ فعلی و گام بعد را با شواهد واقعی توضیح دهد. checkpointهای بعدیِ مجاز و اعتبارسنجی‌شده به همین مقصد commit/push شوند؛ force push، انتشار secret/تنظیم Production/آرشیو مرجع خصوصی و شروع خودکار checkpoint بعد ممنوع است. پیش از ارسال، تمام تاریخچهٔ قابل ارسال بررسی شود؛ حذف فایل ممنوع فقط از HEAD آن را از commitهای قدیمی حذف نمی‌کند.

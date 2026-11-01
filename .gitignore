@@ -41,6 +41,15 @@ private-media/
 tmp/
 temp/
 .phase0-tmp/
+.sync-tmp/
+.local-private/
+# آرشیو مرجع فقط محلی است؛ تاریخچهٔ قبلی جدا و بدون push حفظ می‌شود
+docs/reference/*.zip
+docs/reference/**/*.zip
+docs/reference/**/*.7z
+docs/reference/**/*.rar
+docs/reference/**/*.tar
+docs/reference/**/*.gz
 *.tmp
 *.part
 *.bak
