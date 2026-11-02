@@ -73,4 +73,6 @@ credential خواندن مبدأ از credential نوشتن BAZDID جدا باش
 
 ## refresh و منشأ
 
+به‌روزرسانی طراحی 2E: [ماتریس دقیق Frontend → reader → DTO → ذخیره](implementation/CHECKPOINT-02E-INFO-PERSISTENCE-DESIGN_FA.md) مرجع persistence آینده است؛ این کار query یا mapping کارگزاری را اضافه نکرد. Origin مقدار مؤثر با SourceStatus پذیرفته‌شده، InitialSourceStatus و ObservedSourceStatus جدا می‌شود؛ Manual شاهد Missing را پاک نمی‌کند. ordinalهای enum 2D به SQL آینده cast نمی‌شوند. ColorHex از reader فعلی نمی‌آید و کاتالوگ UI مرجع authoritative رنگ نیست. نسخهٔ اجباری غیرخالی 2D برای source unversioned نیازمند تغییر آگاهانهٔ آینده است؛ در 2E کد تغییر نکرد و نسخه‌ای از ساعت جعل نشد. بازخوانی بعد از submit نیز Info/snapshot را تغییر نمی‌دهد. توضیح lifecycle عمومی زیر طرح آینده باقی می‌ماند.
+
 حل referral یک context کوتاه‌عمر سرور می‌دهد؛ موبایل در زمان صدور/ارسال مجدد و verify با نسخهٔ مورد اعتماد سازگار می‌ماند. تغییر موبایل/مالک، چالش قبلی را باطل می‌کند. در ایجاد بازدید، snapshot مبنای خواندنی پین و زمان بازیابی ثبت می‌شود. اگر پیش از نهایی‌سازی مبدأ تغییر کرد، Backend با `SOURCE_CHANGED` تأیید مجدد می‌خواهد؛ مقدار trusted بی‌صدا روی Manual نوشته نمی‌شود. پس از submit، snapshot تاریخی ثابت است. سیاست دقیق استعلام تازگی و امکان نسخه‌خوانی منبع در تصمیم‌های باز است.

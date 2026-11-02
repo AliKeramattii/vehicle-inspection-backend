@@ -1,0 +1,118 @@
+{
+  "Date": "2026-11-02",
+  "ReferenceHead": "448fa6aa9ce29f4fbf535203dbb96d2e862565ce",
+  "SourceKind": "ExistingWorkingTree",
+  "GitStatusSha256Before": "5c74e9b1db6caef734b3364ec6d9033af35561683398a5c4df5c223e543fa9c9",
+  "PreExistingStatusEntries": 226,
+  "Files": [
+    {
+      "Path": "src/schemas/domain.ts",
+      "Sha256": "4548fb426fbb5aeaeeaf3a4567927e583b016709f6971ed40c63258122be990b"
+    },
+    {
+      "Path": "src/types/domain.ts",
+      "Sha256": "050f85b6623a425e417ede96e97a42d0cded8d6e18109c02192b4634fbb49cfb"
+    },
+    {
+      "Path": "src/features/vehicle/vehicle-model.ts",
+      "Sha256": "c21f0454cf740c5986fdcbaf1ff566d8e3b42b6fd9184553cc964067eb1259df"
+    },
+    {
+      "Path": "src/features/vehicle/vehicle-form.tsx",
+      "Sha256": "791bc5428812916eb6cb08cec6d1e5e10d29ef50c46118bdf93fc6b674a44511"
+    },
+    {
+      "Path": "src/features/vehicle/plate-confirmation.tsx",
+      "Sha256": "201f04df796e9c225e232d709938476011673fb4fea52515460b6ba21b083511"
+    },
+    {
+      "Path": "src/features/vehicle/vehicle-workflow.tsx",
+      "Sha256": "8c787a7c5a1c11b4d743fefa40b10901e99591d7eee696686890289345d05182"
+    },
+    {
+      "Path": "src/features/vehicle/vehicle-colors.ts",
+      "Sha256": "6c00b69d3374a2321f9f30ddf1229be65606a55ac05e1b12e1e7b2cd9bca6dab"
+    },
+    {
+      "Path": "src/components/vehicle/plate-input.tsx",
+      "Sha256": "2b16a8575e4a6bf9c496ead6446c9067227ed97686db94b50d930b0379d3ad2b"
+    },
+    {
+      "Path": "src/components/vehicle/iranian-plate.tsx",
+      "Sha256": "9280acbf54e416cfc35f4be87cfe0fd2dd2312eb5c671f47ca2647eb389fe1f8"
+    },
+    {
+      "Path": "src/components/vehicle/vehicle-card.tsx",
+      "Sha256": "c68a30d28e71548449d0604763c45be0e1e48d525a5fc25e697fe04374212b7e"
+    },
+    {
+      "Path": "src/features/capture-package/capture-package-model.ts",
+      "Sha256": "fa62b834d61152a11d4e64cc59828ff11829f3b1d400e6306e38faa9a797a83c"
+    },
+    {
+      "Path": "src/features/capture-package/odometer-field.tsx",
+      "Sha256": "77f5b8a9e2269be1c571f445daa65509576838333f2d8279767dd5c5639f8132"
+    },
+    {
+      "Path": "src/features/capture-package/capture-package-summary.tsx",
+      "Sha256": "b3ab7695109d4360f59b75a5e8b5a92522ee41d7c737967b1e67b7490167418b"
+    },
+    {
+      "Path": "src/lib/utils/persian.ts",
+      "Sha256": "d5b61c77e9e60c372217cc5423c45b6338e773ccbae2b51d39f2abad9bb33ddd"
+    },
+    {
+      "Path": "src/features/readiness/readiness-screen.tsx",
+      "Sha256": "d35332b4b448e7393ab492d7bb61812242927a920498c909509c406816f2fc9e"
+    },
+    {
+      "Path": "src/features/consent/consent-model.ts",
+      "Sha256": "47f84de9ba4c59e24c9d63f4465ea6b0bf2d61cc3e7d1524904a18fa5642d796"
+    },
+    {
+      "Path": "src/features/consent/consent-form.tsx",
+      "Sha256": "04af5f56f44495413b0d8e767370c58c542c5b5e401f37dffeafe2dbd0813a5f"
+    },
+    {
+      "Path": "src/features/preparation/preparation-header.tsx",
+      "Sha256": "701f553a18288db938d5877dc6be2b65e3ead6d7c8f3f98be1c2a8a035cfa2d2"
+    },
+    {
+      "Path": "src/features/submission/submission-model.ts",
+      "Sha256": "1b61e3cb65059efd735198dc6aa63a4e4691ce006c0b4b5cea5cb489435d1a82"
+    },
+    {
+      "Path": "src/features/submission/summary-sections.tsx",
+      "Sha256": "bc6f5ef4c3b8931b21a83252fa2800d4d6a862c8672fb06045c162b7a3d01135"
+    },
+    {
+      "Path": "src/features/submission/summary-source.ts",
+      "Sha256": "f53179c4ebaad22142dc5c02657e1cd478fd37964e762b7fd1570b488dc1d20a"
+    },
+    {
+      "Path": "src/lib/api/adapters/inspection.ts",
+      "Sha256": "70f97d8d6b3e62e5ea62d15dd9d2270cdec252ad38ce05d8a05ba9bcfe91e107"
+    },
+    {
+      "Path": "src/lib/api/endpoints.ts",
+      "Sha256": "c0b321c6fb1cd3474f717c9e0417c9c687a94fc186b84860228f4db7840710e3"
+    },
+    {
+      "Path": "src/lib/api/repositories.ts",
+      "Sha256": "3dcfa37b3f557aa8de118b9a132d7b6746cd4105145793335a2af3c1d1a2c60c"
+    },
+    {
+      "Path": "src/features/identity/source-context.ts",
+      "Sha256": "3279218138fd329c12ef4c9419a97093efa9b31d256924cc36e869c809bd4f94"
+    },
+    {
+      "Path": "src/mocks/inspection-repository.ts",
+      "Sha256": "769b5cd3a942ee6558338d2ba3e9507dfcff1c7d9bf70860e881d46b46e01739"
+    }
+  ],
+  "ExplanationFa": "Frontend ??? ?????? ??? ??????? ??????? ????? hash ???? ???????? ???? ???? ????? ??? ? HEAD ????????? ????? ?????? ????????? ?? ???? ???????.",
+  "GitStatusSha256After": "5c74e9b1db6caef734b3364ec6d9033af35561683398a5c4df5c223e543fa9c9",
+  "SelectedFilesUnchanged": true,
+  "GitStatusUnchanged": true,
+  "FrontendModifiedByTask": false
+}

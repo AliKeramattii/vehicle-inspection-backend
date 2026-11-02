@@ -2,7 +2,7 @@
 
 این مخزن مستقل، پایهٔ توسعهٔ Backend برنامهٔ فارسی خودبازدید خودرو برای کارگزاری بیمه است. Frontend موجود در `C:\Projects\vehicle-inspection-integrated` فقط مرجع خواندنی است؛ دو مخزن ادغام نمی‌شوند.
 
-**وضعیت در 2026-11-02: Checkpoint 2D تکمیل شد؛ پیشرفت کل 19%.** reader داخلی ساختگی، قراردادهای منشأدار و DI امن با ۱۰۸ آزمون موفق پیاده‌اند؛ HTTP همچنان فقط health/Swagger دارد. پایگاه و سه جدول 2C قبل/بعد به‌صورت خواندنی تأیید و خالی ماندند؛ seed/DDL انجام نشد. SQL واقعی کارگزاری، OTP/Session/Info/media اجرا نشده‌اند. O24، حساب‌های کم‌اختیار و mapping Production بازند. [فرایند و شواهد 2D](docs/implementation/CHECKPOINT-02D-BROKERAGE-READER_FA.md).
+**وضعیت در 2026-11-02: Checkpoint 2E فقط در دامنهٔ طراحی تکمیل شد؛ پیشرفت کل 20%.** قرارداد persistence/refresh آینده با ماتریس Frontend/reader و manifest Info تهیه شد؛ Info یا SQL اجرایی ساخته نشد. reader ساختگی 2D و HTTP health/Swagger بدون تغییرند؛ ۱۰۸ آزمون موجود تازه موفق و build بدون warning/error بود. O24، حساب‌های کم‌اختیار، policyهای داده/crypto و mapping Production بازند. [طرح، حدود و شواهد 2E](docs/implementation/CHECKPOINT-02E-INFO-PERSISTENCE-DESIGN_FA.md).
 
 ## فناوری و میزبانی
 
@@ -94,7 +94,7 @@ restore/build/test در 2D دوباره موفق اجرا شدند: **۶۵ unit 
 
 بسته‌های اصلی `Microsoft.AspNetCore.App 2.1.30`، `Swashbuckle.AspNetCore 4.0.1` و `Newtonsoft.Json 13.0.4` هستند؛ نسخه‌های تست و lockfileها در [گزارش dependency](docs/checkpoint1/DEPENDENCY_SECURITY_FA.md) ثبت‌اند. audit واقعی، ۹ بستهٔ دارای هشدار در گراف API، از جمله Critical برای Kestrel، نشان داد. **Production تأیید امنیتی ندارد.**
 
-Checkpoint 2D نقطهٔ توقف فعلی است. گام پیشنهادی بعد فقط با **اجازهٔ تازهٔ کاربر**، 2E و طرح persistence/refresh است؛ ساخت BAZDIDInfo در Checkpoint 4 می‌ماند. SQL واقعی، OTP، تغییر Frontend و استقرار خودکار شروع نمی‌شوند.
+Checkpoint 2E نقطهٔ توقف فعلی است. گام پیشنهادی بعد فقط با **اجازهٔ تازهٔ کاربر**، 2F و دامنهٔ آزمون/قیود مصوب است؛ ساخت BAZDIDInfo در Checkpoint 4 می‌ماند. SQL واقعی، OTP، تغییر Frontend و استقرار خودکار شروع نمی‌شوند.
 
 ## GitHub و گزارش‌دهی فارسی
 

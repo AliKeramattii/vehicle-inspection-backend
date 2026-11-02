@@ -103,7 +103,7 @@ indexهای `(RequestContextId, OccurredAtUtc, Id)` و `CorrelationId`؛ uniquen
 | `BAZDIDOtpChallenges` | context کوتاه‌عمر با حالت Resolved و nonce مرورگر، challenge handle hash، purpose، ciphertext حداقلی موبایل، OTP MAC nullable تا صدور، generation، تلاش و send/expiry/consumption/rowversion | 3 |
 | `BAZDIDCustomerSessions` | handle hash یکتا، request/customer، مرجع موبایل verified، زمان احراز/انقضا/ابطال و ticket حفاظت‌شده | 3 |
 | `BAZDIDRateLimitBuckets` | کلید مستعار محدودیت، operation/window، counter و expires؛ uniqueness و UPDATE اتمیک بین instanceها | 3 |
-| `BAZDIDInspections` | context، attemptNumber، previousInspectionId، IsCurrent، status، tracking، snapshot قالب/version/hash و rowversion | 4 |
+| `BAZDIDInspections` | context و OwnerCustomerLinkId پین‌شده، attemptNumber، previousInspectionId، IsCurrent، status، tracking، snapshot قالب/version/hash و rowversion | 4 |
 | `BAZDIDInfo` | یک ردیف برای هر inspection؛ دادهٔ خودرو/هویت مرجع، منشأ، اعتبارسنجی، کیلومتر و تأییدها | 4 |
 | `BAZDIDInspectionStatusHistory` | inspection، from/to، actor، reason و زمان؛ تغییرناپذیر | 4 |
 | `BAZDIDIdempotencyRecords` | scope+command+key یکتا، requestHash، حالت/lease، نتیجهٔ مجاز و expiry؛ بدون OTP/cookie | 4 |
@@ -117,24 +117,20 @@ indexهای `(RequestContextId, OccurredAtUtc, Id)` و `CorrelationId`؛ uniquen
 
 شمار ۱۷ پیشنهادِ پایان دامنهٔ مشتری است؛ همه در Checkpoint 2 ساخته نمی‌شوند. journal اختیاری migration جزو این شمار نیست؛ [معماری](ARCHITECTURE_FA.md) دربارهٔ `BAZDIDSchemaVersions` توضیح می‌دهد. جدول جداگانهٔ `BAZDIDInspectionAttempts` لازم نیست، چون هر inspection همان تلاش مستقل است.
 
-## محور `BAZDIDInfo`
+## محور `BAZDIDInfo` — طرح 2E، بدون اجرا
 
-پیشنهاد ساده، ستون‌های typed و منشأ صریح کنار هر فیلد است؛ EAV و جدول عمومی field-value برای چند فیلد محدود نیاز نیست. snapshot کامل ارسال در `BAZDIDInspectionSubmissions` قرار می‌گیرد و جای ستون‌های قابل query را نمی‌گیرد.
+طرح تفصیلی جدید در [walkthrough طراحی 2E](implementation/CHECKPOINT-02E-INFO-PERSISTENCE-DESIGN_FA.md) و [manifest نوع‌دار](design/BAZDIDINFO_SCHEMA_PROPOSAL.json) نگهداری می‌شود؛ این JSON SQL اجرایی یا migration نیست. پیشنهاد تاریخیِ تکرار raw source IDs و Status تک‌محوری با طرح زیر جایگزین شد؛ [ثبت تعارض](SOURCE_REFERENCES_FA.md). schema زنده و سه جدول موجود تغییر نکردند و در 2E اتصال SQL انجام نشد.
 
-| گروه | ستون‌های پیشنهادی و قواعد |
-|---|---|
-| رابطه و منبع | `InspectionId` به‌عنوان PK/FK، `RequestContextId`، `SourceCustomerReference`، `SourceRequestReference`، `SourceSnapshotVersion` و `SourceRetrievedAt`؛ consistency با context بازدید |
-| خودرو | `Make/Model` حداکثر پیشنهادی ۱۰۰ نویسه، `ModelYear int NULL`، `ColorName nvarchar(80) NULL`، `ColorHex char(7) NULL` |
-| پلاک | `PlateFirstTwo char(2)`، `PlateLetter nvarchar(3)`، `PlateThree char(3)` و `PlateRegion char(2)`؛ یک فیلد منطقی اتمیک، نه مخلوط قطعه‌های trusted و manual |
-| VIN/شاسی | `VinMasked`؛ در صورت اثبات نیاز، مقدار کامل در ciphertext حفاظت‌شده همراه key/purpose version، بدون بازگرداندن عمومی. masked value به‌عنوان VIN کامل validate نشود |
-| منشأ و وضعیت | برای هر فیلد منطقی `XSource = Brokerage/Manual/NULL` و `XStatus = Missing/Valid/InvalidSource`؛ برای دادهٔ manual تأییدنشده `PendingValidation` مجاز؛ `XValidatedAt` در صورت نیاز |
-| کیلومتر | `OdometerKm bigint NULL`، `OdometerUpdatedAt` و مرجع عکس اختیاری؛ CHECK بازهٔ فنی و سپس سقف مصوب؛ صفر معتبر |
-| تأیید و مغایرت | `VehicleConfirmedAt`، `ValidationRuleVersion`، `ValidationStatus`، گزارش مغایرت محدود و غیرمحرمانه؛ ردیابی قفل پس از submit |
-| نسخه و زمان | `CreatedAt/UpdatedAt/FinalizedAt`، `rowversion`؛ actor از نشست، نه payload |
+- یک ردیف برای هر inspection با InspectionId به‌عنوان PK؛ RequestContextId و OwnerCustomerLinkId سروری/پین‌شده و FK سه‌ستونی به parent آینده. BAZDIDInspections هنوز وجود ندارد و alternate key آن باید در Checkpoint 4 مصوب و ساخته شود.
+- ۱۳۱ ستون پیشنهادی شامل مقدارهای typed، هفت خانوادهٔ metadata و ۱۹ قاعدهٔ constraint؛ EAV لازم نیست. Origin، SourceStatus، InitialSourceStatus، ObservedSourceStatus و ValidationStatus مستقل‌اند؛ Manual شاهد Missing را از بین نمی‌برد. IsReadOnly از policy/حالت/قفل نهایی محاسبه می‌شود و ورودی client نیست.
+- source request/customer ID و scope از context/linkage معتبر خوانده می‌شوند، نه اینکه دوباره در Info کپی شوند. master مشتری، موبایل خام، OTP و cookie وارد Info نمی‌شوند. مالک inspection از context متغیر دوباره استنتاج و بازنویسی نمی‌شود.
+- سال زوج مقدار/تقویم است؛ پلاک چهار قسمت با یک منشأ اتمیک؛ hex metadata اختیاری و بدون fallback؛ VIN/chassis مستقل با mask/assurance و envelope حفاظت‌شدهٔ bounded فقط پس از تصویب O05/O28.
+- کیلومتر bigint nullable و نامنفی تا حد safe فعلی JSON، با صفر معتبر؛ evidence از رابطهٔ مدارک آینده می‌آید. SourceStatus کارگزاری برای این داده جعل نمی‌شود.
+- source version و UTC retrieval و rowversion سه مفهوم جدا هستند؛ mode unversioned با نسخهٔ NULL نیازمند تغییر صریح آیندهٔ reader است، زیرا 2D فعلی نسخهٔ غیرخالی لازم دارد.
+- refresh مؤثر ابتدا observation/409 و سپس پذیرش صریح کاندید بازخوانی‌شده دارد؛ Manual خاموش overwrite نمی‌شود. outage قفل‌ها را باز نمی‌کند و post-submit حتی timestamp Info را تغییر نمی‌دهد.
+- create/resume، UPDATE/CAS، audit/idempotency و submit آینده transaction مشخص دارند؛ stale و رقابت با submit به conflict صریح می‌رسند. snapshot نهایی در BAZDIDInspectionSubmissions آینده پین می‌شود و به Session یا source mutable وابسته نیست.
 
-حداکثر طول، نیاز full VIN، تقویم سال و enumهای SQL در Checkpoint 4 پیش از DDL نهایی تصویب شوند. به‌جای JSON آزادِ منشأ، ستون‌های محدود و قابل constraint انتخاب شده‌اند. فیلد اختیاری `colorHex` و صفرهای معنادار از دادهٔ مفقود تفکیک می‌شوند. origin `Brokerage` بدون مقدار معتبر و فیلد manual با مقدار invalid، تأیید نهایی نمی‌شود.
-
-در ایجاد inspection، snapshot خواندنی + Info اولیه + status history + نتیجهٔ idempotency یک transaction دارند. تغییر Info با `WHERE InspectionId + ExpectedRowVersion` و کنترل owner/status انجام می‌شود. صفر ردیف به معنای موفقیت نیست؛ stale برابر `409 VERSION_CONFLICT` است. submit، Info را قفل و دادهٔ نهایی و منشأ را در snapshot تغییرناپذیر تثبیت می‌کند؛ پس از آن refresh منبع آن را بازنویسی نمی‌کند.
+نام/طول/nullability تمام ستون‌ها، constraint pattern، index و dependency parent در manifest آمده‌اند؛ CHECKهای نهایی با NULL صریح، overflow/row-overflow، مجوز واقعی و رفتار رقابتی باید در Checkpoint 4 روی SQL Server تست شوند. هیچ schema/DTO/API پیشنهادی در 2E runtime-tested معرفی نمی‌شود؛ required fields، policyهای کسب‌وکار، crypto و freshness طبق O27–O30 قبل از اجرا تصویب شوند.
 
 ## روابط و قیود حیاتی
 

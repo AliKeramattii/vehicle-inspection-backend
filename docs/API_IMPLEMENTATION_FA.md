@@ -47,23 +47,15 @@ JSON با camelCase، UTF-8، زمان ISO-8601/UTC، شناسه‌های opaque
 
 مسیرهای I09/I10 یعنی PUT خودرو/پلاک مستقل در این پیشنهاد حذف و در PUT information ادغام‌اند؛ alias سازگاری تنها با وجود مصرف‌کنندهٔ واقعی و دورهٔ حذف مصوب افزوده می‌شود. گزارش مغایرت می‌تواند در همان فرمان confirmation، بدون تغییر trusted data ثبت شود؛ تصمیم نهایی شکل DTO قبل از Checkpoint 4 با Frontend است.
 
-## نمونهٔ اطلاعات منشأدار
+## قرارداد پیشنهادی اطلاعات منشأدار — طراحی 2E
 
-نمونه زیر صرفاً شکل DTO پیشنهادی است؛ نام و مقدار خودرو ساختگی‌اند. source و readOnly فقط خروجی سرورند.
+[طرح 2E](implementation/CHECKPOINT-02E-INFO-PERSISTENCE-DESIGN_FA.md) مرجع DTO typed و نمونه‌های صرفاً پیشنهادی GET/PUT اطلاعات، manual allowlist، confirmation، refresh و خطاهای CAS است. این مرحله controller یا endpoint زنده اضافه نکرد؛ Swagger همچنان فقط health را دارد.
 
-```json
-{
-  "inspectionId": "test-inspection",
-  "version": "AQIDBAUGBwg=",
-  "fields": {
-    "make": { "value": "سازنده آزمایشی", "source": "Brokerage", "status": "Valid", "readOnly": true },
-    "model": { "value": null, "source": null, "status": "Missing", "readOnly": false }
-  },
-  "confirmed": false
-}
-```
+قرارداد آینده Origin مقدار را از SourceStatus/InitialSourceStatus/ObservedSourceStatus و ValidationStatus جدا می‌کند؛ مقدار Missing nullable است و فقط policy سرور امکان Manual می‌دهد. trusted overwrite حتی جزئی در پلاک رد می‌شود. public DTO فقط projection مورد نیاز مشتری با VIN/chassis masked و بدون raw source IDs/mobile/ciphertext است؛ context داخلی سرور مراجع واقعی را نگه می‌دارد.
 
-PUT فقط فیلدهای مجاز دستی را دارد؛ نه کل object فوق و نه مقدار `source`. ارسال دوبارهٔ مقدار برابر trusted نیز فقط برای DTOی confirmation مصوب پذیرفته می‌شود؛ تغییر آن رد می‌شود. نیاز به اطلاعات ناقص، مدل `Vehicle` کاملاً پرِ Frontend را تغییر خواهد داد؛ نباید با placeholder پر شود.
+PUT همان مسیر planned information، expectedInfo/inspection version، manual فقط برای کلیدهای مجاز، confirmVehicle و پذیرش صریح تغییر منبع را دارد؛ source/tenant/readOnly/policy ورودی نیستند. source observation می‌تواند بدون اعمال مقدار manual، 409 SOURCE_CHANGED با نسخهٔ تازه برگرداند؛ مقدار Manual تا پذیرش صریح حفظ می‌شود. 422 خطای فیلدی، 409 conflict/locked و 503 unavailable تفکیک‌اند. جزئیات null/omission، duplicate key، envelopeها و idempotency در طرح آمده‌اند؛ source outage، Missing و مجوز دستی نمی‌سازد.
+
+این پیشنهاد، DTO موجود 2D یا Frontend را تغییر نداده و در OpenAPI زنده ثبت نشده است؛ CORS/CSRF/authorization آینده و تصویب O27–O30 پیش‌نیاز اجرای Checkpoint 4 هستند. مسیر موازی plate/vehicle برای mutation، refresh endpoint یا alias /api اضافه نمی‌شود؛ odometer از مسیر planned مرحلهٔ 5 همان Info را مصرف خواهد کرد.
 
 ## اصلاح DTOهای فعلی پیش از اتصال
 

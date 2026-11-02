@@ -1,0 +1,1144 @@
+{
+  "Classification": "PROPOSED_FUTURE_DESIGN",
+  "Date": "2026-11-02",
+  "AuthorizationReference": "20acc386-4be3-48e7-84da-a7457cf34b6f",
+  "ExecutionAllowed": false,
+  "ImplementationCheckpoint": "4",
+  "SqlServerTarget": "2019 / compatibility 150",
+  "Schema": "dbo",
+  "Table": "BAZDIDInfo",
+  "Columns": [
+    {
+      "Name": "InspectionId",
+      "SqlType": "uniqueidentifier",
+      "Nullable": false,
+      "PurposeFa": "مرجع داخلی سرور؛ از مالکیت بازدید به‌دست می‌آید، ورودی مشتری نیست."
+    },
+    {
+      "Name": "RequestContextId",
+      "SqlType": "uniqueidentifier",
+      "Nullable": false,
+      "PurposeFa": "مرجع داخلی سرور؛ از مالکیت بازدید به‌دست می‌آید، ورودی مشتری نیست."
+    },
+    {
+      "Name": "OwnerCustomerLinkId",
+      "SqlType": "uniqueidentifier",
+      "Nullable": false,
+      "PurposeFa": "مرجع داخلی سرور؛ از مالکیت بازدید به‌دست می‌آید، ورودی مشتری نیست."
+    },
+    {
+      "Name": "ValidationProfileVersion",
+      "SqlType": "varchar(64)",
+      "Nullable": false,
+      "PurposeFa": "شناسهٔ غیرمحرمانهٔ سیاست نسخه‌دار و غیرقابل‌تغییر؛ فقدان سیاست مصوب مانع نوشتن است."
+    },
+    {
+      "Name": "SensitiveProtectionProfileVersion",
+      "SqlType": "varchar(64)",
+      "Nullable": false,
+      "PurposeFa": "شناسهٔ غیرمحرمانهٔ سیاست نسخه‌دار و غیرقابل‌تغییر؛ فقدان سیاست مصوب مانع نوشتن است."
+    },
+    {
+      "Name": "SourceRevision",
+      "SqlType": "bigint",
+      "Nullable": false,
+      "PurposeFa": "شمارندهٔ محلی دامنه؛ نسخهٔ منبع یا rowversion نیست.",
+      "ProposedDefault": "1"
+    },
+    {
+      "Name": "VehicleRevision",
+      "SqlType": "bigint",
+      "Nullable": false,
+      "PurposeFa": "شمارندهٔ محلی دامنه؛ نسخهٔ منبع یا rowversion نیست.",
+      "ProposedDefault": "1"
+    },
+    {
+      "Name": "ContextVersionAtSourceRead",
+      "SqlType": "binary(8)",
+      "Nullable": false,
+      "PurposeFa": "شاهد CAS زمینه در زمان پذیرش؛ به‌تنهایی اثبات هویت نیست."
+    },
+    {
+      "Name": "SourceVersionMode",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "0=Unversioned؛ 1=Versioned؛ زمان دریافت جای نسخه نیست."
+    },
+    {
+      "Name": "SourceVersion",
+      "SqlType": "nvarchar(128)",
+      "Nullable": true,
+      "PurposeFa": "نسخهٔ opaque منبع در حالت Versioned؛ بدون trim یا ترتیب‌گذاری عددی."
+    },
+    {
+      "Name": "SourceRetrievedAtUtc",
+      "SqlType": "datetime2(3)",
+      "Nullable": false,
+      "PurposeFa": "زمان دریافت آخرین baseline پذیرفته‌شده از ساعت سرور."
+    },
+    {
+      "Name": "SourceComparableHash",
+      "SqlType": "binary(32)",
+      "Nullable": false,
+      "PurposeFa": "SHA-256 بستهٔ canonical حداقلی برای کشف تفاوت؛ خصوصی و فاقد نقش ورود/مجوز."
+    },
+    {
+      "Name": "SourceState",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "0=Current؛ 1=Changed؛ 2=Unavailable؛ 3=ReviewRequired."
+    },
+    {
+      "Name": "LastSourceAttemptAtUtc",
+      "SqlType": "datetime2(3)",
+      "Nullable": false,
+      "PurposeFa": "زمان آخرین تلاش صریح سرور؛ GET آن را تغییر نمی‌دهد."
+    },
+    {
+      "Name": "PendingSourceHash",
+      "SqlType": "binary(32)",
+      "Nullable": true,
+      "PurposeFa": "شرط مشاهدهٔ کاندید منبع؛ مقدار کاندید/موبایل مشتری اینجا تکثیر نمی‌شود."
+    },
+    {
+      "Name": "PendingSourceVersionMode",
+      "SqlType": "tinyint",
+      "Nullable": true,
+      "PurposeFa": "شرط مشاهدهٔ کاندید منبع؛ مقدار کاندید/موبایل مشتری اینجا تکثیر نمی‌شود."
+    },
+    {
+      "Name": "PendingSourceVersion",
+      "SqlType": "nvarchar(128)",
+      "Nullable": true,
+      "PurposeFa": "شرط مشاهدهٔ کاندید منبع؛ مقدار کاندید/موبایل مشتری اینجا تکثیر نمی‌شود."
+    },
+    {
+      "Name": "PendingSourceRetrievedAtUtc",
+      "SqlType": "datetime2(3)",
+      "Nullable": true,
+      "PurposeFa": "شرط مشاهدهٔ کاندید منبع؛ مقدار کاندید/موبایل مشتری اینجا تکثیر نمی‌شود."
+    },
+    {
+      "Name": "ChangedFieldMask",
+      "SqlType": "smallint",
+      "Nullable": false,
+      "PurposeFa": "هفت بیت ثابت Make/Model/ModelYear/Color/Plate/Vin/Chassis؛ فهرست آزاد یا EAV نیست.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "CreatedAtUtc",
+      "SqlType": "datetime2(3)",
+      "Nullable": false,
+      "PurposeFa": "زمان UTC سروری؛ UpdatedAt در UPDATE نیز صریحاً تنظیم می‌شود.",
+      "ProposedDefault": "SYSUTCDATETIME()"
+    },
+    {
+      "Name": "UpdatedAtUtc",
+      "SqlType": "datetime2(3)",
+      "Nullable": false,
+      "PurposeFa": "زمان UTC سروری؛ UpdatedAt در UPDATE نیز صریحاً تنظیم می‌شود.",
+      "ProposedDefault": "SYSUTCDATETIME()"
+    },
+    {
+      "Name": "FinalizedAtUtc",
+      "SqlType": "datetime2(3)",
+      "Nullable": true,
+      "PurposeFa": "زمان قفل نهایی؛ پس از آن هیچ UPDATE اطلاعات یا metadata مجاز نیست."
+    },
+    {
+      "Name": "VehicleConfirmedAtUtc",
+      "SqlType": "datetime2(3)",
+      "Nullable": true,
+      "PurposeFa": "تأیید مشتری برای نسخهٔ مشخص خودرو؛ رضایت‌نامهٔ بازدید نیست."
+    },
+    {
+      "Name": "VehicleConfirmedRevision",
+      "SqlType": "bigint",
+      "Nullable": true,
+      "PurposeFa": "باید با VehicleRevision برابر باشد؛ با تغییر مؤثر خودرو پاک می‌شود."
+    },
+    {
+      "Name": "VehicleConfirmedByCustomerLinkId",
+      "SqlType": "uniqueidentifier",
+      "Nullable": true,
+      "PurposeFa": "عامل سروری برابر مالک پین‌شده؛ مقدار body پذیرفته نمی‌شود."
+    },
+    {
+      "Name": "DiscrepancyField",
+      "SqlType": "tinyint",
+      "Nullable": true,
+      "PurposeFa": "1=Model؛ 2=ModelYear؛ 3=Color؛ 4=Vin؛ فقط گزارش، بدون بازنویسی داده trusted."
+    },
+    {
+      "Name": "DiscrepancyDescription",
+      "SqlType": "nvarchar(500)",
+      "Nullable": true,
+      "PurposeFa": "متن محدود خصوصی؛ ۳ تا ۵۰۰ نویسه پس از trim، بدون log یا تفسیر HTML."
+    },
+    {
+      "Name": "OdometerKm",
+      "SqlType": "bigint",
+      "Nullable": true,
+      "PurposeFa": "عدد صحیح مستقل ۰ تا 9007199254740991؛ سقف کسب‌وکار جدا تصویب می‌شود."
+    },
+    {
+      "Name": "OdometerOrigin",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "0=None؛ 2=Manual؛ منبع کارگزاری برای کیلومتر فرض نشده است.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "OdometerValidationStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "0=None؛ 1=PendingValidation؛ 2=Valid؛ 3=Invalid فقط برای بازاعتبارسنجی مقدار قبلی؛ ورودی بدقالب تازه ذخیره نمی‌شود.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "OdometerPolicyId",
+      "SqlType": "varchar(64)",
+      "Nullable": false,
+      "PurposeFa": "سیاست سروری اعتبارسنجی عدد و سقف مصوب."
+    },
+    {
+      "Name": "OdometerValidationCode",
+      "SqlType": "varchar(64)",
+      "Nullable": false,
+      "PurposeFa": "کد نتیجهٔ allowlist و بدون مقدار ورودی."
+    },
+    {
+      "Name": "OdometerValidatedAtUtc",
+      "SqlType": "datetime2(3)",
+      "Nullable": true,
+      "PurposeFa": "برای Valid/Invalid حاضر و برای None/Pending خالی است؛ زمان ورود با UpdatedAt متفاوت است."
+    },
+    {
+      "Name": "OdometerUpdatedAtUtc",
+      "SqlType": "datetime2(3)",
+      "Nullable": true,
+      "PurposeFa": "زمان ثبت عدد از سرور؛ evidenceId از رابطهٔ مدرک خوانده می‌شود."
+    },
+    {
+      "Name": "Make",
+      "SqlType": "nvarchar(100)",
+      "Nullable": true,
+      "PurposeFa": "جزء typed فیلد منطقی؛ حالت خالی/نامعتبر و گروه اتمیک طبق FieldStateV1 کنترل می‌شود."
+    },
+    {
+      "Name": "MakeSourceText",
+      "SqlType": "nvarchar(128)",
+      "Nullable": true,
+      "PurposeFa": "متن bounded مبدأ برای حفظ شاهد normalization/Invalid؛ برای Manual خالی است؛ بدون truncation."
+    },
+    {
+      "Name": "MakeOrigin",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "0=None؛ 1=Brokerage؛ 2=Manual؛ منشأ مقدار مؤثر.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "MakeSourceStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "1=Present؛ 2=Missing؛ 3=Invalid؛ 4=Unavailable در baseline پذیرفته‌شده."
+    },
+    {
+      "Name": "MakeInitialSourceStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "وضعیت نخستین source؛ در UPDATE تغییر نمی‌کند."
+    },
+    {
+      "Name": "MakeObservedSourceStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "آخرین مشاهدهٔ معتبر؛ با baseline تا زمان پذیرش تغییر ممکن است متفاوت باشد."
+    },
+    {
+      "Name": "MakeValidationStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "0=None؛ 1=PendingValidation؛ 2=Valid؛ 3=Invalid.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "MakePolicyId",
+      "SqlType": "varchar(64)",
+      "Nullable": false,
+      "PurposeFa": "سیاست immutable مورد استفاده برای همان فیلد؛ ادعای client معتبر نیست."
+    },
+    {
+      "Name": "MakeValidationCode",
+      "SqlType": "varchar(64)",
+      "Nullable": false,
+      "PurposeFa": "کد allowlist و بدون مقدار شخصی؛ متن آزاد exception نیست."
+    },
+    {
+      "Name": "MakeValidatedAtUtc",
+      "SqlType": "datetime2(3)",
+      "Nullable": true,
+      "PurposeFa": "فقط نتیجهٔ نهایی Valid/Invalid زمان معتبر دارد؛ Pending/None خالی‌اند."
+    },
+    {
+      "Name": "MakeManualAllowedWhenMissing",
+      "SqlType": "bit",
+      "Nullable": false,
+      "PurposeFa": "ویژگی سیاست سرور؛ مجوز دستی فقط با Missing پذیرفته‌شده و قفل‌های دامنه.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "MakeManualBasisSourceRevision",
+      "SqlType": "bigint",
+      "Nullable": true,
+      "PurposeFa": "برای Manual، revision پذیرش Missing را نگه می‌دارد؛ برای سایر منشأها NULL."
+    },
+    {
+      "Name": "Model",
+      "SqlType": "nvarchar(100)",
+      "Nullable": true,
+      "PurposeFa": "جزء typed فیلد منطقی؛ حالت خالی/نامعتبر و گروه اتمیک طبق FieldStateV1 کنترل می‌شود."
+    },
+    {
+      "Name": "ModelSourceText",
+      "SqlType": "nvarchar(128)",
+      "Nullable": true,
+      "PurposeFa": "متن bounded مبدأ برای حفظ شاهد normalization/Invalid؛ برای Manual خالی است؛ بدون truncation."
+    },
+    {
+      "Name": "ModelOrigin",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "0=None؛ 1=Brokerage؛ 2=Manual؛ منشأ مقدار مؤثر.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "ModelSourceStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "1=Present؛ 2=Missing؛ 3=Invalid؛ 4=Unavailable در baseline پذیرفته‌شده."
+    },
+    {
+      "Name": "ModelInitialSourceStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "وضعیت نخستین source؛ در UPDATE تغییر نمی‌کند."
+    },
+    {
+      "Name": "ModelObservedSourceStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "آخرین مشاهدهٔ معتبر؛ با baseline تا زمان پذیرش تغییر ممکن است متفاوت باشد."
+    },
+    {
+      "Name": "ModelValidationStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "0=None؛ 1=PendingValidation؛ 2=Valid؛ 3=Invalid.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "ModelPolicyId",
+      "SqlType": "varchar(64)",
+      "Nullable": false,
+      "PurposeFa": "سیاست immutable مورد استفاده برای همان فیلد؛ ادعای client معتبر نیست."
+    },
+    {
+      "Name": "ModelValidationCode",
+      "SqlType": "varchar(64)",
+      "Nullable": false,
+      "PurposeFa": "کد allowlist و بدون مقدار شخصی؛ متن آزاد exception نیست."
+    },
+    {
+      "Name": "ModelValidatedAtUtc",
+      "SqlType": "datetime2(3)",
+      "Nullable": true,
+      "PurposeFa": "فقط نتیجهٔ نهایی Valid/Invalid زمان معتبر دارد؛ Pending/None خالی‌اند."
+    },
+    {
+      "Name": "ModelManualAllowedWhenMissing",
+      "SqlType": "bit",
+      "Nullable": false,
+      "PurposeFa": "ویژگی سیاست سرور؛ مجوز دستی فقط با Missing پذیرفته‌شده و قفل‌های دامنه.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "ModelManualBasisSourceRevision",
+      "SqlType": "bigint",
+      "Nullable": true,
+      "PurposeFa": "برای Manual، revision پذیرش Missing را نگه می‌دارد؛ برای سایر منشأها NULL."
+    },
+    {
+      "Name": "ModelYear",
+      "SqlType": "smallint",
+      "Nullable": true,
+      "PurposeFa": "جزء typed فیلد منطقی؛ حالت خالی/نامعتبر و گروه اتمیک طبق FieldStateV1 کنترل می‌شود."
+    },
+    {
+      "Name": "ModelYearCalendar",
+      "SqlType": "tinyint",
+      "Nullable": true,
+      "PurposeFa": "جزء typed فیلد منطقی؛ حالت خالی/نامعتبر و گروه اتمیک طبق FieldStateV1 کنترل می‌شود."
+    },
+    {
+      "Name": "ModelYearSourceText",
+      "SqlType": "nvarchar(128)",
+      "Nullable": true,
+      "PurposeFa": "متن bounded مبدأ برای حفظ شاهد normalization/Invalid؛ برای Manual خالی است؛ بدون truncation."
+    },
+    {
+      "Name": "ModelYearOrigin",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "0=None؛ 1=Brokerage؛ 2=Manual؛ منشأ مقدار مؤثر.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "ModelYearSourceStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "1=Present؛ 2=Missing؛ 3=Invalid؛ 4=Unavailable در baseline پذیرفته‌شده."
+    },
+    {
+      "Name": "ModelYearInitialSourceStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "وضعیت نخستین source؛ در UPDATE تغییر نمی‌کند."
+    },
+    {
+      "Name": "ModelYearObservedSourceStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "آخرین مشاهدهٔ معتبر؛ با baseline تا زمان پذیرش تغییر ممکن است متفاوت باشد."
+    },
+    {
+      "Name": "ModelYearValidationStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "0=None؛ 1=PendingValidation؛ 2=Valid؛ 3=Invalid.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "ModelYearPolicyId",
+      "SqlType": "varchar(64)",
+      "Nullable": false,
+      "PurposeFa": "سیاست immutable مورد استفاده برای همان فیلد؛ ادعای client معتبر نیست."
+    },
+    {
+      "Name": "ModelYearValidationCode",
+      "SqlType": "varchar(64)",
+      "Nullable": false,
+      "PurposeFa": "کد allowlist و بدون مقدار شخصی؛ متن آزاد exception نیست."
+    },
+    {
+      "Name": "ModelYearValidatedAtUtc",
+      "SqlType": "datetime2(3)",
+      "Nullable": true,
+      "PurposeFa": "فقط نتیجهٔ نهایی Valid/Invalid زمان معتبر دارد؛ Pending/None خالی‌اند."
+    },
+    {
+      "Name": "ModelYearManualAllowedWhenMissing",
+      "SqlType": "bit",
+      "Nullable": false,
+      "PurposeFa": "ویژگی سیاست سرور؛ مجوز دستی فقط با Missing پذیرفته‌شده و قفل‌های دامنه.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "ModelYearManualBasisSourceRevision",
+      "SqlType": "bigint",
+      "Nullable": true,
+      "PurposeFa": "برای Manual، revision پذیرش Missing را نگه می‌دارد؛ برای سایر منشأها NULL."
+    },
+    {
+      "Name": "ColorName",
+      "SqlType": "nvarchar(80)",
+      "Nullable": true,
+      "PurposeFa": "جزء typed فیلد منطقی؛ حالت خالی/نامعتبر و گروه اتمیک طبق FieldStateV1 کنترل می‌شود."
+    },
+    {
+      "Name": "ColorSourceText",
+      "SqlType": "nvarchar(128)",
+      "Nullable": true,
+      "PurposeFa": "متن bounded مبدأ برای حفظ شاهد normalization/Invalid؛ برای Manual خالی است؛ بدون truncation."
+    },
+    {
+      "Name": "ColorOrigin",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "0=None؛ 1=Brokerage؛ 2=Manual؛ منشأ مقدار مؤثر.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "ColorSourceStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "1=Present؛ 2=Missing؛ 3=Invalid؛ 4=Unavailable در baseline پذیرفته‌شده."
+    },
+    {
+      "Name": "ColorInitialSourceStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "وضعیت نخستین source؛ در UPDATE تغییر نمی‌کند."
+    },
+    {
+      "Name": "ColorObservedSourceStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "آخرین مشاهدهٔ معتبر؛ با baseline تا زمان پذیرش تغییر ممکن است متفاوت باشد."
+    },
+    {
+      "Name": "ColorValidationStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "0=None؛ 1=PendingValidation؛ 2=Valid؛ 3=Invalid.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "ColorPolicyId",
+      "SqlType": "varchar(64)",
+      "Nullable": false,
+      "PurposeFa": "سیاست immutable مورد استفاده برای همان فیلد؛ ادعای client معتبر نیست."
+    },
+    {
+      "Name": "ColorValidationCode",
+      "SqlType": "varchar(64)",
+      "Nullable": false,
+      "PurposeFa": "کد allowlist و بدون مقدار شخصی؛ متن آزاد exception نیست."
+    },
+    {
+      "Name": "ColorValidatedAtUtc",
+      "SqlType": "datetime2(3)",
+      "Nullable": true,
+      "PurposeFa": "فقط نتیجهٔ نهایی Valid/Invalid زمان معتبر دارد؛ Pending/None خالی‌اند."
+    },
+    {
+      "Name": "ColorManualAllowedWhenMissing",
+      "SqlType": "bit",
+      "Nullable": false,
+      "PurposeFa": "ویژگی سیاست سرور؛ مجوز دستی فقط با Missing پذیرفته‌شده و قفل‌های دامنه.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "ColorManualBasisSourceRevision",
+      "SqlType": "bigint",
+      "Nullable": true,
+      "PurposeFa": "برای Manual، revision پذیرش Missing را نگه می‌دارد؛ برای سایر منشأها NULL."
+    },
+    {
+      "Name": "PlateFirstTwo",
+      "SqlType": "char(2)",
+      "Nullable": true,
+      "PurposeFa": "جزء typed فیلد منطقی؛ حالت خالی/نامعتبر و گروه اتمیک طبق FieldStateV1 کنترل می‌شود."
+    },
+    {
+      "Name": "PlateLetter",
+      "SqlType": "nvarchar(3)",
+      "Nullable": true,
+      "PurposeFa": "جزء typed فیلد منطقی؛ حالت خالی/نامعتبر و گروه اتمیک طبق FieldStateV1 کنترل می‌شود."
+    },
+    {
+      "Name": "PlateThree",
+      "SqlType": "char(3)",
+      "Nullable": true,
+      "PurposeFa": "جزء typed فیلد منطقی؛ حالت خالی/نامعتبر و گروه اتمیک طبق FieldStateV1 کنترل می‌شود."
+    },
+    {
+      "Name": "PlateRegion",
+      "SqlType": "char(2)",
+      "Nullable": true,
+      "PurposeFa": "جزء typed فیلد منطقی؛ حالت خالی/نامعتبر و گروه اتمیک طبق FieldStateV1 کنترل می‌شود."
+    },
+    {
+      "Name": "PlateSourceText",
+      "SqlType": "nvarchar(128)",
+      "Nullable": true,
+      "PurposeFa": "متن bounded مبدأ برای حفظ شاهد normalization/Invalid؛ برای Manual خالی است؛ بدون truncation."
+    },
+    {
+      "Name": "PlateOrigin",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "0=None؛ 1=Brokerage؛ 2=Manual؛ منشأ مقدار مؤثر.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "PlateSourceStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "1=Present؛ 2=Missing؛ 3=Invalid؛ 4=Unavailable در baseline پذیرفته‌شده."
+    },
+    {
+      "Name": "PlateInitialSourceStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "وضعیت نخستین source؛ در UPDATE تغییر نمی‌کند."
+    },
+    {
+      "Name": "PlateObservedSourceStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "آخرین مشاهدهٔ معتبر؛ با baseline تا زمان پذیرش تغییر ممکن است متفاوت باشد."
+    },
+    {
+      "Name": "PlateValidationStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "0=None؛ 1=PendingValidation؛ 2=Valid؛ 3=Invalid.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "PlatePolicyId",
+      "SqlType": "varchar(64)",
+      "Nullable": false,
+      "PurposeFa": "سیاست immutable مورد استفاده برای همان فیلد؛ ادعای client معتبر نیست."
+    },
+    {
+      "Name": "PlateValidationCode",
+      "SqlType": "varchar(64)",
+      "Nullable": false,
+      "PurposeFa": "کد allowlist و بدون مقدار شخصی؛ متن آزاد exception نیست."
+    },
+    {
+      "Name": "PlateValidatedAtUtc",
+      "SqlType": "datetime2(3)",
+      "Nullable": true,
+      "PurposeFa": "فقط نتیجهٔ نهایی Valid/Invalid زمان معتبر دارد؛ Pending/None خالی‌اند."
+    },
+    {
+      "Name": "PlateManualAllowedWhenMissing",
+      "SqlType": "bit",
+      "Nullable": false,
+      "PurposeFa": "ویژگی سیاست سرور؛ مجوز دستی فقط با Missing پذیرفته‌شده و قفل‌های دامنه.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "PlateManualBasisSourceRevision",
+      "SqlType": "bigint",
+      "Nullable": true,
+      "PurposeFa": "برای Manual، revision پذیرش Missing را نگه می‌دارد؛ برای سایر منشأها NULL."
+    },
+    {
+      "Name": "VinCiphertext",
+      "SqlType": "varbinary(2048)",
+      "Nullable": true,
+      "PurposeFa": "جزء typed فیلد منطقی؛ حالت خالی/نامعتبر و گروه اتمیک طبق FieldStateV1 کنترل می‌شود."
+    },
+    {
+      "Name": "VinMasked",
+      "SqlType": "nvarchar(32)",
+      "Nullable": true,
+      "PurposeFa": "جزء typed فیلد منطقی؛ حالت خالی/نامعتبر و گروه اتمیک طبق FieldStateV1 کنترل می‌شود."
+    },
+    {
+      "Name": "VinAssurance",
+      "SqlType": "tinyint",
+      "Nullable": true,
+      "PurposeFa": "جزء typed فیلد منطقی؛ حالت خالی/نامعتبر و گروه اتمیک طبق FieldStateV1 کنترل می‌شود."
+    },
+    {
+      "Name": "VinOrigin",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "0=None؛ 1=Brokerage؛ 2=Manual؛ منشأ مقدار مؤثر.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "VinSourceStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "1=Present؛ 2=Missing؛ 3=Invalid؛ 4=Unavailable در baseline پذیرفته‌شده."
+    },
+    {
+      "Name": "VinInitialSourceStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "وضعیت نخستین source؛ در UPDATE تغییر نمی‌کند."
+    },
+    {
+      "Name": "VinObservedSourceStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "آخرین مشاهدهٔ معتبر؛ با baseline تا زمان پذیرش تغییر ممکن است متفاوت باشد."
+    },
+    {
+      "Name": "VinValidationStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "0=None؛ 1=PendingValidation؛ 2=Valid؛ 3=Invalid.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "VinPolicyId",
+      "SqlType": "varchar(64)",
+      "Nullable": false,
+      "PurposeFa": "سیاست immutable مورد استفاده برای همان فیلد؛ ادعای client معتبر نیست."
+    },
+    {
+      "Name": "VinValidationCode",
+      "SqlType": "varchar(64)",
+      "Nullable": false,
+      "PurposeFa": "کد allowlist و بدون مقدار شخصی؛ متن آزاد exception نیست."
+    },
+    {
+      "Name": "VinValidatedAtUtc",
+      "SqlType": "datetime2(3)",
+      "Nullable": true,
+      "PurposeFa": "فقط نتیجهٔ نهایی Valid/Invalid زمان معتبر دارد؛ Pending/None خالی‌اند."
+    },
+    {
+      "Name": "VinManualAllowedWhenMissing",
+      "SqlType": "bit",
+      "Nullable": false,
+      "PurposeFa": "ویژگی سیاست سرور؛ مجوز دستی فقط با Missing پذیرفته‌شده و قفل‌های دامنه.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "VinManualBasisSourceRevision",
+      "SqlType": "bigint",
+      "Nullable": true,
+      "PurposeFa": "برای Manual، revision پذیرش Missing را نگه می‌دارد؛ برای سایر منشأها NULL."
+    },
+    {
+      "Name": "ChassisCiphertext",
+      "SqlType": "varbinary(2048)",
+      "Nullable": true,
+      "PurposeFa": "جزء typed فیلد منطقی؛ حالت خالی/نامعتبر و گروه اتمیک طبق FieldStateV1 کنترل می‌شود."
+    },
+    {
+      "Name": "ChassisMasked",
+      "SqlType": "nvarchar(32)",
+      "Nullable": true,
+      "PurposeFa": "جزء typed فیلد منطقی؛ حالت خالی/نامعتبر و گروه اتمیک طبق FieldStateV1 کنترل می‌شود."
+    },
+    {
+      "Name": "ChassisAssurance",
+      "SqlType": "tinyint",
+      "Nullable": true,
+      "PurposeFa": "جزء typed فیلد منطقی؛ حالت خالی/نامعتبر و گروه اتمیک طبق FieldStateV1 کنترل می‌شود."
+    },
+    {
+      "Name": "ChassisOrigin",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "0=None؛ 1=Brokerage؛ 2=Manual؛ منشأ مقدار مؤثر.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "ChassisSourceStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "1=Present؛ 2=Missing؛ 3=Invalid؛ 4=Unavailable در baseline پذیرفته‌شده."
+    },
+    {
+      "Name": "ChassisInitialSourceStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "وضعیت نخستین source؛ در UPDATE تغییر نمی‌کند."
+    },
+    {
+      "Name": "ChassisObservedSourceStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "آخرین مشاهدهٔ معتبر؛ با baseline تا زمان پذیرش تغییر ممکن است متفاوت باشد."
+    },
+    {
+      "Name": "ChassisValidationStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "0=None؛ 1=PendingValidation؛ 2=Valid؛ 3=Invalid.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "ChassisPolicyId",
+      "SqlType": "varchar(64)",
+      "Nullable": false,
+      "PurposeFa": "سیاست immutable مورد استفاده برای همان فیلد؛ ادعای client معتبر نیست."
+    },
+    {
+      "Name": "ChassisValidationCode",
+      "SqlType": "varchar(64)",
+      "Nullable": false,
+      "PurposeFa": "کد allowlist و بدون مقدار شخصی؛ متن آزاد exception نیست."
+    },
+    {
+      "Name": "ChassisValidatedAtUtc",
+      "SqlType": "datetime2(3)",
+      "Nullable": true,
+      "PurposeFa": "فقط نتیجهٔ نهایی Valid/Invalid زمان معتبر دارد؛ Pending/None خالی‌اند."
+    },
+    {
+      "Name": "ChassisManualAllowedWhenMissing",
+      "SqlType": "bit",
+      "Nullable": false,
+      "PurposeFa": "ویژگی سیاست سرور؛ مجوز دستی فقط با Missing پذیرفته‌شده و قفل‌های دامنه.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "ChassisManualBasisSourceRevision",
+      "SqlType": "bigint",
+      "Nullable": true,
+      "PurposeFa": "برای Manual، revision پذیرش Missing را نگه می‌دارد؛ برای سایر منشأها NULL."
+    },
+    {
+      "Name": "ColorHex",
+      "SqlType": "char(7)",
+      "Nullable": true,
+      "PurposeFa": "metadata نمایشی اختیاری رنگ؛ نبود آن رنگ سفید ایجاد نمی‌کند."
+    },
+    {
+      "Name": "ColorHexOrigin",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "0=None؛ 1=Brokerage؛ 2=DerivedCatalog؛ مستقل از منشأ ColorName و بدون ویرایش مستقیم.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "ColorHexSourceStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "از reader 2D وجود ندارد: Unavailable، نه Missing حدسی؛ در adapter آینده طبق mapping."
+    },
+    {
+      "Name": "ColorHexValidationStatus",
+      "SqlType": "tinyint",
+      "Nullable": false,
+      "PurposeFa": "0=None یا 2=Valid؛ هرگز شرط اجباری تأیید خودرو نیست.",
+      "ProposedDefault": "0"
+    },
+    {
+      "Name": "ColorHexPolicyId",
+      "SqlType": "varchar(64)",
+      "Nullable": true,
+      "PurposeFa": "سیاست mapping منبع یا کاتالوگ مصوب؛ با hex باید حاضر باشد."
+    },
+    {
+      "Name": "ColorHexValidatedAtUtc",
+      "SqlType": "datetime2(3)",
+      "Nullable": true,
+      "PurposeFa": "زمان validation metadata نمایشی، نه اثبات درستی رنگ واقعی."
+    },
+    {
+      "Name": "Version",
+      "SqlType": "rowversion",
+      "Nullable": false,
+      "PurposeFa": "توکن ۸بایتی CAS؛ نه PK، نه تاریخ و نه مجوز."
+    }
+  ],
+  "FieldFamilies": [
+    {
+      "Field": "Make",
+      "ChangeBit": 1,
+      "ValueColumns": [
+        "Make"
+      ],
+      "SourceTextColumn": "MakeSourceText",
+      "ConstraintPattern": "FieldStateV1"
+    },
+    {
+      "Field": "Model",
+      "ChangeBit": 2,
+      "ValueColumns": [
+        "Model"
+      ],
+      "SourceTextColumn": "ModelSourceText",
+      "ConstraintPattern": "FieldStateV1"
+    },
+    {
+      "Field": "ModelYear",
+      "ChangeBit": 4,
+      "ValueColumns": [
+        "ModelYear",
+        "ModelYearCalendar"
+      ],
+      "SourceTextColumn": "ModelYearSourceText",
+      "ConstraintPattern": "FieldStateV1"
+    },
+    {
+      "Field": "Color",
+      "ChangeBit": 8,
+      "ValueColumns": [
+        "ColorName"
+      ],
+      "SourceTextColumn": "ColorSourceText",
+      "ConstraintPattern": "FieldStateV1"
+    },
+    {
+      "Field": "Plate",
+      "ChangeBit": 16,
+      "ValueColumns": [
+        "PlateFirstTwo",
+        "PlateLetter",
+        "PlateThree",
+        "PlateRegion"
+      ],
+      "SourceTextColumn": "PlateSourceText",
+      "ConstraintPattern": "FieldStateV1"
+    },
+    {
+      "Field": "Vin",
+      "ChangeBit": 32,
+      "ValueColumns": [
+        "VinCiphertext",
+        "VinMasked",
+        "VinAssurance"
+      ],
+      "SourceTextColumn": null,
+      "ConstraintPattern": "FieldStateV1"
+    },
+    {
+      "Field": "Chassis",
+      "ChangeBit": 64,
+      "ValueColumns": [
+        "ChassisCiphertext",
+        "ChassisMasked",
+        "ChassisAssurance"
+      ],
+      "SourceTextColumn": null,
+      "ConstraintPattern": "FieldStateV1"
+    }
+  ],
+  "CodeMaps": {
+    "Origin": {
+      "None": 0,
+      "Brokerage": 1,
+      "Manual": 2
+    },
+    "SourceStatus": {
+      "Present": 1,
+      "Missing": 2,
+      "Invalid": 3,
+      "Unavailable": 4
+    },
+    "ValidationStatus": {
+      "None": 0,
+      "PendingValidation": 1,
+      "Valid": 2,
+      "Invalid": 3
+    },
+    "SourceState": {
+      "Current": 0,
+      "Changed": 1,
+      "Unavailable": 2,
+      "ReviewRequired": 3
+    },
+    "SourceVersionMode": {
+      "Unversioned": 0,
+      "Versioned": 1
+    },
+    "Calendar": {
+      "Persian": 1,
+      "Gregorian": 2
+    },
+    "SensitiveAssurance": {
+      "FullValue": 1,
+      "MaskOnly": 2
+    }
+  },
+  "PlateLetters": [
+    "الف",
+    "ب",
+    "ج",
+    "د",
+    "س",
+    "ص",
+    "ط",
+    "ع",
+    "ق",
+    "ل",
+    "م",
+    "ن",
+    "و",
+    "ه",
+    "ی"
+  ],
+  "Keys": [
+    {
+      "Name": "PK_BAZDIDInfo",
+      "Kind": "PRIMARY KEY CLUSTERED",
+      "Columns": [
+        "InspectionId"
+      ]
+    },
+    {
+      "Name": "FK_BAZDIDInfo_InspectionOwner",
+      "Kind": "FOREIGN KEY",
+      "Columns": [
+        "InspectionId",
+        "RequestContextId",
+        "OwnerCustomerLinkId"
+      ],
+      "References": {
+        "Table": "dbo.BAZDIDInspections",
+        "Columns": [
+          "Id",
+          "RequestContextId",
+          "OwnerCustomerLinkId"
+        ]
+      },
+      "OnDelete": "NO ACTION",
+      "OnUpdate": "NO ACTION",
+      "ParentExists": false
+    }
+  ],
+  "Indexes": [
+    {
+      "Name": "IX_BAZDIDInfo_RequestContext",
+      "Columns": [
+        "RequestContextId",
+        "InspectionId"
+      ],
+      "Unique": false
+    }
+  ],
+  "Checks": [
+    {
+      "Name": "CK_BAZDIDInfo_Revisions",
+      "Rule": "SourceRevision>=1 AND VehicleRevision>=1",
+      "ExplanationFa": "شمارنده‌های سروری مثبت‌اند؛ افزایش و overflow در service نیز بررسی شوند."
+    },
+    {
+      "Name": "CK_BAZDIDInfo_SourceVersionMode",
+      "Rule": "(SourceVersionMode=0 AND SourceVersion IS NULL) OR (SourceVersionMode=1 AND SourceVersion IS NOT NULL AND DATALENGTH(SourceVersion)>0)",
+      "ExplanationFa": "نسخهٔ غیرموجود با زمان دریافت یا مقدار ساختگی پر نمی‌شود."
+    },
+    {
+      "Name": "CK_BAZDIDInfo_SourceState",
+      "Rule": "SourceState IN (0,1,2,3) AND ChangedFieldMask BETWEEN 0 AND 127",
+      "ExplanationFa": "همهٔ enumها و bitهای مجاز محدودند."
+    },
+    {
+      "Name": "CK_BAZDIDInfo_PendingSource",
+      "Rule": "PendingSourceGroupV1",
+      "ExplanationFa": "Hash/mode/time همگی NULL یا همگی حاضر؛ نسخه در mode صفر NULL و در یک غیرخالی؛ Current گروه pending ندارد؛ Changed hash لازم دارد؛ Unavailable می‌تواند pending قبلی را نگه دارد."
+    },
+    {
+      "Name": "CK_BAZDIDInfo_Timestamps",
+      "Rule": "UtcOrderV1",
+      "ExplanationFa": "CreatedAt<=UpdatedAt؛ زمان تأیید/نهایی بین ایجاد و به‌روزرسانی؛ FinalizedAt نیازمند تأیید همان VehicleRevision است؛ زمان source مقید به ساعت سرور است و timestamp منبع نیست."
+    },
+    {
+      "Name": "CK_BAZDIDInfo_Confirmation",
+      "Rule": "ConfirmationGroupV1",
+      "ExplanationFa": "سه ستون confirmation با هم NULL یا حاضر؛ revision برابر VehicleRevision و actor برابر OwnerCustomerLinkId؛ شاهد تأیید قبلی هنگام قطع منبع حفظ می‌شود، ولی صدور و مؤثربودن تأیید در service نیازمند Current است."
+    },
+    {
+      "Name": "CK_BAZDIDInfo_Odometer",
+      "Rule": "OdometerGroupV1",
+      "ExplanationFa": "NULL با Origin=None/Validation=None/time=NULL؛ مقدار بین 0 و 9007199254740991 با Origin=Manual، Pending/Valid یا Invalid بازاعتبارسنجی و زمان ورود حاضر؛ ValidatedAt برای Valid/Invalid حاضر است؛ صفر هرگز NULL نمی‌شود."
+    },
+    {
+      "Name": "CK_BAZDIDInfo_ModelYear",
+      "Rule": "ModelYearGroupV1",
+      "ExplanationFa": "مقدار و تقویم با هم NULL یا حاضر؛ مقدار 1..9999 و تقویم Persian=1/Gregorian=2؛ بازهٔ کسب‌وکار در policy نسخه‌دار است."
+    },
+    {
+      "Name": "CK_BAZDIDInfo_Plate",
+      "Rule": "PlateGroupV1",
+      "ExplanationFa": "هر چهار بخش با هم NULL یا حاضر؛ ASCII digits با طول 2/3/2 و حرف در ۱۵ مقدار UI؛ SourceText نمی‌تواند مجوز mixed provenance بسازد."
+    },
+    {
+      "Name": "CK_BAZDIDInfo_ColorHex",
+      "Rule": "ColorHexGroupV1",
+      "ExplanationFa": "NULL یعنی Origin=None/Validation=None/policy/time=NULL؛ hex حاضر نیازمند ColorName، الگوی #RRGGBB، Origin=Brokerage یا DerivedCatalog، SourceStatus معتبر، policy و زمان و Validation=Valid است."
+    },
+    {
+      "Name": "CK_BAZDIDInfo_Discrepancy",
+      "Rule": "DiscrepancyGroupV1",
+      "ExplanationFa": "کد و شرح با هم NULL یا حاضر؛ کد 1..4 و طول شرح trimشده 3..500؛ گزارش باز به تأیید نهایی منجر نمی‌شود."
+    },
+    {
+      "Name": "CK_BAZDIDInfo_SensitiveFields",
+      "Rule": "SensitiveGroupV1",
+      "ExplanationFa": "برای Vin/Chassis: Assurance=NULL بدون مقدار؛ FullValue=1 با ciphertext/mask؛ MaskOnly=2 با mask و بدون ciphertext؛ مقدار نامعتبر فقط ciphertext خصوصی و Assurance=NULL؛ ciphertext خالی ممنوع."
+    },
+    {
+      "Name": "CK_BAZDIDInfo_Make_State",
+      "Rule": "FieldStateV1",
+      "ExplanationFa": "همهٔ شروط pattern برای این prefix و اجزای ValueColumns با هم اعمال شوند؛ CHECK باید در برابر NULL صریح باشد."
+    },
+    {
+      "Name": "CK_BAZDIDInfo_Model_State",
+      "Rule": "FieldStateV1",
+      "ExplanationFa": "همهٔ شروط pattern برای این prefix و اجزای ValueColumns با هم اعمال شوند؛ CHECK باید در برابر NULL صریح باشد."
+    },
+    {
+      "Name": "CK_BAZDIDInfo_ModelYear_State",
+      "Rule": "FieldStateV1",
+      "ExplanationFa": "همهٔ شروط pattern برای این prefix و اجزای ValueColumns با هم اعمال شوند؛ CHECK باید در برابر NULL صریح باشد."
+    },
+    {
+      "Name": "CK_BAZDIDInfo_Color_State",
+      "Rule": "FieldStateV1",
+      "ExplanationFa": "همهٔ شروط pattern برای این prefix و اجزای ValueColumns با هم اعمال شوند؛ CHECK باید در برابر NULL صریح باشد."
+    },
+    {
+      "Name": "CK_BAZDIDInfo_Plate_State",
+      "Rule": "FieldStateV1",
+      "ExplanationFa": "همهٔ شروط pattern برای این prefix و اجزای ValueColumns با هم اعمال شوند؛ CHECK باید در برابر NULL صریح باشد."
+    },
+    {
+      "Name": "CK_BAZDIDInfo_Vin_State",
+      "Rule": "FieldStateV1",
+      "ExplanationFa": "همهٔ شروط pattern برای این prefix و اجزای ValueColumns با هم اعمال شوند؛ CHECK باید در برابر NULL صریح باشد."
+    },
+    {
+      "Name": "CK_BAZDIDInfo_Chassis_State",
+      "Rule": "FieldStateV1",
+      "ExplanationFa": "همهٔ شروط pattern برای این prefix و اجزای ValueColumns با هم اعمال شوند؛ CHECK باید در برابر NULL صریح باشد."
+    }
+  ],
+  "FieldStateV1": {
+    "EnumBoundsFa": "Origin در 0..2؛ هر سه SourceStatus در 1..4؛ ValidationStatus در 0..3؛ policy/code غیرخالی و ASCII bounded.",
+    "NoneFa": "Origin=None فقط برای Missing/Unavailable با مقدار typed و SourceText خالی، Validation=None، زمان و ManualBasis=NULL.",
+    "BrokeragePresentFa": "SourceStatus=Present، Origin=Brokerage، مقدار typed کامل یا MaskOnly مصوب، Validation=Valid و زمان حاضر؛ ManualBasis=NULL.",
+    "BrokerageInvalidFa": "SourceStatus=Invalid، Origin=Brokerage، Validation=Invalid و زمان حاضر؛ مقدار normalized=NULL و شاهد خام bounded در SourceText یا ciphertext؛ ManualBasis=NULL.",
+    "ManualFa": "Origin=Manual فقط با SourceStatus=Missing و ManualAllowedWhenMissing=1؛ مقدار typed کامل، Validation=Pending/Valid یا Invalid بازاعتبارسنجی مقدار قبلی، ManualBasis بین 1 و SourceRevision و SourceText=NULL؛ ورودی تازهٔ نامعتبر توسط service با 422 رد می‌شود.",
+    "ValidationTimeFa": "Valid/Invalid نیازمند ValidatedAt؛ None/Pending دارای ValidatedAt=NULL؛ تاریخ ورود Manual با UpdatedAt ثبت می‌شود.",
+    "InitialStatusFa": "InitialSourceStatus در INSERT از source پین و در هیچ UPDATE تغییر نمی‌کند؛ زمان مشاهدهٔ جدید جای شاهد اولیه را نمی‌گیرد.",
+    "ObservedStatusFa": "ObservedSourceStatus مشاهدهٔ آخر است؛ تفاوت آن به‌تنهایی اجازهٔ ویرایش نمی‌دهد و با SourceState/پذیرش کنترل می‌شود.",
+    "ScalarNullFa": "برای تمام اجزای nullable از IS NULL/IS NOT NULL استفاده شود؛ UNKNOWN در CHECK SQL نباید ترکیب نامعتبر را بپذیرد."
+  },
+  "ParentRequirements": [
+    {
+      "Table": "dbo.BAZDIDInspections",
+      "State": "PROPOSED_NOT_CREATED",
+      "RequiredColumns": [
+        "Id",
+        "RequestContextId",
+        "OwnerCustomerLinkId",
+        "Status",
+        "Version"
+      ],
+      "RequiredAlternateKey": [
+        "Id",
+        "RequestContextId",
+        "OwnerCustomerLinkId"
+      ]
+    },
+    {
+      "Table": "dbo.BAZDIDRequestContexts",
+      "State": "EXISTING_2C",
+      "PurposeFa": "scope و sourceRequestId و CustomerLinkId معتبر؛ اطلاعات هویتی در Info تکثیر نمی‌شوند."
+    },
+    {
+      "Table": "dbo.BAZDIDCustomerLinks",
+      "State": "EXISTING_2C",
+      "PurposeFa": "شناسهٔ opaque مشتری از این linkage، با مالک پین‌شدهٔ inspection به دست می‌آید."
+    }
+  ],
+  "SecurityGates": [
+    "O05",
+    "O09",
+    "O20",
+    "O21",
+    "O22",
+    "O24",
+    "O26",
+    "O27",
+    "O28",
+    "O29",
+    "O30"
+  ],
+  "ExplanationFa": "این manifest نوع/طول/nullability و الگوهای constraint پیشنهادی را دقیق فهرست می‌کند؛ SQL اجرایی یا migration نیست. IsReadOnly ذخیره نمی‌شود و از قفل نهایی/منبع/policy محاسبه می‌شود. منبع اصلی کد قطعی CHECKها در Checkpoint 4 پس از تصویب DBA ساخته و روی SQL Server آزموده خواهد شد."
+}

@@ -151,3 +151,17 @@ schema واقعی SQL کارگزاری، SMS contract، محیط IIS مقصد و
 | `src/mocks/auth-repository.ts` | `820e3c104bbfb009773818ce766ab052f2e7043f3d9768231938a02860c13970` |
 | `src/features/auth/config.ts` | `88f2665f8aff72a0b39c2873040a38ca2036f6d009fb14aa117192d4cb176d7f` |
 | `src/features/submission/submission-model.ts` | `1b61e3cb65059efd735198dc6aa63a4e4691ce006c0b4b5cea5cb489435d1a82` |
+
+## تطبیق و تعارض‌های طراحی 2E — 2026-11-02
+
+جدول‌های hash بالا شاهد تاریخی مطالعهٔ اولیه‌اند؛ برای 2E، [hash بایت جاری ۲۶ فایل Frontend](checkpoint2e/FRONTEND_REVIEW.json) مرجع است. HEAD مرجع Frontend `448fa6aa9ce29f4fbf535203dbb96d2e862565ce` با ۲۲۶ تغییر قبلی، نسخهٔ تمام working tree را ثابت نمی‌کند. هیچ منبع یا آرشیو اختصاصی تازه منتقل نشد. تصمیم فعلی در [طرح 2E](implementation/CHECKPOINT-02E-INFO-PERSISTENCE-DESIGN_FA.md) پیشنهادِ Checkpoint 4 است، نه تغییر رفتار اجراشده.
+
+| شناسه | تعارض واقعی | تصمیم طرح و gate |
+|---|---|---|
+| E-C01 | Vehicle کامل Frontend در برابر فیلد nullable/منشأدار reader | DTO آینده nullable و envelope؛ adapter آینده باید نقص را نشان دهد؛ بدون placeholder؛ O10/O29 |
+| E-C02 | اصلاح plate/color trusted در فرم/mock و fallback سفید | قفل Present در Backend، manual فقط Missing صریح، confirmation بدون ارسال مقدار trusted؛ بدون تغییر Frontend در 2E |
+| E-C03 | year عددی بدون تقویم در UI، رشته در 2D و CarYearSakhtId در سورس قدیمی | زوج سال/تقویم با SourceText؛ ID سال، مقدار سال نیست؛ O09/O29 |
+| E-C04 | VIN و شاسی در عنوان UI یکی دیده می‌شوند؛ reader دو فیلد دارد | ذخیره/validation مستقل، خروجی mask و assurance؛ O28/O29 |
+| E-C05 | SourceVersion غیرخالی 2D در برابر source واقعی احتمالاً فاقد version | تغییر پیشنهادی آیندهٔ mode/nullable version و hash؛ در این مرحله کد حفظ و نسخه از ساعت جعل نشد؛ O30 |
+| E-C06 | پیشنهاد تاریخی Info، raw source IDs تکراری و Status تک‌محوری داشت | طرح جدید فقط مراجع داخلی pinned و provenance چندمحوری؛ source IDs از linkage/context، Manual شاهد Missing را حفظ می‌کند؛ manifest جدید مرجع پیشنهاد آینده است |
+| E-C07 | factsConfirmed محلی از وجود object و مسیرهای /api در endpoints UI | readiness/ownership سروری و فقط مسیرهای planned /API/BAZDID؛ بدون alias یا افزودن route زنده |

@@ -1,0 +1,38 @@
+{
+  "Date": "2026-11-02",
+  "AuthorizationReference": "20acc386-4be3-48e7-84da-a7457cf34b6f",
+  "StartingCommit": "d704ad21f8d7cbb66abb29b160f3a9c7c6a7d705",
+  "Sdk": "2.1.818",
+  "TargetFramework": "netcoreapp2.1",
+  "CSharp": "7.3",
+  "Restore": {
+    "Command": "dotnet restore Bazdid.sln --locked-mode",
+    "ExitCode": 0
+  },
+  "Build": {
+    "Command": "dotnet build Bazdid.sln --configuration Release --no-restore",
+    "ExitCode": 0,
+    "Warnings": 0,
+    "Errors": 0
+  },
+  "Tests": {
+    "Command": "dotnet test Bazdid.sln --configuration Release --no-build --no-restore",
+    "ExitCode": 0,
+    "UnitPassed": 65,
+    "IntegrationPassed": 43,
+    "Total": 108,
+    "Passed": 108,
+    "Failed": 0,
+    "NewTests": 0
+  },
+  "RuntimeCodeChanged": false,
+  "TestCodeChanged": false,
+  "DependenciesChanged": false,
+  "LiveSwaggerChanged": false,
+  "DatabaseConnectedByCheckpoint2E": false,
+  "DdlOrFixtureDmlExecuted": false,
+  "ProposedInfoDesignRuntimeTested": false,
+  "KestrelSmokeRerun": false,
+  "ProductionAccessed": false,
+  "ExplanationFa": "اجرای تازهٔ baseline موجود 2D؛ طرح schema/DTO/refresh در 2E فقط مستند و از نظر ساختار بازبینی شده است و آزمون SQL/runtime آن انجام نشده است."
+}
