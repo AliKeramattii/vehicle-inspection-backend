@@ -1,6 +1,6 @@
 # اتصال GitHub و سیاست انتشار امن
 
-گزارش اولیه در `2026-11-01` فقط Git و مستندات بود؛ در آن زمان Checkpoint 1 تکمیل و Checkpoint 2 شروع نشده بود. بخش‌های اولیه شاهد تاریخی همان انتشارند؛ وضعیت تأییدشدهٔ 2C و سپس 2D در انتهای این سند ثبت شده است.
+گزارش اولیه در `2026-11-01` فقط Git و مستندات بود؛ در آن زمان Checkpoint 1 تکمیل و Checkpoint 2 شروع نشده بود. بخش‌های اولیه شاهد تاریخی همان انتشارند؛ وضعیت تأییدشدهٔ 2C، 2D و سپس طراحی 2E در انتهای این سند ثبت شده است.
 
 ## مقصد و نتیجهٔ بررسی اولیه
 
@@ -96,3 +96,21 @@ force push، حذف commit remote، reset مخرب، ایجاد مخزن دیگ�
 کنترل پیش از commit پیاده‌سازی: ۳۲ فایل، ۱۳ Markdown، ۱۴۲ پیوند محلی/یک anchor، اسکن ۱۳۶ فایل فعلی و ۱۷۶ blob تاریخی main، بدون هشدار راز باقی‌مانده؛ fixture URL آزمون قدیمی origin جدا تأیید شد. ZIP خصوصی از ancestry قابل ارسال غایب، branch اصل محلی روی SHA قبلی و فایل untracked کاربر با hash اولیه محفوظ بود. هیچ source اختصاصی، backup، فایل پایگاه، credential یا دادهٔ واقعی اضافه نشد؛ package/lockfile/target و SQL scriptها تغییر نکردند.
 
 نتیجهٔ 2D: restore/build موفق با صفر warning/error؛ **۶۵ unit + ۴۳ integration = ۱۰۸ موفق**؛ smoke Kestrel واقعی و verification خواندنی DB قبل/بعد موفق. integration حافظه‌ای/DI/TestServer با SQL واقعی متفاوت است؛ آزمون‌های SQL 2C دوباره اجرا نشدند. [فرایند و محدودیت‌ها](implementation/CHECKPOINT-02D-BROKERAGE-READER_FA.md). **17% + 2 = 19%**؛ O24/O26 و mapping واقعی بازند؛ 2E–2G و auth/OTP/Session/Info/media شروع نشدند. تکمیل این ثبت Git سهم پیشرفت تازه ندارد.
+
+## انتشار تأییدشدهٔ طرح Checkpoint 2E
+
+در `2026-11-02`، مجوز `20acc386-4be3-48e7-84da-a7457cf34b6f` فقط طراحی را پوشش داد. commit طرح `9f5f7df94dc6f1dd6e854af8d52e2d4818fd3d06` شامل ۱۵ فایل مستنداتی بررسی‌شده از مبنای `d704ad2` با push عادی به همان origin/main ارسال شد. پس از ارسال، HEAD، origin/main و ls-remote همین SHA را نشان دادند و اختلاف `0/0` بود؛ remote فقط main داشت. branch اصل خصوصی روی `7e2d83ddeb33475d07f70f4471cd09e466f853a4` محفوظ و ارسال نشد؛ force یا tag در کار نبود.
+
+با ابزار GitHub فایل‌های زیر در همان commit خوانده و blob SHA آن‌ها با Git محلی تطبیق داده شدند:
+
+| فایل | blob SHA در commit طرح |
+|---|---|
+| [manifest پیشنهادی schema](design/BAZDIDINFO_SCHEMA_PROPOSAL.json) | `e8cc3e9d0616293ab1bdccb80ba50432c046b498` |
+| [راهنمای طراحی 2E](implementation/CHECKPOINT-02E-INFO-PERSISTENCE-DESIGN_FA.md) | `3638c2b5a0f4d4f66c773df3f9f52d524cb230e5` |
+| [کنترل طراحی/مخزن](checkpoint2e/DESIGN_VALIDATION.json) | `75e83dce53412bacdd853ad16a8f320a56703ab1` |
+
+این hashها مربوط به commit طرح‌اند؛ راهنما و گزارش کنترل در commit تکمیل انتشار به‌روز می‌شوند. SHA نهایی آن ثبت و تطبیق remote در گزارش تحویل از Git واقعی خوانده می‌شود تا سند به SHA خودش ارجاع دوری ندهد.
+
+کنترل پیش از commit طرح: ۱۵ فایل، ۱۱ Markdown، ۱۷۰ پیوند محلی/یک anchor، دو مثال JSON و اسکن ۱۴۱ فایل فعلی/۲۱۱ blob تاریخی main بدون هشدار راز باقی‌مانده. fixture URL آزمون قدیمی جدا تأیید شد. ZIP خصوصی از ancestry قابل ارسال غایب بود؛ هیچ archive، دادهٔ واقعی، credential، فایل پایگاه یا backup اضافه نشد. ۲۶ فایل Frontend و ۲۲۶ ورودی تغییر قبلی آن با hash/status ثابت حفظ شدند؛ فایل untracked کاربر Backend نیز بدون تغییر و خارج commit ماند. runtime/test/dependency/SQL/deployment diff صفر است.
+
+baseline برنامه در همین مرحله تازه restore/build/test شد: exit صفر، build صفر warning/error و **۶۵ unit + ۴۳ integration = ۱۰۸ موفق**. این نتیجه، اجرای schema/DTO/crypto/refresh طراحی‌شده نیست؛ SQL زنده و smoke Kestrel در 2E اجرا نشدند. manifest ۱۳۱ ستون و ۱۹ قاعدهٔ constraint فقط پیشنهاد آینده است و ۲۴ سناریوی طراحی اجرا نشده‌اند. **19% + 1 = 20%** فقط بابت طراحی مجاز 2E؛ Info/Inspections و API عملیاتی ساخته نشدند. O24/O26 و O27–O30 بازند؛ مرحلهٔ بعد با مجوز جدا و بدون امتیاز فعلی است.
