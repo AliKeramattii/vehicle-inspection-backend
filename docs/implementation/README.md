@@ -38,3 +38,5 @@
 ## P0 امکان‌سنجی مهاجرت؛ تحویل مستقل از اجرای2F
 
 [راهنمای الزامی P0](CHECKPOINT-02F-P0-MIGRATION-FEASIBILITY_FA.md)، [برنامهٔ فایل‌به‌فایل](../checkpoint2f/P0_MIGRATION_FILE_PLAN_FA.md) و [نتیجهٔ امن](../checkpoint2f/P0_FEASIBILITY_RESULTS.json) شامل ساختار نمونهٔ ignored، خطاهای واقعی/رفع آن‌ها،۱۴تست و سهHTTP موفق، regressionاصلی۱۵۹موفق/۸SQLSkip، گراف مستقل/pin امنیتی، hosting/IIS، برآورد و چک‌لیست تصویب‌اند. هیچ prototype/source/artifact موقتی منتشر نمی‌شود. canonical2.1 حفظ و اتصالSQL/IIS/P1/P2 اجرا نشد؛ **20+0=20%**. commit و remote از [گزارش GitHub](../GITHUB_SYNC_FA.md) خوانده شوند.
+
+commit بستهٔ P0: [55573fd](https://github.com/AliKeramattii/vehicle-inspection-backend/commit/55573fda0c2741f103760c3e959c7ff108e10431)؛ push، HEAD و سه blob مستقلاً برابر تأیید شدند. گزارش و ارجاع‌های تحویل در ثبت تکمیلی به‌روز می‌شوند؛ نتیجهٔ نهایی از Git واقعی خوانده شود.

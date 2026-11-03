@@ -160,3 +160,23 @@ URL fetch و push همان مقصد مصوب و refs تازه پیش از commit
 regression تازه همان baseline بود: restore/build exit صفر، warning/error صفر، **۱۰۹ unit + ۵۰ integration آفلاین موفق، صفر شکست، ۸ SQL Skipped و صفر اجرای connected/effective permission**. تست جدید ساخته نشد؛ native/اتصال/TLS نامزدها آزمایش نشدند و audit همان ۹ بستهٔ دارای هشدار را نشان داد. schema قبل/بعد برابر و سه جدول خالی‌اند؛ SQL Server metadata خواندنی با runtime برنامه متفاوت است. smoke Kestrel/IIS در این ادامه تکرار نشد.
 
 **20 + 0 = 20%؛ باقی80%.** O24/O26 و approvalهای P0–P5 در [بستهٔ تصویب](checkpoint2f/CONTINUATION_APPROVAL_FA.md) بازند. توقف قبل از provider/account/SQL/TLS/activation نامصوب و بدون شروع2G؛ همگام‌سازی این بسته پذیرش2F یا امتیاز22% نیست.
+
+## انتشار تأییدشدهٔ P0 امکان‌سنجی مهاجرت
+
+مجوز `700bf7eb-76b8-4b84-ad87-1096b3eb12dd` فقط مطالعه و prototype مستقل ignored را پوشش داد. commit `55573fda0c2741f103760c3e959c7ff108e10431` با والد `ce2d6c6f2be103b34135561cb81c5a4210b8e56d` در `2026-11-03` ثبت و با push عادی فقط `refs/heads/main` به مقصد مصوب فرستاده شد. پیش از ارسال، URLهای fetch/push، refs تازه و ancestry بررسی شدند؛ force، tag، branch اصل و ZIP خصوصی ارسال نشدند.
+
+پس از push، fetch تازه، `rev-parse HEAD origin/main` و `ls-remote --heads origin` همگی `55573fda0c2741f103760c3e959c7ff108e10431` را نشان دادند؛ اختلاف `0/0` و تنها branch دوردست main بود. سه فایل با ابزار GitHub در ref کامل همان commit خوانده و SHA blob با Git محلی برابر شدند:
+
+| فایل | SHA blob تأییدشده |
+|---|---|
+| [walkthrough P0](implementation/CHECKPOINT-02F-P0-MIGRATION-FEASIBILITY_FA.md) | `0526c03d7008898dbfd937140562e13a14f23e9c` |
+| [نتایج امن](checkpoint2f/P0_FEASIBILITY_RESULTS.json) | `6b4ec09cc85ab1a38a8a3e841262fff8407795d8` |
+| [ماتریس مهاجرت](checkpoint2f/P0_MIGRATION_FILE_PLAN_FA.md) | `16826e0b7da187f6c4a0d3f353eadb766015159f` |
+
+چهار فایل تازهٔ این بسته: walkthrough، ماتریس، JSON نتایج و [شاهد کنترل](checkpoint2f/P0_DELIVERY_VALIDATION.json). یازده فایل قبلی تغییر کردند: AGENTS، PLAN، README، ادامهٔ AI، IIS_DEPLOYMENT، OPEN_DECISIONS، SOURCE_REFERENCES، TESTING_STRATEGY، بستهٔ CONTINUATION_APPROVAL، walkthrough قبلی2F و فهرست implementation. این گزارش، ارجاع commit در walkthrough/PLAN و فهرست در ثبت تکمیلی به‌روز می‌شوند؛ hashهای جدول بالا برای نسخهٔ نخست بسته‌اند. SHA ثبت تکمیلی و تطبیق نهایی از Git واقعی در گزارش نهایی خوانده می‌شود تا سند به SHA خودش ارجاع دوری ندهد.
+
+کنترل نخست شامل۱۴فایل پیش از ساخت خود شاهد و سپس بستهٔ۱۵فایلی،۱۳Markdown،۲۳۰پیوند محلی/یک anchor و پوشش هر۳۳فایل C# در ماتریس بود. hash هر۶۴فایل محافظت‌شده یکسان ماند. اسکن **۳۰۴blob reachable main** پس از commit، هشدار راز باقی‌مانده نداشت؛ دو fixture URL نامعتبر تاریخی جدا شناخته شدند و blob ZIP ممنوع از main غایب بود. branch اصل محلی همچنان روی `7e2d83ddeb33475d07f70f4471cd09e466f853a4` بود. تنها untracked بعد از commit، launchSettings شخصی با hash قبلی بود؛ prototype، cache، raw logs/TRX، bin/obj و سورس آن ignored و خارج commit ماندند.
+
+regression اصلی تازه: build بدون warning/error،۱۰۹unit+۵۰integration آفلاین موفق، صفر شکست و۸SQL Skipped. نمونهٔ .NET10/MDS6.1.7 مستقل: build بدون warning/error،۱۴موفق/صفرشکست/صفرskip، سهHTTP smoke موفق، managed-load و PE x64، audit نهایی صفر بستهٔ flagged بعد از pin سازگار Pkcs10.0.14. این نتایج با هم یک suite نیستند. کد اصلی/package/lockfile/SDK/SQL/deployment و فایل کاربر تغییر نکردند؛ هیچ SQL metadata/connect، native execution/SSPI/TLS، account/task/right/ACL/certificate یا IIS در P0 اجرا نشد.
+
+**قبلی20 + سهم P0 صفر = فعلی20%؛ باقی80%.** پذیرش کامل2F تحت مجوز مستقل هدف مشروط22% دارد؛2G شروع نشد. P0 مجوز مهاجرت canonical نیست؛ port واقعی، P1/P2، TLS/activation و استقرار تصویب‌های مستقل می‌خواهند.
