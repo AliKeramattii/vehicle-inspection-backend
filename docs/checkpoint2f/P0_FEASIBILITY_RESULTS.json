@@ -1,0 +1,649 @@
+{
+  "date": "2026-11-03",
+  "authorization": "700bf7eb-76b8-4b84-ad87-1096b3eb12dd",
+  "canonicalBaseline": "ce2d6c6f2be103b34135561cb81c5a4210b8e56d",
+  "scope": "P0",
+  "backendProgressBefore": 20,
+  "earnedProgress": 0,
+  "backendProgressAfter": 20,
+  "canonical": {
+    "targetFramework": "netcoreapp2.1",
+    "sdk": "2.1.818",
+    "runtime": "2.1.30",
+    "protectedFiles": 64,
+    "changedProtectedFiles": [],
+    "buildWarnings": 0,
+    "buildErrors": 0,
+    "testCounters": [
+      {
+        "total": 109,
+        "executed": 109,
+        "passed": 109,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "total": 58,
+        "executed": 50,
+        "passed": 50,
+        "failed": 0,
+        "skipped": 8
+      }
+    ],
+    "sqlTestsSkipped": 8,
+    "userFilePreserved": true
+  },
+  "prototype": {
+    "workspaceIgnored": true,
+    "sdk": "10.0.403",
+    "runtime": "10.0.14",
+    "targetFramework": "net10.0",
+    "runtimeIdentifier": "win-x64",
+    "apiLanguageVersion": "7.3",
+    "hosting": "Generic Host with Startup",
+    "buildWarnings": 0,
+    "buildErrors": 0,
+    "testCounters": [
+      {
+        "total": 14,
+        "executed": 14,
+        "passed": 14,
+        "failed": 0,
+        "skipped": 0
+      }
+    ],
+    "httpSmoke": {
+      "SqlConnectionTested": false,
+      "Transport": "Kestrel loopback HTTP",
+      "IisTested": false,
+      "Cases": [
+        {
+          "NoStore": true,
+          "Path": "/API/BAZDID/health/live",
+          "CorrelationValid": true,
+          "Status": 200,
+          "JsonValid": true
+        },
+        {
+          "NoStore": true,
+          "Path": "/health/live",
+          "CorrelationValid": true,
+          "Status": 404,
+          "JsonValid": true
+        },
+        {
+          "NoStore": true,
+          "Path": "/API/BAZDID/API/BAZDID/health/live",
+          "CorrelationValid": true,
+          "Status": 404,
+          "JsonValid": true
+        }
+      ],
+      "Passed": true
+    },
+    "provider": {
+      "runtime": ".NET 10.0.14",
+      "is64BitProcess": true,
+      "assemblyVersion": "6.0.0.0",
+      "fileVersion": "6.17.26253.4",
+      "connectionState": "Closed",
+      "connectionOpened": false,
+      "encryption": "True",
+      "mandatoryPolicy": true,
+      "integratedSecurity": true,
+      "trustServerCertificate": false,
+      "asyncSignaturesBound": true,
+      "commitAsyncAvailable": true,
+      "rollbackAsyncAvailable": true,
+      "nativeAssets": [
+        {
+          "file": "Microsoft.Data.SqlClient.SNI.dll",
+          "machine": "0x8664",
+          "length": 569240,
+          "sha256": "4b699d5208390414848b2165f8ae442504852afd87221169233a5d7c7bda4ff9"
+        }
+      ],
+      "nativeLoadTested": false,
+      "sqlConnectionTested": false
+    },
+    "sqlPackageAssets": [
+      {
+        "target": "net10.0",
+        "dependencies": {
+          "Azure.Core": "1.50.0",
+          "Azure.Identity": "1.17.1",
+          "Microsoft.Data.SqlClient.SNI.runtime": "6.0.3",
+          "Microsoft.Identity.Client": "4.84.2",
+          "Microsoft.Identity.Client.Broker": "4.84.2",
+          "Microsoft.IdentityModel.JsonWebTokens": "7.7.1",
+          "Microsoft.IdentityModel.Protocols.OpenIdConnect": "7.7.1",
+          "Microsoft.SqlServer.Server": "1.0.0",
+          "System.Configuration.ConfigurationManager": "9.0.11",
+          "System.IdentityModel.Tokens.Jwt": "7.7.1",
+          "System.Security.Cryptography.Pkcs": "9.0.11"
+        },
+        "compile": [
+          "ref/net9.0/Microsoft.Data.SqlClient.dll"
+        ],
+        "runtime": [
+          "lib/net9.0/Microsoft.Data.SqlClient.dll"
+        ]
+      },
+      {
+        "target": "net10.0/win-x64",
+        "dependencies": {
+          "Azure.Core": "1.50.0",
+          "Azure.Identity": "1.17.1",
+          "Microsoft.Data.SqlClient.SNI.runtime": "6.0.3",
+          "Microsoft.Identity.Client": "4.84.2",
+          "Microsoft.Identity.Client.Broker": "4.84.2",
+          "Microsoft.IdentityModel.JsonWebTokens": "7.7.1",
+          "Microsoft.IdentityModel.Protocols.OpenIdConnect": "7.7.1",
+          "Microsoft.SqlServer.Server": "1.0.0",
+          "System.Configuration.ConfigurationManager": "9.0.11",
+          "System.IdentityModel.Tokens.Jwt": "7.7.1",
+          "System.Security.Cryptography.Pkcs": "9.0.11"
+        },
+        "compile": [
+          "ref/net9.0/Microsoft.Data.SqlClient.dll"
+        ],
+        "runtime": [
+          "runtimes/win/lib/net9.0/Microsoft.Data.SqlClient.dll"
+        ]
+      }
+    ],
+    "packageGraphs": {
+      "Api": {
+        "net10.0": [
+          {
+            "name": "Azure.Core",
+            "version": "1.50.0",
+            "type": "Transitive"
+          },
+          {
+            "name": "Azure.Identity",
+            "version": "1.17.1",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.AspNetCore.JsonPatch",
+            "version": "10.0.14",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.AspNetCore.Mvc.NewtonsoftJson",
+            "version": "10.0.14",
+            "type": "Direct"
+          },
+          {
+            "name": "Microsoft.Bcl.AsyncInterfaces",
+            "version": "8.0.0",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Data.SqlClient",
+            "version": "6.1.7",
+            "type": "Direct"
+          },
+          {
+            "name": "Microsoft.Data.SqlClient.SNI.runtime",
+            "version": "6.0.3",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Identity.Client",
+            "version": "4.84.2",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Identity.Client.Broker",
+            "version": "4.84.2",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Identity.Client.Extensions.Msal",
+            "version": "4.78.0",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Identity.Client.NativeInterop",
+            "version": "0.20.6",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.IdentityModel.Abstractions",
+            "version": "8.14.0",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.IdentityModel.JsonWebTokens",
+            "version": "7.7.1",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.IdentityModel.Logging",
+            "version": "7.7.1",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.IdentityModel.Protocols",
+            "version": "7.7.1",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.IdentityModel.Protocols.OpenIdConnect",
+            "version": "7.7.1",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.IdentityModel.Tokens",
+            "version": "7.7.1",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.SqlServer.Server",
+            "version": "1.0.0",
+            "type": "Transitive"
+          },
+          {
+            "name": "Newtonsoft.Json",
+            "version": "13.0.4",
+            "type": "Direct"
+          },
+          {
+            "name": "Newtonsoft.Json.Bson",
+            "version": "1.0.2",
+            "type": "Transitive"
+          },
+          {
+            "name": "System.ClientModel",
+            "version": "1.8.0",
+            "type": "Transitive"
+          },
+          {
+            "name": "System.Configuration.ConfigurationManager",
+            "version": "9.0.11",
+            "type": "Transitive"
+          },
+          {
+            "name": "System.IdentityModel.Tokens.Jwt",
+            "version": "7.7.1",
+            "type": "Transitive"
+          },
+          {
+            "name": "System.Memory.Data",
+            "version": "8.0.1",
+            "type": "Transitive"
+          },
+          {
+            "name": "System.Security.Cryptography.Pkcs",
+            "version": "10.0.14",
+            "type": "Direct"
+          },
+          {
+            "name": "System.Security.Cryptography.ProtectedData",
+            "version": "9.0.11",
+            "type": "Transitive"
+          }
+        ],
+        "net10.0/win-x64": [
+          {
+            "name": "Microsoft.Data.SqlClient",
+            "version": "6.1.7",
+            "type": "Direct"
+          },
+          {
+            "name": "Microsoft.Data.SqlClient.SNI.runtime",
+            "version": "6.0.3",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Identity.Client.NativeInterop",
+            "version": "0.20.6",
+            "type": "Transitive"
+          },
+          {
+            "name": "System.Security.Cryptography.Pkcs",
+            "version": "10.0.14",
+            "type": "Direct"
+          }
+        ]
+      },
+      "Tests": {
+        "net10.0": [
+          {
+            "name": "Azure.Core",
+            "version": "1.50.0",
+            "type": "Transitive"
+          },
+          {
+            "name": "Azure.Identity",
+            "version": "1.17.1",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.ApplicationInsights",
+            "version": "2.23.0",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.AspNetCore.JsonPatch",
+            "version": "10.0.14",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.AspNetCore.Mvc.NewtonsoftJson",
+            "version": "10.0.14",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.AspNetCore.TestHost",
+            "version": "10.0.14",
+            "type": "Direct"
+          },
+          {
+            "name": "Microsoft.Bcl.AsyncInterfaces",
+            "version": "8.0.0",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Data.SqlClient",
+            "version": "6.1.7",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Data.SqlClient.SNI.runtime",
+            "version": "6.0.3",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Extensions.Caching.Abstractions",
+            "version": "9.0.11",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Extensions.Caching.Memory",
+            "version": "9.0.11",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Extensions.DependencyInjection.Abstractions",
+            "version": "9.0.11",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Extensions.Logging.Abstractions",
+            "version": "9.0.11",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Extensions.Options",
+            "version": "9.0.11",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Extensions.Primitives",
+            "version": "9.0.11",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Identity.Client",
+            "version": "4.84.2",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Identity.Client.Broker",
+            "version": "4.84.2",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Identity.Client.Extensions.Msal",
+            "version": "4.78.0",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Identity.Client.NativeInterop",
+            "version": "0.20.6",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.IdentityModel.Abstractions",
+            "version": "8.14.0",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.IdentityModel.JsonWebTokens",
+            "version": "7.7.1",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.IdentityModel.Logging",
+            "version": "7.7.1",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.IdentityModel.Protocols",
+            "version": "7.7.1",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.IdentityModel.Protocols.OpenIdConnect",
+            "version": "7.7.1",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.IdentityModel.Tokens",
+            "version": "7.7.1",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.SqlServer.Server",
+            "version": "1.0.0",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Testing.Extensions.Telemetry",
+            "version": "2.5.1",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Testing.Extensions.TrxReport",
+            "version": "2.5.1",
+            "type": "Direct"
+          },
+          {
+            "name": "Microsoft.Testing.Extensions.TrxReport.Abstractions",
+            "version": "2.5.1",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Testing.Platform",
+            "version": "2.5.1",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Testing.Platform.MSBuild",
+            "version": "2.5.1",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Win32.Registry",
+            "version": "5.0.0",
+            "type": "Transitive"
+          },
+          {
+            "name": "Newtonsoft.Json",
+            "version": "13.0.4",
+            "type": "Transitive"
+          },
+          {
+            "name": "Newtonsoft.Json.Bson",
+            "version": "1.0.2",
+            "type": "Transitive"
+          },
+          {
+            "name": "System.ClientModel",
+            "version": "1.8.0",
+            "type": "Transitive"
+          },
+          {
+            "name": "System.Configuration.ConfigurationManager",
+            "version": "9.0.11",
+            "type": "Transitive"
+          },
+          {
+            "name": "System.Diagnostics.EventLog",
+            "version": "9.0.11",
+            "type": "Transitive"
+          },
+          {
+            "name": "System.IdentityModel.Tokens.Jwt",
+            "version": "7.7.1",
+            "type": "Transitive"
+          },
+          {
+            "name": "System.Memory.Data",
+            "version": "8.0.1",
+            "type": "Transitive"
+          },
+          {
+            "name": "System.Security.AccessControl",
+            "version": "6.0.1",
+            "type": "Transitive"
+          },
+          {
+            "name": "System.Security.Cryptography.Pkcs",
+            "version": "10.0.14",
+            "type": "Transitive"
+          },
+          {
+            "name": "System.Security.Cryptography.ProtectedData",
+            "version": "9.0.11",
+            "type": "Transitive"
+          },
+          {
+            "name": "xunit.analyzers",
+            "version": "2.2.0",
+            "type": "Transitive"
+          },
+          {
+            "name": "xunit.v3.assert",
+            "version": "4.0.2",
+            "type": "Transitive"
+          },
+          {
+            "name": "xunit.v3.common",
+            "version": "4.0.2",
+            "type": "Transitive"
+          },
+          {
+            "name": "xunit.v3.core.mtp-v2",
+            "version": "4.0.2",
+            "type": "Transitive"
+          },
+          {
+            "name": "xunit.v3.extensibility.core",
+            "version": "4.0.2",
+            "type": "Transitive"
+          },
+          {
+            "name": "xunit.v3.mtp-v2",
+            "version": "4.0.2",
+            "type": "Direct"
+          },
+          {
+            "name": "xunit.v3.runner.common",
+            "version": "4.0.2",
+            "type": "Transitive"
+          },
+          {
+            "name": "xunit.v3.runner.inproc.console",
+            "version": "4.0.2",
+            "type": "Transitive"
+          }
+        ],
+        "net10.0/win-x64": [
+          {
+            "name": "Microsoft.Data.SqlClient",
+            "version": "6.1.7",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Data.SqlClient.SNI.runtime",
+            "version": "6.0.3",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Identity.Client.NativeInterop",
+            "version": "0.20.6",
+            "type": "Transitive"
+          },
+          {
+            "name": "Microsoft.Win32.Registry",
+            "version": "5.0.0",
+            "type": "Transitive"
+          },
+          {
+            "name": "System.Diagnostics.EventLog",
+            "version": "9.0.11",
+            "type": "Transitive"
+          },
+          {
+            "name": "System.Security.AccessControl",
+            "version": "6.0.1",
+            "type": "Transitive"
+          },
+          {
+            "name": "System.Security.Cryptography.Pkcs",
+            "version": "10.0.14",
+            "type": "Transitive"
+          }
+        ]
+      }
+    },
+    "vulnerablePackagesInFinalNugetAudit": 0,
+    "initialSecurityFinding": {
+      "package": "System.Security.Cryptography.Pkcs",
+      "version": "9.0.11",
+      "advisories": [
+        "GHSA-2fmv-rv2c-59x7",
+        "GHSA-846f-f764-76mx"
+      ],
+      "explicitCompatiblePin": "10.0.14"
+    },
+    "initialHostingWarnings": [
+      "ASPDEPR008"
+    ],
+    "initialTestRunnerFailure": "VSTest/MTPv2 incompatible; isolated runner changed to Microsoft.Testing.Platform",
+    "intermediateTestResult": {
+      "total": 14,
+      "passed": 10,
+      "failed": 4,
+      "cause": "Configuration validation occurs during host Build; assertions corrected to include Build and Start."
+    }
+  },
+  "notExecuted": [
+    "SQL connection or metadata discovery",
+    "SQL native load/SSPI/TLS/transaction execution",
+    "IIS/ANCM/Windows Server deployment",
+    "Canonical framework/provider migration",
+    "Windows account/task/right/ACL changes",
+    "SQL login/user/role/GRANT/DENY/DDL/DML",
+    "Frontend changes",
+    "OTP/Session/2G"
+  ],
+  "proposalScriptSha256": {
+    "database/proposals/development_logins.review.sql": "9099de3dce8e77fc037d1bdc6d5b8649ba835253df067e6b0e8d89b121b5b15f",
+    "database/proposals/permissions.review.sql": "9888862c6997eb2ab0fc2effaac6559e6399905e1290fec506100ad46609a396"
+  },
+  "rawEvidenceCommitted": false,
+  "rawEvidenceSha256": {
+    ".sync-tmp/p0-net10-spike-20261103/build-verified.log": "e241875c89c5ee58b3cb68f2cf2922d67cd4de2060a5c7d9a561818f8290baca",
+    ".sync-tmp/p0-net10-spike-20261103/tests-verified.log": "9102bcc27e32613d0e699d4513fa2b2c0e51ee47a5abcd1164232961d2a632cb",
+    ".sync-tmp/p0-net10-spike-20261103/provider-verified.json": "fa000056a0ecf6609af45e5b5729efc633e9f78b6915997e440742b9e0b38f0c",
+    ".sync-tmp/p0-net10-spike-20261103/audit-verified.json": "0637ee1115e2e7b1ba36c752a383bd11f99a11b62640e2b09095a94964f62ffe",
+    ".sync-tmp/p0-net10-spike-20261103/http-smoke.json": "238a17f94a8022688eeb66ada40bd70cf1866583b403dd4b9b4dee51b07c8dd2",
+    ".sync-tmp/p0-canonical-build.log": "bf1ddebfe09cd7413c6d431418ca319bcfd453bcbf3e6bdc56cb184706a7622a",
+    ".sync-tmp/p0-canonical-tests.log": "e3a075f958471f62d8f80536ceb9bca1d13a467024a0182b4a900fbc889cc983"
+  }
+}

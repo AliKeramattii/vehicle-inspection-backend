@@ -1,6 +1,6 @@
 # راهنمای فرایند پیاده‌سازی Backend
 
-این صفحه، نقطهٔ ورود به توضیح «چگونه انجام شد» است؛ گزارش‌های قبلی سابقهٔ همان مرحله‌اند. وضعیت `2026-11-03`: تحویل آفلاین 2F انجام شد، پذیرش متصل O24/O26 مسدود و پیشرفت **20%** است. ۱۵۹ آزمون آفلاین تازه موفق و ۸ SQL Skipped؛ verification زندهٔ خواندنی و smoke Kestrel با SQL خاموش انجام شدند. DDL و ۳۵ CASE SQL همچنان فقط شاهد تاریخی 2C هستند.
+این صفحه، نقطهٔ ورود به توضیح «چگونه انجام شد» است؛ گزارش‌های قبلی سابقهٔ همان مرحله‌اند. وضعیت `2026-11-03`: [P0 امکان‌سنجی و آزمایش موقت](CHECKPOINT-02F-P0-MIGRATION-FEASIBILITY_FA.md) با۱۴ تست/سه HTTP smoke موفق انجام شد؛۱۵۹ تست canonical تازه موفق و۸SQL Skipped است. canonical مهاجرت نکرد و در P0 هیچ اتصال/metadata SQL اجرا نشد. پذیرش متصل O24/O26 باز و پیشرفت **20%** است. verificationهای زندهٔ اسناد قبلی و۳۵CASE SQL متعلق به مراحل تاریخی‌اند.
 
 ## مراحل دارای کار واقعی
 
@@ -34,3 +34,7 @@
 
 
 ادامهٔ 2F طبق `e252dad0-0bb1-4058-ab9b-f757dd2b272a` فقط تحلیل و آماده‌سازی تصویب است: [بستهٔ provider/حساب/permissions](../checkpoint2f/CONTINUATION_APPROVAL_FA.md)، [شاهد تازه](../checkpoint2f/CONTINUATION_REVIEW.json) و بخش ادامهٔ walkthrough موجود را بخوانید. نه candidate، دو script بستهٔ آفلاین parseشده و ۱۵۹ موفق/۸ SQL Skipped تازه ثبت شدند؛ provider، حساب‌ها و SQL متصل هنوز تصویب/اجرا نشده‌اند. درصد۲۰٪ و توقف پیش از تغییر نامصوب/2G حفظ شد.
+
+## P0 امکان‌سنجی مهاجرت؛ تحویل مستقل از اجرای2F
+
+[راهنمای الزامی P0](CHECKPOINT-02F-P0-MIGRATION-FEASIBILITY_FA.md)، [برنامهٔ فایل‌به‌فایل](../checkpoint2f/P0_MIGRATION_FILE_PLAN_FA.md) و [نتیجهٔ امن](../checkpoint2f/P0_FEASIBILITY_RESULTS.json) شامل ساختار نمونهٔ ignored، خطاهای واقعی/رفع آن‌ها،۱۴تست و سهHTTP موفق، regressionاصلی۱۵۹موفق/۸SQLSkip، گراف مستقل/pin امنیتی، hosting/IIS، برآورد و چک‌لیست تصویب‌اند. هیچ prototype/source/artifact موقتی منتشر نمی‌شود. canonical2.1 حفظ و اتصالSQL/IIS/P1/P2 اجرا نشد؛ **20+0=20%**. commit و remote از [گزارش GitHub](../GITHUB_SYNC_FA.md) خوانده شوند.

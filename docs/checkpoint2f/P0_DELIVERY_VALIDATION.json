@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-03",
+  "authorization": "700bf7eb-76b8-4b84-ad87-1096b3eb12dd",
+  "scope": "P0 documentation only",
+  "filesBeforeThisSummary": 14,
+  "markdownFiles": 13,
+  "localLinks": 230,
+  "explicitAnchors": 1,
+  "csharpFilesCoveredInPlan": 33,
+  "protectedFilesUnchanged": 64,
+  "userFilePreserved": true,
+  "prototypeIgnored": true,
+  "canonicalCodePackageSqlDeploymentDiffEmpty": true,
+  "currentFileSecretScanFindings": 0,
+  "backendProgress": 20,
+  "sqlConnectedAcceptance": false,
+  "pushVerifiedByThisCheck": false
+}

@@ -2,7 +2,7 @@
 
 این مخزن مستقل، پایهٔ توسعهٔ Backend برنامهٔ فارسی خودبازدید خودرو برای کارگزاری بیمه است. Frontend موجود در `C:\Projects\vehicle-inspection-integrated` فقط مرجع خواندنی است؛ دو مخزن ادغام نمی‌شوند.
 
-در `2026-11-03`، مجوز `ea650fd0-47e2-4d02-bf9b-0fb87f03a254` فقط 2F را پوشش داد. قراردادها، سه repository، transaction و DI با gate بسته پیاده شدند؛ O24/O26 مانع پذیرش متصل‌اند. ۱۰۹ unit و ۵۰ integration آفلاین موفق، صفر شکست و ۸ SQL Skipped؛ build صفر warning/error. verification خواندنی schema/ردیف قبل و بعد برابر و سه جدول خالی‌اند. DDL، DML repository، grant و اتصال runtime انجام نشدند. **پیشرفت 20%؛ توقف در 2F ناقص، بدون شروع 2G.** [راهنمای 2F و شواهد](docs/implementation/CHECKPOINT-02F-SQL-REPOSITORIES_FA.md).
+در `2026-11-03`، [امکان‌سنجی P0 و نمونهٔ مستقل .NET10](docs/implementation/CHECKPOINT-02F-P0-MIGRATION-FEASIBILITY_FA.md) تکمیل شد: build بدون warning/error،۱۴ تست و سه HTTP smoke موفق؛ driver6.1.7 فقط managed-load و asset-inspect شد. [نقشهٔ مهاجرت](docs/checkpoint2f/P0_MIGRATION_FILE_PLAN_FA.md) آماده است؛ نسخهٔ اصلی همچنان2.1 با gate بسته و بدون تغییر package/lockfile است. regression تازه۱۰۹unit+۵۰offline موفق و۸SQL Skipped دارد. در P0 هیچ اتصال یا metadata SQL، حساب/permission، نصب یا IIS اجرا نشد. **پیشرفت20%؛2F ناقص و2G شروع نشده است.** مهاجرت canonical نیازمند تصویب صریح مالک و عملیات SQL/زیرساخت نیازمند مجوزهای مستقل‌اند.
 
 ## فناوری و میزبانی
 

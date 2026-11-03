@@ -1,5 +1,7 @@
 # طرح استقرار IIS و PathBase
 
+آخرین بررسی `2026-11-03`: [P0 مهاجرت .NET10](implementation/CHECKPOINT-02F-P0-MIGRATION-FEASIBILITY_FA.md) فقط hosting محلی و PathBase شبیه‌سازی‌شده را آزمود. پیشنهاد Generic Host با حفظ Startup/OutOfProcess و الزامات OS/Hosting Bundle/rollback در آن آمده است؛ canonical همچنان2.1 و نصب/استقرار/IIS واقعی مجاز یا اجرا نشده‌اند. حداقل‌های legacy پایین این سند برای .NET10 قابل تعمیم نیستند؛ Server2012/2012R2 در ماتریس .NET10 شرط ESU دارند.
+
 وضعیت: **در Checkpoint 1، artifact محلی publish و template ساخته شده؛ هیچ IIS، سرور یا برنامهٔ کارگزاری تغییر نکرده است.** راهنمای اجرایی و دستورهای واقعی در [deployment/iis](../deployment/iis/README.md) هستند. PathBase در Kestrel واقعی و metadata شبیه‌سازی‌شدهٔ IIS آزموده شده؛ ANCM واقعی هنوز آزموده نشده است. دامنه‌های مثال تنظیمات واقعی نیستند.
 
 ## Application مستقل و مدل hosting
