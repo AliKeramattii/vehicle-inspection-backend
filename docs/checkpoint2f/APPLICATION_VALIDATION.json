@@ -1,0 +1,52 @@
+{
+  "Date": "2026-11-03",
+  "AuthorizationReference": "ea650fd0-47e2-4d02-bf9b-0fb87f03a254",
+  "StartingCommit": "228d3769fc3471a2e3d597b9272c9629fa9ebe28",
+  "Sdk": "2.1.818",
+  "Runtime": "2.1.30",
+  "TargetFramework": "netcoreapp2.1",
+  "CSharp": "7.3",
+  "Restore": {
+    "Command": "dotnet restore Bazdid.sln --locked-mode",
+    "ExitCode": 0
+  },
+  "Build": {
+    "Command": "dotnet build Bazdid.sln --configuration Release --no-restore",
+    "ExitCode": 0,
+    "Warnings": 0,
+    "Errors": 0
+  },
+  "Tests": {
+    "Command": "dotnet test Bazdid.sln --configuration Release --no-build --no-restore --logger trx --results-directory C:/Projects/vehicle-inspection-backend/.sync-tmp/cp2f-pass",
+    "ExitCode": 0,
+    "Unit": {
+      "Passed": 109,
+      "Failed": 0,
+      "NotExecuted": 0,
+      "Total": 109,
+      "BaselinePassed": 65
+    },
+    "Integration": {
+      "Passed": 50,
+      "Failed": 0,
+      "NotExecuted": 8,
+      "Total": 58,
+      "BaselinePassed": 43
+    },
+    "BaselinePassed": 108,
+    "NewOfflinePassed": 51,
+    "OfflinePassed": 159,
+    "ConnectedSqlPassed": 0,
+    "ConnectedSqlSkipped": 8,
+    "Failed": 0,
+    "TotalDiscovered": 167
+  },
+  "ConnectedAcceptance": "Blocked",
+  "ProgressBefore": 20,
+  "ProgressEarned": 0,
+  "ProgressAfter": 20,
+  "HistoricalSql2cCasesRerun": false,
+  "DependenciesChanged": false,
+  "SchemaChanged": false,
+  "ExplanationFa": "اجرای تازهٔ برنامه و آزمون‌های آفلاین؛ هشت آزمون SQL متصل کشف و صریحاً skip شدند. هیچ عملیات repository روی SQL اجرا نشد."
+}

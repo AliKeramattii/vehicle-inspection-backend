@@ -1,0 +1,55 @@
+{
+  "Date": "2026-11-03",
+  "ProviderRuntimeConnection": "Blocked",
+  "ApprovedRuntimePrincipalsAvailable": false,
+  "ConnectedSqlExecuted": 0,
+  "ConnectedSqlPassed": 0,
+  "ConnectedSqlFailed": 0,
+  "ConnectedSqlSkipped": 8,
+  "Tests": [
+    {
+      "Name": "Bazdid.IntegrationTests.SqlRepositoryConnectedTests.Customer_request_and_audit_insert_are_rolled_back_together",
+      "Outcome": "Skipped",
+      "Reason": "O24/O26: provider متصل و principal کم‌اختیار مصوب/آزموده نشده‌اند؛ gate کد بسته است."
+    },
+    {
+      "Name": "Bazdid.IntegrationTests.SqlRepositoryConnectedTests.Concurrent_creation_waits_for_key_lock_and_leaves_no_committed_record",
+      "Outcome": "Skipped",
+      "Reason": "O24/O26: provider متصل و principal کم‌اختیار مصوب/آزموده نشده‌اند؛ gate کد بسته است."
+    },
+    {
+      "Name": "Bazdid.IntegrationTests.SqlRepositoryConnectedTests.Existing_request_cannot_be_relinked_to_another_customer",
+      "Outcome": "Skipped",
+      "Reason": "O24/O26: provider متصل و principal کم‌اختیار مصوب/آزموده نشده‌اند؛ gate کد بسته است."
+    },
+    {
+      "Name": "Bazdid.IntegrationTests.SqlRepositoryConnectedTests.Exact_keys_idempotence_multiple_requests_and_tenant_isolation",
+      "Outcome": "Skipped",
+      "Reason": "O24/O26: provider متصل و principal کم‌اختیار مصوب/آزموده نشده‌اند؛ gate کد بسته است."
+    },
+    {
+      "Name": "Bazdid.IntegrationTests.SqlRepositoryConnectedTests.Actual_SQL_command_observes_cancellation",
+      "Outcome": "Skipped",
+      "Reason": "O24/O26: provider متصل و principal کم‌اختیار مصوب/آزموده نشده‌اند؛ gate کد بسته است."
+    },
+    {
+      "Name": "Bazdid.IntegrationTests.SqlRepositoryConnectedTests.Actual_SQL_timeout_is_not_not_found_or_duplicate",
+      "Outcome": "Skipped",
+      "Reason": "O24/O26: provider متصل و principal کم‌اختیار مصوب/آزموده نشده‌اند؛ gate کد بسته است."
+    },
+    {
+      "Name": "Bazdid.IntegrationTests.SqlRepositoryConnectedTests.Actual_writer_cannot_read_audit_or_delete_contexts_or_issue_DDL",
+      "Outcome": "Skipped",
+      "Reason": "O24/O26: provider متصل و principal کم‌اختیار مصوب/آزموده نشده‌اند؛ gate کد بسته است."
+    },
+    {
+      "Name": "Bazdid.IntegrationTests.SqlRepositoryConnectedTests.Stale_rowversion_cannot_overwrite_metadata",
+      "Outcome": "Skipped",
+      "Reason": "O24/O26: provider متصل و principal کم‌اختیار مصوب/آزموده نشده‌اند؛ gate کد بسته است."
+    }
+  ],
+  "EffectiveSourceReaderPermissionTest": "PendingApprovedPrincipalAndObjectMapping",
+  "RollbackAuditCountVerification": "PendingSeparateApprovedVerifier",
+  "DdlExecuted": false,
+  "RepositoryDmlExecuted": false
+}

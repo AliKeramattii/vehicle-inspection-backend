@@ -1,0 +1,20 @@
+{
+  "Date": "2026-11-03",
+  "ChangedFilesBeforeValidationEvidence": 33,
+  "MarkdownChanged": 13,
+  "LocalLinksValidated": 210,
+  "ExplicitAnchorsValidated": 1,
+  "CurrentFilesScanned": 160,
+  "ReachableHistoricalBlobsScanned": 231,
+  "HighConfidenceSecretFindings": 0,
+  "KnownSyntheticUrlFixtureOccurrences": 3,
+  "PrivateZipReachableFromMain": false,
+  "OriginalBranchUnchanged": true,
+  "UserUntrackedFileUnchanged": true,
+  "DependenciesAndLockfilesUnchanged": true,
+  "SqlScriptsAndBrokerageContractsUnchanged": true,
+  "RuntimeGateClosed": true,
+  "ConnectedSqlSkipCount": 8,
+  "ProgressPercent": 20,
+  "ExplanationFa": "کنترل فایل/پیوند/JSON و الگوهای راز با بازبینی دامنه؛ این اسکن تضمین امنیت کامل یا آزمون SQL نیست. فایل شخصی کاربر فقط hash شد و خارج محتوای قابل ارسال است."
+}

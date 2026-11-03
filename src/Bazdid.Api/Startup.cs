@@ -3,6 +3,7 @@ using System.IO;
 using Bazdid.Api.Configuration;
 using Bazdid.Api.Middleware;
 using Bazdid.Api.Infrastructure.Brokerage;
+using Bazdid.Api.Infrastructure.Sql;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -21,10 +22,12 @@ namespace Bazdid.Api
         private readonly FoundationOptions _settings;
         private readonly bool _swaggerEnabled;
         private readonly IHostingEnvironment _environment;
+        private readonly IConfiguration _configuration;
 
         public Startup(IConfiguration configuration, IHostingEnvironment environment)
         {
             _environment = environment;
+            _configuration = configuration;
             _settings = new FoundationOptions();
             configuration.GetSection("Bazdid").Bind(_settings);
             _settings.Validate(environment.EnvironmentName);
@@ -37,6 +40,7 @@ namespace Bazdid.Api
         {
             services.AddSingleton(_settings);
             services.AddBrokerageReader(_settings, _environment);
+            services.AddBazdidPersistence(_configuration, _environment.EnvironmentName);
             services.AddCors(options => options.AddPolicy("TrustedFrontend", policy =>
             {
                 if (_settings.TrustedFrontendOrigins.Length > 0)

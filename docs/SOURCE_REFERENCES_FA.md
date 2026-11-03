@@ -165,3 +165,10 @@ schema واقعی SQL کارگزاری، SMS contract، محیط IIS مقصد و
 | E-C05 | SourceVersion غیرخالی 2D در برابر source واقعی احتمالاً فاقد version | تغییر پیشنهادی آیندهٔ mode/nullable version و hash؛ در این مرحله کد حفظ و نسخه از ساعت جعل نشد؛ O30 |
 | E-C06 | پیشنهاد تاریخی Info، raw source IDs تکراری و Status تک‌محوری داشت | طرح جدید فقط مراجع داخلی pinned و provenance چندمحوری؛ source IDs از linkage/context، Manual شاهد Missing را حفظ می‌کند؛ manifest جدید مرجع پیشنهاد آینده است |
 | E-C07 | factsConfirmed محلی از وجود object و مسیرهای /api در endpoints UI | readiness/ownership سروری و فقط مسیرهای planned /API/BAZDID؛ بدون alias یا افزودن route زنده |
+
+
+## تصمیم دامنهٔ 2F در 2026-11-03
+
+مجوز `ea650fd0-47e2-4d02-bf9b-0fb87f03a254` ادامهٔ 2F را مجاز کرد و صریحاً در نبود provider امن/هویت کم‌اختیار، فقط کار مستقل آفلاین را خواست. بنابراین وضعیت پیشین «2F شروع نشده» برای زمان 2E تاریخی است؛ وضعیت تازه، کد آفلاین تحویل‌شده و پذیرش متصل مسدود است، با پیشرفت ۲۰٪. [راهنما و شواهد](implementation/CHECKPOINT-02F-SQL-REPOSITORIES_FA.md). تعداد ۱۵۹ موفق، SQL connected نیست و هشت Skip جداست.
+
+پیش‌نویس permissions تاریخی UPDATE CustomerLinks را پیشنهاد می‌دهد؛ repository فعلی چنین عملیاتی ندارد و حداقل موردنیاز فقط SELECT/INSERT آن جدول است. script تغییر/اجرا نشد و پیش از هر اجرای احتمالی باید با دو principal مشخص بازبینی/تصویب شود. metadata provisioner و نقش پیشنهادی جای effective permission با حساب واقعی نیستند. قید provider، APIهای موجود و پایان پشتیبانی از اجرای اجباری 4.8.6 یا ادعای امنیت Production جلوگیری می‌کنند؛ O24/O26 بازند.

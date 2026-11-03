@@ -6,7 +6,7 @@
 
 مخزن `C:\Projects\vehicle-inspection-integrated` فقط مرجع **خواندنی** است. آن را تغییر ندهید، با Backend ادغام نکنید و در آن worktree نسازید. دستورهای تاریخی عامل‌های Frontend، مجوز تغییر آن مخزن یا تغییر دامنهٔ این پروژه نیستند.
 
-**وضعیت جاری در 2026-11-02: Checkpoint 2E فقط در دامنهٔ طراحی persistence/refresh تکمیل شد؛ پیشرفت 20%.** مجوز `20acc386-4be3-48e7-84da-a7457cf34b6f` بررسی خواندنی Frontend، طرح Info، provenance/locking، مالکیت، concurrency و DTO آینده را پوشش داد. baseline کد 2D با ۱۰۸ آزمون تازه و build صفر warning/error تأیید شد؛ runtime/SQL/Frontend تغییر نکردند. [طرح و شواهد 2E](docs/implementation/CHECKPOINT-02E-INFO-PERSISTENCE-DESIGN_FA.md) و PLAN مرجع ادامه‌اند. manifest، پیشنهاد آینده است؛ Info/Inspections ساخته نشده‌اند و SQL به‌صورت زنده در 2E متصل نشد. 2F/2G، SQL واقعی کارگزاری، نقش/حساب برنامه، Production، OTP و استقرار واقعی مجاز/اجرا نشده‌اند؛ DDL/seed و بازسازی DB مجوز ندارند.
+**وضعیت جاری در 2026-11-03: تحویل آفلاین 2F انجام شد؛ پذیرش متصل مسدود و پیشرفت 20%.** مجوز `ea650fd0-47e2-4d02-bf9b-0fb87f03a254` فقط 2F است. سه repository و transaction/DI با gate بسته پیاده شدند؛ ۱۰۹ unit + ۵۰ integration آفلاین موفق، ۸ SQL Skipped و build صفر warning/error. metadata محلی قبل/بعد همان schema و صفر ردیف را تأیید کرد؛ provider برنامه اتصال باز نکرد. O24/O26 و mapping واقعی بازند؛ حساب کم‌اختیار مصوب موجود نیست و sysadmin فقط برای metadata استفاده شد. [راهنمای 2F](docs/implementation/CHECKPOINT-02F-SQL-REPOSITORIES_FA.md) و PLAN مرجع ادامه‌اند. 2G، DDL/seed، role/login/user/grant، SQL کارگزاری، OTP/Session/Info/media و Production مجاز/اجرا نشده‌اند؛ gate را از تنظیمات باز نکنید.
 
 ## سلسله‌مراتب منابع
 

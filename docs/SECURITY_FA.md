@@ -1,6 +1,8 @@
 # طرح امنیت و مدیریت کارکنان آینده
 
-## وضعیت واقعی Checkpoint 1
+## وضعیت فعلی و سابقهٔ foundation
+
+در `2026-11-03`، 2F فقط آفلاین تحویل شد. gate اتصال در کد false است؛ تنظیمات فعال یا اتصال Development در Production رد می‌شوند. provider فعلی advisory دارد و دو Windows principal مصوب موجود نیستند؛ O24/O26 بازند، sysadmin فقط metadata خواند و effective permission یا اتصال runtime تأیید نشده است. SQL ثابت/پارامتری، owner/CAS، audit محدود و حذف raw exception با آزمون آفلاین بررسی شدند؛ ۱۵۹ موفق و ۸ SQL Skipped جای SQL/IIS واقعی نیستند. [راهنمای امنیت و حدود 2F](implementation/CHECKPOINT-02F-SQL-REPOSITORIES_FA.md)، [ممیزی تازه](checkpoint2f/PROVIDER_AUDIT.json). پیشرفت ۲۰٪ و امنیت Production تأیید نشده است.
 
 به‌روزرسانی `2026-11-02`: [خوانندهٔ داخلی 2D](implementation/CHECKPOINT-02D-BROKERAGE-READER_FA.md) فقط Development/Testing از fixture می‌خواند؛ mode/scope ساختگی در Production رد می‌شود، adapter واقعی Unavailable می‌ماند و fallback ندارد. resolve فاقد موبایل/خودرو و snapshot فقط داخلی است؛ reference مجوز مالکیت نیست. timeout/تعارض موبایل/eligibility نامعلوم به دادهٔ Missing قابل‌ویرایش تبدیل نمی‌شوند. تست‌های DI/privacy/cancellation و startup موفق‌اند؛ auth، SQL runtime و امنیت Production هنوز اثبات نشده‌اند. بخش foundation زیر شاهد همان مرحله است.
 

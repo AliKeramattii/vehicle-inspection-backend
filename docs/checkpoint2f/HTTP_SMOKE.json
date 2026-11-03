@@ -1,0 +1,13 @@
+{
+  "Date": "2026-11-03",
+  "Environment": "Development",
+  "Host": "KestrelLoopback",
+  "HealthStatus": 200,
+  "SwaggerStatus": 200,
+  "BasePath": "/API/BAZDID",
+  "PublicPathCount": 1,
+  "SqlRuntimeEnabled": false,
+  "SqlConnectionTested": false,
+  "IisTested": false,
+  "ProcessStopped": true
+}

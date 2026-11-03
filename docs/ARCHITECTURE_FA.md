@@ -1,6 +1,6 @@
 # معماری پیشنهادی و سازگاری محیط
 
-وضعیت: **foundation و reader داخلی ساختگی 2D پیاده‌اند؛ سایر قابلیت‌های این سند برای مراحل بعدند.** یک deployable و دو پروژهٔ آزمون داریم. Application/Domain/Infrastructure اکنون interface، مدل منشأدار، سرویس scope-bound و adapter ساختگی/مرز SQL تنظیم‌نشده دارند. [معماری و آزمون واقعی 2D](implementation/CHECKPOINT-02D-BROKERAGE-READER_FA.md). microservice یا message broker اضافه نشده است.
+وضعیت `2026-11-03`: **foundation، reader داخلی ساختگی 2D و repositoryهای آفلاین 2F پیاده‌اند؛ gate SQL runtime بسته است و سایر قابلیت‌ها برای مراحل بعدند.** [معماری repository و موانع 2F](implementation/CHECKPOINT-02F-SQL-REPOSITORIES_FA.md). یک deployable و دو پروژهٔ آزمون داریم. Application/Domain/Infrastructure اکنون interface، مدل منشأدار، سرویس scope-bound و adapter ساختگی/مرز SQL تنظیم‌نشده دارند. [معماری و آزمون واقعی 2D](implementation/CHECKPOINT-02D-BROKERAGE-READER_FA.md). microservice یا message broker اضافه نشده است.
 
 ```mermaid
 flowchart LR

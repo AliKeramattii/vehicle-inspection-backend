@@ -1,0 +1,63 @@
+{
+  "Date": "2026-11-03",
+  "Tool": "database/tools/Invoke-BazdidDevelopmentDatabase.ps1 -Action Verify",
+  "Before": {
+    "Status": "Passed",
+    "Database": "BAZDID_Development",
+    "Tables": 3,
+    "Columns": 39,
+    "Indexes": 10,
+    "PrimaryKeys": 3,
+    "UniqueConstraints": 3,
+    "ForeignKeys": 1,
+    "CheckConstraints": 13,
+    "RowVersionColumns": 2,
+    "PersistedComputedKeys": 2,
+    "RowCounts": [
+      {
+        "TableName": "BAZDIDCustomerLinks",
+        "RowCount": 0
+      },
+      {
+        "TableName": "BAZDIDRequestContexts",
+        "RowCount": 0
+      },
+      {
+        "TableName": "BAZDIDAuditLogs",
+        "RowCount": 0
+      }
+    ]
+  },
+  "After": {
+    "Status": "Passed",
+    "Database": "BAZDID_Development",
+    "Tables": 3,
+    "Columns": 39,
+    "Indexes": 10,
+    "PrimaryKeys": 3,
+    "UniqueConstraints": 3,
+    "ForeignKeys": 1,
+    "CheckConstraints": 13,
+    "RowVersionColumns": 2,
+    "PersistedComputedKeys": 2,
+    "RowCounts": [
+      {
+        "TableName": "BAZDIDCustomerLinks",
+        "RowCount": 0
+      },
+      {
+        "TableName": "BAZDIDRequestContexts",
+        "RowCount": 0
+      },
+      {
+        "TableName": "BAZDIDAuditLogs",
+        "RowCount": 0
+      }
+    ]
+  },
+  "Equal": true,
+  "MetadataConnectionOnly": true,
+  "ApplicationProviderVerified": false,
+  "RepositoryOperationsExecuted": 0,
+  "ExplanationFa": "verification مستقل خواندنی schema و شمار ردیف‌ها؛ اتصال ابزار System.Data در PowerShell است و اتصال provider برنامه محسوب نمی‌شود."
+}

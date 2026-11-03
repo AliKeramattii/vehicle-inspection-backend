@@ -1,0 +1,163 @@
+{
+  "Date": "2026-11-03",
+  "Decision": "KeepExistingGraphOfflineOnly",
+  "O24": "Open",
+  "FrameworkConstraint": "[4.5.3,4.6.0)",
+  "ForcedOverrideAdded": false,
+  "SqlGraph": {
+    "runtime.native.System.Data.SqlClient.sni": {
+      "type": "Transitive",
+      "resolved": "4.4.0",
+      "dependencies": {
+        "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+        "runtime.win-x64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+        "runtime.win-x86.runtime.native.System.Data.SqlClient.sni": "4.4.0"
+      }
+    },
+    "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni": {
+      "type": "Transitive",
+      "resolved": "4.4.0"
+    },
+    "runtime.win-x64.runtime.native.System.Data.SqlClient.sni": {
+      "type": "Transitive",
+      "resolved": "4.4.0"
+    },
+    "runtime.win-x86.runtime.native.System.Data.SqlClient.sni": {
+      "type": "Transitive",
+      "resolved": "4.4.0"
+    },
+    "System.Data.SqlClient": {
+      "type": "Transitive",
+      "resolved": "4.5.3",
+      "dependencies": {
+        "Microsoft.Win32.Registry": "4.5.0",
+        "System.Security.Principal.Windows": "4.5.0",
+        "System.Text.Encoding.CodePages": "4.5.0",
+        "runtime.native.System.Data.SqlClient.sni": "4.4.0"
+      }
+    }
+  },
+  "ObservedUnderTestHost": {
+    "Runtime": ".NET Core 4.6.30411.01",
+    "Is64BitProcess": true,
+    "AssemblyVersion": "4.4.0.1",
+    "FileVersion": "4.6.28516.10",
+    "Location": "NuGet/system.data.sqlclient/4.5.3/runtimes/win/lib/netcoreapp2.1/System.Data.SqlClient.dll",
+    "NativeSniAdjacent": false,
+    "NativeSniFiles": [],
+    "NativeSniLoadedVerified": false,
+    "ConnectionOpened": false
+  },
+  "NativeAssetMetadata": {
+    "FrameworkNativeAsset": "Microsoft.AspNetCore.App/2.1.30/sni.dll",
+    "MachineHex": "0x8664",
+    "FileVersion": "4.6.25512.01 built by: dlab-DDVSOWINAGE016. Commit Hash: d0d5c7b49271cadb6d97de26d8e623e98abdc8db",
+    "Sha256": "68705C4EF9AB818F2956A78E05F3FEFCE501A1448793B073B46110BEB49B47D6",
+    "NativePackageAssetLocated": true,
+    "NativePackageFromFallback": true,
+    "NativeLoadTested": false,
+    "ConnectionTested": false
+  },
+  "VulnerablePackageCount": 9,
+  "VulnerablePackages": [
+    {
+      "Id": "Microsoft.AspNetCore.Identity",
+      "Version": "2.1.6",
+      "Advisories": [
+        {
+          "severity": "High",
+          "advisoryurl": "https://github.com/advisories/GHSA-25c8-p796-jg6r"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.AspNetCore.Server.Kestrel.Core",
+      "Version": "2.1.25",
+      "Advisories": [
+        {
+          "severity": "Critical",
+          "advisoryurl": "https://github.com/advisories/GHSA-5rrx-jjjq-q2r5"
+        }
+      ]
+    },
+    {
+      "Id": "Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets",
+      "Version": "2.1.3",
+      "Advisories": [
+        {
+          "severity": "High",
+          "advisoryurl": "https://github.com/advisories/GHSA-vmch-3w2x-vhgq"
+        }
+      ]
+    },
+    {
+      "Id": "Swashbuckle.AspNetCore.SwaggerUI",
+      "Version": "4.0.1",
+      "Advisories": [
+        {
+          "severity": "Moderate",
+          "advisoryurl": "https://github.com/advisories/GHSA-qrmm-w75w-3wpx"
+        }
+      ]
+    },
+    {
+      "Id": "System.Data.SqlClient",
+      "Version": "4.5.3",
+      "Advisories": [
+        {
+          "severity": "Moderate",
+          "advisoryurl": "https://github.com/advisories/GHSA-8g2p-5pqh-5jmc"
+        },
+        {
+          "severity": "High",
+          "advisoryurl": "https://github.com/advisories/GHSA-98g6-xh36-x2p7"
+        }
+      ]
+    },
+    {
+      "Id": "System.IdentityModel.Tokens.Jwt",
+      "Version": "5.2.0",
+      "Advisories": [
+        {
+          "severity": "Moderate",
+          "advisoryurl": "https://github.com/advisories/GHSA-59j7-ghrg-fj52"
+        }
+      ]
+    },
+    {
+      "Id": "System.Net.Http",
+      "Version": "4.3.0",
+      "Advisories": [
+        {
+          "severity": "High",
+          "advisoryurl": "https://github.com/advisories/GHSA-7jgj-8wvc-jh57"
+        }
+      ]
+    },
+    {
+      "Id": "System.Security.Cryptography.Xml",
+      "Version": "4.5.0",
+      "Advisories": [
+        {
+          "severity": "Moderate",
+          "advisoryurl": "https://github.com/advisories/GHSA-vh55-786g-wjwj"
+        }
+      ]
+    },
+    {
+      "Id": "System.Text.RegularExpressions",
+      "Version": "4.3.0",
+      "Advisories": [
+        {
+          "severity": "High",
+          "advisoryurl": "https://github.com/advisories/GHSA-cmhx-cq75-c4mj"
+        }
+      ]
+    }
+  ],
+  "AuditCommand": "dotnet \"C:/Program Files/dotnet/sdk/10.0.403/dotnet.dll\" package list --project Bazdid.sln --vulnerable --include-transitive --no-restore --format json",
+  "AuditExitCode": 0,
+  "ProviderConnectionTested": false,
+  "NativeLoadDuringConnectionTested": false,
+  "ExplanationFa": "بارگذاری managed و وجود asset x64 فقط شاهد آفلاین است؛ اتصال برنامه و TLS/SNI واقعی تأیید نشده‌اند. SDK جدید فقط ابزار ممیزی خواندنی بود؛ SDK ساخت و target تغییر نکردند."
+}

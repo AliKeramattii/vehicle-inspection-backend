@@ -1,6 +1,6 @@
 # راهنمای فرایند پیاده‌سازی Backend
 
-این صفحه، نقطهٔ ورود به توضیح «چگونه انجام شد» است. گزارش‌های معتبر قبلی در جای خود می‌مانند و محتوا دوباره کپی نمی‌شود. وضعیت `2026-11-02`: طراحی اطلاعات/refresh در 2E کامل و پیشرفت کل **20%** است؛ سهم سیاست نگهداری مستندات صفر بود و سهم طراحی صریحاً مجاز 2E یک واحد است. ۱۰۸ آزمون موجود در 2E تازه موفق شدند؛ هیچ SQL/runtime تازه‌ای برای طرح اجرا نشد. DDL و ۳۵ آزمون SQL مربوط به 2C و آخرین verification زندهٔ خواندنی مربوط به 2D است.
+این صفحه، نقطهٔ ورود به توضیح «چگونه انجام شد» است؛ گزارش‌های قبلی سابقهٔ همان مرحله‌اند. وضعیت `2026-11-03`: تحویل آفلاین 2F انجام شد، پذیرش متصل O24/O26 مسدود و پیشرفت **20%** است. ۱۵۹ آزمون آفلاین تازه موفق و ۸ SQL Skipped؛ verification زندهٔ خواندنی و smoke Kestrel با SQL خاموش انجام شدند. DDL و ۳۵ CASE SQL همچنان فقط شاهد تاریخی 2C هستند.
 
 ## مراحل دارای کار واقعی
 
@@ -13,8 +13,9 @@
 | 2C | [ساخت و verification پایگاه](CHECKPOINT-02C-DATABASE-CREATION_FA.md)، [metadata](../checkpoint2c/SCHEMA_VERIFICATION.json)، [۳۵ آزمون SQL](../checkpoint2c/ROLLBACK_TEST_RESULTS.json)، [آزمون برنامه](../checkpoint2c/APPLICATION_VALIDATION.json) | DB محلی و فقط سه جدول، اصلاح CHECK با WITH CHECK و صفر ردیف پس از rollback؛ بدون SQL runtime | SHA بسته از Git واقعی و گزارش تحویل خوانده شود |
 | 2D | [reader و قراردادهای داخلی](CHECKPOINT-02D-BROKERAGE-READER_FA.md)، [آزمون برنامه](../checkpoint2d/APPLICATION_VALIDATION.json)، [بررسی خواندنی DB](../checkpoint2d/DATABASE_VERIFICATION.json)، [HTTP واقعی](../checkpoint2d/HTTP_SMOKE.json) | ۱۸ fixture حافظه‌ای، provenance، scope و DI امن؛ ۱۰۸ آزمون و smoke Kestrel؛ بدون SQL واقعی مبدأ | [پیاده‌سازی 30112f1](https://github.com/AliKeramattii/vehicle-inspection-backend/commit/30112f104d9def9a5ea91cfd56b78d21e581685a)؛ تکمیل گزارش از Git و گزارش تحویل |
 | 2E | [طرح persistence/refresh](CHECKPOINT-02E-INFO-PERSISTENCE-DESIGN_FA.md)، [schema پیشنهادی](../design/BAZDIDINFO_SCHEMA_PROPOSAL.json)، [baseline تازه](../checkpoint2e/APPLICATION_VALIDATION.json)، [Frontend](../checkpoint2e/FRONTEND_REVIEW.json)، [اعتبارسنجی طراحی](../checkpoint2e/DESIGN_VALIDATION.json) | فقط طراحی و تطبیق منابع؛ بدون Info/DDL/API یا تغییر runtime؛ ۱۰۸ آزمون موجود تازه موفق | [طرح 9f5f7df](https://github.com/AliKeramattii/vehicle-inspection-backend/commit/9f5f7df94dc6f1dd6e854af8d52e2d4818fd3d06)؛ ثبت تکمیلی از Git و گزارش تحویل |
+| 2F، پذیرش ناقص | [repositoryهای آفلاین و gate بسته](CHECKPOINT-02F-SQL-REPOSITORIES_FA.md)، [شاهد آزمون](../checkpoint2f/APPLICATION_VALIDATION.json)، [SQL مسدود](../checkpoint2f/SQL_TEST_RESULTS.json) | سه repository/transaction/DI، ۱۵۹ موفق آفلاین و ۸ SQL Skipped؛ بدون DML/DDL/grant و بدون امتیاز تازه | SHA و وضعیت ارسال در [گزارش GitHub](../GITHUB_SYNC_FA.md) |
 
-گزارشی برای **پیاده‌سازی** Info، احراز هویت، media، submit، کارکنان یا deployment واقعی ایجاد نشده است؛ راهنمای 2E فقط طراحی همان checkpoint مجاز است و گزارش اجرای Checkpoint 4 نیست. فایل صوری 2F/2G ساخته نشد. [آموزش VS Code](../guides/VSCODE_SQLSERVER_SETUP_FA.md) راه مشاهده است و اجرای تصویری VS Code را ادعا نمی‌کند.
+گزارشی برای **پیاده‌سازی** Info، احراز هویت، media، submit، کارکنان یا deployment واقعی ایجاد نشده است؛ راهنمای 2E فقط طراحی همان checkpoint مجاز است و گزارش اجرای Checkpoint 4 نیست. راهنمای 2F فقط کد آفلاین موجود و موانع واقعی آن را شرح می‌دهد؛ گزارش 2G ساخته نشده است. [آموزش VS Code](../guides/VSCODE_SQLSERVER_SETUP_FA.md) راه مشاهده است و اجرای تصویری VS Code را ادعا نمی‌کند.
 
 ## شیوهٔ استفاده و نگهداری
 

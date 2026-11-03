@@ -1,6 +1,6 @@
 # برنامهٔ مرجع پیاده‌سازی Backend بازدید
 
-تاریخ: `2026-11-02`؛ مخزن: `C:\Projects\vehicle-inspection-backend`. **Checkpoint 2E طبق مجوز `20acc386-4be3-48e7-84da-a7457cf34b6f` فقط در دامنهٔ طراحی تکمیل شد؛ پیشرفت 20%.** طرح typed Info، ماتریس Frontend/reader/storage، refresh، مالکیت، CAS و DTO آینده تهیه و با منابع واقعی بررسی شد. runtime، سه جدول 2C و Frontend تغییر نکردند؛ SQL در این مرحله متصل نشد. ۱۰۸ آزمون موجود تازه موفق و build صفر warning/error بود؛ این آزمون اجرای طرح Info نیست. 2F/2G، SQL runtime واقعی، auth و Production شروع نشده‌اند؛ O24/O26 و policyهای تولید بازند.
+تاریخ: `2026-11-03`؛ مخزن: `C:\Projects\vehicle-inspection-backend`. در `2026-11-03`، مجوز `ea650fd0-47e2-4d02-bf9b-0fb87f03a254` فقط 2F را پوشش داد. قراردادها، سه repository، transaction و DI با gate بسته پیاده شدند؛ O24/O26 مانع پذیرش متصل‌اند. ۱۰۹ unit و ۵۰ integration آفلاین موفق، صفر شکست و ۸ SQL Skipped؛ build صفر warning/error. verification خواندنی schema/ردیف قبل و بعد برابر و سه جدول خالی‌اند. DDL، DML repository، grant و اتصال runtime انجام نشدند. **پیشرفت 20%؛ توقف در 2F ناقص، بدون شروع 2G.** [راهنمای تحویل و شواهد](docs/implementation/CHECKPOINT-02F-SQL-REPOSITORIES_FA.md).
 
 ## هدف، معماری و وابستگی
 
@@ -32,7 +32,7 @@ flowchart LR
 - [x] Checkpoint 2C: provisioning پایگاه و سه جدول؛ ۳۵ آزمون SQL rollback-only، verification metadata و ۴۳ آزمون موجود برنامه موفق؛ [walkthrough و شواهد](docs/implementation/CHECKPOINT-02C-DATABASE-CREATION_FA.md).
 - [x] Checkpoint 2D: reader/قرارداد/fixture ساختگی، DI امن و ۱۰۸ آزمون؛ [walkthrough و شواهد](docs/implementation/CHECKPOINT-02D-BROKERAGE-READER_FA.md).
 - [x] Checkpoint 2E فقط طراحی: قرارداد ماندگاری/refresh و manifest آینده، بدون Info/DDL/runtime؛ [طرح و شواهد](docs/implementation/CHECKPOINT-02E-INFO-PERSISTENCE-DESIGN_FA.md).
-- [ ] Phase 1 / Checkpoint 2 کامل: 2F/2G و SQL runtime/adapter واقعی هنوز اجرا نشده‌اند.
+- [ ] Phase 1 / Checkpoint 2 کامل: 2F فقط آفلاین تحویل شد؛ پذیرش SQL متصل با O24/O26 مسدود است. 2G و adapter واقعی شروع نشده‌اند.
 - [ ] Phase 1 / Checkpoint 3: OTP و session.
 - [ ] Phase 1 / Checkpoint 4: اطلاعات و `BAZDIDInfo`.
 - [ ] Phase 1 / Checkpoint 5: گردش بازدید و سیاست مدرک.
@@ -72,7 +72,7 @@ flowchart LR
 - **اعتبارسنجی:** ۳۱ پیوند Markdown و ۳۱ کنترل ساختاری شاهد عبور کردند؛ ۱۰۳ فایل نسخهٔ قابل انتشار و ۱۲۱ blob تاریخی main بدون هشدار راز باقی‌مانده بررسی شدند. تنها fixture URL اعتبارسنجیِ تست موجود جداگانه تأیید شد. diff فقط پنج سند است و hash آرشیو تغییر نکرده؛ fetch پیش از commit اختلاف `0/0` با origin/main داشت. source/API/SQL و رفتار برنامه تغییر نمی‌کنند؛ ۴۳ آزمون موفق، نتیجهٔ تاریخی Checkpoint 1 است.
 - **نقطهٔ توقف:** پس از ثبت و همگام‌سازی همین بسته توقف؛ بسته‌های زیر برنامه‌اند و مجوز اجرا نیستند.
 
-## Checkpoint 2 — SQL Server تست و adapter کارگزاری؛ تا طرح persistence در 2E
+## Checkpoint 2 — SQL Server تست و adapter کارگزاری؛ تحویل آفلاین 2F، پذیرش متصل باز
 
 - **پیش‌نیاز ادامه:** 2C محلی اجرا و تأیید شد؛ دامنهٔ بعدی به دستور جدا و بررسی دوبارهٔ پیش‌نیاز نیاز دارد. Production، هویت‌های runtime و reader واقعی مجوز/قرارداد جدا می‌خواهند.
 - **دامنه:** connection factory، transaction، scriptهای شماره‌دار تست، تفکیک source read/BAZDID write، قرارداد منطقی reader و fixture کاملاً ساختگی. adapter واقعی فقط با mapping و مجوز جدا.
@@ -91,7 +91,7 @@ flowchart LR
 - [x] **2C — provisioning محلی طبق دامنهٔ تازهٔ مالک:** فقط `dbo.BAZDIDCustomerLinks`، `dbo.BAZDIDRequestContexts` و `dbo.BAZDIDAuditLogs` ساخته شدند. compatibility 150، collation مصوب محلی و SIMPLE؛ ۳۹ ستون، ۱۰ index، سه PK، سه unique، یک FK، ۱۳ CHECK trusted/فعال، دو rowversion و دو computed key تأیید شدند. عیب alphabet در CHECKهای tenant در همان سه جدول با WITH CHECK رفع و ۳۵ CASE با rollback و صفر ردیف نهایی موفق شدند. نقش/حساب جدید یا journal ساخته نشد؛ O24 طبق دستور جدید به SQL runtime آینده موکول شد و dependency برنامه تغییر نکرد.
 - [x] **2D — reader و قرارداد در دامنهٔ مصوب:** `IBrokerageRequestReader` با ResolveReferralAsync/GetRequestSnapshotAsync، نتیجهٔ typed، scope/reference دقیق، snapshot منشأدار و سرویس داخلی پیاده شد. ۱۸ رکورد حافظه‌ای، حالات نتیجه و Missing/Invalid/Unavailable، صفر با سیاست مستقل، شناسهٔ بزرگ، موبایل متعارض و cancellation آزموده شدند. Synthetic فقط Development/Testing و Production fail-closed است؛ SqlBrokerageRequestReader تنها Unavailable/SourceNotConfigured می‌دهد و query ندارد. هیچ احراز هویت، seed یا SQL runtime پیاده نشد.
 - [x] **2E — فقط طرح persistence اطلاعات:** ماتریس فیلدهای واقعی Frontend به reader/DTO/ستون، هفت خانوادهٔ provenance، جداسازی وضعیت مبدأ و منشأ Manual، طرح ۱۳۱ ستون و ۱۹ قاعدهٔ constraint، FK مالک پین‌شدهٔ inspection آینده، refresh با پذیرش صریح، CAS/transaction و ۲۴ سناریوی طراحی ثبت شدند. نسخهٔ بدون version، crypto و policyهای کسب‌وکار gateهای صریح دارند. ساخت/نوشتن Info، repository، API و migration در این بسته انجام نشد؛ اجرای آن در Checkpoint 4 با تصویب وابستگی‌هاست.
-- [ ] **2F — قیود و آزمون:** یکتایی linkage در حوزهٔ tenant/source و شناسه‌های مبدأ، ارتباط BAZDID درخواست/مشتری و indexهای lookup با نمونه‌های ساختگی بازبینی شوند؛ bigint درخواست در adapter به رشتهٔ دقیق تبدیل شود. unit برای normalization/نتایج/missing-vs-zero و شناسهٔ بزرگ؛ integration روی SQL Server تست واقعی برای یک مشتری/دو درخواست، مشتری null، موبایل متعارض، referral مبهم، timeout، منع نوشتن مبدأ، transaction، concurrency و idempotency موردنیاز همین repositories اجرا شود. SQLite/InMemory جای این شواهد نیست.
+- [ ] **2F — SQL runtime/repository و آزمون واقعی:** طبق مجوز 2026-11-03، کد مستقل آفلاین و ۵۱ case تازه موفق تحویل شد؛ سه repository روی schema موجود، transaction صریح، owner/CAS و audit INSERT-only. gate اتصال بسته است؛ provider امنِ متصل و دو principal مصوب موجود نیستند. ۸ تست SQL صریحاً Skipped و اجرای connected صفر؛ effective permissions، رقابت/rollback واقعی و پذیرش کامل انجام نشده‌اند. [راهنما و شواهد](docs/implementation/CHECKPOINT-02F-SQL-REPOSITORIES_FA.md).
 - [ ] **2G — rollback و پذیرش:** scriptهای شماره‌دار forward/revert فقط برای اشیای BAZDID با guard مقصد تست و پیش‌شرط نسخه آماده و پیش از اجرا بازبینی شوند؛ حفظ داده و backup لازم در طرح درج شود. ساخت از صفر، اجرای تکراری کنترل‌شده، rollback و بازاعمال روی تست اثبات شوند؛ حذف/تغییر جدول مبدأ یا اجرای Production مجاز نیست. خروجی واقعی آزمون، طرح/تفاوت schema و محدودیت‌ها پیش از تکمیل checkpoint ثبت شوند.
 
 endpoint عمومی تازه، OTP، cookie احراز هویت، آپلود و ماژول کارکنان در این بسته‌ها پیاده نمی‌شوند. موارد O01/O02/O20 تا O22 در دفتر تصمیم‌ها، gateهای adapter واقعی و محیط تست را مشخص می‌کنند.
@@ -121,7 +121,7 @@ build تازه با SDK `2.1.818` صفر warning/error و هر ۴۳ آزمون �
 | 9 | 10% | 0% |
 | مجموع | 100% | **20%** |
 
-مبنای پیش از 2A/2B برابر `12%` و سهم آن‌ها هرکدام `1.5` بود؛ 2C دو واحد، 2D دو واحد و 2E طبق مجوز جدید فقط بابت طراحی یک واحد کسب کردند: **19% + 1 = 20%**؛ باقی‌ماندهٔ کل ۸۰٪. دامنهٔ سبک‌تر 2D همان دو واحد ماند و SQL واقعی امتیاز نگرفت. از وزن ۱۲واحدی Checkpoint 2، هشت واحد تکمیل و چهار واحد باقی است؛ وزن کل و هدف پایان آن **24%** تغییر نکرده‌اند. پیشنهاد مشروط 2F دو واحد تا **22%** است، فقط پس از تصویب scope و پذیرش شواهد واقعی؛ تفکیک باقی‌مانده قبل از پذیرش بسته‌های بعدی ثبت شود. شروع 2F/2G، SQL واقعی، Checkpoint 4 یا auth خودکار نیست.
+مبنای پیش از 2A/2B برابر `12%` و سهم آن‌ها جمعاً `3` بود؛ 2C دو واحد، 2D دو واحد و طرح مصوب 2E یک واحد کسب کردند: **12 + 3 + 2 + 2 + 1 = 20%**. تحویل آفلاین 2F به‌دلیل مسدودبودن gateهای حیاتی سهم صفر دارد؛ باقی‌ماندهٔ کل ۸۰٪. از وزن ۱۲واحدی Checkpoint 2، هشت واحد تکمیل و چهار واحد باقی است؛ هدف پایان آن **24%** تغییر نکرده است. ادامهٔ همین 2F پس از رفع O24/O26 و پذیرش کامل حداکثر دو واحد تا **22%** دارد؛ 2G با مجوز جدا پس از آن بررسی می‌شود. Checkpoint 4، auth و استقرار خودکار نیستند.
 
 ## Checkpoint 3 — احراز هویت و نشست
 
@@ -292,3 +292,12 @@ restore قفل‌شده و build Release با SDK 2.1.818 موفق؛ build صف�
 ## وظیفهٔ مستقل GitHub و گزارش‌دهی
 
 در `2026-11-01` کاربر فقط اتصال مخزن موجود به GitHub و الزام گزارش فارسی را مجاز کرد. برای منع انتشار ZIP مرجع، سپس صریحاً پاک‌سازی تاریخچهٔ ارسالی با نگهداری SHAهای اصلی فقط محلی را تأیید کرد. `main` قابل انتشار از branch محلی `local-original-history-2026-11-01` جداست؛ branch اصلی هرگز push/merge به main نمی‌شود. [وضعیت همگام‌سازی](docs/GITHUB_SYNC_FA.md) و [نقشهٔ SHAها](docs/GIT_HISTORY_EXPORT.json) مرجع نتیجه‌اند. این کار هیچ مجوزی برای Checkpoint 2 یا تغییر رفتار برنامه ایجاد نمی‌کند.
+
+
+### تحویل بخش آفلاین Checkpoint 2F و توقف
+
+در `2026-11-03`، مجوز `ea650fd0-47e2-4d02-bf9b-0fb87f03a254` فقط 2F را پوشش داد. قراردادها، سه repository، transaction و DI با gate بسته پیاده شدند؛ O24/O26 مانع پذیرش متصل‌اند. ۱۰۹ unit و ۵۰ integration آفلاین موفق، صفر شکست و ۸ SQL Skipped؛ build صفر warning/error. verification خواندنی schema/ردیف قبل و بعد برابر و سه جدول خالی‌اند. DDL، DML repository، grant و اتصال runtime انجام نشدند. **پیشرفت 20%؛ توقف در 2F ناقص، بدون شروع 2G.**
+
+[شاهد برنامه](docs/checkpoint2f/APPLICATION_VALIDATION.json)، [SQL مجزا](docs/checkpoint2f/SQL_TEST_RESULTS.json)، [provider](docs/checkpoint2f/PROVIDER_AUDIT.json)، [حساب‌ها](docs/checkpoint2f/RUNTIME_PRINCIPALS.json)، [schema قبل/بعد](docs/checkpoint2f/DATABASE_VERIFICATION.json) و [smoke Kestrel](docs/checkpoint2f/HTTP_SMOKE.json) ثبت شدند. تمام ۱۰۸ baseline دوباره موفق و ۵۱ موفق تازه آفلاین‌اند؛ شمار کل ۱۶۷ شامل ۸ skip است. شواهد ۳۵ CASE مربوط به 2C تاریخی ماندند. PackageReference/lockfile/target و SQL scriptها تغییر نکردند؛ reader و HTTP/CORS/auth و فایل untracked کاربر حفظ شدند. منبع واقعی کارگزاری تنظیم‌نشده است.
+
+**قبلی 20% + سهم پذیرفتهٔ فعلی 0 = جدید 20%؛ باقی 80%.** از وزن ۱۲واحدی Checkpoint 2، همان هشت واحد پذیرفته شده است. پیشنهاد مشروط ادامهٔ همین 2F دو واحد تا **22%**، فقط پس از provider واقعی، عملیات SQL، هویت‌های کم‌اختیار/effective permission، concurrency/rollback و regression/docs کامل است؛ پایان Checkpoint 2 همچنان 24%. این تحویل امتیاز SQL یا مجوز 2G نمی‌دهد. گام بعد رفع O24/O26 و ادامهٔ کنترل‌شدهٔ همین 2F است؛ نام دو principal و permissions و هر DDL دسترسی تصویب جدا می‌خواهد. SHA/push فقط از [گزارش GitHub](docs/GITHUB_SYNC_FA.md) و Git واقعی خوانده شوند.

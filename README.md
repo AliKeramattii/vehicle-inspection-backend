@@ -2,7 +2,7 @@
 
 این مخزن مستقل، پایهٔ توسعهٔ Backend برنامهٔ فارسی خودبازدید خودرو برای کارگزاری بیمه است. Frontend موجود در `C:\Projects\vehicle-inspection-integrated` فقط مرجع خواندنی است؛ دو مخزن ادغام نمی‌شوند.
 
-**وضعیت در 2026-11-02: Checkpoint 2E فقط در دامنهٔ طراحی تکمیل شد؛ پیشرفت کل 20%.** قرارداد persistence/refresh آینده با ماتریس Frontend/reader و manifest Info تهیه شد؛ Info یا SQL اجرایی ساخته نشد. reader ساختگی 2D و HTTP health/Swagger بدون تغییرند؛ ۱۰۸ آزمون موجود تازه موفق و build بدون warning/error بود. O24، حساب‌های کم‌اختیار، policyهای داده/crypto و mapping Production بازند. [طرح، حدود و شواهد 2E](docs/implementation/CHECKPOINT-02E-INFO-PERSISTENCE-DESIGN_FA.md).
+در `2026-11-03`، مجوز `ea650fd0-47e2-4d02-bf9b-0fb87f03a254` فقط 2F را پوشش داد. قراردادها، سه repository، transaction و DI با gate بسته پیاده شدند؛ O24/O26 مانع پذیرش متصل‌اند. ۱۰۹ unit و ۵۰ integration آفلاین موفق، صفر شکست و ۸ SQL Skipped؛ build صفر warning/error. verification خواندنی schema/ردیف قبل و بعد برابر و سه جدول خالی‌اند. DDL، DML repository، grant و اتصال runtime انجام نشدند. **پیشرفت 20%؛ توقف در 2F ناقص، بدون شروع 2G.** [راهنمای 2F و شواهد](docs/implementation/CHECKPOINT-02F-SQL-REPOSITORIES_FA.md).
 
 ## فناوری و میزبانی
 
@@ -94,7 +94,7 @@ restore/build/test در 2D دوباره موفق اجرا شدند: **۶۵ unit 
 
 بسته‌های اصلی `Microsoft.AspNetCore.App 2.1.30`، `Swashbuckle.AspNetCore 4.0.1` و `Newtonsoft.Json 13.0.4` هستند؛ نسخه‌های تست و lockfileها در [گزارش dependency](docs/checkpoint1/DEPENDENCY_SECURITY_FA.md) ثبت‌اند. audit واقعی، ۹ بستهٔ دارای هشدار در گراف API، از جمله Critical برای Kestrel، نشان داد. **Production تأیید امنیتی ندارد.**
 
-Checkpoint 2E نقطهٔ توقف فعلی است. گام پیشنهادی بعد فقط با **اجازهٔ تازهٔ کاربر**، 2F و دامنهٔ آزمون/قیود مصوب است؛ ساخت BAZDIDInfo در Checkpoint 4 می‌ماند. SQL واقعی، OTP، تغییر Frontend و استقرار خودکار شروع نمی‌شوند.
+Checkpoint 2F فقط در بخش آفلاین تحویل شد و پذیرش آن مسدود است. `SqlRuntime.Enabled=false` و gate کد بسته است؛ روشن‌کردن آن در تنظیمات startup را رد می‌کند. O24 و دو principal مصوب O26 باید پیش از هر اتصال برنامه حل شوند. گام بعد ادامهٔ همین 2F با تصمیم/مجوز لازم است؛ 2G شروع نشد و Info در Checkpoint 4 می‌ماند.
 
 ## GitHub و گزارش‌دهی فارسی
 

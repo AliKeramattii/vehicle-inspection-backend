@@ -30,3 +30,12 @@ Verify این مرحله، پایگاه خالیِ تحویل 2C را انتظا
 پیش‌نیاز SQL runtime آینده: دو هویت Windows مستقل و کم‌اختیارِ مصوب، آزمون permission مؤثر، secret store/ACL، TLS معتبر و حل سازگاری client در O24. این هویت‌ها تحویل نشده‌اند؛ sysadmin provisioning برای برنامه ممنوع است. patch موتور RTM باید توسط DBA بازبینی شود. هیچ نرم‌افزار یا سرویسی نصب/تغییر نشد؛ روی میزبان تازه نصب نیازمند تصویب جداست.
 
 [walkthrough 2C](../docs/implementation/CHECKPOINT-02C-DATABASE-CREATION_FA.md) توالی واقعی، hashها، خطا و رفع آن، تنظیم فایل‌ها، فرمان‌های بازتولید و VS Code را دارد؛ [schema واقعی](../docs/checkpoint2c/SCHEMA_VERIFICATION.json) و [نتایج rollback](../docs/checkpoint2c/ROLLBACK_TEST_RESULTS.json) شاهدند. [طراحی داده](../docs/DATABASE_DESIGN_FA.md) بقیهٔ جدول‌های آینده را از سه جدول ساخته‌شده تفکیک می‌کند. ارتقای migration/repository و آزمون permission runtime هنوز انجام نشده؛ در پایان 2C توقف می‌شود و 2D شروع نشده است.
+
+
+## وضعیت 2F در 2026-11-03
+
+schema و همهٔ scriptهای این پوشه بدون تغییر ماندند. verification خواندنی قبل/بعد همان سه جدول و صفر ردیف را تأیید کرد؛ [شاهد 2F](../docs/checkpoint2f/DATABASE_VERIFICATION.json). repositoryها در برنامه نوشته شده‌اند ولی gate اتصال کد بسته است؛ هیچ عملیات SQL آن‌ها یا DDL/role/user/grant اجرا نشد. [راهنمای 2F](../docs/implementation/CHECKPOINT-02F-SQL-REPOSITORIES_FA.md) جریان، پارامترها، transaction و موانع را شرح می‌دهد.
+
+metadata نقش‌ها/Windows user صفر و نام دو principal مصوب موجود نیست. permissions.review.sql هنوز پیش‌نویس بسته است و حداقل دسترسی Writer فعلی حتی UPDATE CustomerLinks نیاز ندارد؛ قبل از اجرای احتمالی باید دوباره بازبینی و با نام‌ها/مجوزهای مشخص تصویب شود. SourceReader هیچ mapping/شیء مصوب ندارد. sysadmin فقط metadata خوانده و account برنامه نشده است.
+
+۸ تست واقعی SQL در SqlRepositoryConnectedTests با دلیل O24/O26 Skip هستند؛ صفر تست متصل، ۱۵۹ موفق آفلاین و پیشرفت ۲۰٪. از ابزار Verify فقط برای مشاهدهٔ مقصد مصوب استفاده شد؛ EvidencePath ابزار 2C محدود است و نباید برای 2F باز شود، stdout را جدا ثبت کنید. اجرای ۳۵ CASE قدیمی، DDL یا بازسازی خودکار مجاز نیست؛ 2G شروع نشده است.

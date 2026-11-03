@@ -203,3 +203,10 @@ auth/session/rate جدول‌های تازهٔ پیشنهادی‌اند که د
 ابتدا نسخه/compatibility و دسترسی تست تحویل، سپس scriptهای BAZDID هر checkpoint بازبینی و روی test DB مستقل اجرا شوند. آزمون از پایگاه خالی، ارتقای نسخهٔ قبلی، اجرای دوبارهٔ امن، rollback عملیاتی و restore لازم است. rollback destructive دادهٔ مشتری پذیرفته نیست؛ ترجیح rollback برنامه با schema سازگار و forward-fix است. برنامهٔ واقعی index/حجم، retention و recovery قبل از انتشار نهایی با DBA تعیین شود.
 
 grant SELECT مبدأ و DML اشیای BAZDID جداست؛ کاربر برنامه `db_owner` یا دسترسی عمومی به جدول‌های دیگر نمی‌گیرد. SQL audit، backup رمزگذاری‌شده و پیوند backup فایل/DB باید هماهنگ باشند. Production تا mapping و مجوز مستقل مسدود می‌ماند، ولی fixture تست مانع برنامه‌ریزی نیست.
+
+
+## پیاده‌سازی آفلاین 2F روی همین schema
+
+در `2026-11-03` سه repository و transaction/connection factory پشت gate بسته نوشته شدند؛ [راهنمای کد و SQL](implementation/CHECKPOINT-02F-SQL-REPOSITORIES_FA.md). schema، index، constraint و scriptها تغییر نکردند و migration اجرا نشد. Find/GetOrCreate مشتری و درخواست با natural key باینری دقیق، UPDLOCK/HOLDLOCK و unique موجود طراحی شدند؛ request owner با scope/CustomerLinkId/SourceCustomerIdKey کنترل و update metadata با rowversion مقایسه می‌شود. audit فقط INSERT کدهای محدود و بدون OUTPUT/SELECT از audit دارد. CustomerLinks در این نسخه update ندارد؛ HMACها فقط مقدار/مرجع اختیاری و بدون تولید کلید هستند.
+
+verification مستقل خواندنی قبل/بعد همان ۳۹ ستون/۱۰ index/۱۳ CHECK و صفر ردیف را تأیید کرد؛ [شاهد](checkpoint2f/DATABASE_VERIFICATION.json). این، آزمون runtime repository نیست: SQL متصل صفر و ۸ case Skip، O24/O26 باز، بدون principal مصوب، DML/DDL/grant اجرا نشده است. طرح Info/Inspections آینده و manifest 2E تغییری نکردند. برای gate SQL، امنیت provider، هویت واقعی و effective permissions، و transaction/rowversion/race واقعی هنوز پذیرش لازم است؛ پیشرفت ۲۰٪ است.

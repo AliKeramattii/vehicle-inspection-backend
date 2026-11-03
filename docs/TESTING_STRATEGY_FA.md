@@ -1,6 +1,6 @@
 # راهبرد آزمون و کنترل کیفیت
 
-این سند راهبرد کلی و آزمون‌های آینده را حفظ می‌کند. در 2D، **۶۵ آزمون واحد و ۴۳ integration، جمعاً ۱۰۸ آزمون، موفق اجرا شدند**؛ همهٔ ۴۳ قبلی و ۶۵ جدید. build SDK 2.1.818 صفر warning/error و smoke واقعی Kestrel موفق بود. [شواهد تازهٔ 2D](checkpoint2d/APPLICATION_VALIDATION.json). integrationهای تازه DI/TestServer/reader حافظه‌ای‌اند؛ SQL repository یا IIS/ANCM را اثبات نمی‌کنند. ۳۵ آزمون مستقیم schema SQL متعلق به 2C است و در 2D فقط verification خواندنی DB اجرا شد. بخش foundation پایین تاریخی است؛ [گزارش همان مرحله](CHECKPOINT1_IMPLEMENTATION_FA.md).
+وضعیت جاری `2026-11-03`: ۱۵۹ آزمون آفلاین موفق، صفر شکست و ۸ SQL Skipped؛ جزئیات اجرای تازهٔ 2F در انتهای سند و [شاهد برنامه](checkpoint2f/APPLICATION_VALIDATION.json) است. پذیرش SQL متصل مسدود است. این سند راهبرد کلی و سابقهٔ آزمون‌های قبلی را حفظ می‌کند. در 2D، **۶۵ آزمون واحد و ۴۳ integration، جمعاً ۱۰۸ آزمون، موفق اجرا شدند**؛ همهٔ ۴۳ قبلی و ۶۵ جدید. build SDK 2.1.818 صفر warning/error و smoke واقعی Kestrel موفق بود. [شواهد تازهٔ 2D](checkpoint2d/APPLICATION_VALIDATION.json). integrationهای تازه DI/TestServer/reader حافظه‌ای‌اند؛ SQL repository یا IIS/ANCM را اثبات نمی‌کنند. ۳۵ آزمون مستقیم schema SQL متعلق به 2C است و در 2D فقط verification خواندنی DB اجرا شد. بخش foundation پایین تاریخی است؛ [گزارش همان مرحله](CHECKPOINT1_IMPLEMENTATION_FA.md).
 
 ## اجرای فعلی Checkpoint 1
 
@@ -54,3 +54,12 @@ OpenAPI همان implementation با نمونهٔ واقعی responseها تطب
 ## کنترل Phase 0
 
 وجود root/docهای لازم، فارسی UTF-8، پیوندهای نسبی اسناد تازه، ۳۷ ردیف تصمیم SQL، ۱۷ جدول پیشنهادی مشتری، checkpointهای ۰ تا ۹، قواعد ۱۱+۱، نبود کد برنامه/DDL جدید، .gitignore، hash مرجع، عدم تغییر Frontend و Git مستقل کنترل شوند. پیوندهای ناقص داخل بستهٔ مرجع ازقبل‌موجود به‌عنوان محدودیت همان بسته ثبت و فایل‌های تاریخی بی‌اجازه بازنویسی نشوند. نتیجه در [PHASE0_VALIDATION_FA.md](PHASE0_VALIDATION_FA.md) ثبت می‌شود.
+
+
+## شواهد تازه و تفکیک آزمون‌های 2F
+
+در `2026-11-03`، [شاهد برنامه](checkpoint2f/APPLICATION_VALIDATION.json) اجرای تازهٔ restore/build و test را ثبت کرد: صفر warning/error، ۱۰۹ unit + ۵۰ integration آفلاین = ۱۵۹ موفق، صفر شکست، تمام ۱۰۸ baseline و ۵۱ case تازه. هشت آزمون `SqlRepositoryConnectedTests` جداگانه Skipped با دلیل O24/O26 هستند؛ **صفر SQL connected اجرا شد**. TestServer/DI و doubleهای transaction این مرحله شاهد SQL Server نیستند. [نتایج SQL مجزا](checkpoint2f/SQL_TEST_RESULTS.json)، [provider](checkpoint2f/PROVIDER_AUDIT.json) و [walkthrough](implementation/CHECKPOINT-02F-SQL-REPOSITORIES_FA.md) حدود پذیرش را مشخص می‌کنند.
+
+آفلاین‌ها binding دقیق/نوع/اندازه/null، source ID بزرگ/case/Unicode/trailing space، injection، owner/CAS در متن command، خطا/timeout، token/HMAC، config/gate و شکست جزئی/عدم retry را پوشش می‌دهند. هشت تست متصل برای طبیعی‌کلید/تکرار/tenant، مالک نادرست، stale version، rollback، رقابت، effective permissions Writer، timeout و cancellation نوشته شده‌اند؛ هیچ bypass محیطی ندارند. پس از تصمیم provider و تصویب دو principal، suite باید بازبینی و با خود هویت‌ها اجرا شود؛ SourceReader نیاز به mapping مصوب و verifier شمار audit قبل/پس دارد. رقابت commitشده، commit مبهم و عدم باقی‌ماندن داده باید واقعاً اثبات شوند؛ طرح body فعلی، معیار پذیرش اجراشده نیست.
+
+verification metadata با provisioner فقط‌خواندنی و smoke واقعی Kestrel با SQL خاموش موفق شدند؛ IIS و native/connection واقعی provider آزموده نشدند. ۳۵ CASE تاریخی 2C تکرار نشدند. هر نتیجهٔ بعدی باید passed/offline/skipped/connected را جدا و بدون افزایش درصد برای gate مسدود ثبت کند.
