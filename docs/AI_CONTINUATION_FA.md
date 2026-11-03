@@ -56,3 +56,12 @@ foundation از نو ساخته نشود: `Bazdid.sln`، API و دو پروژه�
 اجرای تازهٔ این تحویل: restore/build صفر، warning/error صفر، ۱۰۹ unit + ۵۰ integration آفلاین موفق، ۸ SQL Skipped و صفر connected SQL. Kestrel واقعی با SQL خاموش health/Swagger 200 و فرآیند متوقف شد؛ IIS آزموده نشد. schema قبل/بعد برابر و خالی است. برای آزمون‌های بعدی، transaction rollback-only و بررسی مجاز audit قبل/بعد، رقابت commitشده و commit مبهم هنوز لازم‌اند؛ body تست‌های غیرفعال تأیید رفتار نیست. dependency/lockfile/SQL script/Frontend و فایل untracked کاربر حفظ شدند.
 
 **20 + 0 = 20%**؛ باقی 80% و هدف مشروط پس از پذیرش کامل همین 2F برابر 22% است. توقف پس از این تحویل؛ 2G، auth، Info یا checkpoint بعدی شروع نشود. وضعیت واقعی commit/push از GITHUB_SYNC و Git بررسی شود؛ تغییرهای ناتمام/کاربر را حفظ کنید.
+
+
+## آخرین ادامهٔ 2F طبق e252dad0
+
+این بخش وضعیت تازه‌تر از تحویل اولیهٔ آفلاین بالاست. مبنا `3b5e78dd8c35d7da6b0550d92220b782ac1acc12`؛ [بستهٔ تصمیم/تصویب](checkpoint2f/CONTINUATION_APPROVAL_FA.md)، [نه candidate](checkpoint2f/PROVIDER_CANDIDATES.json) و [شواهد تازه](checkpoint2f/CONTINUATION_REVIEW.json). منشأ range خود Microsoft.AspNetCore.App2.1.30 و تعارضهای CodePages و candidateهای جدید اثبات شد؛ provider امنِ متصل انتخاب/مصوب نشده و target/lockfile/package/runtime/test-code/gate دست‌نخورده‌اند. طرح .NET10/Microsoft.Data.SqlClient6.1.7 فقط پیشنهاد برای مجوز جداست؛ الزام 2.1 فعلاً معتبر است.
+
+دو نام `.\BAZDIDDevWriter` و `.\BAZDIDDevReader` پیشنهاد مجاز این تحلیل‌اند، نه حساب مصوب/موجود. development_logins.review.sql جدید و permissions.review.sql اصلاح‌شده فقط پیشنهادند؛ هر دو AllowDdl0 و approval/ماشین/login/SIDهای NULL دارند. ScriptDom موجود فقط syntax دو فایل و دو template را parse کرد؛ هیچ SQL آن‌ها اجرا نشد. حساب metadata SQL sysadmin ولی Windows token فعلی admin مؤثر نیست؛ ساخت حساب نیازمند مسئول Windows و تصویب حقوق/ACL/task است. registry ForceEncryption0 و binding صریح خالی، گواه TLS یا نبود certificate نیست.
+
+regression همین ادامه تازه اجرا شد: restore/build صفر، warning/error صفر، ۱۰۹ unit + ۵۰ integration آفلاین موفق، ۸ SQL Skipped و صفر متصل/effective permission. تست جدیدی ساخته نشد؛ smoke Kestrel/IIS و ۳۵ CASE تاریخی تکرار نشدند. metadata محلی همان schema/صفر ردیف است. پیش از نسخهٔ package، ایجاد account/login/user/role، grant، certificate/network یا بازکردن gate، تصمیم‌های P0–P5 را از پاسخ مالک احراز کنید؛ مصوبهٔ قبلی را در دامنهٔ خودش حفظ کنید. کد قبلی بازنویسی نشود و source reader واقعی تنظیم‌نشده بماند. **20 + 0 = 20%**؛ باقی80%، هدف مشروط پذیرش کامل همین 2F برابر22%، توقف پیش از2G. SHA/push از گزارش GitHub و Git واقعی خوانده شود.

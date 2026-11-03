@@ -146,3 +146,14 @@ commit پیاده‌سازی `f3bf660cc640eebd20ed348cdda181b041d0d799` شامل
 **محاسبه: قبلی 20 + سهم پذیرفتهٔ این تحویل 0 = فعلی 20%؛ باقی‌مانده 80%.** وزن پایهٔ PLAN تغییر نکرد؛ سهم دو واحدی 2F فقط پس از provider متصلِ پذیرفته، repositoryهای واقعی SQL، دو هویت کم‌اختیار و effective permission، concurrency/transaction و regression کامل قابل کسب است. برآورد مشروط ادامهٔ همین 2F **22%** و هدف پایان Checkpoint 2 برابر **24%** است؛ 2G شروع نشده است.
 
 گام بعد، رفع O24 و تحویل/تصویب دو principal و مجوزها در O26، سپس بازبینی gate و suite متصل با بررسی schema پیش/پس است. نام/مجوز حساب و هر role/user/grant یا انتخاب جدید provider نیاز به تصمیم مشخص دارد؛ هیچ اجرای خودکار DDL یا استفاده از sysadmin مجاز نیست. پس از این تحویل توقف می‌شود و 2G، OTP، Session، Info، رسانه یا ماژول دیگری شروع نمی‌شود.
+
+
+## ادامهٔ مصوب 2F — تحلیل و آماده‌سازی، بدون اجرای متصل
+
+در ادامهٔ `e252dad0-0bb1-4058-ab9b-f757dd2b272a` از مبنای `3b5e78dd8c35d7da6b0550d92220b782ac1acc12`، repositoryها و هشت تست متصل بازبینی و کد آن‌ها حفظ شد. [بستهٔ کامل تصویب](../checkpoint2f/CONTINUATION_APPROVAL_FA.md) روند، نه candidate، تقاطع قیود، API/native/TLS، نام/حقوق دو حساب، اجرای task محدود، حداقل permissions، hash دو script بسته، ابطال و تصمیم‌های P0–P5 را ثبت می‌کند. [شاهد تازه](../checkpoint2f/CONTINUATION_REVIEW.json) و [metadata candidateها](../checkpoint2f/PROVIDER_CANDIDATES.json) مستقل از شواهد اولیه هستند.
+
+برخلاف نسخهٔ تاریخی permissions در تحویل اول، اکنون فقط **پیش‌نویس** اصلاح شد: UPDATE CustomerLinks حذف، منع SELECT audit اضافه و source grant اختیاری حذف شد. development_logins.review.sql جدید نیز صرفاً پیشنهاد Windows login است؛ هیچ حساب/مجوزی ایجاد/اعمال نشد. هر دو file و دو template با parser موجود آفلاین parse و guardهای صفر حفظ شدند. parent schema، API/DI/runtime/gate، SDK/target و lockfile تغییر نکردند.
+
+منشأ قید provider، خود App2.1.30 است؛ CodePages و سایر قیدها هم گزینه‌های جدید را رد می‌کنند. هیچ انتخاب جدید provider تصویب نشد و هیچ candidate نصب/restore/build یا Open نشد. پیشنهاد طرح مهاجرت جدا .NET10 LTS با ارزیابی Microsoft.Data.SqlClient6.1.7 LTS مجوز ارتقا نیست. Windows user/roleهای موردنیاز وجود ندارند؛ دو نام پیشنهادی نیز ساخته نشده‌اند. TLS ارائه‌شدهٔ واقعی نامعلوم است و registry خالی اثبات نبود گواهی نیست.
+
+اجرای تازهٔ این ادامه همان ۱۵۹ موفق آفلاین و ۸ SQL Skipped، صفر شکست و build صفر warning/error را تأیید کرد؛ تست تازه صفر، SQL connected/effective permissions صفر. metadata همان پایگاه/صفر ردیف؛ smoke Kestrel/IIS و CASEهای قدیمی اجرا نشدند. خطای helper `$LASTEXITCODE` و نحوهٔ تأیید Status واقعی، فرمان‌ها و فایل‌ها در بسته ثبت شده‌اند؛ خطای اتصال candidate جعل نشده است. قبل از provider/account/SQL/TLS/activation نامصوب توقف می‌شود. **20 + 0 = 20%**؛ باقی80%، هدف مشروط ادامهٔ همین2F برابر22% و 2G شروع نشده است. SHA واقعی و نتیجهٔ push در گزارش GitHub ثبت می‌شود.

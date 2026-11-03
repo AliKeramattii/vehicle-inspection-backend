@@ -40,3 +40,9 @@
 یک پروژهٔ API با دو پروژهٔ تست، ADO.NET پارامتری، ۱۷ جدول تدریجی، manifest قالب ثابت و snapshot به‌جای مدیریت قالب کامل، منشأهای ستونی Info، cookie با SQL ticket store، ادغام فرمان‌های ویرایش خودرو در information و whole-file retry پیشنهاد شده‌اند. این‌ها الزامات ازپیش‌تأییدشده معرفی نمی‌شوند. اگر بازبینی آن‌ها را تغییر داد، PLAN و docs مرتبط در یک تغییر همسو اصلاح شوند.
 
 2E در دامنهٔ طراحی تکمیل شد و 2F اکنون فقط آفلاین تحویل شده است؛ **20%** باقی ماند. O24/O26 و mapping واقعی بازند؛ O27–O30 همچنان برای اجرای امن Info لازم‌اند. audit گراف پاک نشده، ۱۵۹ موفق آفلاین و ۸ SQL Skipped تازه ثبت شده‌اند؛ جدول/DTO پیشنهادی Info هنوز اجرا نشده است. گام بعد رفع موانع و ادامهٔ همین 2F با هدف مشروط ۲۲٪ است؛ 2G، OTP/Session/Info/media و Production شروع نشده‌اند.
+
+## ادامهٔ بررسی O24/O26 — تصویب‌ها هنوز باز
+
+در `e252dad0-0bb1-4058-ab9b-f757dd2b272a`، نه nuspec رسمی و قیود گراف موجود بررسی شدند: خود App2.1.30 بالاسقف SQL Client و CodePages را تحمیل می‌کند؛ candidateهای جدید هم Caching/Pkcs/Channels را نقض می‌کنند. package change، native connection و TLS مصوب/آزموده نشده‌اند. پیشنهاد تصمیم O24، **اجازهٔ تهیهٔ طرح مهاجرت جداگانهٔ .NET10 LTS با ارزیابی Microsoft.Data.SqlClient6.1.7 LTS** است؛ امکان آزمایش legacy با گراف بازطراحی‌شده رد فنی کلی نشده، اما هیچ آزمایشی تصویب نشده و runtime2.1 دارای پشتیبانی نیست. [ماتریس و شواهد](checkpoint2f/CONTINUATION_APPROVAL_FA.md).
+
+O26: دو نام `.\BAZDIDDevWriter` و `.\BAZDIDDevReader` با Batch logon/task محدود و بدون admin/RDP فقط پیشنهادند؛ metadata نبود آن‌ها و نقش/userهای SQL را تازه تأیید کرد. login/permissions بسته برای تصویب نام/SID و hash script آماده است؛ UPDATE CustomerLinks حذف و SELECT audit منع شد. source grant یا جدول فرضی وجود ندارد. هیچ CREATE/GRANT/DENY، account، ACL یا registry تغییر نکرد. P0–P5 در همان بسته، approvalهای provider، OS/SQL، TLS، activation/verifier و fixture/cleanup را تفکیک می‌کنند. O24/O26 بسته نشده‌اند؛ **20%** و توقف پیش از عملیات نامصوب.

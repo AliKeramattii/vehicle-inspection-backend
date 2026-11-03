@@ -1,0 +1,326 @@
+{
+  "Date": "2026-11-03",
+  "AuthorizationReference": "e252dad0-0bb1-4058-ab9b-f757dd2b272a",
+  "StartingCommit": "3b5e78dd8c35d7da6b0550d92220b782ac1acc12",
+  "Inspection": {
+    "Date": "2026-11-03",
+    "AuthorizationReference": "e252dad0-0bb1-4058-ab9b-f757dd2b272a",
+    "StartingCommit": "3b5e78dd8c35d7da6b0550d92220b782ac1acc12",
+    "Schema": {
+      "Status": "Passed",
+      "Database": "BAZDID_Development",
+      "Tables": 3,
+      "Columns": 39,
+      "Indexes": 10,
+      "PrimaryKeys": 3,
+      "UniqueConstraints": 3,
+      "ForeignKeys": 1,
+      "CheckConstraints": 13,
+      "RowVersionColumns": 2,
+      "PersistedComputedKeys": 2,
+      "RowCounts": [
+        {
+          "TableName": "BAZDIDCustomerLinks",
+          "RowCount": 0
+        },
+        {
+          "TableName": "BAZDIDRequestContexts",
+          "RowCount": 0
+        },
+        {
+          "TableName": "BAZDIDAuditLogs",
+          "RowCount": 0
+        }
+      ]
+    },
+    "SqlProductVersion": "15.0.2000.5",
+    "MachineMatchesLocal": 1,
+    "NetTransport": "Shared memory",
+    "AuthenticationScheme": "NTLM",
+    "MetadataIdentityIsSysadmin": 1,
+    "LinkedServers": 0,
+    "UnexpectedUserDatabases": 0,
+    "RestrictedNonServiceWindowsLogins": 0,
+    "ProposedRolesPresent": 0,
+    "WindowsDatabaseUsers": 0,
+    "ProposedRoleMembers": 0,
+    "CurrentIsLocalWindowsIdentity": true,
+    "CurrentTokenIsAdministrator": false,
+    "LocalUserCount": 7,
+    "EnabledLocalUserCount": 3,
+    "ProposedWriterName": "BAZDIDDevWriter",
+    "ProposedReaderName": "BAZDIDDevReader",
+    "ProposedWriterExists": false,
+    "ProposedReaderExists": false,
+    "RegistryForceEncryption": 0,
+    "RegistryExplicitCertificateBinding": false,
+    "ActualServerCertificateVerified": false,
+    "RuntimeTlsVerified": false,
+    "RuntimeConnectionOpened": false,
+    "WindowsAccountsCreated": false,
+    "SqlLoginsCreated": false,
+    "PermissionsApplied": false,
+    "DdlExecuted": false,
+    "RepositoryDmlExecuted": false,
+    "ExplanationFa": "metadata فقط‌خواندنی با ابزار قبلی؛ خالی بودن binding صریح، نبود گواهی خودکار یا موفقیت/شکست TLS را ثابت نمی‌کند. بررسی sysadmin، آزمون runtime نیست."
+  },
+  "SchemaAfterOfflineTests": {
+    "Status": "Passed",
+    "Database": "BAZDID_Development",
+    "Tables": 3,
+    "Columns": 39,
+    "Indexes": 10,
+    "PrimaryKeys": 3,
+    "UniqueConstraints": 3,
+    "ForeignKeys": 1,
+    "CheckConstraints": 13,
+    "RowVersionColumns": 2,
+    "PersistedComputedKeys": 2,
+    "RowCounts": [
+      {
+        "TableName": "BAZDIDCustomerLinks",
+        "RowCount": 0
+      },
+      {
+        "TableName": "BAZDIDRequestContexts",
+        "RowCount": 0
+      },
+      {
+        "TableName": "BAZDIDAuditLogs",
+        "RowCount": 0
+      }
+    ]
+  },
+  "SchemaBeforeAfterEqual": true,
+  "SqlProposalValidation": {
+    "Date": "2026-11-03",
+    "Files": [
+      {
+        "Path": "database/proposals/development_logins.review.sql",
+        "Parser": "TSql150Parser/ScriptDom161.8901.0",
+        "ParseErrors": 0,
+        "DefaultGuardClosed": true,
+        "Sha256": "9099DE3DCE8E77FC037D1BDC6D5B8649BA835253DF067E6B0E8D89B121B5B15F",
+        "SqlExecuted": false
+      },
+      {
+        "Path": "database/proposals/permissions.review.sql",
+        "Parser": "TSql150Parser/ScriptDom161.8901.0",
+        "ParseErrors": 0,
+        "DefaultGuardClosed": true,
+        "Sha256": "9888862C6997EB2AB0FC2EFFAAC6559E6399905E1290FEC506100AD46609A396",
+        "SqlExecuted": false
+      }
+    ],
+    "RepresentativeDynamicTemplatesParsed": 2,
+    "DynamicTemplateParseErrors": 0,
+    "SqlExecuted": false,
+    "ExplanationFa": "فقط syntax آفلاین و default guard بررسی شد؛ هیچ statement به SQL Server ارسال نشد و مجوز مؤثر تأیید نشده است."
+  },
+  "Application": {
+    "Sdk": "2.1.818",
+    "TargetFramework": "netcoreapp2.1",
+    "Restore": {
+      "Command": "dotnet restore Bazdid.sln --locked-mode",
+      "ExitCode": 0
+    },
+    "Build": {
+      "Command": "dotnet build Bazdid.sln --configuration Release --no-restore",
+      "ExitCode": 0,
+      "Warnings": 0,
+      "Errors": 0
+    },
+    "Tests": {
+      "Command": "dotnet test Bazdid.sln --configuration Release --no-build --no-restore --logger trx --results-directory C:/Projects/vehicle-inspection-backend/.sync-tmp/cp2f-cont-tests",
+      "ExitCode": 0,
+      "Counts": {
+        "Unit": {
+          "Passed": 109,
+          "Failed": 0,
+          "NotExecuted": 0
+        },
+        "OfflineIntegrationAndBlockedSql": {
+          "Passed": 50,
+          "Failed": 0,
+          "NotExecuted": 8
+        }
+      },
+      "OfflinePassed": 159,
+      "ConnectedExecuted": 0,
+      "ConnectedSkipped": 8,
+      "Failed": 0,
+      "NewTests": 0
+    },
+    "FreshObservedExistingProvider": {
+      "Runtime": ".NET Core 4.6.30411.01",
+      "Is64BitProcess": true,
+      "AssemblyVersion": "4.4.0.1",
+      "FileVersion": "4.6.28516.10",
+      "Location": "NuGet/system.data.sqlclient/4.5.3/runtimes/win/lib/netcoreapp2.1/System.Data.SqlClient.dll",
+      "NativeSniAdjacent": false,
+      "NativeSniFiles": [],
+      "NativeSniLoadedVerified": false,
+      "ConnectionOpened": false
+    },
+    "FreshExistingNativeMetadata": {
+      "Asset": "Microsoft.AspNetCore.App/2.1.30/sni.dll",
+      "PeMachine": "0x8664",
+      "Sha256": "68705c4ef9ab818f2956a78e05f3fefce501a1448793b073b46110beb49b47d6",
+      "NativeLoadVerified": false
+    },
+    "KestrelSmokeRerun": false,
+    "RuntimeCodeChanged": false,
+    "CandidatePackagesInstalled": false
+  },
+  "FreshAudit": {
+    "VulnerablePackageCount": 9,
+    "Packages": [
+      {
+        "Id": "Microsoft.AspNetCore.Identity",
+        "Version": "2.1.6",
+        "Advisories": [
+          {
+            "severity": "High",
+            "advisoryurl": "https://github.com/advisories/GHSA-25c8-p796-jg6r"
+          }
+        ]
+      },
+      {
+        "Id": "Microsoft.AspNetCore.Server.Kestrel.Core",
+        "Version": "2.1.25",
+        "Advisories": [
+          {
+            "severity": "Critical",
+            "advisoryurl": "https://github.com/advisories/GHSA-5rrx-jjjq-q2r5"
+          }
+        ]
+      },
+      {
+        "Id": "Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets",
+        "Version": "2.1.3",
+        "Advisories": [
+          {
+            "severity": "High",
+            "advisoryurl": "https://github.com/advisories/GHSA-vmch-3w2x-vhgq"
+          }
+        ]
+      },
+      {
+        "Id": "Swashbuckle.AspNetCore.SwaggerUI",
+        "Version": "4.0.1",
+        "Advisories": [
+          {
+            "severity": "Moderate",
+            "advisoryurl": "https://github.com/advisories/GHSA-qrmm-w75w-3wpx"
+          }
+        ]
+      },
+      {
+        "Id": "System.Data.SqlClient",
+        "Version": "4.5.3",
+        "Advisories": [
+          {
+            "severity": "Moderate",
+            "advisoryurl": "https://github.com/advisories/GHSA-8g2p-5pqh-5jmc"
+          },
+          {
+            "severity": "High",
+            "advisoryurl": "https://github.com/advisories/GHSA-98g6-xh36-x2p7"
+          }
+        ]
+      },
+      {
+        "Id": "System.IdentityModel.Tokens.Jwt",
+        "Version": "5.2.0",
+        "Advisories": [
+          {
+            "severity": "Moderate",
+            "advisoryurl": "https://github.com/advisories/GHSA-59j7-ghrg-fj52"
+          }
+        ]
+      },
+      {
+        "Id": "System.Net.Http",
+        "Version": "4.3.0",
+        "Advisories": [
+          {
+            "severity": "High",
+            "advisoryurl": "https://github.com/advisories/GHSA-7jgj-8wvc-jh57"
+          }
+        ]
+      },
+      {
+        "Id": "System.Security.Cryptography.Xml",
+        "Version": "4.5.0",
+        "Advisories": [
+          {
+            "severity": "Moderate",
+            "advisoryurl": "https://github.com/advisories/GHSA-vh55-786g-wjwj"
+          }
+        ]
+      },
+      {
+        "Id": "System.Text.RegularExpressions",
+        "Version": "4.3.0",
+        "Advisories": [
+          {
+            "severity": "High",
+            "advisoryurl": "https://github.com/advisories/GHSA-cmhx-cq75-c4mj"
+          }
+        ]
+      }
+    ]
+  },
+  "BlockedConnectedTests": [
+    {
+      "Name": "Bazdid.IntegrationTests.SqlRepositoryConnectedTests.Actual_SQL_command_observes_cancellation",
+      "Outcome": "Skipped",
+      "Reason": "O24/O26؛ provider، principal و activation تصویب/تأیید نشده‌اند."
+    },
+    {
+      "Name": "Bazdid.IntegrationTests.SqlRepositoryConnectedTests.Actual_SQL_timeout_is_not_not_found_or_duplicate",
+      "Outcome": "Skipped",
+      "Reason": "O24/O26؛ provider، principal و activation تصویب/تأیید نشده‌اند."
+    },
+    {
+      "Name": "Bazdid.IntegrationTests.SqlRepositoryConnectedTests.Concurrent_creation_waits_for_key_lock_and_leaves_no_committed_record",
+      "Outcome": "Skipped",
+      "Reason": "O24/O26؛ provider، principal و activation تصویب/تأیید نشده‌اند."
+    },
+    {
+      "Name": "Bazdid.IntegrationTests.SqlRepositoryConnectedTests.Stale_rowversion_cannot_overwrite_metadata",
+      "Outcome": "Skipped",
+      "Reason": "O24/O26؛ provider، principal و activation تصویب/تأیید نشده‌اند."
+    },
+    {
+      "Name": "Bazdid.IntegrationTests.SqlRepositoryConnectedTests.Customer_request_and_audit_insert_are_rolled_back_together",
+      "Outcome": "Skipped",
+      "Reason": "O24/O26؛ provider، principal و activation تصویب/تأیید نشده‌اند."
+    },
+    {
+      "Name": "Bazdid.IntegrationTests.SqlRepositoryConnectedTests.Exact_keys_idempotence_multiple_requests_and_tenant_isolation",
+      "Outcome": "Skipped",
+      "Reason": "O24/O26؛ provider، principal و activation تصویب/تأیید نشده‌اند."
+    },
+    {
+      "Name": "Bazdid.IntegrationTests.SqlRepositoryConnectedTests.Actual_writer_cannot_read_audit_or_delete_contexts_or_issue_DDL",
+      "Outcome": "Skipped",
+      "Reason": "O24/O26؛ provider، principal و activation تصویب/تأیید نشده‌اند."
+    },
+    {
+      "Name": "Bazdid.IntegrationTests.SqlRepositoryConnectedTests.Existing_request_cannot_be_relinked_to_another_customer",
+      "Outcome": "Skipped",
+      "Reason": "O24/O26؛ provider، principal و activation تصویب/تأیید نشده‌اند."
+    }
+  ],
+  "EffectivePermissionTestsExecuted": 0,
+  "ProviderApproved": false,
+  "AccountPermissionApprovalProvided": false,
+  "RuntimeActivationApproved": false,
+  "ProgressBefore": 20,
+  "ProgressEarned": 0,
+  "ProgressAfter": 20,
+  "Checkpoint2FAccepted": false,
+  "Checkpoint2GStarted": false,
+  "ExplanationFa": "ادامهٔ تحلیل و آماده‌سازی برای تصویب؛ regression همان baseline تازه اجرا شد. SQL parse آفلاین، اجرای permission script یا effective permission test نیست. هیچ runtime connection یا DDL/DML و ساخت حساب اجرا نشد."
+}

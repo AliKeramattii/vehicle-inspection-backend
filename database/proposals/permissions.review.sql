@@ -1,13 +1,15 @@
--- پیش‌نویس نقش‌ها؛ هیچ login، رمز یا حساب Windows ساخته نمی‌شود.
+-- پیش‌نویس اصلاح‌شدهٔ 2F؛ اجرا نشده است. ایجاد حساب Windows/login در این فایل وجود ندارد.
+-- مجوز بعدی باید نام دو حساب، SIDهای تازه‌تأییدشده، مقصد و همین نسخهٔ script را مشخص کند.
 SET NOCOUNT ON;
 SET XACT_ABORT ON;
 DECLARE @AllowDdl bit = 0;
 DECLARE @ApprovalReference nvarchar(128) = NULL;
 DECLARE @TestDatabase sysname = N'BAZDID_Development';
+DECLARE @ExpectedMachine sysname = NULL;
 DECLARE @ReaderLogin sysname = NULL;
 DECLARE @WriterLogin sysname = NULL;
-DECLARE @SyntheticSourceSchema sysname = NULL;
-DECLARE @SyntheticSourceTable sysname = NULL;
+DECLARE @ExpectedReaderSid varbinary(85) = NULL;
+DECLARE @ExpectedWriterSid varbinary(85) = NULL;
 IF COALESCE(@AllowDdl, 0) <> 1 OR NULLIF(LTRIM(RTRIM(@ApprovalReference)), N'') IS NULL
 BEGIN
     RAISERROR(N'تغییر مجوز بسته است؛ مقصد، دو حساب و script باید تصویب شوند.', 16, 1);
@@ -15,16 +17,23 @@ BEGIN
 END;
 IF DB_NAME() <> @TestDatabase OR DB_ID() <= 4
    OR @TestDatabase IS NULL OR @TestDatabase NOT LIKE N'BAZDID[_]%'
+   OR @ExpectedMachine IS NULL
+   OR CONVERT(nvarchar(128), SERVERPROPERTY('MachineName')) <> @ExpectedMachine
+   OR CONVERT(int, SERVERPROPERTY('ProductMajorVersion')) <> 15
    OR COALESCE(IS_SRVROLEMEMBER('sysadmin'), 0) <> 1
    OR CONVERT(int, SERVERPROPERTY('IsClustered')) <> 0
    OR CONVERT(int, SERVERPROPERTY('IsHadrEnabled')) <> 0
    OR COALESCE(CONVERT(nvarchar(128), SERVERPROPERTY('InstanceName')), N'') <> N'SQLSERVER2019'
    OR COALESCE(CONVERT(nvarchar(128), CONNECTIONPROPERTY('net_transport')), N'') <> N'Shared memory'
+   OR COALESCE(CONVERT(nvarchar(128), CONNECTIONPROPERTY('auth_scheme')), N'') NOT IN (N'NTLM',N'KERBEROS')
    OR EXISTS (SELECT 1 FROM sys.servers WHERE is_linked = 1)
    OR EXISTS (SELECT 1 FROM sys.databases WHERE database_id > 4 AND name <> @TestDatabase)
    OR @ReaderLogin IS NULL OR @WriterLogin IS NULL OR @ReaderLogin = @WriterLogin
-   OR NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = @ReaderLogin AND type IN ('U', 'G'))
-   OR NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = @WriterLogin AND type IN ('U', 'G'))
+   OR @ReaderLogin <> @ExpectedMachine + N'\BAZDIDDevReader'
+   OR @WriterLogin <> @ExpectedMachine + N'\BAZDIDDevWriter'
+   OR @ExpectedReaderSid IS NULL OR @ExpectedWriterSid IS NULL OR @ExpectedReaderSid = @ExpectedWriterSid
+   OR NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = @ReaderLogin AND type = 'U' AND sid = @ExpectedReaderSid AND is_disabled = 0)
+   OR NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = @WriterLogin AND type = 'U' AND sid = @ExpectedWriterSid AND is_disabled = 0)
    OR COALESCE(IS_SRVROLEMEMBER('sysadmin', @ReaderLogin), 1) <> 0
    OR COALESCE(IS_SRVROLEMEMBER('sysadmin', @WriterLogin), 1) <> 0
    OR USER_ID(@ReaderLogin) IS NOT NULL OR USER_ID(@WriterLogin) IS NOT NULL
@@ -37,19 +46,7 @@ BEGIN
     RAISERROR(N'پیش‌شرط تست، جدول‌ها یا حساب‌های تازه و کم‌اختیار برقرار نیست.', 16, 1);
     RETURN;
 END;
-IF (@SyntheticSourceSchema IS NULL AND @SyntheticSourceTable IS NOT NULL)
-   OR (@SyntheticSourceSchema IS NOT NULL AND @SyntheticSourceTable IS NULL)
-BEGIN
-    RAISERROR(N'نام schema و جدول ساختگی باید با هم تعیین شوند.', 16, 1);
-    RETURN;
-END;
-DECLARE @SourceObject nvarchar(517) = QUOTENAME(@SyntheticSourceSchema) + N'.' + QUOTENAME(@SyntheticSourceTable);
-IF @SourceObject IS NOT NULL AND
-   (OBJECT_ID(@SourceObject, N'U') IS NULL OR @SyntheticSourceTable LIKE N'BAZDID%')
-BEGIN
-    RAISERROR(N'شیء مبدأ تست معتبر نیست؛ به جدول‌های BAZDID مجوز مبدأ داده نمی‌شود.', 16, 1);
-    RETURN;
-END;
+-- هیچ مبدأ واقعی یا ساختگی تصویب نشده است؛ این نسخه هیچ مجوز SELECT مبدأ صادر نمی‌کند.
 BEGIN TRY
     BEGIN TRANSACTION;
     CREATE ROLE BAZDIDSourceReader AUTHORIZATION dbo;
@@ -59,22 +56,22 @@ BEGIN TRY
         + N'ALTER ROLE BAZDIDSourceReader ADD MEMBER ' + QUOTENAME(@ReaderLogin) + N';'
         + N'ALTER ROLE BAZDIDWriter ADD MEMBER ' + QUOTENAME(@WriterLogin) + N';';
     EXEC sys.sp_executesql @Sql;
-    GRANT SELECT, INSERT, UPDATE ON OBJECT::dbo.BAZDIDCustomerLinks TO BAZDIDWriter;
+    GRANT SELECT, INSERT ON OBJECT::dbo.BAZDIDCustomerLinks TO BAZDIDWriter;
+    DENY UPDATE, DELETE, ALTER ON OBJECT::dbo.BAZDIDCustomerLinks TO BAZDIDWriter;
     GRANT SELECT, INSERT, UPDATE ON OBJECT::dbo.BAZDIDRequestContexts TO BAZDIDWriter;
+    DENY DELETE, ALTER ON OBJECT::dbo.BAZDIDRequestContexts TO BAZDIDWriter;
     GRANT INSERT ON OBJECT::dbo.BAZDIDAuditLogs TO BAZDIDWriter;
-    DENY UPDATE, DELETE, ALTER ON OBJECT::dbo.BAZDIDAuditLogs TO BAZDIDWriter;
-    IF @SourceObject IS NOT NULL
-    BEGIN
-        SET @Sql = N'GRANT SELECT ON OBJECT::' + @SourceObject + N' TO BAZDIDSourceReader;'
-            + N'DENY INSERT, UPDATE, DELETE, ALTER ON OBJECT::' + @SourceObject + N' TO BAZDIDSourceReader;'
-            + N'DENY SELECT, INSERT, UPDATE, DELETE, ALTER ON OBJECT::' + @SourceObject + N' TO BAZDIDWriter;';
-        EXEC sys.sp_executesql @Sql;
-    END;
+    DENY SELECT, UPDATE, DELETE, ALTER ON OBJECT::dbo.BAZDIDAuditLogs TO BAZDIDWriter;
+    DENY SELECT, INSERT, UPDATE, DELETE, ALTER ON OBJECT::dbo.BAZDIDCustomerLinks TO BAZDIDSourceReader;
+    DENY SELECT, INSERT, UPDATE, DELETE, ALTER ON OBJECT::dbo.BAZDIDRequestContexts TO BAZDIDSourceReader;
+    DENY SELECT, INSERT, UPDATE, DELETE, ALTER ON OBJECT::dbo.BAZDIDAuditLogs TO BAZDIDSourceReader;
+    DENY CREATE TABLE, CREATE VIEW, CREATE PROCEDURE, CREATE FUNCTION, CREATE SCHEMA TO BAZDIDWriter;
+    DENY CREATE TABLE, CREATE VIEW, CREATE PROCEDURE, CREATE FUNCTION, CREATE SCHEMA TO BAZDIDSourceReader;
     COMMIT TRANSACTION;
 END TRY
 BEGIN CATCH
     IF XACT_STATE() <> 0 ROLLBACK TRANSACTION;
     THROW;
 END CATCH;
--- با مبدأ NULL نقش خواننده هنوز هیچ SELECT ندارد؛ موفقیت ایجاد نقش، تأیید adapter نیست.
+-- نقش خواننده هیچ SELECT مبدأ ندارد؛ موفقیت ساخت نقش، تأیید adapter یا effective permission نیست.
 -- عضویت‌های ارثی Windows/public و مجوز مؤثر هر حساب باید جداگانه آزموده شوند.

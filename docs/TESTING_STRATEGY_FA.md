@@ -63,3 +63,10 @@ OpenAPI همان implementation با نمونهٔ واقعی responseها تطب
 آفلاین‌ها binding دقیق/نوع/اندازه/null، source ID بزرگ/case/Unicode/trailing space، injection، owner/CAS در متن command، خطا/timeout، token/HMAC، config/gate و شکست جزئی/عدم retry را پوشش می‌دهند. هشت تست متصل برای طبیعی‌کلید/تکرار/tenant، مالک نادرست، stale version، rollback، رقابت، effective permissions Writer، timeout و cancellation نوشته شده‌اند؛ هیچ bypass محیطی ندارند. پس از تصمیم provider و تصویب دو principal، suite باید بازبینی و با خود هویت‌ها اجرا شود؛ SourceReader نیاز به mapping مصوب و verifier شمار audit قبل/پس دارد. رقابت commitشده، commit مبهم و عدم باقی‌ماندن داده باید واقعاً اثبات شوند؛ طرح body فعلی، معیار پذیرش اجراشده نیست.
 
 verification metadata با provisioner فقط‌خواندنی و smoke واقعی Kestrel با SQL خاموش موفق شدند؛ IIS و native/connection واقعی provider آزموده نشدند. ۳۵ CASE تاریخی 2C تکرار نشدند. هر نتیجهٔ بعدی باید passed/offline/skipped/connected را جدا و بدون افزایش درصد برای gate مسدود ثبت کند.
+
+
+## اجرای تازهٔ ادامهٔ 2F و محدودیت acceptance
+
+مجوز `e252dad0-0bb1-4058-ab9b-f757dd2b272a` هنوز اجازهٔ تغییر provider/حساب/permission یا activation نداد. [شاهد تازه](checkpoint2f/CONTINUATION_REVIEW.json): ۱۰۹ unit و ۵۰ integration آفلاین موفق، صفر شکست، ۸ SQL Skipped؛ build صفر warning/error، تست جدید صفر. این baseline قبلی دوباره اجرا شد؛ شواهد تحویل اولیه بازنویسی نشدند. دو proposal و دو template با ScriptDom/TSql150 آفلاین parse شدند؛ این SQL اجرا یا effective permission test نیست.
+
+[بستهٔ تصویب](checkpoint2f/CONTINUATION_APPROVAL_FA.md) review هشت تست را ثبت می‌کند: اثبات انتظار قفل، رقابت commitشده، commit مبهم/بازیابی، همهٔ منع‌های audit/DDL، Reader مستقل، native/TLS/pooling و verifier شمار audit هنوز به تکمیل و اجرای مصوب نیاز دارند. هیچ fixture commitشده یا cleanup قبل از approval run/شناسه‌ها/هویت جدا مجاز نیست؛ Writer حق DELETE/SELECT audit نمی‌گیرد. native فایل موجود و managed load فعلی، اتصال را ثابت نمی‌کنند. نگهداری این بسته امتیاز ندارد؛ ۲۰٪ باقی می‌ماند.

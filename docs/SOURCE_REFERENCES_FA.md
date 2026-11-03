@@ -172,3 +172,10 @@ schema واقعی SQL کارگزاری، SMS contract، محیط IIS مقصد و
 مجوز `ea650fd0-47e2-4d02-bf9b-0fb87f03a254` ادامهٔ 2F را مجاز کرد و صریحاً در نبود provider امن/هویت کم‌اختیار، فقط کار مستقل آفلاین را خواست. بنابراین وضعیت پیشین «2F شروع نشده» برای زمان 2E تاریخی است؛ وضعیت تازه، کد آفلاین تحویل‌شده و پذیرش متصل مسدود است، با پیشرفت ۲۰٪. [راهنما و شواهد](implementation/CHECKPOINT-02F-SQL-REPOSITORIES_FA.md). تعداد ۱۵۹ موفق، SQL connected نیست و هشت Skip جداست.
 
 پیش‌نویس permissions تاریخی UPDATE CustomerLinks را پیشنهاد می‌دهد؛ repository فعلی چنین عملیاتی ندارد و حداقل موردنیاز فقط SELECT/INSERT آن جدول است. script تغییر/اجرا نشد و پیش از هر اجرای احتمالی باید با دو principal مشخص بازبینی/تصویب شود. metadata provisioner و نقش پیشنهادی جای effective permission با حساب واقعی نیستند. قید provider، APIهای موجود و پایان پشتیبانی از اجرای اجباری 4.8.6 یا ادعای امنیت Production جلوگیری می‌کنند؛ O24/O26 بازند.
+
+
+## ادامهٔ 2F و اصلاح پیشنهاد مجوز در e252dad0
+
+مجوز تازه `e252dad0-0bb1-4058-ab9b-f757dd2b272a` صریحاً پیشنهاد دو نام Windows و اصلاح permissions را مجاز کرد؛ منع قدیمی «نام حساب اختراع نشود» به معنی معرفی نام پیشنهادی این بسته به‌عنوان حساب موجود/مصوب نیست. `.\BAZDIDDevWriter` و `.\BAZDIDDevReader` فقط پیشنهاد و metadata نبود آن‌ها را تأیید می‌کند. [بستهٔ تصویب](checkpoint2f/CONTINUATION_APPROVAL_FA.md) مرجع تازه است.
+
+نسخهٔ پیشین permissions واقعاً UPDATE CustomerLinks می‌داد؛ نسخهٔ جاری فقط پیش‌نویس اصلاح‌شدهٔ SELECT/INSERT آن جدول و INSERT-only audit با منع SELECT است. source grant اختیاری حذف و login proposal جدا تهیه شد؛ AllowDdl/approval بسته‌اند و اجرا نشدند. گزاره‌های «script تغییر نکرد» در تحویل اولیهٔ 2F شاهد همان commit تاریخی‌اند. نه nuspec و قیود App/CodePages بررسی شد؛ metadata/asset یا patch یک CVE، جای runtime/گراف دارای پشتیبانی نیست. پیشنهاد طرح مهاجرت مستقل، الزام target فعلی2.1 یا gate را لغو نکرده است.

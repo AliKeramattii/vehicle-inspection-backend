@@ -101,3 +101,10 @@ Checkpoint 2F فقط در بخش آفلاین تحویل شد و پذیرش آن
 مخزن مقصد مجاز [AliKeramattii/vehicle-inspection-backend](https://github.com/AliKeramattii/vehicle-inspection-backend) است. `origin` به URL همین مخزن وصل شده است؛ وضعیت ارسال و تطبیق HEADها فقط از [گزارش همگام‌سازی](docs/GITHUB_SYNC_FA.md) خوانده شود و وجود remote به‌معنی push موفق فرض نشود.
 
 پس از هر وظیفهٔ Codex، گزارش نهایی باید طبق [سیاست اجباری AGENTS.md](AGENTS.md) فارسی باشد و تغییر، فایل، آزمون/build، امنیت، Git، مرحلهٔ فعلی و گام بعد را با شواهد واقعی توضیح دهد. checkpointهای بعدیِ مجاز و اعتبارسنجی‌شده به همین مقصد commit/push شوند؛ force push، انتشار secret/تنظیم Production/آرشیو مرجع خصوصی و شروع خودکار checkpoint بعد ممنوع است. پیش از ارسال، تمام تاریخچهٔ قابل ارسال بررسی شود؛ حذف فایل ممنوع فقط از HEAD آن را از commitهای قدیمی حذف نمی‌کند.
+
+
+## ادامهٔ 2F و تصمیم لازم پیش از اتصال
+
+در ادامهٔ مصوب `e252dad0-0bb1-4058-ab9b-f757dd2b272a`، [بستهٔ تصویب O24/O26](docs/checkpoint2f/CONTINUATION_APPROVAL_FA.md) با نه نامزد provider و دو حساب پیشنهادی تهیه شد. App2.1.30 قیدهای SQL Client و CodePages و وابستگی‌های دیگر را محدود می‌کند؛ تعویض سادهٔ provider امن/سازگار تأیید نشد. توصیه، تصویب طرح مهاجرت جداگانه به .NET10 LTS با ارزیابی Microsoft.Data.SqlClient6.1.7 LTS است؛ target و بسته‌ها تغییر نکردند.
+
+`.\BAZDIDDevWriter` و `.\BAZDIDDevReader` هنوز وجود/تصویب ندارند. دو script پیشنهادی login/permissions بسته و اجرا‌نشده‌اند؛ حداقل دسترسی از کد استخراج شده است. ۱۵۹ آزمون آفلاین تازه موفق، ۸ SQL Skipped، صفر متصل و build صفر warning/error؛ **20%** باقی ماند. قبل از تغییر provider/حساب/مجوز/TLS/activation، تصمیم‌های مشخص P0–P5 لازم‌اند؛ هیچ رمز یا connection string محرمانه در گفتگو ارسال نشود.

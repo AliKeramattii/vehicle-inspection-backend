@@ -39,3 +39,10 @@ schema و همهٔ scriptهای این پوشه بدون تغییر ماندند
 metadata نقش‌ها/Windows user صفر و نام دو principal مصوب موجود نیست. permissions.review.sql هنوز پیش‌نویس بسته است و حداقل دسترسی Writer فعلی حتی UPDATE CustomerLinks نیاز ندارد؛ قبل از اجرای احتمالی باید دوباره بازبینی و با نام‌ها/مجوزهای مشخص تصویب شود. SourceReader هیچ mapping/شیء مصوب ندارد. sysadmin فقط metadata خوانده و account برنامه نشده است.
 
 ۸ تست واقعی SQL در SqlRepositoryConnectedTests با دلیل O24/O26 Skip هستند؛ صفر تست متصل، ۱۵۹ موفق آفلاین و پیشرفت ۲۰٪. از ابزار Verify فقط برای مشاهدهٔ مقصد مصوب استفاده شد؛ EvidencePath ابزار 2C محدود است و نباید برای 2F باز شود، stdout را جدا ثبت کنید. اجرای ۳۵ CASE قدیمی، DDL یا بازسازی خودکار مجاز نیست؛ 2G شروع نشده است.
+
+
+## پیشنهادهای اصلاح‌شدهٔ ادامهٔ 2F — اجرا نشده
+
+[development_logins.review.sql](proposals/development_logins.review.sql) تازه، فقط دو Windows login از حساب‌های محلیِ پیشنهادی BAZDIDDevWriter/BAZDIDDevReader را پس از تصویب نام کامل/SID هدف می‌گیرد؛ Windows user نمی‌سازد. [permissions.review.sql](proposals/permissions.review.sql) اصلاح‌شده، UPDATE CustomerLinks و source grant اختیاری تاریخی را حذف و منع SELECT audit و سایر حدود حداقلی را اضافه کرد. هر دو AllowDdl0 و approval/ماشین/login/SIDهای NULL دارند؛ اجرا نشدند. SHAها، مقصد/ترتیب و approvalهای لازم در [بستهٔ تصویب](../docs/checkpoint2f/CONTINUATION_APPROVAL_FA.md) هستند.
+
+SQL Server/sysadmin بودن metadata اجازهٔ ایجاد Windows account نمی‌دهد؛ نام‌ها هنوز وجود/تصویب ندارند. دو فایل و دو template فقط با parser آفلاین معتبر شدند. هیچ GRANT/DENY یا DDL/DML، schema، TLS/registry/ACL تغییر نکرد. SourceReader هیچ شیء مبدأ مصوب یا SELECT ندارد. گراف provider فعلی هم مسدود است؛ ۱۵۹ موفق آفلاین/۸ SQL Skipped تازه، نه SQL acceptance؛ پیشرفت۲۰٪. مجوز 2C یا این پیش‌نویس، اجازهٔ اجرا یا بازسازی DB نیست.
