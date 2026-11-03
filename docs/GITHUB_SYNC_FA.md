@@ -180,3 +180,17 @@ regression تازه همان baseline بود: restore/build exit صفر، warnin
 regression اصلی تازه: build بدون warning/error،۱۰۹unit+۵۰integration آفلاین موفق، صفر شکست و۸SQL Skipped. نمونهٔ .NET10/MDS6.1.7 مستقل: build بدون warning/error،۱۴موفق/صفرشکست/صفرskip، سهHTTP smoke موفق، managed-load و PE x64، audit نهایی صفر بستهٔ flagged بعد از pin سازگار Pkcs10.0.14. این نتایج با هم یک suite نیستند. کد اصلی/package/lockfile/SDK/SQL/deployment و فایل کاربر تغییر نکردند؛ هیچ SQL metadata/connect، native execution/SSPI/TLS، account/task/right/ACL/certificate یا IIS در P0 اجرا نشد.
 
 **قبلی20 + سهم P0 صفر = فعلی20%؛ باقی80%.** پذیرش کامل2F تحت مجوز مستقل هدف مشروط22% دارد؛2G شروع نشد. P0 مجوز مهاجرت canonical نیست؛ port واقعی، P1/P2، TLS/activation و استقرار تصویب‌های مستقل می‌خواهند.
+
+## انتشار تأییدشدهٔ بررسی 2F-L1
+
+commit `069f55ca190dfa2fd908c826f8aea67d9cca5984` (والد `dbdd6ee6ebead440af6d4dc58371f7ef407375d2`) با `git push origin main:main` و بدون force منتشر شد. شواهد:
+
+- خروجی push برابر `dbdd6ee..069f55c  main -> main` بود.
+- پس از fetch، HEAD محلی و `refs/heads/main` روی remote هر دو `069f55c` بودند.
+- blob سه فایل در GitHub API با `HEAD` محلی برابر بود:
+  - walkthrough: `07a7db79…`؛
+  - `LEGACY_SECURITY_PINS.json`: `ef81d03c…`؛
+  - `LEGACY_PROVIDER_RESULTS.json`: `8c18e182…`.
+- اشیای تازه فقط ۱۲ فایل مستند همان commit بودند. پیش از commit، اسکن راز/مسیر شخصی و بررسی ۲۲۲ پیوند نسبی (صفر شکسته) انجام شد.
+
+آزمایش‌ها، logها، `bin/obj`، cache بسته‌ها و `src/Bazdid.Api/Properties/` منتشر نشدند. فقط `main` push شد و ref تاریخچهٔ اصلی محلی ارسال نشد. این ثبت تکمیلی سهم پیشرفت ندارد؛ پیشرفت 20% است.
