@@ -136,3 +136,27 @@ baseline برنامه در همین مرحله تازه restore/build/test شد:
 نتیجهٔ واقعی همین تحویل: restore و build exit صفر، build صفر warning/error، **۱۰۹ unit + ۵۰ integration آفلاین = ۱۵۹ موفق، صفر شکست و ۸ SQL Skipped**. تمام ۱۰۸ baseline و ۵۱ case تازه موفق‌اند. Kestrel با SQL خاموش، health/Swagger 200 و PathBase صحیح داشت؛ فرآیند متوقف شد. verification خواندنی قبل/بعد، schema برابر و صفر ردیف را نشان داد. **هیچ SQL runtime connection، DML repository، effective permission با runtime principal، DDL/grant یا آزمون متصل اجرا نشد.** O24/O26 بازند؛ [walkthrough و شواهد](implementation/CHECKPOINT-02F-SQL-REPOSITORIES_FA.md).
 
 **20 + 0 = 20%؛ باقی 80%.** این انتشار، پذیرش کامل 2F یا امتیاز ۲۲٪ نیست؛ ادامهٔ همین 2F بعد از تصمیم provider، تصویب دو principal/permissions و آزمون واقعی لازم است. 2G و OTP/Session/Info/media/Production شروع نشدند؛ تکمیل گزارش Git سهم تازه ندارد.
+
+## انتشار تأییدشدهٔ بستهٔ تصمیم و تصویب ادامهٔ 2F
+
+مجوز `e252dad0-0bb1-4058-ab9b-f757dd2b272a` در `2026-11-03` فقط تحلیل/آماده‌سازی را تا تصویب provider و حساب/permissions مجاز کرد. commit `19ac050f885a6cd77dbbf11d740ab45bf1d9d11a` از مبنای `3b5e78dd8c35d7da6b0550d92220b782ac1acc12` شامل ۱۶ فایل بررسی‌شده بود: اسناد/شواهد و دو پیشنهاد SQL بسته؛ کد runtime، تست‌ها، package/lockfile، target و تعریف جدول‌ها تغییر نکردند.
+
+URL fetch و push همان مقصد مصوب و refs تازه پیش از commit برابر بودند. push عادی فقط `refs/heads/main` ارسال کرد؛ پس از آن fetch، HEAD، origin/main و ls-remote همگی SHA بالا و اختلاف `0/0` را نشان دادند؛ remote فقط main بود. نه force/tag/branch اصل ارسال شد و نه تاریخچهٔ remote حذف شد. branch اصل محلی روی `7e2d83ddeb33475d07f70f4471cd09e466f853a4` محفوظ ماند.
+
+سه فایل در ref کامل این commit با ابزار GitHub خوانده و blob SHA آن‌ها با Git محلی برابر شد:
+
+| فایل | blob SHA در commit بسته |
+|---|---|
+| [بستهٔ تصمیم/تصویب](checkpoint2f/CONTINUATION_APPROVAL_FA.md) | `362a9d4b381022dc1febd48db5546bb6a7f5a198` |
+| [permissions پیشنهادی اصلاح‌شده](../database/proposals/permissions.review.sql) | `0a2d68e2572b5ab58cf5c0099f4015fc6614f95d` |
+| [شاهد تازهٔ ادامه](checkpoint2f/CONTINUATION_REVIEW.json) | `4829b3ce3ad5e32b237583090e20bc42ffc975ec` |
+
+این hashها به نسخهٔ اول بسته اشاره دارند؛ همین گزارش، PLAN، walkthrough و بند Git بسته در commit تکمیل مستندات به‌روز می‌شوند. SHA نهایی آن و تطبیق remote از Git واقعی در گزارش نهایی خوانده می‌شود تا ارجاع دوری به SHA خود سند ایجاد نشود.
+
+کنترل اولیه: ۱۵ فایل پیش از تولید خود شاهد کنترل و سپس بستهٔ ۱۶فایلی؛ ۱۱ Markdown، ۲۱۴ پیوند محلی/یک anchor و ۱۶۵ فایل فعلی بررسی شدند. ۲۶۹ blob تاریخی مبنا و سپس **۲۸۵ blob reachable main** بدون هشدار راز باقی‌مانده اسکن شدند. fixture قدیمی URL نامعتبر جداگانه تأیید شد؛ ZIP ممنوع از ancestry main غایب بود. هیچ credential، archive خصوصی، customer data، فایل DB/backup یا خروجی bin/obj ارسال نشد. تنها untracked باقی‌مانده فایل شخصی launchSettings کاربر با همان hash اولیه بود؛ Frontend خوانده/تغییر نشد.
+
+خروجی بسته: نه nuspec رسمی، منشأ قید App2.1.30 و تعارضهای CodePages/Caching/Pkcs/Channels، ماتریس provider، دو نام Windows پیشنهادی، حداقل حقوق/مجوز و روش اجرا/ابطال، hash دو SQL proposal با guard صفر و approval/SIDهای NULL. دو فایل و دو template فقط آفلاین parse شدند؛ هیچ CREATE/GRANT/DENY یا account/ACL/TLS/registry تغییر نکرد. نام‌های پیشنهادی موجود/مصوب نیستند و توصیهٔ طرح مهاجرت جداگانه مجوز ارتقای target نیست.
+
+regression تازه همان baseline بود: restore/build exit صفر، warning/error صفر، **۱۰۹ unit + ۵۰ integration آفلاین موفق، صفر شکست، ۸ SQL Skipped و صفر اجرای connected/effective permission**. تست جدید ساخته نشد؛ native/اتصال/TLS نامزدها آزمایش نشدند و audit همان ۹ بستهٔ دارای هشدار را نشان داد. schema قبل/بعد برابر و سه جدول خالی‌اند؛ SQL Server metadata خواندنی با runtime برنامه متفاوت است. smoke Kestrel/IIS در این ادامه تکرار نشد.
+
+**20 + 0 = 20%؛ باقی80%.** O24/O26 و approvalهای P0–P5 در [بستهٔ تصویب](checkpoint2f/CONTINUATION_APPROVAL_FA.md) بازند. توقف قبل از provider/account/SQL/TLS/activation نامصوب و بدون شروع2G؛ همگام‌سازی این بسته پذیرش2F یا امتیاز22% نیست.
