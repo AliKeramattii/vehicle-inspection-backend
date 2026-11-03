@@ -141,7 +141,7 @@ restore و build نهایی exit صفر داشتند؛ build **صفر warning/er
 
 SQL static/پارامتری، محدودهٔ مالک، ورودی محدود audit، حذف raw exception، timeout و dispose در کد بررسی شدند. با وجود آزمون‌های موفق، provider قدیمی، EOL framework، SQL Server RTM، مجوزهای آزموده‌نشده، TLS/native/runtime اتصال و hosting واقعی IIS بازند؛ آمادگی Production ادعا نمی‌شود. راز، connection string محرمانه، principal ساختگی، کد اختصاصی کارگزاری یا دادهٔ واقعی در بسته وجود ندارد.
 
-SHA مبنا در ابتدای این سند ثبت است؛ commit/push این تحویل فقط پس از کنترل محتوای قابل ارسال و تاریخچه انجام می‌شود. SHA واقعی و شواهد HEAD/فایل GitHub در [گزارش همگام‌سازی](../GITHUB_SYNC_FA.md) ثبت می‌شوند؛ این بند به‌تنهایی ادعای push موفق نیست. branch تاریخچهٔ اصلی و ZIP خصوصی ارسال نمی‌شوند؛ فایل untracked کاربر خارج commit می‌ماند.
+commit پیاده‌سازی `f3bf660cc640eebd20ed348cdda181b041d0d799` شامل ۳۴ فایل بررسی‌شده با push عادی روی همان origin/main منتشر شد. HEAD محلی، origin/main و ls-remote برابر و اختلاف `0/0` بود؛ repository، راهنما و شاهد SQL با ابزار GitHub خوانده و blob SHA آن‌ها تطبیق داده شد. [گزارش همگام‌سازی](../GITHUB_SYNC_FA.md) شواهد این نسخه را ثبت می‌کند. این بند و گزارش در commit تکمیل مستندات به‌روز می‌شوند؛ SHA نهایی آن از Git واقعی/گزارش تحویل خوانده شود. branch تاریخچهٔ اصلی و ZIP خصوصی ارسال نشدند؛ فایل untracked کاربر خارج commit و با hash اولیه محفوظ ماند.
 
 **محاسبه: قبلی 20 + سهم پذیرفتهٔ این تحویل 0 = فعلی 20%؛ باقی‌مانده 80%.** وزن پایهٔ PLAN تغییر نکرد؛ سهم دو واحدی 2F فقط پس از provider متصلِ پذیرفته، repositoryهای واقعی SQL، دو هویت کم‌اختیار و effective permission، concurrency/transaction و regression کامل قابل کسب است. برآورد مشروط ادامهٔ همین 2F **22%** و هدف پایان Checkpoint 2 برابر **24%** است؛ 2G شروع نشده است.
 

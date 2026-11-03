@@ -114,3 +114,25 @@ force push، حذف commit remote، reset مخرب، ایجاد مخزن دیگ�
 کنترل پیش از commit طرح: ۱۵ فایل، ۱۱ Markdown، ۱۷۰ پیوند محلی/یک anchor، دو مثال JSON و اسکن ۱۴۱ فایل فعلی/۲۱۱ blob تاریخی main بدون هشدار راز باقی‌مانده. fixture URL آزمون قدیمی جدا تأیید شد. ZIP خصوصی از ancestry قابل ارسال غایب بود؛ هیچ archive، دادهٔ واقعی، credential، فایل پایگاه یا backup اضافه نشد. ۲۶ فایل Frontend و ۲۲۶ ورودی تغییر قبلی آن با hash/status ثابت حفظ شدند؛ فایل untracked کاربر Backend نیز بدون تغییر و خارج commit ماند. runtime/test/dependency/SQL/deployment diff صفر است.
 
 baseline برنامه در همین مرحله تازه restore/build/test شد: exit صفر، build صفر warning/error و **۶۵ unit + ۴۳ integration = ۱۰۸ موفق**. این نتیجه، اجرای schema/DTO/crypto/refresh طراحی‌شده نیست؛ SQL زنده و smoke Kestrel در 2E اجرا نشدند. manifest ۱۳۱ ستون و ۱۹ قاعدهٔ constraint فقط پیشنهاد آینده است و ۲۴ سناریوی طراحی اجرا نشده‌اند. **19% + 1 = 20%** فقط بابت طراحی مجاز 2E؛ Info/Inspections و API عملیاتی ساخته نشدند. O24/O26 و O27–O30 بازند؛ مرحلهٔ بعد با مجوز جدا و بدون امتیاز فعلی است.
+
+## انتشار تأییدشدهٔ تحویل آفلاین Checkpoint 2F
+
+در `2026-11-03`، مجوز `ea650fd0-47e2-4d02-bf9b-0fb87f03a254` فقط 2F و در صورت نبود provider/هویت مجاز، بخش مستقل آفلاین را پوشش داد. commit `f3bf660cc640eebd20ed348cdda181b041d0d799` از مبنای `228d3769fc3471a2e3d597b9272c9629fa9ebe28` شامل ۳۴ فایل مرتبط ثبت و با push عادی به `refs/heads/main` همان مقصد مجاز منتشر شد. URL دریافت و URL ارسال هر دو کنترل شدند؛ refs تازه پیش از commit اختلاف `0/0` داشتند و تاریخچهٔ remote حفظ شد.
+
+پس از push، fetch تازه، HEAD، origin/main و `ls-remote --heads origin` همگی SHA پیاده‌سازی بالا را نشان دادند؛ اختلاف `0/0` و remote فقط main بود. هیچ force، tag، `--all` یا `--mirror` استفاده نشد. branch اصل محلی همچنان `7e2d83ddeb33475d07f70f4471cd09e466f853a4` بود و نه merge و نه push شد.
+
+فایل‌های زیر با ابزار متصل GitHub در ref کامل commit خوانده شدند و blob SHA محلی/remote برابر بود:
+
+| فایل | blob SHA در commit پیاده‌سازی |
+|---|---|
+| [سه repository](../src/Bazdid.Api/Infrastructure/Sql/SqlRepositories.cs) | `7c68cec54ec44227ca7ae0235be57a4174de360c` |
+| [راهنمای 2F](implementation/CHECKPOINT-02F-SQL-REPOSITORIES_FA.md) | `253e04076c7f3f78701373ae5d4e7c29b990ea48` |
+| [نتیجهٔ SQL مجزا](checkpoint2f/SQL_TEST_RESULTS.json) | `bbd3fde6546286c9cc17bf16b408a169bdad8aee` |
+
+این SHAهای blob مربوط به نسخهٔ پیاده‌سازی هستند؛ راهنما، فهرست، PLAN و همین گزارش در commit تکمیل مستندات به‌روز می‌شوند. آخرین SHA و تطبیق HEAD آن از Git واقعی در گزارش نهایی ثبت می‌شود تا ارجاع دوری به SHA خود سند ایجاد نشود.
+
+کنترل پیش از ثبت: ۳۳ فایل پیش از تولید خود شاهد کنترل، سپس شاهد افزوده شد و بسته ۳۴ فایل شد؛ ۱۳ Markdown، ۲۱۰ پیوند محلی/یک anchor و ۱۶۰ فایل فعلی بررسی شدند. ۲۳۱ blob تاریخی مبنا و پس از commit **۲۶۵ blob reachable main** بدون هشدار راز باقی‌مانده اسکن شدند. fixture مشخص URL نامعتبر در تست قدیمی، ساختگی و جداگانه تأیید شد؛ ZIP ممنوع از ancestry main غایب بود. هیچ archive، credential، دادهٔ واقعی، فایل پایگاه/backup یا bin/obj ارسال نشد. فایل شخصی untracked کاربر با hash اولیه حفظ و خارج commit ماند؛ تنها همین فایل پس از commit در status باقی بود. Frontend استفاده/تغییر نشد؛ dependency/lockfile/target، SQL script و reader/fixture/HTTP/auth/CORS قبلی تغییر نکردند.
+
+نتیجهٔ واقعی همین تحویل: restore و build exit صفر، build صفر warning/error، **۱۰۹ unit + ۵۰ integration آفلاین = ۱۵۹ موفق، صفر شکست و ۸ SQL Skipped**. تمام ۱۰۸ baseline و ۵۱ case تازه موفق‌اند. Kestrel با SQL خاموش، health/Swagger 200 و PathBase صحیح داشت؛ فرآیند متوقف شد. verification خواندنی قبل/بعد، schema برابر و صفر ردیف را نشان داد. **هیچ SQL runtime connection، DML repository، effective permission با runtime principal، DDL/grant یا آزمون متصل اجرا نشد.** O24/O26 بازند؛ [walkthrough و شواهد](implementation/CHECKPOINT-02F-SQL-REPOSITORIES_FA.md).
+
+**20 + 0 = 20%؛ باقی 80%.** این انتشار، پذیرش کامل 2F یا امتیاز ۲۲٪ نیست؛ ادامهٔ همین 2F بعد از تصمیم provider، تصویب دو principal/permissions و آزمون واقعی لازم است. 2G و OTP/Session/Info/media/Production شروع نشدند؛ تکمیل گزارش Git سهم تازه ندارد.
