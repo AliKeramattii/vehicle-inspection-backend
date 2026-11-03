@@ -185,3 +185,15 @@ schema واقعی SQL کارگزاری، SMS contract، محیط IIS مقصد و
 در `2026-11-03`، پیوست `700bf7eb-76b8-4b84-ad87-1096b3eb12dd` فقط feasibility/PoC روی.NET10/MDS6.1.7 در workspace ignored را مجاز کرد؛ منع ارتقای canonical2.1، SQL connection و P1/P2/IIS صریح باقی ماند. بنابراین وجود APIهای Generic Host/endpoint routing در نمونه، تغییر دستور فنی اصلی نیست. [walkthrough P0](implementation/CHECKPOINT-02F-P0-MIGRATION-FEASIBILITY_FA.md) و [شاهد](checkpoint2f/P0_FEASIBILITY_RESULTS.json) مرز اجرای واقعی/طرح را ثبت می‌کنند. توصیهٔ A یا موفقیت build اجازهٔ اجرای مهاجرت واقعی نیست؛ owner باید الزام target را صریح تغییر دهد.
 
 منابع اصلیِ به‌روز بررسی شدند: [lifecycle.NET](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core)، [lifecycle driver](https://learn.microsoft.com/en-us/sql/connect/ado-net/sqlclient-driver-support-lifecycle)، [OS.NET10](https://github.com/dotnet/core/blob/main/release-notes/10.0/supported-os.md)، [WebHost deprecated](https://learn.microsoft.com/en-us/dotnet/core/compatibility/aspnet-core/10/webhostbuilder-deprecated)، [MTP](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-test-mtp) و [اعلان امنیتی454](https://github.com/dotnet/announcements/issues/454)/[468](https://github.com/dotnet/announcements/issues/468). asset net9 روی net10 و PE x64 مشاهدهٔ محلی‌اند؛ موفقیت SQL/IIS استنباط نمی‌شود. جدول حداقل OS قدیمی IIS برای.NET10 ملاک نیست؛ ماتریس.NET10 برای2012/R2 شرطESU دارد. Swagger10.3.1 candidate بررسی‌شدهٔ feed است و گراف/قرارداد آن هنوز build/تأیید نشده‌اند.
+
+## قید الزامی کارفرما برای 2.1 در 2F-L1
+
+در `2026-11-03` دستور مالک، الزام زیرساخت کارفرما را تصریح کرد: canonical روی `netcoreapp2.1` می‌ماند. این دستور بر پیشنهاد مهاجرت P0 (.NET10) مقدم است. پیشنهاد P0 تعارض حل‌شده و سابقهٔ پژوهش ثبت می‌شود، نه گام بعدی. منابع بیرونی تازه:
+
+- [lifecycle رسمی SqlClient](https://learn.microsoft.com/en-us/sql/connect/ado-net/sqlclient-driver-support-lifecycle) (به‌روز `2026-10-23`): خط‌های MDS سازگار با 2.1 خارج از پشتیبانی‌اند.
+- [GHSA-5rrx-jjjq-q2r5](https://github.com/advisories/GHSA-5rrx-jjjq-q2r5): CVE-2025-55315، وصلهٔ Kestrel 2.x فقط `2.3.6`.
+- [GHSA-vmch-3w2x-vhgq](https://github.com/advisories/GHSA-vmch-3w2x-vhgq): وصلهٔ Sockets در `2.1.40`.
+- [GHSA-qrmm-w75w-3wpx](https://github.com/advisories/GHSA-qrmm-w75w-3wpx): وصلهٔ SwaggerUI در `6.3.0`.
+- فهرست نسخه‌ها و metadata از `api.nuget.org`.
+
+تاریخ دقیق پایان پشتیبانی `System.Data.SqlClient` از منبع اصلی Microsoft تأیید نشد و حدس زده نمی‌شود. [walkthrough L1](implementation/CHECKPOINT-02F-LEGACY-SQLCLIENT-FEASIBILITY_FA.md).

@@ -165,3 +165,23 @@ for package, node in target.items():
 ## تکمیل P0 تحت مجوز بعدی؛ اجرای P1/P2 همچنان نامصوب
 
 پیوست `700bf7eb-76b8-4b84-ad87-1096b3eb12dd` نمونهٔ محدود.NET10/MDS6.1.7 را مجاز کرد و [walkthrough P0](../implementation/CHECKPOINT-02F-P0-MIGRATION-FEASIBILITY_FA.md) نتیجهٔ آن و چک‌لیست نهایی P1/P2 را ثبت می‌کند. canonical مهاجرت نکرد. دو SQL proposal با همان hashهای بالا و guard صفر حفظ شدند؛ بررسی آن‌ها با connection guard/repositoryهای فعلی هم‌خوان بود. در P0 هیچ SQL metadata/connect یا account/right/ACL/task/certificate تغییری نبود؛ نبود حساب/role/login در متن پیشین، شاهد تاریخی همان ادامه است. امکان managed-load و۱۴تست نمونه، O24/O26 یا native/TLS/permission را نمی‌بندد. Pkcs10.0.14 فقط در نمونه pin شد؛ برای port واقعی و عملیات P1/P2/TLS/activation تصویب‌های جدا لازم‌اند. progress20% باقی است.
+
+## بازبینی 2F-L1؛ P0 با قید الزامی 2.1 جایگزین شد
+
+در `2026-11-03` کارفرما `netcoreapp2.1` را الزامی کرد. ردیف P0 بالا (طرح .NET10) سابقهٔ پژوهش است و گام مصوب نیست. جایگزین آن تصمیم‌های **L1-A** و **L1-R** در [walkthrough L1](../implementation/CHECKPOINT-02F-LEGACY-SQLCLIENT-FEASIBILITY_FA.md) هستند:
+
+- **L1-A**: تغییر بستهٔ canonical به گراف ریز با `System.Data.SqlClient 4.8.6`.
+- **L1-R**: پذیرش مکتوب ریسک Kestrel 2.1.25/CVE-2025-55315 و runtime EOL.
+
+بازبینی تازهٔ P1/P2:
+
+- hash دو script برابر جدول بالا است: `9099de3d…5b5f` و `9888862c…a396`.
+- guard صفر و SID/approval برابر `NULL` است.
+- GRANT/DENYها با شرط‌های `HAS_PERMS_BY_NAME` در `BazdidWriteConnectionFactory` هم‌خوان‌اند:
+  - Writer روی `BAZDIDCustomerLinks`: `SELECT, INSERT`؛
+  - Writer روی `BAZDIDRequestContexts`: `SELECT, INSERT, UPDATE`؛
+  - Writer روی `BAZDIDAuditLogs`: فقط `INSERT`؛
+  - Reader روی هر سه جدول BAZDID: DENY کامل و بدون GRANT مبدأ.
+- چون کد فعلی Reader را به کار نمی‌برد (`UnconfiguredSourceReadConnectionFactory`)، تعویق ساخت Reader تا تصویب mapping مبدأ، گزینه‌ای کم‌اختیارتر است. این کار نسخه و hash تازهٔ script می‌خواهد و فعلاً پیشنهاد است.
+
+چک‌لیست اجرایی در بخش ۱۵ walkthrough L1 آمده است. هیچ حساب، login، user، role، GRANT/DENY، ACL یا task ساخته یا اجرا نشد. ترتیب لازم: L1-A، آفلاین canonical، L1-R، P1، P2، P3، P4/P5؛ هرکدام مستقل. درصد 20.

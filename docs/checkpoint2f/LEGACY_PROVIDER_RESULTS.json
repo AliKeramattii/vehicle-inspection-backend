@@ -1,0 +1,2831 @@
+{
+  "date": "2026-11-03",
+  "authorization": "4f92b238-5727-4884-9d03-79394952f2a1",
+  "checkpoint": "2F-L1",
+  "canonicalBaseline": "dbdd6ee6ebead440af6d4dc58371f7ef407375d2",
+  "bindingFramework": "ASP.NET Core 2.1 / netcoreapp2.1",
+  "frameworkMigrationApproved": false,
+  "canonicalDependenciesChanged": false,
+  "runtimeGateChanged": false,
+  "canonical": {
+    "sdk": "2.1.818",
+    "runtime": "2.1.30",
+    "build": {
+      "warnings": 0,
+      "errors": 0
+    },
+    "testResults": [
+      {
+        "total": 109,
+        "executed": 109,
+        "passed": 109,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "total": 58,
+        "executed": 50,
+        "passed": 50,
+        "failed": 0,
+        "skipped": 8
+      }
+    ],
+    "auditVulnerabilities": [
+      {
+        "id": "Microsoft.AspNetCore.Identity",
+        "resolvedVersion": "2.1.6",
+        "vulnerabilities": [
+          {
+            "severity": "High",
+            "advisoryurl": "https://github.com/advisories/GHSA-25c8-p796-jg6r"
+          }
+        ]
+      },
+      {
+        "id": "Microsoft.AspNetCore.Server.Kestrel.Core",
+        "resolvedVersion": "2.1.25",
+        "vulnerabilities": [
+          {
+            "severity": "Critical",
+            "advisoryurl": "https://github.com/advisories/GHSA-5rrx-jjjq-q2r5"
+          }
+        ]
+      },
+      {
+        "id": "Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets",
+        "resolvedVersion": "2.1.3",
+        "vulnerabilities": [
+          {
+            "severity": "High",
+            "advisoryurl": "https://github.com/advisories/GHSA-vmch-3w2x-vhgq"
+          }
+        ]
+      },
+      {
+        "id": "Swashbuckle.AspNetCore.SwaggerUI",
+        "resolvedVersion": "4.0.1",
+        "vulnerabilities": [
+          {
+            "severity": "Moderate",
+            "advisoryurl": "https://github.com/advisories/GHSA-qrmm-w75w-3wpx"
+          }
+        ]
+      },
+      {
+        "id": "System.Data.SqlClient",
+        "resolvedVersion": "4.5.3",
+        "vulnerabilities": [
+          {
+            "severity": "Moderate",
+            "advisoryurl": "https://github.com/advisories/GHSA-8g2p-5pqh-5jmc"
+          },
+          {
+            "severity": "High",
+            "advisoryurl": "https://github.com/advisories/GHSA-98g6-xh36-x2p7"
+          }
+        ]
+      },
+      {
+        "id": "System.IdentityModel.Tokens.Jwt",
+        "resolvedVersion": "5.2.0",
+        "vulnerabilities": [
+          {
+            "severity": "Moderate",
+            "advisoryurl": "https://github.com/advisories/GHSA-59j7-ghrg-fj52"
+          }
+        ]
+      },
+      {
+        "id": "System.Net.Http",
+        "resolvedVersion": "4.3.0",
+        "vulnerabilities": [
+          {
+            "severity": "High",
+            "advisoryurl": "https://github.com/advisories/GHSA-7jgj-8wvc-jh57"
+          }
+        ]
+      },
+      {
+        "id": "System.Security.Cryptography.Xml",
+        "resolvedVersion": "4.5.0",
+        "vulnerabilities": [
+          {
+            "severity": "Moderate",
+            "advisoryurl": "https://github.com/advisories/GHSA-vh55-786g-wjwj"
+          }
+        ]
+      },
+      {
+        "id": "System.Text.RegularExpressions",
+        "resolvedVersion": "4.3.0",
+        "vulnerabilities": [
+          {
+            "severity": "High",
+            "advisoryurl": "https://github.com/advisories/GHSA-cmhx-cq75-c4mj"
+          }
+        ]
+      }
+    ]
+  },
+  "protectedFilesUnchanged": 68,
+  "historicalP0EvidenceUnchanged": true,
+  "userFilePreserved": true,
+  "experimentSdk": "2.1.818",
+  "auditToolSdk": "10.0.403",
+  "experimentTarget": "netcoreapp2.1",
+  "experimentRuntime": "2.1.30",
+  "runtimeIdentifier": "win-x64",
+  "warningPolicy": "NU1608/NU1605/NU1701 are errors; no warning suppression",
+  "versionIndices": [
+    {
+      "package": "system.data.sqlclient",
+      "url": "https://api.nuget.org/v3-flatcontainer/system.data.sqlclient/index.json",
+      "sha256": "572c9c0192e65b20757710852bda9100a13e5cfeb259ae47eda8fc162ba68b2a",
+      "stableVersionsWithin45": [
+        "4.5.0",
+        "4.5.1",
+        "4.5.3"
+      ],
+      "latestStable": "4.9.1"
+    },
+    {
+      "package": "microsoft.data.sqlclient",
+      "url": "https://api.nuget.org/v3-flatcontainer/microsoft.data.sqlclient/index.json",
+      "sha256": "a25b028db2ea79b78e1f945e3fde713a5152e6fbedefedd184b94a4e8ee78f9d",
+      "stableVersionsWithin45": [],
+      "latestStable": "7.1.1"
+    }
+  ],
+  "candidates": [
+    {
+      "id": "sds486",
+      "package": "System.Data.SqlClient",
+      "version": "4.8.6",
+      "restoreAccepted": true,
+      "restoreErrorCodes": [],
+      "securityAccepted": false,
+      "connectedTested": false,
+      "nativeLoadTested": false,
+      "deterministicRestore": {
+        "id": "sds486",
+        "exitCode": 0,
+        "lockSha256": "9a0789b8af889c1bf1250d69c35b80c07af38c8e2ff7b847660d08146b99d5ec",
+        "lockUnchanged": true
+      },
+      "build": {
+        "warnings": 0,
+        "errors": 0
+      },
+      "offlineProbe": {
+        "Passed": true,
+        "Checks": 10,
+        "Runtime": ".NET Core 4.6.30411.01",
+        "Is64BitProcess": true,
+        "AssemblyVersion": "4.6.1.6",
+        "FileVersion": "4.700.23.52603",
+        "ManagedFile": "System.Data.SqlClient.dll",
+        "ConnectionState": "Closed",
+        "ConnectionOpened": false,
+        "Encrypt": true,
+        "TrustServerCertificate": false,
+        "IntegratedSecurity": true,
+        "AsyncSignaturesBound": true,
+        "TransactionSignaturesChecked": true,
+        "NativeAssets": [
+          {
+            "File": "sni.dll",
+            "Machine": "0x8664",
+            "Length": 160040,
+            "Sha256": "68705c4ef9ab818f2956a78e05f3fefce501a1448793b073b46110beb49b47d6"
+          }
+        ],
+        "NativeLoadTested": false,
+        "SqlConnectionTested": false,
+        "managedAssemblyLoaded": true,
+        "coreRuntimeVersion": "2.1.30"
+      },
+      "vulnerabilities": [],
+      "flaggedPackageCount": 0,
+      "advisoryEdgeCount": 0,
+      "resolvedPackages": {
+        "Microsoft.NETCore.App": "2.1.30",
+        "Microsoft.NETCore.DotNetAppHost": "2.1.30",
+        "Microsoft.NETCore.DotNetHostPolicy": "2.1.30",
+        "Microsoft.NETCore.DotNetHostResolver": "2.1.30",
+        "Microsoft.NETCore.Platforms": "3.1.0",
+        "Microsoft.NETCore.Targets": "2.0.0",
+        "Microsoft.Win32.Registry": "4.7.0",
+        "NETStandard.Library": "2.0.3",
+        "Newtonsoft.Json": "13.0.4",
+        "System.Data.SqlClient": "4.8.6",
+        "System.Diagnostics.DiagnosticSource": "4.7.0",
+        "System.Runtime.CompilerServices.Unsafe": "4.7.0",
+        "System.Security.AccessControl": "4.7.0",
+        "System.Security.Principal.Windows": "4.7.0",
+        "System.Text.Encoding.CodePages": "4.7.0",
+        "runtime.native.System.Data.SqlClient.sni": "4.7.0",
+        "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+        "runtime.win-x64.Microsoft.NETCore.App": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetAppHost": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetHostPolicy": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetHostResolver": "2.1.30",
+        "runtime.win-x64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+        "runtime.win-x86.runtime.native.System.Data.SqlClient.sni": "4.4.0"
+      },
+      "selectedCompileAssets": [
+        "ref/netcoreapp2.1/System.Data.SqlClient.dll"
+      ],
+      "selectedRuntimeAssets": [
+        "runtimes/win/lib/netcoreapp2.1/System.Data.SqlClient.dll"
+      ],
+      "nativePackageVersions": {
+        "runtime.native.System.Data.SqlClient.sni": "4.7.0",
+        "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+        "runtime.win-x64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+        "runtime.win-x86.runtime.native.System.Data.SqlClient.sni": "4.4.0"
+      },
+      "nativePackageAssets": [
+        {
+          "package": "runtime.win-x64.runtime.native.System.Data.SqlClient.sni/4.4.0",
+          "asset": "runtimes/win-x64/native/sni.dll",
+          "machine": "0x8664",
+          "length": 160040,
+          "sha256": "68705c4ef9ab818f2956a78e05f3fefce501a1448793b073b46110beb49b47d6",
+          "source": "InstalledSdkFallback"
+        }
+      ],
+      "runtimeConfig": {
+        "runtimeOptions": {
+          "tfm": "netcoreapp2.1",
+          "framework": {
+            "name": "Microsoft.NETCore.App",
+            "version": "2.1.30"
+          }
+        }
+      },
+      "sdkFallbackFoldersUsed": true
+    },
+    {
+      "id": "sds491",
+      "package": "System.Data.SqlClient",
+      "version": "4.9.1",
+      "restoreAccepted": true,
+      "restoreErrorCodes": [],
+      "securityAccepted": false,
+      "connectedTested": false,
+      "nativeLoadTested": false,
+      "deterministicRestore": {
+        "id": "sds491",
+        "exitCode": 0,
+        "lockSha256": "5b67587373933524fe4dfa289cc4fe153dddcfd4fd66163bc43686d0565488ac",
+        "lockUnchanged": true
+      },
+      "build": {
+        "warnings": 9,
+        "errors": 0,
+        "warningReasons": [
+          "Package explicitly warns netcoreapp2.1 is unsupported",
+          "CS0618 obsolete SqlClient APIs"
+        ]
+      },
+      "offlineProbe": {
+        "Passed": false,
+        "Checks": 0,
+        "ManagedAssemblyLoaded": true,
+        "AssemblyVersion": "4.6.1.6",
+        "NativeAssets": [],
+        "ErrorType": "System.PlatformNotSupportedException",
+        "Error": "System.Data.SqlClient is not supported on this platform.",
+        "SqlConnectionTested": false,
+        "managedAssemblyLoaded": true,
+        "coreRuntimeVersion": "2.1.30"
+      },
+      "vulnerabilities": [],
+      "flaggedPackageCount": 0,
+      "advisoryEdgeCount": 0,
+      "resolvedPackages": {
+        "Microsoft.NETCore.App": "2.1.30",
+        "Microsoft.NETCore.DotNetAppHost": "2.1.30",
+        "Microsoft.NETCore.DotNetHostPolicy": "2.1.30",
+        "Microsoft.NETCore.DotNetHostResolver": "2.1.30",
+        "Microsoft.NETCore.Platforms": "2.1.14",
+        "Microsoft.NETCore.Targets": "2.0.0",
+        "NETStandard.Library": "2.0.3",
+        "Newtonsoft.Json": "13.0.4",
+        "System.Data.SqlClient": "4.9.1",
+        "runtime.win-x64.Microsoft.NETCore.App": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetAppHost": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetHostPolicy": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetHostResolver": "2.1.30"
+      },
+      "selectedCompileAssets": [
+        "lib/netstandard2.0/System.Data.SqlClient.dll"
+      ],
+      "selectedRuntimeAssets": [
+        "lib/netstandard2.0/System.Data.SqlClient.dll"
+      ],
+      "nativePackageVersions": {},
+      "nativePackageAssets": [],
+      "runtimeConfig": {
+        "runtimeOptions": {
+          "tfm": "netcoreapp2.1",
+          "framework": {
+            "name": "Microsoft.NETCore.App",
+            "version": "2.1.30"
+          }
+        }
+      },
+      "sdkFallbackFoldersUsed": true
+    },
+    {
+      "id": "mds114",
+      "package": "Microsoft.Data.SqlClient",
+      "version": "1.1.4",
+      "restoreAccepted": true,
+      "restoreErrorCodes": [],
+      "securityAccepted": false,
+      "connectedTested": false,
+      "nativeLoadTested": false,
+      "deterministicRestore": {
+        "id": "mds114",
+        "exitCode": 0,
+        "lockSha256": "4ad85498d931b7d0597c1caf4c376cfd3df8838279abdac56ecf115a9a3a6438",
+        "lockUnchanged": true
+      },
+      "build": {
+        "warnings": 0,
+        "errors": 0
+      },
+      "offlineProbe": {
+        "Passed": true,
+        "Checks": 10,
+        "Runtime": ".NET Core 4.6.30411.01",
+        "Is64BitProcess": true,
+        "AssemblyVersion": "1.14.21068.1",
+        "FileVersion": "1.14.21068.1",
+        "ManagedFile": "Microsoft.Data.SqlClient.dll",
+        "ConnectionState": "Closed",
+        "ConnectionOpened": false,
+        "Encrypt": true,
+        "TrustServerCertificate": false,
+        "IntegratedSecurity": true,
+        "AsyncSignaturesBound": true,
+        "TransactionSignaturesChecked": true,
+        "NativeAssets": [
+          {
+            "File": "sni.dll",
+            "Machine": "0x8664",
+            "Length": 160040,
+            "Sha256": "68705c4ef9ab818f2956a78e05f3fefce501a1448793b073b46110beb49b47d6"
+          }
+        ],
+        "NativeLoadTested": false,
+        "SqlConnectionTested": false,
+        "managedAssemblyLoaded": true,
+        "coreRuntimeVersion": "2.1.30"
+      },
+      "vulnerabilities": [
+        {
+          "id": "Microsoft.Data.SqlClient",
+          "resolvedVersion": "1.1.4",
+          "vulnerabilities": [
+            {
+              "severity": "High",
+              "advisoryurl": "https://github.com/advisories/GHSA-98g6-xh36-x2p7"
+            }
+          ]
+        },
+        {
+          "id": "Microsoft.IdentityModel.JsonWebTokens",
+          "resolvedVersion": "5.5.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-59j7-ghrg-fj52"
+            }
+          ]
+        },
+        {
+          "id": "System.IdentityModel.Tokens.Jwt",
+          "resolvedVersion": "5.5.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-59j7-ghrg-fj52"
+            }
+          ]
+        },
+        {
+          "id": "System.Text.RegularExpressions",
+          "resolvedVersion": "4.3.0",
+          "vulnerabilities": [
+            {
+              "severity": "High",
+              "advisoryurl": "https://github.com/advisories/GHSA-cmhx-cq75-c4mj"
+            }
+          ]
+        }
+      ],
+      "flaggedPackageCount": 4,
+      "advisoryEdgeCount": 4,
+      "resolvedPackages": {
+        "Microsoft.CSharp": "4.5.0",
+        "Microsoft.Data.SqlClient": "1.1.4",
+        "Microsoft.Identity.Client": "3.0.8",
+        "Microsoft.IdentityModel.JsonWebTokens": "5.5.0",
+        "Microsoft.IdentityModel.Logging": "5.5.0",
+        "Microsoft.IdentityModel.Protocols.OpenIdConnect": "5.5.0",
+        "Microsoft.IdentityModel.Protocols": "5.5.0",
+        "Microsoft.IdentityModel.Tokens": "5.5.0",
+        "Microsoft.NETCore.App": "2.1.30",
+        "Microsoft.NETCore.DotNetAppHost": "2.1.30",
+        "Microsoft.NETCore.DotNetHostPolicy": "2.1.30",
+        "Microsoft.NETCore.DotNetHostResolver": "2.1.30",
+        "Microsoft.NETCore.Platforms": "2.1.14",
+        "Microsoft.NETCore.Targets": "2.0.0",
+        "Microsoft.Win32.Registry": "4.5.0",
+        "NETStandard.Library": "2.0.3",
+        "Newtonsoft.Json": "13.0.4",
+        "System.Collections.Concurrent": "4.3.0",
+        "System.Collections.NonGeneric": "4.3.0",
+        "System.Collections.Specialized": "4.3.0",
+        "System.Collections": "4.3.0",
+        "System.ComponentModel.Primitives": "4.3.0",
+        "System.ComponentModel.TypeConverter": "4.3.0",
+        "System.ComponentModel": "4.3.0",
+        "System.Configuration.ConfigurationManager": "4.5.0",
+        "System.Diagnostics.Debug": "4.3.0",
+        "System.Diagnostics.Tools": "4.3.0",
+        "System.Diagnostics.Tracing": "4.3.0",
+        "System.Globalization.Extensions": "4.3.0",
+        "System.Globalization": "4.3.0",
+        "System.IO.FileSystem.Primitives": "4.3.0",
+        "System.IO.FileSystem": "4.3.0",
+        "System.IO": "4.3.0",
+        "System.IdentityModel.Tokens.Jwt": "5.5.0",
+        "System.Linq": "4.3.0",
+        "System.Net.NameResolution": "4.3.0",
+        "System.Net.Primitives": "4.3.0",
+        "System.Private.DataContractSerialization": "4.3.0",
+        "System.Reflection.Emit.ILGeneration": "4.3.0",
+        "System.Reflection.Emit.Lightweight": "4.3.0",
+        "System.Reflection.Emit": "4.3.0",
+        "System.Reflection.Extensions": "4.3.0",
+        "System.Reflection.Primitives": "4.3.0",
+        "System.Reflection.TypeExtensions": "4.3.0",
+        "System.Reflection": "4.3.0",
+        "System.Resources.ResourceManager": "4.3.0",
+        "System.Runtime.Caching": "4.5.0",
+        "System.Runtime.CompilerServices.Unsafe": "4.5.0",
+        "System.Runtime.Extensions": "4.3.0",
+        "System.Runtime.Handles": "4.3.0",
+        "System.Runtime.InteropServices": "4.3.0",
+        "System.Runtime.Serialization.Formatters": "4.3.0",
+        "System.Runtime.Serialization.Json": "4.3.0",
+        "System.Runtime.Serialization.Primitives": "4.3.0",
+        "System.Runtime": "4.3.0",
+        "System.Security.AccessControl": "4.5.0",
+        "System.Security.Cryptography.Cng": "4.5.0",
+        "System.Security.Cryptography.Primitives": "4.3.0",
+        "System.Security.Cryptography.ProtectedData": "4.5.0",
+        "System.Security.Permissions": "4.5.0",
+        "System.Security.Principal.Windows": "4.5.0",
+        "System.Security.SecureString": "4.3.0",
+        "System.Text.Encoding.CodePages": "4.5.0",
+        "System.Text.Encoding.Extensions": "4.3.0",
+        "System.Text.Encoding": "4.3.0",
+        "System.Text.RegularExpressions": "4.3.0",
+        "System.Threading.Tasks.Extensions": "4.3.0",
+        "System.Threading.Tasks": "4.3.0",
+        "System.Threading": "4.3.0",
+        "System.Xml.ReaderWriter": "4.3.0",
+        "System.Xml.XDocument": "4.3.0",
+        "System.Xml.XmlDocument": "4.3.0",
+        "System.Xml.XmlSerializer": "4.3.0",
+        "runtime.native.System.Data.SqlClient.sni": "4.4.0",
+        "runtime.native.System": "4.3.0",
+        "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+        "runtime.win-x64.Microsoft.NETCore.App": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetAppHost": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetHostPolicy": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetHostResolver": "2.1.30",
+        "runtime.win-x64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+        "runtime.win-x86.runtime.native.System.Data.SqlClient.sni": "4.4.0"
+      },
+      "selectedCompileAssets": [
+        "ref/netcoreapp2.1/Microsoft.Data.SqlClient.dll"
+      ],
+      "selectedRuntimeAssets": [
+        "runtimes/win/lib/netcoreapp2.1/Microsoft.Data.SqlClient.dll"
+      ],
+      "nativePackageVersions": {
+        "runtime.native.System.Data.SqlClient.sni": "4.4.0",
+        "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+        "runtime.win-x64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+        "runtime.win-x86.runtime.native.System.Data.SqlClient.sni": "4.4.0"
+      },
+      "nativePackageAssets": [
+        {
+          "package": "runtime.win-x64.runtime.native.System.Data.SqlClient.sni/4.4.0",
+          "asset": "runtimes/win-x64/native/sni.dll",
+          "machine": "0x8664",
+          "length": 160040,
+          "sha256": "68705c4ef9ab818f2956a78e05f3fefce501a1448793b073b46110beb49b47d6",
+          "source": "InstalledSdkFallback"
+        }
+      ],
+      "runtimeConfig": {
+        "runtimeOptions": {
+          "tfm": "netcoreapp2.1",
+          "framework": {
+            "name": "Microsoft.NETCore.App",
+            "version": "2.1.30"
+          }
+        }
+      },
+      "sdkFallbackFoldersUsed": true
+    },
+    {
+      "id": "mds217",
+      "package": "Microsoft.Data.SqlClient",
+      "version": "2.1.7",
+      "restoreAccepted": true,
+      "restoreErrorCodes": [],
+      "securityAccepted": false,
+      "connectedTested": false,
+      "nativeLoadTested": false,
+      "deterministicRestore": {
+        "id": "mds217",
+        "exitCode": 0,
+        "lockSha256": "6abe9f52f37811c3c6ffe527fa42ffc0d6407f6826b884ef6eed22c9d4dfebfb",
+        "lockUnchanged": true
+      },
+      "build": {
+        "warnings": 0,
+        "errors": 0
+      },
+      "offlineProbe": {
+        "Passed": true,
+        "Checks": 10,
+        "Runtime": ".NET Core 4.6.30411.01",
+        "Is64BitProcess": true,
+        "AssemblyVersion": "2.0.20168.4",
+        "FileVersion": "2.0.20168.4",
+        "ManagedFile": "Microsoft.Data.SqlClient.dll",
+        "ConnectionState": "Closed",
+        "ConnectionOpened": false,
+        "Encrypt": true,
+        "TrustServerCertificate": false,
+        "IntegratedSecurity": true,
+        "AsyncSignaturesBound": true,
+        "TransactionSignaturesChecked": true,
+        "NativeAssets": [
+          {
+            "File": "Microsoft.Data.SqlClient.SNI.dll",
+            "Machine": "0x8664",
+            "Length": 510856,
+            "Sha256": "ba3f38cbc739596841d66abcdace14bdf2a6969ef164194d1c6000f3949ed8e9"
+          }
+        ],
+        "NativeLoadTested": false,
+        "SqlConnectionTested": false,
+        "managedAssemblyLoaded": true,
+        "coreRuntimeVersion": "2.1.30"
+      },
+      "vulnerabilities": [
+        {
+          "id": "Microsoft.IdentityModel.JsonWebTokens",
+          "resolvedVersion": "6.8.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-59j7-ghrg-fj52"
+            }
+          ]
+        },
+        {
+          "id": "System.IdentityModel.Tokens.Jwt",
+          "resolvedVersion": "6.8.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-59j7-ghrg-fj52"
+            }
+          ]
+        }
+      ],
+      "flaggedPackageCount": 2,
+      "advisoryEdgeCount": 2,
+      "resolvedPackages": {
+        "Microsoft.CSharp": "4.5.0",
+        "Microsoft.Data.SqlClient.SNI.runtime": "2.1.1",
+        "Microsoft.Data.SqlClient": "2.1.7",
+        "Microsoft.Identity.Client": "4.21.1",
+        "Microsoft.IdentityModel.JsonWebTokens": "6.8.0",
+        "Microsoft.IdentityModel.Logging": "6.8.0",
+        "Microsoft.IdentityModel.Protocols.OpenIdConnect": "6.8.0",
+        "Microsoft.IdentityModel.Protocols": "6.8.0",
+        "Microsoft.IdentityModel.Tokens": "6.8.0",
+        "Microsoft.NETCore.App": "2.1.30",
+        "Microsoft.NETCore.DotNetAppHost": "2.1.30",
+        "Microsoft.NETCore.DotNetHostPolicy": "2.1.30",
+        "Microsoft.NETCore.DotNetHostResolver": "2.1.30",
+        "Microsoft.NETCore.Platforms": "3.1.0",
+        "Microsoft.NETCore.Targets": "2.0.0",
+        "Microsoft.Win32.Registry": "4.7.0",
+        "NETStandard.Library": "2.0.3",
+        "Newtonsoft.Json": "13.0.4",
+        "System.Configuration.ConfigurationManager": "4.7.0",
+        "System.Diagnostics.DiagnosticSource": "4.7.0",
+        "System.IdentityModel.Tokens.Jwt": "6.8.0",
+        "System.Runtime.Caching": "4.7.0",
+        "System.Runtime.CompilerServices.Unsafe": "4.7.0",
+        "System.Security.AccessControl": "4.7.0",
+        "System.Security.Cryptography.Cng": "4.5.0",
+        "System.Security.Cryptography.ProtectedData": "4.7.0",
+        "System.Security.Permissions": "4.7.0",
+        "System.Security.Principal.Windows": "4.7.0",
+        "System.Text.Encoding.CodePages": "4.7.0",
+        "runtime.win-x64.Microsoft.NETCore.App": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetAppHost": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetHostPolicy": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetHostResolver": "2.1.30"
+      },
+      "selectedCompileAssets": [
+        "ref/netcoreapp2.1/Microsoft.Data.SqlClient.dll"
+      ],
+      "selectedRuntimeAssets": [
+        "runtimes/win/lib/netcoreapp2.1/Microsoft.Data.SqlClient.dll"
+      ],
+      "nativePackageVersions": {
+        "Microsoft.Data.SqlClient.SNI.runtime": "2.1.1"
+      },
+      "nativePackageAssets": [
+        {
+          "package": "Microsoft.Data.SqlClient.SNI.runtime/2.1.1",
+          "asset": "runtimes/win-x64/native/Microsoft.Data.SqlClient.SNI.dll",
+          "machine": "0x8664",
+          "length": 510856,
+          "sha256": "ba3f38cbc739596841d66abcdace14bdf2a6969ef164194d1c6000f3949ed8e9",
+          "source": "IsolatedCache"
+        }
+      ],
+      "runtimeConfig": {
+        "runtimeOptions": {
+          "tfm": "netcoreapp2.1",
+          "framework": {
+            "name": "Microsoft.NETCore.App",
+            "version": "2.1.30"
+          }
+        }
+      },
+      "sdkFallbackFoldersUsed": true
+    },
+    {
+      "id": "mds317",
+      "package": "Microsoft.Data.SqlClient",
+      "version": "3.1.7",
+      "restoreAccepted": true,
+      "restoreErrorCodes": [],
+      "securityAccepted": false,
+      "connectedTested": false,
+      "nativeLoadTested": false,
+      "deterministicRestore": {
+        "id": "mds317",
+        "exitCode": 0,
+        "lockSha256": "851e431a0f80fd95469afafe70e3f87c40acef41b674f92f91850fcec791b037",
+        "lockUnchanged": true
+      },
+      "build": {
+        "warnings": 0,
+        "errors": 0
+      },
+      "offlineProbe": {
+        "Passed": true,
+        "Checks": 10,
+        "Runtime": ".NET Core 4.6.30411.01",
+        "Is64BitProcess": true,
+        "AssemblyVersion": "3.0.0.0",
+        "FileVersion": "3.17.24233.08",
+        "ManagedFile": "Microsoft.Data.SqlClient.dll",
+        "ConnectionState": "Closed",
+        "ConnectionOpened": false,
+        "Encrypt": true,
+        "TrustServerCertificate": false,
+        "IntegratedSecurity": true,
+        "AsyncSignaturesBound": true,
+        "TransactionSignaturesChecked": true,
+        "NativeAssets": [
+          {
+            "File": "Microsoft.Data.SqlClient.SNI.dll",
+            "Machine": "0x8664",
+            "Length": 471472,
+            "Sha256": "3e3abe6c6440eca4226ea240d684f46698537a4c262175a11dc0be39fb5fde05"
+          }
+        ],
+        "NativeLoadTested": false,
+        "SqlConnectionTested": false,
+        "managedAssemblyLoaded": true,
+        "coreRuntimeVersion": "2.1.30"
+      },
+      "vulnerabilities": [
+        {
+          "id": "Azure.Identity",
+          "resolvedVersion": "1.3.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-m5vv-6r4h-3vj9"
+            },
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-wvxc-855f-jvrv"
+            },
+            {
+              "severity": "High",
+              "advisoryurl": "https://github.com/advisories/GHSA-5mfx-4wcx-rv27"
+            }
+          ]
+        },
+        {
+          "id": "Microsoft.IdentityModel.JsonWebTokens",
+          "resolvedVersion": "6.8.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-59j7-ghrg-fj52"
+            }
+          ]
+        },
+        {
+          "id": "System.IdentityModel.Tokens.Jwt",
+          "resolvedVersion": "6.8.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-59j7-ghrg-fj52"
+            }
+          ]
+        }
+      ],
+      "flaggedPackageCount": 3,
+      "advisoryEdgeCount": 5,
+      "resolvedPackages": {
+        "Azure.Core": "1.6.0",
+        "Azure.Identity": "1.3.0",
+        "Microsoft.Bcl.AsyncInterfaces": "1.0.0",
+        "Microsoft.CSharp": "4.5.0",
+        "Microsoft.Data.SqlClient.SNI.runtime": "3.0.2",
+        "Microsoft.Data.SqlClient": "3.1.7",
+        "Microsoft.Identity.Client.Extensions.Msal": "2.16.5",
+        "Microsoft.Identity.Client": "4.22.0",
+        "Microsoft.IdentityModel.JsonWebTokens": "6.8.0",
+        "Microsoft.IdentityModel.Logging": "6.8.0",
+        "Microsoft.IdentityModel.Protocols.OpenIdConnect": "6.8.0",
+        "Microsoft.IdentityModel.Protocols": "6.8.0",
+        "Microsoft.IdentityModel.Tokens": "6.8.0",
+        "Microsoft.NETCore.App": "2.1.30",
+        "Microsoft.NETCore.DotNetAppHost": "2.1.30",
+        "Microsoft.NETCore.DotNetHostPolicy": "2.1.30",
+        "Microsoft.NETCore.DotNetHostResolver": "2.1.30",
+        "Microsoft.NETCore.Platforms": "3.1.0",
+        "Microsoft.NETCore.Targets": "2.0.0",
+        "Microsoft.Win32.Registry": "4.7.0",
+        "NETStandard.Library": "2.0.3",
+        "Newtonsoft.Json": "13.0.4",
+        "System.Buffers": "4.5.0",
+        "System.Configuration.ConfigurationManager": "4.7.0",
+        "System.Diagnostics.DiagnosticSource": "4.7.0",
+        "System.IdentityModel.Tokens.Jwt": "6.8.0",
+        "System.Memory": "4.5.3",
+        "System.Numerics.Vectors": "4.5.0",
+        "System.Runtime.Caching": "4.7.0",
+        "System.Runtime.CompilerServices.Unsafe": "4.7.0",
+        "System.Security.AccessControl": "4.7.0",
+        "System.Security.Cryptography.Cng": "4.5.0",
+        "System.Security.Cryptography.ProtectedData": "4.7.0",
+        "System.Security.Permissions": "4.7.0",
+        "System.Security.Principal.Windows": "4.7.0",
+        "System.Text.Encoding.CodePages": "4.7.0",
+        "System.Text.Encodings.Web": "4.7.2",
+        "System.Text.Json": "4.6.0",
+        "System.Threading.Tasks.Extensions": "4.5.2",
+        "runtime.win-x64.Microsoft.NETCore.App": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetAppHost": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetHostPolicy": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetHostResolver": "2.1.30"
+      },
+      "selectedCompileAssets": [
+        "ref/netcoreapp2.1/Microsoft.Data.SqlClient.dll"
+      ],
+      "selectedRuntimeAssets": [
+        "runtimes/win/lib/netcoreapp2.1/Microsoft.Data.SqlClient.dll"
+      ],
+      "nativePackageVersions": {
+        "Microsoft.Data.SqlClient.SNI.runtime": "3.0.2"
+      },
+      "nativePackageAssets": [
+        {
+          "package": "Microsoft.Data.SqlClient.SNI.runtime/3.0.2",
+          "asset": "runtimes/win-x64/native/Microsoft.Data.SqlClient.SNI.dll",
+          "machine": "0x8664",
+          "length": 471472,
+          "sha256": "3e3abe6c6440eca4226ea240d684f46698537a4c262175a11dc0be39fb5fde05",
+          "source": "IsolatedCache"
+        }
+      ],
+      "runtimeConfig": {
+        "runtimeOptions": {
+          "tfm": "netcoreapp2.1",
+          "framework": {
+            "name": "Microsoft.NETCore.App",
+            "version": "2.1.30"
+          }
+        }
+      },
+      "sdkFallbackFoldersUsed": true
+    },
+    {
+      "id": "mds406",
+      "package": "Microsoft.Data.SqlClient",
+      "version": "4.0.6",
+      "restoreAccepted": true,
+      "restoreErrorCodes": [],
+      "securityAccepted": false,
+      "connectedTested": false,
+      "nativeLoadTested": false,
+      "deterministicRestore": {
+        "id": "mds406",
+        "exitCode": 0,
+        "lockSha256": "d57ffd92605c46ca23e9728d7953d337a5cce1ada74ed656ae662040b7f7468b",
+        "lockUnchanged": true
+      },
+      "build": {
+        "warnings": 0,
+        "errors": 0
+      },
+      "offlineProbe": {
+        "Passed": true,
+        "Checks": 10,
+        "Runtime": ".NET Core 4.6.30411.01",
+        "Is64BitProcess": true,
+        "AssemblyVersion": "4.0.0.0",
+        "FileVersion": "4.06.24234.08",
+        "ManagedFile": "Microsoft.Data.SqlClient.dll",
+        "ConnectionState": "Closed",
+        "ConnectionOpened": false,
+        "Encrypt": true,
+        "TrustServerCertificate": false,
+        "IntegratedSecurity": true,
+        "AsyncSignaturesBound": true,
+        "TransactionSignaturesChecked": true,
+        "NativeAssets": [
+          {
+            "File": "Microsoft.Data.SqlClient.SNI.dll",
+            "Machine": "0x8664",
+            "Length": 470936,
+            "Sha256": "0466a0369666a301a1465a1e9feaebc53b56e8d051ec85e9f6bacd68d667bb93"
+          }
+        ],
+        "NativeLoadTested": false,
+        "SqlConnectionTested": false,
+        "managedAssemblyLoaded": true,
+        "coreRuntimeVersion": "2.1.30"
+      },
+      "vulnerabilities": [
+        {
+          "id": "Azure.Identity",
+          "resolvedVersion": "1.3.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-m5vv-6r4h-3vj9"
+            },
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-wvxc-855f-jvrv"
+            },
+            {
+              "severity": "High",
+              "advisoryurl": "https://github.com/advisories/GHSA-5mfx-4wcx-rv27"
+            }
+          ]
+        },
+        {
+          "id": "Microsoft.IdentityModel.JsonWebTokens",
+          "resolvedVersion": "6.8.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-59j7-ghrg-fj52"
+            }
+          ]
+        },
+        {
+          "id": "System.IdentityModel.Tokens.Jwt",
+          "resolvedVersion": "6.8.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-59j7-ghrg-fj52"
+            }
+          ]
+        }
+      ],
+      "flaggedPackageCount": 3,
+      "advisoryEdgeCount": 5,
+      "resolvedPackages": {
+        "Azure.Core": "1.6.0",
+        "Azure.Identity": "1.3.0",
+        "Microsoft.Bcl.AsyncInterfaces": "1.0.0",
+        "Microsoft.CSharp": "4.5.0",
+        "Microsoft.Data.SqlClient.SNI.runtime": "4.0.1",
+        "Microsoft.Data.SqlClient": "4.0.6",
+        "Microsoft.Identity.Client.Extensions.Msal": "2.16.5",
+        "Microsoft.Identity.Client": "4.22.0",
+        "Microsoft.IdentityModel.JsonWebTokens": "6.8.0",
+        "Microsoft.IdentityModel.Logging": "6.8.0",
+        "Microsoft.IdentityModel.Protocols.OpenIdConnect": "6.8.0",
+        "Microsoft.IdentityModel.Protocols": "6.8.0",
+        "Microsoft.IdentityModel.Tokens": "6.8.0",
+        "Microsoft.NETCore.App": "2.1.30",
+        "Microsoft.NETCore.DotNetAppHost": "2.1.30",
+        "Microsoft.NETCore.DotNetHostPolicy": "2.1.30",
+        "Microsoft.NETCore.DotNetHostResolver": "2.1.30",
+        "Microsoft.NETCore.Platforms": "5.0.0",
+        "Microsoft.NETCore.Targets": "2.0.0",
+        "Microsoft.Win32.Registry": "5.0.0",
+        "NETStandard.Library": "2.0.3",
+        "Newtonsoft.Json": "13.0.4",
+        "System.Buffers": "4.5.1",
+        "System.Configuration.ConfigurationManager": "5.0.0",
+        "System.Diagnostics.DiagnosticSource": "4.6.0",
+        "System.Globalization": "4.3.0",
+        "System.IO": "4.3.0",
+        "System.IdentityModel.Tokens.Jwt": "6.8.0",
+        "System.Memory": "4.5.3",
+        "System.Numerics.Vectors": "4.5.0",
+        "System.Reflection.Primitives": "4.3.0",
+        "System.Reflection": "4.3.0",
+        "System.Resources.ResourceManager": "4.3.0",
+        "System.Runtime.Caching": "5.0.0",
+        "System.Runtime.CompilerServices.Unsafe": "5.0.0",
+        "System.Runtime.Loader": "4.3.0",
+        "System.Runtime": "4.3.0",
+        "System.Security.AccessControl": "5.0.0",
+        "System.Security.Cryptography.Cng": "5.0.0",
+        "System.Security.Cryptography.ProtectedData": "5.0.0",
+        "System.Security.Permissions": "5.0.0",
+        "System.Security.Principal.Windows": "5.0.0",
+        "System.Text.Encoding.CodePages": "5.0.0",
+        "System.Text.Encoding": "4.3.0",
+        "System.Text.Encodings.Web": "4.7.2",
+        "System.Text.Json": "4.6.0",
+        "System.Threading.Tasks.Extensions": "4.5.2",
+        "System.Threading.Tasks": "4.3.0",
+        "runtime.win-x64.Microsoft.NETCore.App": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetAppHost": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetHostPolicy": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetHostResolver": "2.1.30"
+      },
+      "selectedCompileAssets": [
+        "ref/netstandard2.0/Microsoft.Data.SqlClient.dll"
+      ],
+      "selectedRuntimeAssets": [
+        "runtimes/win/lib/netstandard2.0/Microsoft.Data.SqlClient.dll"
+      ],
+      "nativePackageVersions": {
+        "Microsoft.Data.SqlClient.SNI.runtime": "4.0.1"
+      },
+      "nativePackageAssets": [
+        {
+          "package": "Microsoft.Data.SqlClient.SNI.runtime/4.0.1",
+          "asset": "runtimes/win-x64/native/Microsoft.Data.SqlClient.SNI.dll",
+          "machine": "0x8664",
+          "length": 470936,
+          "sha256": "0466a0369666a301a1465a1e9feaebc53b56e8d051ec85e9f6bacd68d667bb93",
+          "source": "IsolatedCache"
+        }
+      ],
+      "runtimeConfig": {
+        "runtimeOptions": {
+          "tfm": "netcoreapp2.1",
+          "framework": {
+            "name": "Microsoft.NETCore.App",
+            "version": "2.1.30"
+          }
+        }
+      },
+      "sdkFallbackFoldersUsed": true
+    },
+    {
+      "id": "meta_sds486",
+      "package": "System.Data.SqlClient",
+      "version": "4.8.6",
+      "metapackage": true,
+      "restoreAccepted": false,
+      "restoreErrorCodes": [
+        "NU1107",
+        "NU1608"
+      ],
+      "securityAccepted": false,
+      "connectedTested": false,
+      "nativeLoadTested": false
+    },
+    {
+      "id": "meta_sds491",
+      "package": "System.Data.SqlClient",
+      "version": "4.9.1",
+      "metapackage": true,
+      "restoreAccepted": false,
+      "restoreErrorCodes": [
+        "NU1608"
+      ],
+      "securityAccepted": false,
+      "connectedTested": false,
+      "nativeLoadTested": false
+    },
+    {
+      "id": "meta_mds217",
+      "package": "Microsoft.Data.SqlClient",
+      "version": "2.1.7",
+      "metapackage": true,
+      "restoreAccepted": false,
+      "restoreErrorCodes": [
+        "NU1107"
+      ],
+      "securityAccepted": false,
+      "connectedTested": false,
+      "nativeLoadTested": false
+    },
+    {
+      "id": "meta_mds114",
+      "package": "Microsoft.Data.SqlClient",
+      "version": "1.1.4",
+      "metapackage": true,
+      "restoreAccepted": true,
+      "restoreErrorCodes": [],
+      "securityAccepted": false,
+      "connectedTested": false,
+      "nativeLoadTested": false,
+      "deterministicRestore": {
+        "id": "meta_mds114",
+        "exitCode": 0,
+        "lockSha256": "1ad96ca74d904867f66fea3343749ae8412515d78c72e9e8cd0470b9f9b95868",
+        "lockUnchanged": true
+      },
+      "build": {
+        "warnings": 0,
+        "errors": 0
+      },
+      "offlineProbe": {
+        "Passed": true,
+        "Checks": 10,
+        "Runtime": ".NET Core 4.6.30411.01",
+        "Is64BitProcess": true,
+        "AssemblyVersion": "1.14.21068.1",
+        "FileVersion": "1.14.21068.1",
+        "ManagedFile": "Microsoft.Data.SqlClient.dll",
+        "ConnectionState": "Closed",
+        "ConnectionOpened": false,
+        "Encrypt": true,
+        "TrustServerCertificate": false,
+        "IntegratedSecurity": true,
+        "AsyncSignaturesBound": true,
+        "TransactionSignaturesChecked": true,
+        "NativeAssets": [],
+        "NativeLoadTested": false,
+        "SqlConnectionTested": false,
+        "managedAssemblyLoaded": true,
+        "coreRuntimeVersion": "2.1.30"
+      },
+      "vulnerabilities": [
+        {
+          "id": "Microsoft.Data.SqlClient",
+          "resolvedVersion": "1.1.4",
+          "vulnerabilities": [
+            {
+              "severity": "High",
+              "advisoryurl": "https://github.com/advisories/GHSA-98g6-xh36-x2p7"
+            }
+          ]
+        },
+        {
+          "id": "Microsoft.AspNetCore.Identity",
+          "resolvedVersion": "2.1.6",
+          "vulnerabilities": [
+            {
+              "severity": "High",
+              "advisoryurl": "https://github.com/advisories/GHSA-25c8-p796-jg6r"
+            }
+          ]
+        },
+        {
+          "id": "Microsoft.AspNetCore.Server.Kestrel.Core",
+          "resolvedVersion": "2.1.25",
+          "vulnerabilities": [
+            {
+              "severity": "Critical",
+              "advisoryurl": "https://github.com/advisories/GHSA-5rrx-jjjq-q2r5"
+            }
+          ]
+        },
+        {
+          "id": "Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets",
+          "resolvedVersion": "2.1.3",
+          "vulnerabilities": [
+            {
+              "severity": "High",
+              "advisoryurl": "https://github.com/advisories/GHSA-vmch-3w2x-vhgq"
+            }
+          ]
+        },
+        {
+          "id": "Microsoft.IdentityModel.JsonWebTokens",
+          "resolvedVersion": "5.5.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-59j7-ghrg-fj52"
+            }
+          ]
+        },
+        {
+          "id": "System.Data.SqlClient",
+          "resolvedVersion": "4.5.3",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-8g2p-5pqh-5jmc"
+            },
+            {
+              "severity": "High",
+              "advisoryurl": "https://github.com/advisories/GHSA-98g6-xh36-x2p7"
+            }
+          ]
+        },
+        {
+          "id": "System.IdentityModel.Tokens.Jwt",
+          "resolvedVersion": "5.5.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-59j7-ghrg-fj52"
+            }
+          ]
+        },
+        {
+          "id": "System.Security.Cryptography.Xml",
+          "resolvedVersion": "4.5.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-vh55-786g-wjwj"
+            }
+          ]
+        },
+        {
+          "id": "System.Text.RegularExpressions",
+          "resolvedVersion": "4.3.0",
+          "vulnerabilities": [
+            {
+              "severity": "High",
+              "advisoryurl": "https://github.com/advisories/GHSA-cmhx-cq75-c4mj"
+            }
+          ]
+        }
+      ],
+      "flaggedPackageCount": 9,
+      "advisoryEdgeCount": 10,
+      "resolvedPackages": {
+        "Microsoft.AspNet.WebApi.Client": "5.2.7",
+        "Microsoft.AspNetCore.Antiforgery": "2.1.1",
+        "Microsoft.AspNetCore.App": "2.1.30",
+        "Microsoft.AspNetCore.Authentication.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Authentication.Cookies": "2.1.16",
+        "Microsoft.AspNetCore.Authentication.Core": "2.1.1",
+        "Microsoft.AspNetCore.Authentication.Facebook": "2.1.2",
+        "Microsoft.AspNetCore.Authentication.Google": "2.1.8",
+        "Microsoft.AspNetCore.Authentication.JwtBearer": "2.1.30",
+        "Microsoft.AspNetCore.Authentication.MicrosoftAccount": "2.1.2",
+        "Microsoft.AspNetCore.Authentication.OAuth": "2.1.2",
+        "Microsoft.AspNetCore.Authentication.OpenIdConnect": "2.1.2",
+        "Microsoft.AspNetCore.Authentication.Twitter": "2.1.2",
+        "Microsoft.AspNetCore.Authentication.WsFederation": "2.1.2",
+        "Microsoft.AspNetCore.Authentication": "2.1.2",
+        "Microsoft.AspNetCore.Authorization.Policy": "2.1.2",
+        "Microsoft.AspNetCore.Authorization": "2.1.2",
+        "Microsoft.AspNetCore.Connections.Abstractions": "2.1.3",
+        "Microsoft.AspNetCore.CookiePolicy": "2.1.14",
+        "Microsoft.AspNetCore.Cors": "2.1.1",
+        "Microsoft.AspNetCore.Cryptography.Internal": "2.1.1",
+        "Microsoft.AspNetCore.Cryptography.KeyDerivation": "2.1.1",
+        "Microsoft.AspNetCore.DataProtection.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.DataProtection.Extensions": "2.1.1",
+        "Microsoft.AspNetCore.DataProtection": "2.1.1",
+        "Microsoft.AspNetCore.Diagnostics.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "2.1.1",
+        "Microsoft.AspNetCore.Diagnostics": "2.1.1",
+        "Microsoft.AspNetCore.HostFiltering": "2.1.1",
+        "Microsoft.AspNetCore.Hosting.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Hosting.Server.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Hosting": "2.1.1",
+        "Microsoft.AspNetCore.Html.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Http.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Http.Connections.Common": "1.0.4",
+        "Microsoft.AspNetCore.Http.Connections": "1.0.15",
+        "Microsoft.AspNetCore.Http.Extensions": "2.1.21",
+        "Microsoft.AspNetCore.Http.Features": "2.1.1",
+        "Microsoft.AspNetCore.Http": "2.1.22",
+        "Microsoft.AspNetCore.HttpOverrides": "2.1.1",
+        "Microsoft.AspNetCore.HttpsPolicy": "2.1.1",
+        "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "2.1.6",
+        "Microsoft.AspNetCore.Identity.UI": "2.1.11",
+        "Microsoft.AspNetCore.Identity": "2.1.6",
+        "Microsoft.AspNetCore.JsonPatch": "2.1.1",
+        "Microsoft.AspNetCore.Localization.Routing": "2.1.1",
+        "Microsoft.AspNetCore.Localization": "2.1.1",
+        "Microsoft.AspNetCore.MiddlewareAnalysis": "2.1.1",
+        "Microsoft.AspNetCore.Mvc.Abstractions": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.Analyzers": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.ApiExplorer": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.Core": "2.1.16",
+        "Microsoft.AspNetCore.Mvc.Cors": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.DataAnnotations": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.Formatters.Json": "2.1.18",
+        "Microsoft.AspNetCore.Mvc.Formatters.Xml": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.Localization": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.Razor.Extensions": "2.1.2",
+        "Microsoft.AspNetCore.Mvc.Razor.ViewCompilation": "2.1.1",
+        "Microsoft.AspNetCore.Mvc.Razor": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.RazorPages": "2.1.11",
+        "Microsoft.AspNetCore.Mvc.TagHelpers": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.ViewFeatures": "2.1.3",
+        "Microsoft.AspNetCore.Mvc": "2.1.3",
+        "Microsoft.AspNetCore.NodeServices": "2.1.1",
+        "Microsoft.AspNetCore.Owin": "2.1.1",
+        "Microsoft.AspNetCore.Razor.Design": "2.1.2",
+        "Microsoft.AspNetCore.Razor.Language": "2.1.2",
+        "Microsoft.AspNetCore.Razor.Runtime": "2.1.2",
+        "Microsoft.AspNetCore.Razor": "2.1.2",
+        "Microsoft.AspNetCore.ResponseCaching.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.ResponseCaching": "2.1.1",
+        "Microsoft.AspNetCore.ResponseCompression": "2.1.21",
+        "Microsoft.AspNetCore.Rewrite": "2.1.1",
+        "Microsoft.AspNetCore.Routing.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Routing": "2.1.1",
+        "Microsoft.AspNetCore.Server.HttpSys": "2.1.12",
+        "Microsoft.AspNetCore.Server.IISIntegration": "2.1.7",
+        "Microsoft.AspNetCore.Server.Kestrel.Core": "2.1.25",
+        "Microsoft.AspNetCore.Server.Kestrel.Https": "2.1.3",
+        "Microsoft.AspNetCore.Server.Kestrel.Transport.Abstractions": "2.1.3",
+        "Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets": "2.1.3",
+        "Microsoft.AspNetCore.Server.Kestrel": "2.1.3",
+        "Microsoft.AspNetCore.Session": "2.1.1",
+        "Microsoft.AspNetCore.SignalR.Common": "1.0.4",
+        "Microsoft.AspNetCore.SignalR.Core": "1.0.15",
+        "Microsoft.AspNetCore.SignalR.Protocols.Json": "1.0.4",
+        "Microsoft.AspNetCore.SignalR": "1.0.4",
+        "Microsoft.AspNetCore.SpaServices.Extensions": "2.1.1",
+        "Microsoft.AspNetCore.SpaServices": "2.1.13",
+        "Microsoft.AspNetCore.StaticFiles": "2.1.1",
+        "Microsoft.AspNetCore.WebSockets": "2.1.7",
+        "Microsoft.AspNetCore.WebUtilities": "2.1.1",
+        "Microsoft.AspNetCore": "2.1.7",
+        "Microsoft.CSharp": "4.5.0",
+        "Microsoft.CodeAnalysis.Analyzers": "1.1.0",
+        "Microsoft.CodeAnalysis.CSharp": "2.8.0",
+        "Microsoft.CodeAnalysis.Common": "2.8.0",
+        "Microsoft.CodeAnalysis.Razor": "2.1.2",
+        "Microsoft.Data.SqlClient": "1.1.4",
+        "Microsoft.DotNet.PlatformAbstractions": "2.1.0",
+        "Microsoft.EntityFrameworkCore.Abstractions": "2.1.14",
+        "Microsoft.EntityFrameworkCore.Analyzers": "2.1.14",
+        "Microsoft.EntityFrameworkCore.Design": "2.1.14",
+        "Microsoft.EntityFrameworkCore.InMemory": "2.1.14",
+        "Microsoft.EntityFrameworkCore.Relational": "2.1.14",
+        "Microsoft.EntityFrameworkCore.SqlServer": "2.1.14",
+        "Microsoft.EntityFrameworkCore.Tools": "2.1.14",
+        "Microsoft.EntityFrameworkCore": "2.1.14",
+        "Microsoft.Extensions.Caching.Abstractions": "2.1.23",
+        "Microsoft.Extensions.Caching.Memory": "2.1.23",
+        "Microsoft.Extensions.Caching.SqlServer": "2.1.2",
+        "Microsoft.Extensions.Configuration.Abstractions": "2.1.1",
+        "Microsoft.Extensions.Configuration.Binder": "2.1.10",
+        "Microsoft.Extensions.Configuration.CommandLine": "2.1.1",
+        "Microsoft.Extensions.Configuration.EnvironmentVariables": "2.1.1",
+        "Microsoft.Extensions.Configuration.FileExtensions": "2.1.1",
+        "Microsoft.Extensions.Configuration.Ini": "2.1.1",
+        "Microsoft.Extensions.Configuration.Json": "2.1.1",
+        "Microsoft.Extensions.Configuration.KeyPerFile": "2.1.1",
+        "Microsoft.Extensions.Configuration.UserSecrets": "2.1.1",
+        "Microsoft.Extensions.Configuration.Xml": "2.1.1",
+        "Microsoft.Extensions.Configuration": "2.1.1",
+        "Microsoft.Extensions.DependencyInjection.Abstractions": "2.1.1",
+        "Microsoft.Extensions.DependencyInjection": "2.1.1",
+        "Microsoft.Extensions.DependencyModel": "2.1.0",
+        "Microsoft.Extensions.DiagnosticAdapter": "2.1.0",
+        "Microsoft.Extensions.FileProviders.Abstractions": "2.1.1",
+        "Microsoft.Extensions.FileProviders.Composite": "2.1.1",
+        "Microsoft.Extensions.FileProviders.Embedded": "2.1.1",
+        "Microsoft.Extensions.FileProviders.Physical": "2.1.1",
+        "Microsoft.Extensions.FileSystemGlobbing": "2.1.1",
+        "Microsoft.Extensions.Hosting.Abstractions": "2.1.1",
+        "Microsoft.Extensions.Hosting": "2.1.1",
+        "Microsoft.Extensions.Http": "2.1.1",
+        "Microsoft.Extensions.Identity.Core": "2.1.6",
+        "Microsoft.Extensions.Identity.Stores": "2.1.6",
+        "Microsoft.Extensions.Localization.Abstractions": "2.1.1",
+        "Microsoft.Extensions.Localization": "2.1.1",
+        "Microsoft.Extensions.Logging.Abstractions": "2.1.1",
+        "Microsoft.Extensions.Logging.Configuration": "2.1.1",
+        "Microsoft.Extensions.Logging.Console": "2.1.1",
+        "Microsoft.Extensions.Logging.Debug": "2.1.1",
+        "Microsoft.Extensions.Logging.EventSource": "2.1.1",
+        "Microsoft.Extensions.Logging.TraceSource": "2.1.1",
+        "Microsoft.Extensions.Logging": "2.1.1",
+        "Microsoft.Extensions.ObjectPool": "2.1.6",
+        "Microsoft.Extensions.Options.ConfigurationExtensions": "2.1.1",
+        "Microsoft.Extensions.Options": "2.1.1",
+        "Microsoft.Extensions.Primitives": "2.1.6",
+        "Microsoft.Extensions.WebEncoders": "2.1.1",
+        "Microsoft.Identity.Client": "3.0.8",
+        "Microsoft.IdentityModel.JsonWebTokens": "5.5.0",
+        "Microsoft.IdentityModel.Logging": "5.5.0",
+        "Microsoft.IdentityModel.Protocols.OpenIdConnect": "5.5.0",
+        "Microsoft.IdentityModel.Protocols.WsFederation": "5.2.0",
+        "Microsoft.IdentityModel.Protocols": "5.5.0",
+        "Microsoft.IdentityModel.Tokens.Saml": "5.2.0",
+        "Microsoft.IdentityModel.Tokens": "5.5.0",
+        "Microsoft.IdentityModel.Xml": "5.2.0",
+        "Microsoft.NETCore.App": "2.1.30",
+        "Microsoft.NETCore.DotNetAppHost": "2.1.30",
+        "Microsoft.NETCore.DotNetHostPolicy": "2.1.30",
+        "Microsoft.NETCore.DotNetHostResolver": "2.1.30",
+        "Microsoft.NETCore.Platforms": "2.1.14",
+        "Microsoft.NETCore.Targets": "2.0.0",
+        "Microsoft.Net.Http.Headers": "2.1.14",
+        "Microsoft.Win32.Registry": "4.5.0",
+        "NETStandard.Library": "2.0.3",
+        "Newtonsoft.Json.Bson": "1.0.1",
+        "Newtonsoft.Json": "13.0.4",
+        "Remotion.Linq": "2.2.0",
+        "System.AppContext": "4.3.0",
+        "System.Buffers": "4.5.1",
+        "System.Collections.Concurrent": "4.3.0",
+        "System.Collections.Immutable": "1.5.0",
+        "System.Collections.NonGeneric": "4.3.0",
+        "System.Collections.Specialized": "4.3.0",
+        "System.Collections": "4.3.0",
+        "System.ComponentModel.Annotations": "4.5.0",
+        "System.ComponentModel.Primitives": "4.3.0",
+        "System.ComponentModel.TypeConverter": "4.3.0",
+        "System.ComponentModel": "4.3.0",
+        "System.Configuration.ConfigurationManager": "4.5.0",
+        "System.Console": "4.3.0",
+        "System.Data.SqlClient": "4.5.3",
+        "System.Diagnostics.Debug": "4.3.0",
+        "System.Diagnostics.DiagnosticSource": "4.5.1",
+        "System.Diagnostics.FileVersionInfo": "4.3.0",
+        "System.Diagnostics.StackTrace": "4.3.0",
+        "System.Diagnostics.Tools": "4.3.0",
+        "System.Diagnostics.Tracing": "4.3.0",
+        "System.Dynamic.Runtime": "4.3.0",
+        "System.Globalization.Calendars": "4.3.0",
+        "System.Globalization.Extensions": "4.3.0",
+        "System.Globalization": "4.3.0",
+        "System.IO.Compression": "4.3.0",
+        "System.IO.FileSystem.Primitives": "4.3.0",
+        "System.IO.FileSystem": "4.3.0",
+        "System.IO.Pipelines": "4.5.4",
+        "System.IO": "4.3.0",
+        "System.IdentityModel.Tokens.Jwt": "5.5.0",
+        "System.Interactive.Async": "3.1.1",
+        "System.Linq.Expressions": "4.3.0",
+        "System.Linq.Queryable": "4.0.1",
+        "System.Linq": "4.3.0",
+        "System.Memory": "4.5.4",
+        "System.Net.NameResolution": "4.3.0",
+        "System.Net.Primitives": "4.3.0",
+        "System.Net.WebSockets.WebSocketProtocol": "4.5.3",
+        "System.Numerics.Vectors": "4.5.0",
+        "System.ObjectModel": "4.3.0",
+        "System.Private.DataContractSerialization": "4.3.0",
+        "System.Reflection.Emit.ILGeneration": "4.3.0",
+        "System.Reflection.Emit.Lightweight": "4.3.0",
+        "System.Reflection.Emit": "4.3.0",
+        "System.Reflection.Extensions": "4.3.0",
+        "System.Reflection.Metadata": "1.6.0",
+        "System.Reflection.Primitives": "4.3.0",
+        "System.Reflection.TypeExtensions": "4.3.0",
+        "System.Reflection": "4.3.0",
+        "System.Resources.ResourceManager": "4.3.0",
+        "System.Runtime.Caching": "4.5.0",
+        "System.Runtime.CompilerServices.Unsafe": "4.5.3",
+        "System.Runtime.Extensions": "4.3.0",
+        "System.Runtime.Handles": "4.3.0",
+        "System.Runtime.InteropServices.RuntimeInformation": "4.0.0",
+        "System.Runtime.InteropServices": "4.3.0",
+        "System.Runtime.Numerics": "4.3.0",
+        "System.Runtime.Serialization.Formatters": "4.3.0",
+        "System.Runtime.Serialization.Json": "4.3.0",
+        "System.Runtime.Serialization.Primitives": "4.3.0",
+        "System.Runtime": "4.3.0",
+        "System.Security.AccessControl": "4.5.0",
+        "System.Security.Cryptography.Algorithms": "4.3.0",
+        "System.Security.Cryptography.Cng": "4.5.2",
+        "System.Security.Cryptography.Csp": "4.3.0",
+        "System.Security.Cryptography.Encoding": "4.3.0",
+        "System.Security.Cryptography.OpenSsl": "4.3.0",
+        "System.Security.Cryptography.Pkcs": "4.5.2",
+        "System.Security.Cryptography.Primitives": "4.3.0",
+        "System.Security.Cryptography.ProtectedData": "4.5.0",
+        "System.Security.Cryptography.X509Certificates": "4.3.0",
+        "System.Security.Cryptography.Xml": "4.5.0",
+        "System.Security.Permissions": "4.5.0",
+        "System.Security.Principal.Windows": "4.5.1",
+        "System.Security.SecureString": "4.3.0",
+        "System.Text.Encoding.CodePages": "4.5.1",
+        "System.Text.Encoding.Extensions": "4.3.0",
+        "System.Text.Encoding": "4.3.0",
+        "System.Text.Encodings.Web": "4.5.1",
+        "System.Text.RegularExpressions": "4.3.0",
+        "System.Threading.Channels": "4.5.0",
+        "System.Threading.Tasks.Extensions": "4.5.4",
+        "System.Threading.Tasks.Parallel": "4.3.0",
+        "System.Threading.Tasks": "4.3.0",
+        "System.Threading.Thread": "4.3.0",
+        "System.Threading": "4.3.0",
+        "System.ValueTuple": "4.3.0",
+        "System.Xml.ReaderWriter": "4.3.0",
+        "System.Xml.XDocument": "4.3.0",
+        "System.Xml.XPath.XDocument": "4.3.0",
+        "System.Xml.XPath": "4.3.0",
+        "System.Xml.XmlDocument": "4.3.0",
+        "System.Xml.XmlSerializer": "4.3.0",
+        "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.fedora.23-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.native.System.Data.SqlClient.sni": "4.4.0",
+        "runtime.native.System.IO.Compression": "4.3.0",
+        "runtime.native.System.Net.Http": "4.3.0",
+        "runtime.native.System.Security.Cryptography.Apple": "4.3.0",
+        "runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.native.System": "4.3.0",
+        "runtime.opensuse.13.2-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.opensuse.42.1-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.Apple": "4.3.0",
+        "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.rhel.7-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+        "runtime.win-x64.Microsoft.NETCore.App": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetAppHost": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetHostPolicy": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetHostResolver": "2.1.30",
+        "runtime.win-x64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+        "runtime.win-x86.runtime.native.System.Data.SqlClient.sni": "4.4.0"
+      },
+      "selectedCompileAssets": [
+        "ref/netcoreapp2.1/Microsoft.Data.SqlClient.dll"
+      ],
+      "selectedRuntimeAssets": [
+        "runtimes/win/lib/netcoreapp2.1/Microsoft.Data.SqlClient.dll"
+      ],
+      "nativePackageVersions": {
+        "runtime.native.System.Data.SqlClient.sni": "4.4.0",
+        "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+        "runtime.win-x64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+        "runtime.win-x86.runtime.native.System.Data.SqlClient.sni": "4.4.0"
+      },
+      "nativePackageAssets": [
+        {
+          "package": "runtime.win-x64.runtime.native.System.Data.SqlClient.sni/4.4.0",
+          "asset": "runtimes/win-x64/native/sni.dll",
+          "machine": "0x8664",
+          "length": 160040,
+          "sha256": "68705c4ef9ab818f2956a78e05f3fefce501a1448793b073b46110beb49b47d6",
+          "source": "InstalledSdkFallback"
+        }
+      ],
+      "runtimeConfig": {
+        "runtimeOptions": {
+          "tfm": "netcoreapp2.1",
+          "framework": {
+            "name": "Microsoft.AspNetCore.App",
+            "version": "2.1.30"
+          },
+          "configProperties": {
+            "System.GC.Server": true
+          }
+        }
+      },
+      "sdkFallbackFoldersUsed": true
+    },
+    {
+      "id": "granular_sds486",
+      "package": "System.Data.SqlClient",
+      "version": "4.8.6",
+      "granular": true,
+      "hostResult": {
+        "Passed": true,
+        "Scenarios": 14,
+        "PassedScenarios": [
+          "/API/BAZDID/health/live",
+          "/health/live",
+          "/API/BAZDID/API/BAZDID/health/live",
+          "Swagger JSON",
+          "Swagger UI",
+          "Swagger query rejection",
+          "CORS https://frontend.example.invalid",
+          "CORS https://unknown.example.invalid",
+          "safe exception",
+          "config Production L1:SqlEnabled",
+          "config Testing L1:SqlEnabled",
+          "config Testing L1:Base",
+          "simulated IIS /API/BAZDID",
+          "simulated IIS /wrong"
+        ],
+        "SqlConnectionTested": false,
+        "IisTested": false
+      },
+      "httpSmoke": {
+        "Passed": true,
+        "Cases": [
+          {
+            "NoStore": true,
+            "Path": "/API/BAZDID/health/live",
+            "CorrelationValid": true,
+            "Status": 200,
+            "JsonValid": true
+          },
+          {
+            "NoStore": true,
+            "Path": "/health/live",
+            "CorrelationValid": true,
+            "Status": 404,
+            "JsonValid": true
+          },
+          {
+            "NoStore": true,
+            "Path": "/API/BAZDID/API/BAZDID/health/live",
+            "CorrelationValid": true,
+            "Status": 404,
+            "JsonValid": true
+          }
+        ],
+        "IisTested": false,
+        "SqlConnectionTested": false,
+        "Candidate": "granular_sds486",
+        "Transport": "Kestrel loopback HTTP"
+      },
+      "baselinePins": [
+        {
+          "package": "Microsoft.AspNetCore.Authorization",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.2"
+        },
+        {
+          "package": "Microsoft.AspNetCore.Authorization.Policy",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.2"
+        },
+        {
+          "package": "Microsoft.AspNetCore.Http",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.22"
+        },
+        {
+          "package": "Microsoft.AspNetCore.Http.Extensions",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.21"
+        },
+        {
+          "package": "Microsoft.AspNetCore.Mvc.Formatters.Json",
+          "initialVersion": "2.1.3",
+          "pinnedVersion": "2.1.18"
+        },
+        {
+          "package": "Microsoft.AspNetCore.Mvc.Razor.Extensions",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.2"
+        },
+        {
+          "package": "Microsoft.AspNetCore.Mvc.RazorPages",
+          "initialVersion": "2.1.3",
+          "pinnedVersion": "2.1.11"
+        },
+        {
+          "package": "Microsoft.AspNetCore.Razor",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.2"
+        },
+        {
+          "package": "Microsoft.AspNetCore.Razor.Design",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.2"
+        },
+        {
+          "package": "Microsoft.AspNetCore.Razor.Language",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.2"
+        },
+        {
+          "package": "Microsoft.AspNetCore.Razor.Runtime",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.2"
+        },
+        {
+          "package": "Microsoft.AspNetCore.StaticFiles",
+          "initialVersion": "2.0.0",
+          "pinnedVersion": "2.1.1"
+        },
+        {
+          "package": "Microsoft.Extensions.Caching.Abstractions",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.23"
+        },
+        {
+          "package": "Microsoft.Extensions.Caching.Memory",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.23"
+        },
+        {
+          "package": "Microsoft.Extensions.FileProviders.Embedded",
+          "initialVersion": "2.0.0",
+          "pinnedVersion": "2.1.1"
+        },
+        {
+          "package": "Microsoft.Extensions.ObjectPool",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.6"
+        },
+        {
+          "package": "Microsoft.Extensions.Primitives",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.6"
+        },
+        {
+          "package": "Microsoft.Net.Http.Headers",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.14"
+        },
+        {
+          "package": "System.Collections.Immutable",
+          "initialVersion": "1.3.1",
+          "pinnedVersion": "1.5.0"
+        },
+        {
+          "package": "System.IO.Pipelines",
+          "initialVersion": "4.5.3",
+          "pinnedVersion": "4.5.4"
+        },
+        {
+          "package": "System.Runtime.InteropServices.RuntimeInformation",
+          "initialVersion": "4.0.0",
+          "pinnedVersion": "4.3.0"
+        },
+        {
+          "package": "System.Security.Cryptography.Pkcs",
+          "initialVersion": "4.5.0",
+          "pinnedVersion": "4.5.2"
+        },
+        {
+          "package": "System.Text.Encodings.Web",
+          "initialVersion": "4.5.0",
+          "pinnedVersion": "4.5.1"
+        }
+      ],
+      "initialVulnerabilities": [
+        {
+          "id": "Microsoft.AspNetCore.Server.Kestrel.Core",
+          "resolvedVersion": "2.1.25",
+          "vulnerabilities": [
+            {
+              "severity": "Critical",
+              "advisoryurl": "https://github.com/advisories/GHSA-5rrx-jjjq-q2r5"
+            }
+          ]
+        },
+        {
+          "id": "Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets",
+          "resolvedVersion": "2.1.3",
+          "vulnerabilities": [
+            {
+              "severity": "High",
+              "advisoryurl": "https://github.com/advisories/GHSA-vmch-3w2x-vhgq"
+            }
+          ]
+        },
+        {
+          "id": "Swashbuckle.AspNetCore.SwaggerUI",
+          "resolvedVersion": "4.0.1",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-qrmm-w75w-3wpx"
+            }
+          ]
+        },
+        {
+          "id": "System.Security.Cryptography.Xml",
+          "resolvedVersion": "4.5.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-vh55-786g-wjwj"
+            }
+          ]
+        },
+        {
+          "id": "System.Text.Encodings.Web",
+          "resolvedVersion": "4.5.0",
+          "vulnerabilities": [
+            {
+              "severity": "Critical",
+              "advisoryurl": "https://github.com/advisories/GHSA-ghhp-997w-qr28"
+            }
+          ]
+        },
+        {
+          "id": "System.Text.RegularExpressions",
+          "resolvedVersion": "4.3.0",
+          "vulnerabilities": [
+            {
+              "severity": "High",
+              "advisoryurl": "https://github.com/advisories/GHSA-cmhx-cq75-c4mj"
+            }
+          ]
+        }
+      ],
+      "restoreAccepted": true,
+      "restoreErrorCodes": [],
+      "securityAccepted": false,
+      "connectedTested": false,
+      "nativeLoadTested": false,
+      "deterministicRestore": {
+        "id": "granular_sds486",
+        "exitCode": 0,
+        "lockSha256": "02138dfe1611d332b58418b2e7346d5a737412c5544cd2d3daea19df7df7540f",
+        "lockUnchanged": true
+      },
+      "build": {
+        "warnings": 0,
+        "errors": 0
+      },
+      "offlineProbe": {
+        "Passed": true,
+        "Checks": 10,
+        "Runtime": ".NET Core 4.6.30411.01",
+        "Is64BitProcess": true,
+        "AssemblyVersion": "4.6.1.6",
+        "FileVersion": "4.700.23.52603",
+        "ManagedFile": "System.Data.SqlClient.dll",
+        "ConnectionState": "Closed",
+        "ConnectionOpened": false,
+        "Encrypt": true,
+        "TrustServerCertificate": false,
+        "IntegratedSecurity": true,
+        "AsyncSignaturesBound": true,
+        "TransactionSignaturesChecked": true,
+        "NativeAssets": [
+          {
+            "File": "sni.dll",
+            "Machine": "0x8664",
+            "Length": 160040,
+            "Sha256": "68705c4ef9ab818f2956a78e05f3fefce501a1448793b073b46110beb49b47d6"
+          }
+        ],
+        "NativeLoadTested": false,
+        "SqlConnectionTested": false,
+        "managedAssemblyLoaded": true,
+        "coreRuntimeVersion": "2.1.30"
+      },
+      "vulnerabilities": [
+        {
+          "id": "Microsoft.AspNetCore.Server.Kestrel.Core",
+          "resolvedVersion": "2.1.25",
+          "vulnerabilities": [
+            {
+              "severity": "Critical",
+              "advisoryurl": "https://github.com/advisories/GHSA-5rrx-jjjq-q2r5"
+            }
+          ]
+        },
+        {
+          "id": "Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets",
+          "resolvedVersion": "2.1.3",
+          "vulnerabilities": [
+            {
+              "severity": "High",
+              "advisoryurl": "https://github.com/advisories/GHSA-vmch-3w2x-vhgq"
+            }
+          ]
+        },
+        {
+          "id": "Swashbuckle.AspNetCore.SwaggerUI",
+          "resolvedVersion": "4.0.1",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-qrmm-w75w-3wpx"
+            }
+          ]
+        },
+        {
+          "id": "System.Security.Cryptography.Xml",
+          "resolvedVersion": "4.5.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-vh55-786g-wjwj"
+            }
+          ]
+        },
+        {
+          "id": "System.Text.RegularExpressions",
+          "resolvedVersion": "4.3.0",
+          "vulnerabilities": [
+            {
+              "severity": "High",
+              "advisoryurl": "https://github.com/advisories/GHSA-cmhx-cq75-c4mj"
+            }
+          ]
+        }
+      ],
+      "flaggedPackageCount": 5,
+      "advisoryEdgeCount": 5,
+      "resolvedPackages": {
+        "Microsoft.AspNetCore.Antiforgery": "2.1.1",
+        "Microsoft.AspNetCore.Authentication.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Authentication.Core": "2.1.1",
+        "Microsoft.AspNetCore.Authorization.Policy": "2.1.2",
+        "Microsoft.AspNetCore.Authorization": "2.1.2",
+        "Microsoft.AspNetCore.Connections.Abstractions": "2.1.3",
+        "Microsoft.AspNetCore.Cors": "2.1.1",
+        "Microsoft.AspNetCore.Cryptography.Internal": "2.1.1",
+        "Microsoft.AspNetCore.DataProtection.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.DataProtection": "2.1.1",
+        "Microsoft.AspNetCore.Diagnostics.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Diagnostics": "2.1.1",
+        "Microsoft.AspNetCore.HostFiltering": "2.1.1",
+        "Microsoft.AspNetCore.Hosting.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Hosting.Server.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Hosting": "2.1.1",
+        "Microsoft.AspNetCore.Html.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Http.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Http.Extensions": "2.1.21",
+        "Microsoft.AspNetCore.Http.Features": "2.1.1",
+        "Microsoft.AspNetCore.Http": "2.1.22",
+        "Microsoft.AspNetCore.HttpOverrides": "2.1.1",
+        "Microsoft.AspNetCore.HttpsPolicy": "2.1.1",
+        "Microsoft.AspNetCore.JsonPatch": "2.1.1",
+        "Microsoft.AspNetCore.Localization": "2.1.1",
+        "Microsoft.AspNetCore.Mvc.Abstractions": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.ApiExplorer": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.Core": "2.1.16",
+        "Microsoft.AspNetCore.Mvc.Cors": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.DataAnnotations": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.Formatters.Json": "2.1.18",
+        "Microsoft.AspNetCore.Mvc.Localization": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.Razor.Extensions": "2.1.2",
+        "Microsoft.AspNetCore.Mvc.Razor": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.RazorPages": "2.1.11",
+        "Microsoft.AspNetCore.Mvc.TagHelpers": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.ViewFeatures": "2.1.3",
+        "Microsoft.AspNetCore.Mvc": "2.1.3",
+        "Microsoft.AspNetCore.Razor.Design": "2.1.2",
+        "Microsoft.AspNetCore.Razor.Language": "2.1.2",
+        "Microsoft.AspNetCore.Razor.Runtime": "2.1.2",
+        "Microsoft.AspNetCore.Razor": "2.1.2",
+        "Microsoft.AspNetCore.ResponseCaching.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Routing.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Routing": "2.1.1",
+        "Microsoft.AspNetCore.Server.IISIntegration": "2.1.7",
+        "Microsoft.AspNetCore.Server.Kestrel.Core": "2.1.25",
+        "Microsoft.AspNetCore.Server.Kestrel.Https": "2.1.3",
+        "Microsoft.AspNetCore.Server.Kestrel.Transport.Abstractions": "2.1.3",
+        "Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets": "2.1.3",
+        "Microsoft.AspNetCore.Server.Kestrel": "2.1.3",
+        "Microsoft.AspNetCore.StaticFiles": "2.1.1",
+        "Microsoft.AspNetCore.TestHost": "2.1.1",
+        "Microsoft.AspNetCore.WebUtilities": "2.1.1",
+        "Microsoft.AspNetCore": "2.1.7",
+        "Microsoft.CSharp": "4.5.0",
+        "Microsoft.CodeAnalysis.Analyzers": "1.1.0",
+        "Microsoft.CodeAnalysis.CSharp": "2.8.0",
+        "Microsoft.CodeAnalysis.Common": "2.8.0",
+        "Microsoft.CodeAnalysis.Razor": "2.1.2",
+        "Microsoft.DotNet.PlatformAbstractions": "2.1.0",
+        "Microsoft.Extensions.Caching.Abstractions": "2.1.23",
+        "Microsoft.Extensions.Caching.Memory": "2.1.23",
+        "Microsoft.Extensions.Configuration.Abstractions": "2.1.1",
+        "Microsoft.Extensions.Configuration.Binder": "2.1.10",
+        "Microsoft.Extensions.Configuration.CommandLine": "2.1.1",
+        "Microsoft.Extensions.Configuration.EnvironmentVariables": "2.1.1",
+        "Microsoft.Extensions.Configuration.FileExtensions": "2.1.1",
+        "Microsoft.Extensions.Configuration.Json": "2.1.1",
+        "Microsoft.Extensions.Configuration.UserSecrets": "2.1.1",
+        "Microsoft.Extensions.Configuration": "2.1.1",
+        "Microsoft.Extensions.DependencyInjection.Abstractions": "2.1.1",
+        "Microsoft.Extensions.DependencyInjection": "2.1.1",
+        "Microsoft.Extensions.DependencyModel": "2.1.0",
+        "Microsoft.Extensions.FileProviders.Abstractions": "2.1.1",
+        "Microsoft.Extensions.FileProviders.Composite": "2.1.1",
+        "Microsoft.Extensions.FileProviders.Embedded": "2.1.1",
+        "Microsoft.Extensions.FileProviders.Physical": "2.1.1",
+        "Microsoft.Extensions.FileSystemGlobbing": "2.1.1",
+        "Microsoft.Extensions.Hosting.Abstractions": "2.1.1",
+        "Microsoft.Extensions.Localization.Abstractions": "2.1.1",
+        "Microsoft.Extensions.Localization": "2.1.1",
+        "Microsoft.Extensions.Logging.Abstractions": "2.1.1",
+        "Microsoft.Extensions.Logging.Configuration": "2.1.1",
+        "Microsoft.Extensions.Logging.Console": "2.1.1",
+        "Microsoft.Extensions.Logging.Debug": "2.1.1",
+        "Microsoft.Extensions.Logging": "2.1.1",
+        "Microsoft.Extensions.ObjectPool": "2.1.6",
+        "Microsoft.Extensions.Options.ConfigurationExtensions": "2.1.1",
+        "Microsoft.Extensions.Options": "2.1.1",
+        "Microsoft.Extensions.Primitives": "2.1.6",
+        "Microsoft.Extensions.WebEncoders": "2.1.1",
+        "Microsoft.NETCore.App": "2.1.30",
+        "Microsoft.NETCore.DotNetAppHost": "2.1.30",
+        "Microsoft.NETCore.DotNetHostPolicy": "2.1.30",
+        "Microsoft.NETCore.DotNetHostResolver": "2.1.30",
+        "Microsoft.NETCore.Platforms": "3.1.0",
+        "Microsoft.NETCore.Targets": "2.0.0",
+        "Microsoft.Net.Http.Headers": "2.1.14",
+        "Microsoft.Win32.Registry": "4.7.0",
+        "NETStandard.Library": "2.0.3",
+        "Newtonsoft.Json.Bson": "1.0.1",
+        "Newtonsoft.Json": "13.0.4",
+        "Swashbuckle.AspNetCore.Swagger": "4.0.1",
+        "Swashbuckle.AspNetCore.SwaggerGen": "4.0.1",
+        "Swashbuckle.AspNetCore.SwaggerUI": "4.0.1",
+        "Swashbuckle.AspNetCore": "4.0.1",
+        "System.AppContext": "4.3.0",
+        "System.Buffers": "4.5.1",
+        "System.Collections.Concurrent": "4.3.0",
+        "System.Collections.Immutable": "1.5.0",
+        "System.Collections": "4.3.0",
+        "System.ComponentModel.Annotations": "4.5.0",
+        "System.Console": "4.3.0",
+        "System.Data.SqlClient": "4.8.6",
+        "System.Diagnostics.Debug": "4.3.0",
+        "System.Diagnostics.DiagnosticSource": "4.7.0",
+        "System.Diagnostics.FileVersionInfo": "4.3.0",
+        "System.Diagnostics.StackTrace": "4.3.0",
+        "System.Diagnostics.Tools": "4.3.0",
+        "System.Diagnostics.Tracing": "4.3.0",
+        "System.Dynamic.Runtime": "4.3.0",
+        "System.Globalization.Calendars": "4.3.0",
+        "System.Globalization": "4.3.0",
+        "System.IO.Compression": "4.3.0",
+        "System.IO.FileSystem.Primitives": "4.3.0",
+        "System.IO.FileSystem": "4.3.0",
+        "System.IO.Pipelines": "4.5.4",
+        "System.IO": "4.3.0",
+        "System.Linq.Expressions": "4.3.0",
+        "System.Linq": "4.3.0",
+        "System.Memory": "4.5.4",
+        "System.Numerics.Vectors": "4.5.0",
+        "System.ObjectModel": "4.3.0",
+        "System.Reflection.Emit.ILGeneration": "4.3.0",
+        "System.Reflection.Emit.Lightweight": "4.3.0",
+        "System.Reflection.Emit": "4.3.0",
+        "System.Reflection.Extensions": "4.3.0",
+        "System.Reflection.Metadata": "1.6.0",
+        "System.Reflection.Primitives": "4.3.0",
+        "System.Reflection.TypeExtensions": "4.3.0",
+        "System.Reflection": "4.3.0",
+        "System.Resources.ResourceManager": "4.3.0",
+        "System.Runtime.CompilerServices.Unsafe": "4.7.0",
+        "System.Runtime.Extensions": "4.3.0",
+        "System.Runtime.Handles": "4.3.0",
+        "System.Runtime.InteropServices.RuntimeInformation": "4.3.0",
+        "System.Runtime.InteropServices": "4.3.0",
+        "System.Runtime.Numerics": "4.3.0",
+        "System.Runtime": "4.3.0",
+        "System.Security.AccessControl": "4.7.0",
+        "System.Security.Cryptography.Algorithms": "4.3.0",
+        "System.Security.Cryptography.Cng": "4.5.2",
+        "System.Security.Cryptography.Csp": "4.3.0",
+        "System.Security.Cryptography.Encoding": "4.3.0",
+        "System.Security.Cryptography.OpenSsl": "4.3.0",
+        "System.Security.Cryptography.Pkcs": "4.5.2",
+        "System.Security.Cryptography.Primitives": "4.3.0",
+        "System.Security.Cryptography.X509Certificates": "4.3.0",
+        "System.Security.Cryptography.Xml": "4.5.0",
+        "System.Security.Permissions": "4.5.0",
+        "System.Security.Principal.Windows": "4.7.0",
+        "System.Text.Encoding.CodePages": "4.7.0",
+        "System.Text.Encoding.Extensions": "4.3.0",
+        "System.Text.Encoding": "4.3.0",
+        "System.Text.Encodings.Web": "4.5.1",
+        "System.Text.RegularExpressions": "4.3.0",
+        "System.Threading.Tasks.Extensions": "4.5.4",
+        "System.Threading.Tasks.Parallel": "4.3.0",
+        "System.Threading.Tasks": "4.3.0",
+        "System.Threading.Thread": "4.3.0",
+        "System.Threading": "4.3.0",
+        "System.ValueTuple": "4.3.0",
+        "System.Xml.ReaderWriter": "4.3.0",
+        "System.Xml.XDocument": "4.3.0",
+        "System.Xml.XPath.XDocument": "4.3.0",
+        "System.Xml.XPath": "4.3.0",
+        "System.Xml.XmlDocument": "4.3.0",
+        "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.fedora.23-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.native.System.Data.SqlClient.sni": "4.7.0",
+        "runtime.native.System.IO.Compression": "4.3.0",
+        "runtime.native.System.Net.Http": "4.3.0",
+        "runtime.native.System.Security.Cryptography.Apple": "4.3.0",
+        "runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.native.System": "4.3.0",
+        "runtime.opensuse.13.2-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.opensuse.42.1-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.Apple": "4.3.0",
+        "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.rhel.7-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+        "runtime.win-x64.Microsoft.NETCore.App": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetAppHost": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetHostPolicy": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetHostResolver": "2.1.30",
+        "runtime.win-x64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+        "runtime.win-x86.runtime.native.System.Data.SqlClient.sni": "4.4.0"
+      },
+      "selectedCompileAssets": [
+        "ref/netcoreapp2.1/System.Data.SqlClient.dll"
+      ],
+      "selectedRuntimeAssets": [
+        "runtimes/win/lib/netcoreapp2.1/System.Data.SqlClient.dll"
+      ],
+      "nativePackageVersions": {
+        "runtime.native.System.Data.SqlClient.sni": "4.7.0",
+        "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+        "runtime.win-x64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+        "runtime.win-x86.runtime.native.System.Data.SqlClient.sni": "4.4.0"
+      },
+      "nativePackageAssets": [
+        {
+          "package": "runtime.win-x64.runtime.native.System.Data.SqlClient.sni/4.4.0",
+          "asset": "runtimes/win-x64/native/sni.dll",
+          "machine": "0x8664",
+          "length": 160040,
+          "sha256": "68705c4ef9ab818f2956a78e05f3fefce501a1448793b073b46110beb49b47d6",
+          "source": "InstalledSdkFallback"
+        }
+      ],
+      "runtimeConfig": {
+        "runtimeOptions": {
+          "tfm": "netcoreapp2.1",
+          "framework": {
+            "name": "Microsoft.NETCore.App",
+            "version": "2.1.30"
+          },
+          "configProperties": {
+            "System.GC.Server": true
+          }
+        }
+      },
+      "sdkFallbackFoldersUsed": true,
+      "generatedWebConfigPresent": true
+    },
+    {
+      "id": "granular_mds406",
+      "package": "Microsoft.Data.SqlClient",
+      "version": "4.0.6",
+      "granular": true,
+      "hostResult": {
+        "Passed": true,
+        "Scenarios": 14,
+        "PassedScenarios": [
+          "/API/BAZDID/health/live",
+          "/health/live",
+          "/API/BAZDID/API/BAZDID/health/live",
+          "Swagger JSON",
+          "Swagger UI",
+          "Swagger query rejection",
+          "CORS https://frontend.example.invalid",
+          "CORS https://unknown.example.invalid",
+          "safe exception",
+          "config Production L1:SqlEnabled",
+          "config Testing L1:SqlEnabled",
+          "config Testing L1:Base",
+          "simulated IIS /API/BAZDID",
+          "simulated IIS /wrong"
+        ],
+        "SqlConnectionTested": false,
+        "IisTested": false
+      },
+      "httpSmoke": {
+        "Passed": true,
+        "Cases": [
+          {
+            "NoStore": true,
+            "Path": "/API/BAZDID/health/live",
+            "CorrelationValid": true,
+            "Status": 200,
+            "JsonValid": true
+          },
+          {
+            "NoStore": true,
+            "Path": "/health/live",
+            "CorrelationValid": true,
+            "Status": 404,
+            "JsonValid": true
+          },
+          {
+            "NoStore": true,
+            "Path": "/API/BAZDID/API/BAZDID/health/live",
+            "CorrelationValid": true,
+            "Status": 404,
+            "JsonValid": true
+          }
+        ],
+        "IisTested": false,
+        "SqlConnectionTested": false,
+        "Candidate": "granular_mds406",
+        "Transport": "Kestrel loopback HTTP"
+      },
+      "baselinePins": [
+        {
+          "package": "Microsoft.AspNetCore.Authorization",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.2"
+        },
+        {
+          "package": "Microsoft.AspNetCore.Authorization.Policy",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.2"
+        },
+        {
+          "package": "Microsoft.AspNetCore.Http",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.22"
+        },
+        {
+          "package": "Microsoft.AspNetCore.Http.Extensions",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.21"
+        },
+        {
+          "package": "Microsoft.AspNetCore.Mvc.Formatters.Json",
+          "initialVersion": "2.1.3",
+          "pinnedVersion": "2.1.18"
+        },
+        {
+          "package": "Microsoft.AspNetCore.Mvc.Razor.Extensions",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.2"
+        },
+        {
+          "package": "Microsoft.AspNetCore.Mvc.RazorPages",
+          "initialVersion": "2.1.3",
+          "pinnedVersion": "2.1.11"
+        },
+        {
+          "package": "Microsoft.AspNetCore.Razor",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.2"
+        },
+        {
+          "package": "Microsoft.AspNetCore.Razor.Design",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.2"
+        },
+        {
+          "package": "Microsoft.AspNetCore.Razor.Language",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.2"
+        },
+        {
+          "package": "Microsoft.AspNetCore.Razor.Runtime",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.2"
+        },
+        {
+          "package": "Microsoft.AspNetCore.StaticFiles",
+          "initialVersion": "2.0.0",
+          "pinnedVersion": "2.1.1"
+        },
+        {
+          "package": "Microsoft.Extensions.Caching.Abstractions",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.23"
+        },
+        {
+          "package": "Microsoft.Extensions.Caching.Memory",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.23"
+        },
+        {
+          "package": "Microsoft.Extensions.FileProviders.Embedded",
+          "initialVersion": "2.0.0",
+          "pinnedVersion": "2.1.1"
+        },
+        {
+          "package": "Microsoft.Extensions.ObjectPool",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.6"
+        },
+        {
+          "package": "Microsoft.Extensions.Primitives",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.6"
+        },
+        {
+          "package": "Microsoft.Net.Http.Headers",
+          "initialVersion": "2.1.1",
+          "pinnedVersion": "2.1.14"
+        },
+        {
+          "package": "System.Collections.Immutable",
+          "initialVersion": "1.3.1",
+          "pinnedVersion": "1.5.0"
+        },
+        {
+          "package": "System.IO.Pipelines",
+          "initialVersion": "4.5.3",
+          "pinnedVersion": "4.5.4"
+        },
+        {
+          "package": "System.Runtime.InteropServices.RuntimeInformation",
+          "initialVersion": "4.0.0",
+          "pinnedVersion": "4.3.0"
+        },
+        {
+          "package": "System.Security.Cryptography.Pkcs",
+          "initialVersion": "4.5.0",
+          "pinnedVersion": "4.5.2"
+        }
+      ],
+      "initialVulnerabilities": [
+        {
+          "id": "Microsoft.AspNetCore.Server.Kestrel.Core",
+          "resolvedVersion": "2.1.25",
+          "vulnerabilities": [
+            {
+              "severity": "Critical",
+              "advisoryurl": "https://github.com/advisories/GHSA-5rrx-jjjq-q2r5"
+            }
+          ]
+        },
+        {
+          "id": "Azure.Identity",
+          "resolvedVersion": "1.3.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-m5vv-6r4h-3vj9"
+            },
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-wvxc-855f-jvrv"
+            },
+            {
+              "severity": "High",
+              "advisoryurl": "https://github.com/advisories/GHSA-5mfx-4wcx-rv27"
+            }
+          ]
+        },
+        {
+          "id": "Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets",
+          "resolvedVersion": "2.1.3",
+          "vulnerabilities": [
+            {
+              "severity": "High",
+              "advisoryurl": "https://github.com/advisories/GHSA-vmch-3w2x-vhgq"
+            }
+          ]
+        },
+        {
+          "id": "Microsoft.IdentityModel.JsonWebTokens",
+          "resolvedVersion": "6.8.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-59j7-ghrg-fj52"
+            }
+          ]
+        },
+        {
+          "id": "Swashbuckle.AspNetCore.SwaggerUI",
+          "resolvedVersion": "4.0.1",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-qrmm-w75w-3wpx"
+            }
+          ]
+        },
+        {
+          "id": "System.IdentityModel.Tokens.Jwt",
+          "resolvedVersion": "6.8.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-59j7-ghrg-fj52"
+            }
+          ]
+        },
+        {
+          "id": "System.Security.Cryptography.Xml",
+          "resolvedVersion": "4.5.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-vh55-786g-wjwj"
+            }
+          ]
+        },
+        {
+          "id": "System.Text.RegularExpressions",
+          "resolvedVersion": "4.3.0",
+          "vulnerabilities": [
+            {
+              "severity": "High",
+              "advisoryurl": "https://github.com/advisories/GHSA-cmhx-cq75-c4mj"
+            }
+          ]
+        }
+      ],
+      "restoreAccepted": true,
+      "restoreErrorCodes": [],
+      "securityAccepted": false,
+      "connectedTested": false,
+      "nativeLoadTested": false,
+      "deterministicRestore": {
+        "id": "granular_mds406",
+        "exitCode": 0,
+        "lockSha256": "f1838f8b5d4e57e55d1c8080d383acd8f5d16dd6baea6f0da52bf967a24f0107",
+        "lockUnchanged": true
+      },
+      "build": {
+        "warnings": 0,
+        "errors": 0
+      },
+      "offlineProbe": {
+        "Passed": true,
+        "Checks": 10,
+        "Runtime": ".NET Core 4.6.30411.01",
+        "Is64BitProcess": true,
+        "AssemblyVersion": "4.0.0.0",
+        "FileVersion": "4.06.24234.08",
+        "ManagedFile": "Microsoft.Data.SqlClient.dll",
+        "ConnectionState": "Closed",
+        "ConnectionOpened": false,
+        "Encrypt": true,
+        "TrustServerCertificate": false,
+        "IntegratedSecurity": true,
+        "AsyncSignaturesBound": true,
+        "TransactionSignaturesChecked": true,
+        "NativeAssets": [
+          {
+            "File": "Microsoft.Data.SqlClient.SNI.dll",
+            "Machine": "0x8664",
+            "Length": 470936,
+            "Sha256": "0466a0369666a301a1465a1e9feaebc53b56e8d051ec85e9f6bacd68d667bb93"
+          }
+        ],
+        "NativeLoadTested": false,
+        "SqlConnectionTested": false,
+        "managedAssemblyLoaded": true,
+        "coreRuntimeVersion": "2.1.30"
+      },
+      "vulnerabilities": [
+        {
+          "id": "Microsoft.AspNetCore.Server.Kestrel.Core",
+          "resolvedVersion": "2.1.25",
+          "vulnerabilities": [
+            {
+              "severity": "Critical",
+              "advisoryurl": "https://github.com/advisories/GHSA-5rrx-jjjq-q2r5"
+            }
+          ]
+        },
+        {
+          "id": "Azure.Identity",
+          "resolvedVersion": "1.3.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-m5vv-6r4h-3vj9"
+            },
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-wvxc-855f-jvrv"
+            },
+            {
+              "severity": "High",
+              "advisoryurl": "https://github.com/advisories/GHSA-5mfx-4wcx-rv27"
+            }
+          ]
+        },
+        {
+          "id": "Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets",
+          "resolvedVersion": "2.1.3",
+          "vulnerabilities": [
+            {
+              "severity": "High",
+              "advisoryurl": "https://github.com/advisories/GHSA-vmch-3w2x-vhgq"
+            }
+          ]
+        },
+        {
+          "id": "Microsoft.IdentityModel.JsonWebTokens",
+          "resolvedVersion": "6.8.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-59j7-ghrg-fj52"
+            }
+          ]
+        },
+        {
+          "id": "Swashbuckle.AspNetCore.SwaggerUI",
+          "resolvedVersion": "4.0.1",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-qrmm-w75w-3wpx"
+            }
+          ]
+        },
+        {
+          "id": "System.IdentityModel.Tokens.Jwt",
+          "resolvedVersion": "6.8.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-59j7-ghrg-fj52"
+            }
+          ]
+        },
+        {
+          "id": "System.Security.Cryptography.Xml",
+          "resolvedVersion": "4.5.0",
+          "vulnerabilities": [
+            {
+              "severity": "Moderate",
+              "advisoryurl": "https://github.com/advisories/GHSA-vh55-786g-wjwj"
+            }
+          ]
+        },
+        {
+          "id": "System.Text.RegularExpressions",
+          "resolvedVersion": "4.3.0",
+          "vulnerabilities": [
+            {
+              "severity": "High",
+              "advisoryurl": "https://github.com/advisories/GHSA-cmhx-cq75-c4mj"
+            }
+          ]
+        }
+      ],
+      "flaggedPackageCount": 8,
+      "advisoryEdgeCount": 10,
+      "resolvedPackages": {
+        "Azure.Core": "1.6.0",
+        "Azure.Identity": "1.3.0",
+        "Microsoft.AspNetCore.Antiforgery": "2.1.1",
+        "Microsoft.AspNetCore.Authentication.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Authentication.Core": "2.1.1",
+        "Microsoft.AspNetCore.Authorization.Policy": "2.1.2",
+        "Microsoft.AspNetCore.Authorization": "2.1.2",
+        "Microsoft.AspNetCore.Connections.Abstractions": "2.1.3",
+        "Microsoft.AspNetCore.Cors": "2.1.1",
+        "Microsoft.AspNetCore.Cryptography.Internal": "2.1.1",
+        "Microsoft.AspNetCore.DataProtection.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.DataProtection": "2.1.1",
+        "Microsoft.AspNetCore.Diagnostics.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Diagnostics": "2.1.1",
+        "Microsoft.AspNetCore.HostFiltering": "2.1.1",
+        "Microsoft.AspNetCore.Hosting.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Hosting.Server.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Hosting": "2.1.1",
+        "Microsoft.AspNetCore.Html.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Http.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Http.Extensions": "2.1.21",
+        "Microsoft.AspNetCore.Http.Features": "2.1.1",
+        "Microsoft.AspNetCore.Http": "2.1.22",
+        "Microsoft.AspNetCore.HttpOverrides": "2.1.1",
+        "Microsoft.AspNetCore.HttpsPolicy": "2.1.1",
+        "Microsoft.AspNetCore.JsonPatch": "2.1.1",
+        "Microsoft.AspNetCore.Localization": "2.1.1",
+        "Microsoft.AspNetCore.Mvc.Abstractions": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.ApiExplorer": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.Core": "2.1.16",
+        "Microsoft.AspNetCore.Mvc.Cors": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.DataAnnotations": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.Formatters.Json": "2.1.18",
+        "Microsoft.AspNetCore.Mvc.Localization": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.Razor.Extensions": "2.1.2",
+        "Microsoft.AspNetCore.Mvc.Razor": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.RazorPages": "2.1.11",
+        "Microsoft.AspNetCore.Mvc.TagHelpers": "2.1.3",
+        "Microsoft.AspNetCore.Mvc.ViewFeatures": "2.1.3",
+        "Microsoft.AspNetCore.Mvc": "2.1.3",
+        "Microsoft.AspNetCore.Razor.Design": "2.1.2",
+        "Microsoft.AspNetCore.Razor.Language": "2.1.2",
+        "Microsoft.AspNetCore.Razor.Runtime": "2.1.2",
+        "Microsoft.AspNetCore.Razor": "2.1.2",
+        "Microsoft.AspNetCore.ResponseCaching.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Routing.Abstractions": "2.1.1",
+        "Microsoft.AspNetCore.Routing": "2.1.1",
+        "Microsoft.AspNetCore.Server.IISIntegration": "2.1.7",
+        "Microsoft.AspNetCore.Server.Kestrel.Core": "2.1.25",
+        "Microsoft.AspNetCore.Server.Kestrel.Https": "2.1.3",
+        "Microsoft.AspNetCore.Server.Kestrel.Transport.Abstractions": "2.1.3",
+        "Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets": "2.1.3",
+        "Microsoft.AspNetCore.Server.Kestrel": "2.1.3",
+        "Microsoft.AspNetCore.StaticFiles": "2.1.1",
+        "Microsoft.AspNetCore.TestHost": "2.1.1",
+        "Microsoft.AspNetCore.WebUtilities": "2.1.1",
+        "Microsoft.AspNetCore": "2.1.7",
+        "Microsoft.Bcl.AsyncInterfaces": "1.0.0",
+        "Microsoft.CSharp": "4.5.0",
+        "Microsoft.CodeAnalysis.Analyzers": "1.1.0",
+        "Microsoft.CodeAnalysis.CSharp": "2.8.0",
+        "Microsoft.CodeAnalysis.Common": "2.8.0",
+        "Microsoft.CodeAnalysis.Razor": "2.1.2",
+        "Microsoft.Data.SqlClient.SNI.runtime": "4.0.1",
+        "Microsoft.Data.SqlClient": "4.0.6",
+        "Microsoft.DotNet.PlatformAbstractions": "2.1.0",
+        "Microsoft.Extensions.Caching.Abstractions": "2.1.23",
+        "Microsoft.Extensions.Caching.Memory": "2.1.23",
+        "Microsoft.Extensions.Configuration.Abstractions": "2.1.1",
+        "Microsoft.Extensions.Configuration.Binder": "2.1.10",
+        "Microsoft.Extensions.Configuration.CommandLine": "2.1.1",
+        "Microsoft.Extensions.Configuration.EnvironmentVariables": "2.1.1",
+        "Microsoft.Extensions.Configuration.FileExtensions": "2.1.1",
+        "Microsoft.Extensions.Configuration.Json": "2.1.1",
+        "Microsoft.Extensions.Configuration.UserSecrets": "2.1.1",
+        "Microsoft.Extensions.Configuration": "2.1.1",
+        "Microsoft.Extensions.DependencyInjection.Abstractions": "2.1.1",
+        "Microsoft.Extensions.DependencyInjection": "2.1.1",
+        "Microsoft.Extensions.DependencyModel": "2.1.0",
+        "Microsoft.Extensions.FileProviders.Abstractions": "2.1.1",
+        "Microsoft.Extensions.FileProviders.Composite": "2.1.1",
+        "Microsoft.Extensions.FileProviders.Embedded": "2.1.1",
+        "Microsoft.Extensions.FileProviders.Physical": "2.1.1",
+        "Microsoft.Extensions.FileSystemGlobbing": "2.1.1",
+        "Microsoft.Extensions.Hosting.Abstractions": "2.1.1",
+        "Microsoft.Extensions.Localization.Abstractions": "2.1.1",
+        "Microsoft.Extensions.Localization": "2.1.1",
+        "Microsoft.Extensions.Logging.Abstractions": "2.1.1",
+        "Microsoft.Extensions.Logging.Configuration": "2.1.1",
+        "Microsoft.Extensions.Logging.Console": "2.1.1",
+        "Microsoft.Extensions.Logging.Debug": "2.1.1",
+        "Microsoft.Extensions.Logging": "2.1.1",
+        "Microsoft.Extensions.ObjectPool": "2.1.6",
+        "Microsoft.Extensions.Options.ConfigurationExtensions": "2.1.1",
+        "Microsoft.Extensions.Options": "2.1.1",
+        "Microsoft.Extensions.Primitives": "2.1.6",
+        "Microsoft.Extensions.WebEncoders": "2.1.1",
+        "Microsoft.Identity.Client.Extensions.Msal": "2.16.5",
+        "Microsoft.Identity.Client": "4.22.0",
+        "Microsoft.IdentityModel.JsonWebTokens": "6.8.0",
+        "Microsoft.IdentityModel.Logging": "6.8.0",
+        "Microsoft.IdentityModel.Protocols.OpenIdConnect": "6.8.0",
+        "Microsoft.IdentityModel.Protocols": "6.8.0",
+        "Microsoft.IdentityModel.Tokens": "6.8.0",
+        "Microsoft.NETCore.App": "2.1.30",
+        "Microsoft.NETCore.DotNetAppHost": "2.1.30",
+        "Microsoft.NETCore.DotNetHostPolicy": "2.1.30",
+        "Microsoft.NETCore.DotNetHostResolver": "2.1.30",
+        "Microsoft.NETCore.Platforms": "5.0.0",
+        "Microsoft.NETCore.Targets": "2.0.0",
+        "Microsoft.Net.Http.Headers": "2.1.14",
+        "Microsoft.Win32.Registry": "5.0.0",
+        "NETStandard.Library": "2.0.3",
+        "Newtonsoft.Json.Bson": "1.0.1",
+        "Newtonsoft.Json": "13.0.4",
+        "Swashbuckle.AspNetCore.Swagger": "4.0.1",
+        "Swashbuckle.AspNetCore.SwaggerGen": "4.0.1",
+        "Swashbuckle.AspNetCore.SwaggerUI": "4.0.1",
+        "Swashbuckle.AspNetCore": "4.0.1",
+        "System.AppContext": "4.3.0",
+        "System.Buffers": "4.5.1",
+        "System.Collections.Concurrent": "4.3.0",
+        "System.Collections.Immutable": "1.5.0",
+        "System.Collections": "4.3.0",
+        "System.ComponentModel.Annotations": "4.5.0",
+        "System.Configuration.ConfigurationManager": "5.0.0",
+        "System.Console": "4.3.0",
+        "System.Diagnostics.Debug": "4.3.0",
+        "System.Diagnostics.DiagnosticSource": "4.6.0",
+        "System.Diagnostics.FileVersionInfo": "4.3.0",
+        "System.Diagnostics.StackTrace": "4.3.0",
+        "System.Diagnostics.Tools": "4.3.0",
+        "System.Diagnostics.Tracing": "4.3.0",
+        "System.Dynamic.Runtime": "4.3.0",
+        "System.Globalization.Calendars": "4.3.0",
+        "System.Globalization": "4.3.0",
+        "System.IO.Compression": "4.3.0",
+        "System.IO.FileSystem.Primitives": "4.3.0",
+        "System.IO.FileSystem": "4.3.0",
+        "System.IO.Pipelines": "4.5.4",
+        "System.IO": "4.3.0",
+        "System.IdentityModel.Tokens.Jwt": "6.8.0",
+        "System.Linq.Expressions": "4.3.0",
+        "System.Linq": "4.3.0",
+        "System.Memory": "4.5.4",
+        "System.Numerics.Vectors": "4.5.0",
+        "System.ObjectModel": "4.3.0",
+        "System.Reflection.Emit.ILGeneration": "4.3.0",
+        "System.Reflection.Emit.Lightweight": "4.3.0",
+        "System.Reflection.Emit": "4.3.0",
+        "System.Reflection.Extensions": "4.3.0",
+        "System.Reflection.Metadata": "1.6.0",
+        "System.Reflection.Primitives": "4.3.0",
+        "System.Reflection.TypeExtensions": "4.3.0",
+        "System.Reflection": "4.3.0",
+        "System.Resources.ResourceManager": "4.3.0",
+        "System.Runtime.Caching": "5.0.0",
+        "System.Runtime.CompilerServices.Unsafe": "5.0.0",
+        "System.Runtime.Extensions": "4.3.0",
+        "System.Runtime.Handles": "4.3.0",
+        "System.Runtime.InteropServices.RuntimeInformation": "4.3.0",
+        "System.Runtime.InteropServices": "4.3.0",
+        "System.Runtime.Loader": "4.3.0",
+        "System.Runtime.Numerics": "4.3.0",
+        "System.Runtime": "4.3.0",
+        "System.Security.AccessControl": "5.0.0",
+        "System.Security.Cryptography.Algorithms": "4.3.0",
+        "System.Security.Cryptography.Cng": "5.0.0",
+        "System.Security.Cryptography.Csp": "4.3.0",
+        "System.Security.Cryptography.Encoding": "4.3.0",
+        "System.Security.Cryptography.OpenSsl": "4.3.0",
+        "System.Security.Cryptography.Pkcs": "4.5.2",
+        "System.Security.Cryptography.Primitives": "4.3.0",
+        "System.Security.Cryptography.ProtectedData": "5.0.0",
+        "System.Security.Cryptography.X509Certificates": "4.3.0",
+        "System.Security.Cryptography.Xml": "4.5.0",
+        "System.Security.Permissions": "5.0.0",
+        "System.Security.Principal.Windows": "5.0.0",
+        "System.Text.Encoding.CodePages": "5.0.0",
+        "System.Text.Encoding.Extensions": "4.3.0",
+        "System.Text.Encoding": "4.3.0",
+        "System.Text.Encodings.Web": "4.7.2",
+        "System.Text.Json": "4.6.0",
+        "System.Text.RegularExpressions": "4.3.0",
+        "System.Threading.Tasks.Extensions": "4.5.4",
+        "System.Threading.Tasks.Parallel": "4.3.0",
+        "System.Threading.Tasks": "4.3.0",
+        "System.Threading.Thread": "4.3.0",
+        "System.Threading": "4.3.0",
+        "System.ValueTuple": "4.3.0",
+        "System.Xml.ReaderWriter": "4.3.0",
+        "System.Xml.XDocument": "4.3.0",
+        "System.Xml.XPath.XDocument": "4.3.0",
+        "System.Xml.XPath": "4.3.0",
+        "System.Xml.XmlDocument": "4.3.0",
+        "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.fedora.23-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.native.System.IO.Compression": "4.3.0",
+        "runtime.native.System.Net.Http": "4.3.0",
+        "runtime.native.System.Security.Cryptography.Apple": "4.3.0",
+        "runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.native.System": "4.3.0",
+        "runtime.opensuse.13.2-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.opensuse.42.1-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.Apple": "4.3.0",
+        "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.rhel.7-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0",
+        "runtime.win-x64.Microsoft.NETCore.App": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetAppHost": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetHostPolicy": "2.1.30",
+        "runtime.win-x64.Microsoft.NETCore.DotNetHostResolver": "2.1.30"
+      },
+      "selectedCompileAssets": [
+        "ref/netstandard2.0/Microsoft.Data.SqlClient.dll"
+      ],
+      "selectedRuntimeAssets": [
+        "runtimes/win/lib/netstandard2.0/Microsoft.Data.SqlClient.dll"
+      ],
+      "nativePackageVersions": {
+        "Microsoft.Data.SqlClient.SNI.runtime": "4.0.1"
+      },
+      "nativePackageAssets": [
+        {
+          "package": "Microsoft.Data.SqlClient.SNI.runtime/4.0.1",
+          "asset": "runtimes/win-x64/native/Microsoft.Data.SqlClient.SNI.dll",
+          "machine": "0x8664",
+          "length": 470936,
+          "sha256": "0466a0369666a301a1465a1e9feaebc53b56e8d051ec85e9f6bacd68d667bb93",
+          "source": "IsolatedCache"
+        }
+      ],
+      "runtimeConfig": {
+        "runtimeOptions": {
+          "tfm": "netcoreapp2.1",
+          "framework": {
+            "name": "Microsoft.NETCore.App",
+            "version": "2.1.30"
+          },
+          "configProperties": {
+            "System.GC.Server": true
+          }
+        }
+      },
+      "sdkFallbackFoldersUsed": true,
+      "generatedWebConfigPresent": true
+    }
+  ],
+  "proposalScriptSha256": {
+    "database/proposals/development_logins.review.sql": "9099de3dce8e77fc037d1bdc6d5b8649ba835253df067e6b0e8d89b121b5b15f",
+    "database/proposals/permissions.review.sql": "9888862c6997eb2ab0fc2effaac6559e6399905e1290fec506100ad46609a396"
+  },
+  "backendProgressBefore": 20,
+  "earnedProgress": 0,
+  "backendProgressAfter": 20,
+  "conditionalProgressAfterFull2F": 22,
+  "notExecuted": [
+    "SQL connection or metadata discovery",
+    "Native provider load/SSPI/TLS validation",
+    "Windows accounts/tasks/rights/ACL changes",
+    "SQL login/user/role/GRANT/DENY/DDL/DML",
+    "IIS deployment or service/sidecar introduction",
+    "Canonical source/package/lockfile/framework changes",
+    "Frontend changes",
+    "2G/OTP/Session/Info/media/Production"
+  ],
+  "rawPrototypeAndLogsCommitted": false,
+  "sharedAspNetCoreSniInspection": {
+    "runtime": "Microsoft.AspNetCore.App/2.1.30",
+    "file": "sni.dll",
+    "machine": "0x8664",
+    "length": 160040,
+    "sha256": "68705c4ef9ab818f2956a78e05f3fefce501a1448793b073b46110beb49b47d6",
+    "loaded": false
+  },
+  "rawEvidenceSha256": {
+    ".sync-tmp/l1-legacy-spike-20261103/sds486/build-final.log": "4724ab957c79bef713e625a0b632e72c542b79a90119adc8425c8d19a940274a",
+    ".sync-tmp/l1-legacy-spike-20261103/sds486/offline-published.log": "d12d4361582008b96cbdeab8a494de03226d55c0c81693ccb5088ed41bf8e7b0",
+    ".sync-tmp/l1-legacy-spike-20261103/sds486/audit.log": "509928b22939e5a572290ab534a839f80ca9e915b6ef288e88341a66cd709272",
+    ".sync-tmp/l1-legacy-spike-20261103/sds486/deterministic-restore.log": "e0d38d98f9fafe9a00d664f7826e7de8adb765c3c53ff43e55e960c9ccc6bec3",
+    ".sync-tmp/l1-legacy-spike-20261103/sds486/restore.log": "1495b6122d0d6c8c5eb28bca90d8424ae2e3f444ac22cd4d82d73466415b7864",
+    ".sync-tmp/l1-legacy-spike-20261103/sds491/build-diagnostic.log": "68607c13fcae7104105371467a885c76092e3cb9a3ce9e0ca549217bab14e76b",
+    ".sync-tmp/l1-legacy-spike-20261103/sds491/probe-diagnostic.log": "647096ec8a7a3fd518eb33a9af85bdc2e0ddf6dff24c58ede5c54a004e866e5f",
+    ".sync-tmp/l1-legacy-spike-20261103/sds491/audit.log": "c59b45ea07000f3639e4626a12e774057197f27c3b4bb5955eb3e619c3a7ced1",
+    ".sync-tmp/l1-legacy-spike-20261103/sds491/deterministic-restore.log": "389ec4dda9b12ded2596d9c8dcf4bf656bc2e69fb92ccbb593f551e3c257c282",
+    ".sync-tmp/l1-legacy-spike-20261103/sds491/restore.log": "29663b1323984f659479bf5661905c4aad533fffd50bda47c943de48ed678b98",
+    ".sync-tmp/l1-legacy-spike-20261103/mds114/build-final.log": "f9addf4f5ec8b22211fa9e167683822ec5a7f2086a0d36863865e877bae43864",
+    ".sync-tmp/l1-legacy-spike-20261103/mds114/offline-published.log": "d72f391a11fa04485d38e8ecb57e917d8ef30b4bea58316261ed56573fedb16d",
+    ".sync-tmp/l1-legacy-spike-20261103/mds114/audit.log": "b91195aff8795dc05f11a38198c135d9484e4d6da084cbdfdd869fc6cc804371",
+    ".sync-tmp/l1-legacy-spike-20261103/mds114/deterministic-restore.log": "623af8108b2c1ccb4b87ff22f868ea9e83d741d3c99e5d386411c4186ee579fe",
+    ".sync-tmp/l1-legacy-spike-20261103/mds114/restore.log": "221877bcf044d8a383373a32c01b1fa664e63be24554b52914732645bbd0552f",
+    ".sync-tmp/l1-legacy-spike-20261103/mds217/build-final.log": "1cf33b9cb3e975633e78f079bb7129c2ef57b36f4aa50bed8e939ab0557f5646",
+    ".sync-tmp/l1-legacy-spike-20261103/mds217/offline-published.log": "7c62766487ae7c6f9a87dff13b7db7660ae9c0a9f902816bcfbc344369e91b7f",
+    ".sync-tmp/l1-legacy-spike-20261103/mds217/audit.log": "629f7d3c65abfb47c2edd068bf9792a86bb5a09c1cd4252f66cd4035391784c9",
+    ".sync-tmp/l1-legacy-spike-20261103/mds217/deterministic-restore.log": "c062c5b1d94d215802208eeb51a1d8f3bf88a90f3f857332a0859e8cb2cb4a34",
+    ".sync-tmp/l1-legacy-spike-20261103/mds217/restore.log": "48d2797abf357ab16091d41eb6c6f49d21b3084d3ae6b8a645cf393c2a3eb589",
+    ".sync-tmp/l1-legacy-spike-20261103/mds317/build-final.log": "f6feb07aae953c2be82623ef5d9df98fd487782abad7c15ce33fdf6d4a31df93",
+    ".sync-tmp/l1-legacy-spike-20261103/mds317/offline-published.log": "aeacaccb69a9b6f3a0758d183099708641996bd798c00f7d7c5a624a046ec40c",
+    ".sync-tmp/l1-legacy-spike-20261103/mds317/audit.log": "4e7d3b88574891bd4d941eb1fd4df36bb4f7ee59d6205df1224d194167593298",
+    ".sync-tmp/l1-legacy-spike-20261103/mds317/deterministic-restore.log": "9a3d960df54323f13612a1b016d2cd669e8f46225a0b8599c1a6b3b17ee05ebb",
+    ".sync-tmp/l1-legacy-spike-20261103/mds317/restore.log": "cad6657e1df5f99d1018e7484e73ea431fad38f43dffa41bdfa40fb230840cfb",
+    ".sync-tmp/l1-legacy-spike-20261103/mds406/build-final.log": "cad11da67162eae56d017cf9636e77ea93fd4c6c0b6301e07f5aaf8478f5b5d7",
+    ".sync-tmp/l1-legacy-spike-20261103/mds406/offline-published.log": "bfacaecf7e36dd33af3a8e63ff5eb3f6a9f59fcf6e7d357dae940d23f6a5cc4d",
+    ".sync-tmp/l1-legacy-spike-20261103/mds406/audit.log": "59f61024d0919401a51b119df2d69bd1fec4fe103cd4bf30eb5a239a1f201427",
+    ".sync-tmp/l1-legacy-spike-20261103/mds406/deterministic-restore.log": "ea725dcb7fca7ed4f646034ece87904adb4846aeef199bfa4c818ce9ec41bf6b",
+    ".sync-tmp/l1-legacy-spike-20261103/mds406/restore.log": "f75f84ca998c688cc6e74cc911174b714bcd027683311e0155efe88b5afbbb7e",
+    ".sync-tmp/l1-legacy-spike-20261103/meta_sds486/restore.log": "92f0fdebb86912f235310197d7bb0cea898f6eae030198860f5a39d0b91811ac",
+    ".sync-tmp/l1-legacy-spike-20261103/meta_sds491/restore.log": "d4b89ac532fed35f9ed064a6b75f57a2419a83d5a881b618ac506cec4b04d3bb",
+    ".sync-tmp/l1-legacy-spike-20261103/meta_mds217/restore.log": "8c119f54c3c704862a27e6602784beab82253a44874e168ca5323582a84147db",
+    ".sync-tmp/l1-legacy-spike-20261103/meta_mds114/build-final.log": "6b8fb7a310e6c1f4fbb6800fd9a812f7d0d2037dce3a5292894b254bc72b8ab6",
+    ".sync-tmp/l1-legacy-spike-20261103/meta_mds114/offline-published.log": "1a2c622a4bfe2cc53e84625a0bb2dc59dd449cfe1717e6894eea8b4d17e1b55d",
+    ".sync-tmp/l1-legacy-spike-20261103/meta_mds114/audit.log": "0240996b8719bdce2cd8208e553308e7409d2ab470977242d273ab52238d2377",
+    ".sync-tmp/l1-legacy-spike-20261103/meta_mds114/deterministic-restore.log": "e7dc48e278af67dce74e4e9ffb8b5806a20f0d172aacea965c88a72a1f9296ee",
+    ".sync-tmp/l1-legacy-spike-20261103/meta_mds114/restore.log": "8eb3a26259af517ef1f5aa0098b15c6ea4cfc29958e392ca33f2862616914baf",
+    ".sync-tmp/l1-legacy-spike-20261103/granular_sds486/build-websdk.log": "e81f18832982a3485f2ab58404b3371ce634f94283f59fa85b711648bc706c29",
+    ".sync-tmp/l1-legacy-spike-20261103/granular_sds486/provider-websdk.log": "89d9fa7b0f39c1b84d6264c46ed909eb1f22f751e852839d26d2b7b169105ae4",
+    ".sync-tmp/l1-legacy-spike-20261103/granular_sds486/audit-websdk.log": "fb9e79c26e37d64681c6bbc29703aacd8901a454025ed3d8c1e47773023cbf6d",
+    ".sync-tmp/l1-legacy-spike-20261103/granular_sds486/deterministic-restore.log": "4312957f3c631967cb52269635378ab350017bade91a5202579a14dd414482af",
+    ".sync-tmp/l1-legacy-spike-20261103/granular_sds486/host-websdk.log": "1fee88791204b192712d7f72809efb9bac4b74f6aeacb7350fcab6b2187865cf",
+    ".sync-tmp/l1-legacy-spike-20261103/granular_sds486/http-smoke.json": "bbfe23002eebc7e89a137d306e69f99dd9d6095d39f923054fb7fb63890daa4b",
+    ".sync-tmp/l1-legacy-spike-20261103/granular_sds486/restore-websdk.log": "f06cec4852e99a659ffc039d8cd87c77cfcd4bd4622d9a0a40cf148ce9f0dd20",
+    ".sync-tmp/l1-legacy-spike-20261103/granular_mds406/build-websdk.log": "2f337731518af2d7fa7281a90ffab83b181855124d9075356da7242ae2a34f33",
+    ".sync-tmp/l1-legacy-spike-20261103/granular_mds406/provider-websdk.log": "2c3a45078579c01f9bda082fe24525a968e710194182492c5fa974c54034489a",
+    ".sync-tmp/l1-legacy-spike-20261103/granular_mds406/audit-websdk.log": "d5ce750780d71a11ca173ccd107e8d5511b7a959fbf937fb3d603e7534bb6cdd",
+    ".sync-tmp/l1-legacy-spike-20261103/granular_mds406/deterministic-restore.log": "a3e2ea2daebfca06bcbae2a34c5353d763974a2ab6799bfe1a0bca5794f845ba",
+    ".sync-tmp/l1-legacy-spike-20261103/granular_mds406/host-websdk.log": "1fee88791204b192712d7f72809efb9bac4b74f6aeacb7350fcab6b2187865cf",
+    ".sync-tmp/l1-legacy-spike-20261103/granular_mds406/http-smoke.json": "89dbf1c2c1e0e3a792d8b00865cf25f32356952dbd65ddbc4f56a778ea591d96",
+    ".sync-tmp/l1-legacy-spike-20261103/granular_mds406/restore-websdk.log": "c6a1df7b9a5084e6d6edd75525c1f8ea2a18ae434ddfe7e0b665e3ad1cf8ed0a",
+    ".sync-tmp/l1-canonical-restore.log": "15d99a52a86f95b8095b0495c5979c06a0b79e410713d63d2072e176d2b3b6f5",
+    ".sync-tmp/l1-canonical-build.log": "d1eb4248c6100ba50e67ed3e94e7eb4e33a5ac4bb45f7e5952398afe12cd59e9",
+    ".sync-tmp/l1-canonical-tests.log": "f945c29738b507c561e85ce9c47826834168b550dc84d967a71f25e1b008fe66"
+  }
+}

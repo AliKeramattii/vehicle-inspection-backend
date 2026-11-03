@@ -1,6 +1,14 @@
 # راهبرد آزمون و کنترل کیفیت
 
-شاهد تازهٔ P0 در `2026-11-03`: [روش و فرمان‌ها](implementation/CHECKPOINT-02F-P0-MIGRATION-FEASIBILITY_FA.md) و [نتایج گزینش‌شده](checkpoint2f/P0_FEASIBILITY_RESULTS.json). canonical: build صفر warning/error،۱۰۹ unit و۵۰ integration آفلاین موفق، صفر شکست و۸ SQL Skipped. نمونهٔ مستقل net10: build صفر warning/error،۱۴ موفق/صفر شکست و سه HTTP smoke موفق؛ audit نهایی نمونه صفر بستهٔ flagged. نتیجهٔ نمونه و canonical قابل جمع به‌عنوان suite واحد نیستند؛ هیچ SQL connect/metadata، native load، TLS، IIS یا Windows Server اجرا نشد. مهاجرت واقعی باید تمام caseهای قبلی را با runner جدید نگاشت و حفظ کند؛ Skip موفق نیست. پیشرفت20% باقی است.
+شاهد تازهٔ 2F-L1 در `2026-11-03`: [روش](implementation/CHECKPOINT-02F-LEGACY-SQLCLIENT-FEASIBILITY_FA.md) و [نتایج](checkpoint2f/LEGACY_SECURITY_PINS.json).
+
+- **canonical** (`restore --locked-mode`، `build --configuration Release --no-restore`، `test --configuration Release --no-build --no-restore`): صفر warning/error، ۱۰۹ unit + ۵۰ integration موفق، صفر شکست، ۸ SQL Skipped.
+- **آزمایش‌های جدا:** هر نامزد probe آفلاین ۱۰ بررسی بدون `Open`/کوئری دارد. گراف ریز ۱۴ سناریوی میزبان دارد. کپی canonical روی گراف ریز همان ۱۰۹ + ۵۰ موفق/۸ Skipped را دارد.
+- این شمارش‌ها با canonical جمع نمی‌شوند و Skip موفق نیست.
+- audit باید با SDK دارای `--vulnerable` و خارج از `global.json` ریشه اجرا شود. هر تغییر بستهٔ آینده باید audit را ثبت کند و warning NuGet را سرکوب نکند.
+- اتصال SQL، native load، TLS و IIS آزموده نشدند و پیشرفت 20% است.
+
+سابقهٔ P0 در `2026-11-03`: [روش و فرمان‌ها](implementation/CHECKPOINT-02F-P0-MIGRATION-FEASIBILITY_FA.md) و [نتایج گزینش‌شده](checkpoint2f/P0_FEASIBILITY_RESULTS.json). canonical: build صفر warning/error،۱۰۹ unit و۵۰ integration آفلاین موفق، صفر شکست و۸ SQL Skipped. نمونهٔ مستقل net10: build صفر warning/error،۱۴ موفق/صفر شکست و سه HTTP smoke موفق؛ audit نهایی نمونه صفر بستهٔ flagged. نتیجهٔ نمونه و canonical قابل جمع به‌عنوان suite واحد نیستند؛ هیچ SQL connect/metadata، native load، TLS، IIS یا Windows Server اجرا نشد. مهاجرت واقعی باید تمام caseهای قبلی را با runner جدید نگاشت و حفظ کند؛ Skip موفق نیست. پیشرفت20% باقی است.
 
 وضعیت جاری `2026-11-03`: ۱۵۹ آزمون آفلاین موفق، صفر شکست و ۸ SQL Skipped؛ جزئیات اجرای تازهٔ 2F در انتهای سند و [شاهد برنامه](checkpoint2f/APPLICATION_VALIDATION.json) است. پذیرش SQL متصل مسدود است. این سند راهبرد کلی و سابقهٔ آزمون‌های قبلی را حفظ می‌کند. در 2D، **۶۵ آزمون واحد و ۴۳ integration، جمعاً ۱۰۸ آزمون، موفق اجرا شدند**؛ همهٔ ۴۳ قبلی و ۶۵ جدید. build SDK 2.1.818 صفر warning/error و smoke واقعی Kestrel موفق بود. [شواهد تازهٔ 2D](checkpoint2d/APPLICATION_VALIDATION.json). integrationهای تازه DI/TestServer/reader حافظه‌ای‌اند؛ SQL repository یا IIS/ANCM را اثبات نمی‌کنند. ۳۵ آزمون مستقیم schema SQL متعلق به 2C است و در 2D فقط verification خواندنی DB اجرا شد. بخش foundation پایین تاریخی است؛ [گزارش همان مرحله](CHECKPOINT1_IMPLEMENTATION_FA.md).
 

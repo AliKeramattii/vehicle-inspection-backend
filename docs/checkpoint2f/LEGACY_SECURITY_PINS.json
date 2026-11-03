@@ -1,0 +1,99 @@
+{
+  "date": "2026-11-03",
+  "checkpoint": "2F-L1",
+  "scope": "isolated ignored experiments only; canonical source, packages, lockfiles, runtime gate, database and permissions unchanged",
+  "bindingFramework": "ASP.NET Core 2.1 / netcoreapp2.1 (employer/infrastructure constraint)",
+  "canonicalBaseline": "dbdd6ee6ebead440af6d4dc58371f7ef407375d2",
+  "relationToEarlierEvidence": "LEGACY_PROVIDER_RESULTS.json is the earlier same-day L1 run; it is kept unchanged. This file records the independent re-run and the new experiments of this session.",
+  "sdk": { "experiments": "2.1.818", "audit": "10.0.403 (cwd outside repository global.json)" },
+  "warningPolicy": "NU1608/NU1605/NU1701 as errors; no suppression; no DLL copying; no SqlConnection.Open/OpenAsync invocation",
+  "rerunOfEarlierCandidates": {
+    "sds486": { "lockedRestore": 0, "build": "0 warnings/0 errors", "offlineProbe": "Passed (10 checks)", "flagged": 0 },
+    "sds491": { "lockedRestore": 0, "build": "1 warning: package does not support netcoreapp2.1", "offlineProbe": "Failed: PlatformNotSupportedException", "flagged": 0 },
+    "mds114": { "build": "0/0", "offlineProbe": "Passed", "flagged": 4 },
+    "mds217": { "build": "0/0", "offlineProbe": "Passed", "flagged": 2 },
+    "mds317": { "build": "0/0", "offlineProbe": "Passed", "flagged": 3 },
+    "mds406": { "build": "0/0", "offlineProbe": "Passed", "flagged": 3 },
+    "meta_sds486": { "restore": "failed NU1107,NU1608" },
+    "meta_sds491": { "restore": "failed NU1608" },
+    "meta_mds217": { "restore": "failed NU1107" },
+    "meta_mds114": { "build": "0/0", "offlineProbe": "Passed", "flagged": 9 },
+    "granular_sds486": { "build": "0/0", "hostScenarios": "14/14", "offlineProbe": "Passed", "flagged": 5 },
+    "granular_mds406": { "build": "0/0", "hostScenarios": "14/14", "offlineProbe": "Passed", "flagged": 8 }
+  },
+  "newExperiments": [
+    {
+      "id": "granular_sds486_secpin",
+      "addedPins": { "System.Text.RegularExpressions": "4.3.1", "System.Security.Cryptography.Xml": "4.7.1", "System.Security.Cryptography.Pkcs": "4.7.0" },
+      "restore": 0, "lockedRestoreDeterministic": true,
+      "lockSha256": "6c73cdb2c56a031dff45b86e13380a31c348feed3ea16a7af829820d9471865e",
+      "build": "0 warnings/0 errors", "hostScenarios": "14/14", "offlineProbe": "Passed (10 checks)",
+      "flagged": [
+        { "id": "Microsoft.AspNetCore.Server.Kestrel.Core", "version": "2.1.25", "severity": "Critical", "advisory": "GHSA-5rrx-jjjq-q2r5" },
+        { "id": "Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets", "version": "2.1.3", "severity": "High", "advisory": "GHSA-vmch-3w2x-vhgq" },
+        { "id": "Swashbuckle.AspNetCore.SwaggerUI", "version": "4.0.1", "severity": "Moderate", "advisory": "GHSA-qrmm-w75w-3wpx" }
+      ]
+    },
+    {
+      "id": "granular_sds486_secpin2",
+      "addedPins": { "Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets": "2.1.40" },
+      "restore": 0, "lockedRestoreDeterministic": true,
+      "lockSha256": "e28652f77f3238f37c0092cd3a9a8322ccff0266969ab98a0e45e74f2ada2748",
+      "lockedDependencyCount": 198,
+      "build": "0 warnings/0 errors", "hostScenarios": "14/14", "offlineProbe": "Passed (10 checks)",
+      "runtimeFramework": "Microsoft.NETCore.App 2.1.30 only",
+      "nativeSni": { "package": "runtime.win-x64.runtime.native.System.Data.SqlClient.sni/4.4.0", "machine": "0x8664", "sha256": "68705c4ef9ab818f2956a78e05f3fefce501a1448793b073b46110beb49b47d6", "loaded": false },
+      "flagged": [
+        { "id": "Microsoft.AspNetCore.Server.Kestrel.Core", "version": "2.1.25", "severity": "Critical", "advisory": "GHSA-5rrx-jjjq-q2r5", "patchedOnlyIn": "2.3.6" },
+        { "id": "Swashbuckle.AspNetCore.SwaggerUI", "version": "4.0.1", "severity": "Moderate", "advisory": "GHSA-qrmm-w75w-3wpx", "patchedOnlyIn": "6.3.0" }
+      ]
+    },
+    {
+      "id": "granular_sds486_secpin3",
+      "attempt": "Microsoft.AspNetCore.Server.Kestrel.Core 2.3.6 on the 2.1 granular graph",
+      "restore": "failed NU1605 (Microsoft.Net.Http.Headers 2.3.0 vs 2.1.14; System.Text.Encodings.Web 8.0.0 vs 4.5.1)",
+      "conclusion": "Kestrel CVE-2025-55315 fix requires the ASP.NET Core 2.3 package line; not forced"
+    },
+    {
+      "id": "l1-canonical-granular",
+      "description": "copy of tracked canonical src/tests (no lockfiles, no Properties) with Microsoft.AspNetCore.App replaced by the secpin2 granular graph; canonical tree untouched",
+      "apiPackageReferences": 37,
+      "restore": 0, "lockedRestoreDeterministic": true,
+      "lockSha256": {
+        "src/Bazdid.Api": "d717eaa425136eb0910392900deb3f411bd51f4597a924be95daa54cd9657e6c",
+        "tests/Bazdid.IntegrationTests": "226eb1407ed0718d16b632d5890513079390c44f97148396a07eef4f734b2aff",
+        "tests/Bazdid.UnitTests": "c1f12c6d124529048617054a52233f401db60615d1a2d9dec6c49ddf1f035d30"
+      },
+      "csharpChanges": 0,
+      "build": "0 warnings/0 errors",
+      "tests": { "unit": { "total": 109, "passed": 109, "failed": 0, "skipped": 0 }, "integration": { "total": 58, "passed": 50, "failed": 0, "skipped": 8 } },
+      "resolvedRuntime": { "System.Data.SqlClient": "4.8.6", "Kestrel.Core": "2.1.25", "Kestrel.Transport.Sockets": "2.1.40", "System.Text.RegularExpressions": "4.3.1", "System.Security.Cryptography.Xml": "4.7.1" },
+      "runtimeFramework": "Microsoft.NETCore.App 2.1.30 only (no Microsoft.AspNetCore.App shared framework)",
+      "flaggedPerProject": 2
+    }
+  ],
+  "canonicalAuditFresh": { "project": "src/Bazdid.Api", "flagged": 9 },
+  "canonicalRegressionFresh": {
+    "commands": ["dotnet restore Bazdid.sln --locked-mode", "dotnet build Bazdid.sln --configuration Release --no-restore", "dotnet test Bazdid.sln --configuration Release --no-build --no-restore"],
+    "restore": 0, "build": "0 warnings/0 errors",
+    "unit": { "total": 109, "passed": 109, "failed": 0, "skipped": 0 },
+    "integration": { "total": 58, "passed": 50, "failed": 0, "skipped": 8 },
+    "connectedSqlExecuted": 0,
+    "canonicalLockfilesChanged": false
+  },
+  "externalFacts": {
+    "msdsLifecycle": "learn.microsoft.com sqlclient-driver-support-lifecycle (updated 2026-10-23): 1.1 ended 2022-11-21, 2.1 ended 2023-11-20, 3.1 ended 2025-03-30, 4.0 ended 2024-11-19; supported lines 6.1 LTS/7.0/7.1 do not target netcoreapp2.1",
+    "systemDataSqlClient": "package deprecated on NuGet in favour of Microsoft.Data.SqlClient; 4.8.6 published 2024-01-09 with no per-version advisory; exact Microsoft end-of-support date not confirmed from a primary source in this session",
+    "netCore21": "end of support 2021-08-21"
+  },
+  "proposalScriptSha256": {
+    "database/proposals/development_logins.review.sql": "9099de3dce8e77fc037d1bdc6d5b8649ba835253df067e6b0e8d89b121b5b15f",
+    "database/proposals/permissions.review.sql": "9888862c6997eb2ab0fc2effaac6559e6399905e1290fec506100ad46609a396"
+  },
+  "notExecuted": ["SqlConnection.Open/OpenAsync or any SQL query", "native SNI load/SSPI/TLS", "Windows accounts/tasks/rights/ACL", "SQL login/user/role/GRANT/DENY/DDL/DML", "IIS deployment or sidecar", "canonical source/package/lockfile/framework change", "Frontend", "2G/OTP/Session/Info/media/Production"],
+  "rawPrototypeAndLogsCommitted": false,
+  "backendProgressBefore": 20,
+  "earnedProgress": 0,
+  "backendProgressAfter": 20,
+  "conditionalProgressAfterFull2F": 22
+}

@@ -6,7 +6,19 @@
 
 مخزن `C:\Projects\vehicle-inspection-integrated` فقط مرجع **خواندنی** است. آن را تغییر ندهید، با Backend ادغام نکنید و در آن worktree نسازید. دستورهای تاریخی عامل‌های Frontend، مجوز تغییر آن مخزن یا تغییر دامنهٔ این پروژه نیستند.
 
-**وضعیت جاری در 2026-11-03: P0 امکان‌سنجی انجام شد؛ canonical همچنان2.1، پذیرش متصل2F باز و پیشرفت20% است.** مجوز `700bf7eb-76b8-4b84-ad87-1096b3eb12dd` فقط نمونهٔ موقت ignored با .NET10/MDS6.1.7 و مطالعه را پوشش داد. نمونه build صفر warning/error،۱۴ تست و سه HTTP smoke موفق دارد؛ regression اصلی تازه۱۰۹unit+۵۰offline موفق/۸SQL Skipped است. [walkthrough P0](docs/implementation/CHECKPOINT-02F-P0-MIGRATION-FEASIBILITY_FA.md)، [ماتریس مهاجرت](docs/checkpoint2f/P0_MIGRATION_FILE_PLAN_FA.md) و [بستهٔ حساب/permissions](docs/checkpoint2f/CONTINUATION_APPROVAL_FA.md) مرجع ادامه‌اند. کد اصلی، target/package/lockfile، gate، SQL و فایل شخصی کاربر حفظ شدند. در P0 هیچ SQL metadata/connect، native load، حساب/task/ACL، DDL/GRANT یا IIS اجرا نشد. نام‌های پیشنهادی دو حساب و نبود تاریخی آن‌ها تأیید زندهٔ این مرحله نیست. مهاجرت واقعی نیازمند تصویب صریح تغییر الزام2.1 است؛ P1/P2/TLS/activation/استقرار مجوزهای مستقل می‌خواهند. پیش از آن‌ها توقف؛2G، source واقعی، OTP/Session/Info/media/Production شروع نشده‌اند.
+**وضعیت جاری در 2026-11-03: بررسی 2F-L1 (SQL Client سازگار با 2.1) انجام شد؛ canonical همچنان `netcoreapp2.1`، پذیرش متصل 2F باز و پیشرفت 20% است.** [walkthrough L1](docs/implementation/CHECKPOINT-02F-LEGACY-SQLCLIENT-FEASIBILITY_FA.md) نشان داد:
+
+- تنها نامزد فنی، `System.Data.SqlClient 4.8.6` روی گراف ریز ASP.NET Core 2.1 با pinهای امنیتی است.
+- کپی ignored کد canonical روی این گراف صفر warning/error و ۱۰۹ unit + ۵۰ integration موفق/۸ SQL Skipped دارد.
+- audit از ۹ به ۲ بستهٔ flagged رسید؛ Kestrel 2.1.25 با Critical CVE-2025-55315 بی‌وصله باقی است.
+
+هیچ نامزدی امن یا آمادهٔ Production اعلام نشده است. کد، package، lockfile، gate، SQL و فایل شخصی کاربر حفظ شدند. هیچ اتصال SQL، native load، حساب/ACL/task، DDL/GRANT، TLS یا IIS اجرا نشد. ادامه نیازمند تصمیم کارفرما است:
+
+- **L1-A**: تغییر بستهٔ canonical؛
+- **L1-R**: پذیرش مکتوب ریسک باقی‌مانده؛
+- P1 تا P4: هرکدام مستقل.
+
+P0 با .NET10 ([walkthrough](docs/implementation/CHECKPOINT-02F-P0-MIGRATION-FEASIBILITY_FA.md)) فقط پژوهش آینده است و مهاجرت گام مصوب نیست. پیش از تصویب‌ها توقف؛ 2G، source واقعی، OTP/Session/Info/media/Production شروع نشده‌اند.
 
 ## سلسله‌مراتب منابع
 
@@ -17,6 +29,7 @@
 ## سازگاری فنی
 
 - هدف الزام‌آور `ASP.NET Core 2.1` و `netcoreapp2.1`، SQL Server، Windows Server و IIS است. آن را بی‌اجازه ارتقا ندهید.
+- از `2026-11-03`، `netcoreapp2.1` صریحاً **قید کسب‌وکار/زیرساخت کارفرما** است. تغییر آن فقط با تصویب صریح کارفرما و مالک پروژه مجاز است. نتیجهٔ P0 (.NET10) پژوهش آینده است و مهاجرت را گام بعدی مصوب معرفی نکنید. هشدار پایان پشتیبانی و advisoryها باید نمایان بمانند و runtime 2.1 «امن برای Production» علامت نخورد.
 - APIهای این نسل مانند `WebHost`، `Startup`، `AddMvc`، `UseMvc` و `IHostingEnvironment` را به کار ببرید. Minimal API، `WebApplication`، `UseRouting`، `System.Text.Json` و rate limiter داخلی نسخه‌های جدید قابل فرض نیستند.
 - مبنای پیشنهادی SDK برابر `2.1.818`، Runtime برابر `2.1.30` و C# برابر `7.3` است. نسخهٔ دقیق dependency و تمام وابستگی‌های انتقالی را پیش از افزودن بررسی و pin کنید.
 - پایان پشتیبانی این پشته و خطرهای آن باید صریح بماند. build موفق، تأیید امنیت یا آمادگی انتشار عمومی نیست. نصب نرم‌افزار بدون پشتیبانی به تأیید نیاز دارد.

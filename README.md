@@ -2,7 +2,9 @@
 
 این مخزن مستقل، پایهٔ توسعهٔ Backend برنامهٔ فارسی خودبازدید خودرو برای کارگزاری بیمه است. Frontend موجود در `C:\Projects\vehicle-inspection-integrated` فقط مرجع خواندنی است؛ دو مخزن ادغام نمی‌شوند.
 
-در `2026-11-03`، [امکان‌سنجی P0 و نمونهٔ مستقل .NET10](docs/implementation/CHECKPOINT-02F-P0-MIGRATION-FEASIBILITY_FA.md) تکمیل شد: build بدون warning/error،۱۴ تست و سه HTTP smoke موفق؛ driver6.1.7 فقط managed-load و asset-inspect شد. [نقشهٔ مهاجرت](docs/checkpoint2f/P0_MIGRATION_FILE_PLAN_FA.md) آماده است؛ نسخهٔ اصلی همچنان2.1 با gate بسته و بدون تغییر package/lockfile است. regression تازه۱۰۹unit+۵۰offline موفق و۸SQL Skipped دارد. در P0 هیچ اتصال یا metadata SQL، حساب/permission، نصب یا IIS اجرا نشد. **پیشرفت20%؛2F ناقص و2G شروع نشده است.** مهاجرت canonical نیازمند تصویب صریح مالک و عملیات SQL/زیرساخت نیازمند مجوزهای مستقل‌اند.
+**وضعیت `2026-11-03`:** `netcoreapp2.1` قید الزامی کارفرما است. [بررسی 2F-L1](docs/implementation/CHECKPOINT-02F-LEGACY-SQLCLIENT-FEASIBILITY_FA.md) تنها نامزد فنی را `System.Data.SqlClient 4.8.6` روی گراف ریز ASP.NET Core 2.1 با pinهای امنیتی یافت. کپی ignored کد canonical روی آن ۱۵۹ موفق/۸ Skipped و audit با ۲ بستهٔ flagged (به‌جای ۹) دارد. Kestrel 2.1 با Critical بی‌وصله است و هیچ نامزدی امن یا آمادهٔ Production اعلام نشده است. canonical، package/lockfile و gate تغییر نکردند و اتصال SQL، حساب یا IIS اجرا نشد. ادامه به تصمیم کارفرما دربارهٔ L1-A (تغییر بسته) و L1-R (پذیرش ریسک) وابسته است. **پیشرفت 20%.**
+
+سابقه: در `2026-11-03`، [امکان‌سنجی P0 و نمونهٔ مستقل .NET10](docs/implementation/CHECKPOINT-02F-P0-MIGRATION-FEASIBILITY_FA.md) تکمیل شد: build بدون warning/error،۱۴ تست و سه HTTP smoke موفق؛ driver6.1.7 فقط managed-load و asset-inspect شد. [نقشهٔ مهاجرت](docs/checkpoint2f/P0_MIGRATION_FILE_PLAN_FA.md) آماده است؛ نسخهٔ اصلی همچنان2.1 با gate بسته و بدون تغییر package/lockfile است. regression تازه۱۰۹unit+۵۰offline موفق و۸SQL Skipped دارد. در P0 هیچ اتصال یا metadata SQL، حساب/permission، نصب یا IIS اجرا نشد. **پیشرفت20%؛2F ناقص و2G شروع نشده است.** مهاجرت canonical نیازمند تصویب صریح مالک و عملیات SQL/زیرساخت نیازمند مجوزهای مستقل‌اند.
 
 ## فناوری و میزبانی
 

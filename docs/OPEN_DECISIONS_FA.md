@@ -52,3 +52,19 @@ O26: دو نام `.\BAZDIDDevWriter` و `.\BAZDIDDevReader` با Batch logon/tas
 مجوز `700bf7eb-76b8-4b84-ad87-1096b3eb12dd` برای نمونهٔ مستقل اجرا شد. [walkthrough P0](implementation/CHECKPOINT-02F-P0-MIGRATION-FEASIBILITY_FA.md) امکان compile/managed-load و حفظ Startup روی.NET10 را نشان داد؛۱۴تست و سهHTTP موفق‌اند. Pkcs انتقالی9.0.11 دارای دو advisory بود؛ pin10.0.14 در محدودهٔ dependency، audit نمونه را بدون flagged کرد. canonical و advisoryهایش تغییر نکردند؛ پشتیبانی/امنیت Production یا اتصال SQL اثبات نشد.
 
 تصمیم باز O24: تصویب تغییر الزام2.1 و مهاجرت واقعی آفلاین، گراف Swagger/Newtonsoft و parity قرارداد، سپس native/SSPI/TLS و provider متصل. تصمیم باز O26: نام/SID/حقوق دو حساب، hash scriptهای P1/P2، verifier مستقل و effective permission. چک‌لیست دقیق در walkthrough آمده و proposalها بدون تغییرند. metadata حساب/DB این بار خوانده نشد؛ گزاره‌های نبود آن‌ها در بخش قبلی تاریخی‌اند. درصد20، هدف مشروط پذیرش کامل2F برابر22 و2G شروع‌نشده است.
+
+## 2F-L1؛ قید الزامی 2.1 و تصمیم‌های L1-A/L1-R
+
+در `2026-11-03` کارفرما `netcoreapp2.1` را الزامی اعلام کرد. پیشنهاد مهاجرت O24 در P0، گام مصوب نیست و فقط پژوهش آینده است. [walkthrough L1](implementation/CHECKPOINT-02F-LEGACY-SQLCLIENT-FEASIBILITY_FA.md) نشان داد:
+
+- metapackage هیچ SqlClient وصله‌شده‌ای را نمی‌پذیرد.
+- تنها نامزد فنی، `System.Data.SqlClient 4.8.6` روی گراف ریز با pinهای امنیتی است: build و ۱۵۹ آزمون کپی canonical موفق، audit ۲ بستهٔ flagged.
+- `Kestrel.Core 2.1.25` (CVE-2025-55315، Critical) در خط 2.1 وصله ندارد.
+
+| شناسه | تصمیم باز | صاحب |
+|---|---|---|
+| L1-A | تغییر بستهٔ canonical از `Microsoft.AspNetCore.App` به گراف ریز + SDS 4.8.6؛ target و کد ثابت | کارفرما + مالک |
+| L1-R | پذیرش مکتوب و زمان‌دار ریسک Kestrel/EOL، کنترل‌های جبرانی و تاریخ بازبینی | کارفرما/امنیت |
+| D | اجازهٔ runtime/سرویس دادهٔ جدا؛ فقط در صورت رد L1-R | زیرساخت |
+
+O26 (P1/P2) بدون تغییر و منتظر تصویب جدا است. بدون L1-A، gate بسته می‌ماند. بدون L1-R، فعال‌سازی متصل یا Production مجاز نیست. درصد 20 است.
