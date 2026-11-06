@@ -1,0 +1,86 @@
+{
+  "date": "2026-11-06",
+  "checkpoint": "2F-L1A",
+  "authorization": "owner instruction 2026-11-06: 'Execute Approved L1-A', scope L1-A offline dependency changes only; explicitly not L1-R, not SQL/accounts/permissions/TLS/IIS/Production; no separate employer document recorded in repository",
+  "baseCommit": "0eda1f3e08d1184caafbf706751cfbd9ea61b67a",
+  "targetFramework": "netcoreapp2.1",
+  "langVersion": "7.3",
+  "runtime": "Microsoft.NETCore.App 2.1.30 only (Microsoft.AspNetCore.App shared framework no longer referenced)",
+  "sourceOfConfiguration": "l1-canonical-granular (graph granular_sds486_secpin2) from LEGACY_SECURITY_PINS.json",
+  "changedFiles": [
+    "src/Bazdid.Api/Bazdid.Api.csproj",
+    "src/Bazdid.Api/packages.lock.json",
+    "tests/Bazdid.IntegrationTests/packages.lock.json",
+    "tests/Bazdid.UnitTests/packages.lock.json"
+  ],
+  "csharpFilesChanged": 0,
+  "csprojIdenticalToTestedCopy": true,
+  "lockfilesIdenticalToTestedCopy": true,
+  "lockSha256": {
+    "src/Bazdid.Api": "d717eaa425136eb0910392900deb3f411bd51f4597a924be95daa54cd9657e6c",
+    "tests/Bazdid.IntegrationTests": "226eb1407ed0718d16b632d5890513079390c44f97148396a07eef4f734b2aff",
+    "tests/Bazdid.UnitTests": "c1f12c6d124529048617054a52233f401db60615d1a2d9dec6c49ddf1f035d30"
+  },
+  "resolved": {
+    "System.Data.SqlClient": "4.8.6",
+    "runtime.win-x64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+    "Microsoft.AspNetCore.Server.Kestrel.Core": "2.1.25",
+    "Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets": "2.1.40",
+    "System.Text.RegularExpressions": "4.3.1",
+    "System.Security.Cryptography.Xml": "4.7.1",
+    "System.Security.Cryptography.Pkcs": "4.7.0",
+    "Swashbuckle.AspNetCore.SwaggerUI": "4.0.1",
+    "Microsoft.AspNetCore.App": "not referenced"
+  },
+  "commands": {
+    "sdk": "2.1.818",
+    "restore": { "command": "dotnet restore Bazdid.sln", "exitCode": 0 },
+    "lockedRestore": { "command": "dotnet restore Bazdid.sln --locked-mode", "exitCode": 0 },
+    "build": { "command": "dotnet build Bazdid.sln --configuration Release --no-restore", "exitCode": 0, "warnings": 0, "errors": 0 },
+    "test": { "command": "dotnet test Bazdid.sln --configuration Release --no-build --no-restore", "exitCode": 0 }
+  },
+  "tests": {
+    "unit": { "total": 109, "passed": 109, "failed": 0, "skipped": 0 },
+    "offlineIntegration": { "total": 58, "passed": 50, "failed": 0, "skipped": 8 },
+    "connectedSqlExecuted": 0,
+    "factOrTheoryAttributes": 79,
+    "skipAttributes": 8,
+    "testSourceChanged": false
+  },
+  "audit": {
+    "sdk": "10.0.403",
+    "command": "dotnet list <project> package --vulnerable --include-transitive --format json --no-restore",
+    "flaggedPerProject": 2,
+    "flaggedBefore": 9,
+    "remaining": [
+      { "id": "Microsoft.AspNetCore.Server.Kestrel.Core", "version": "2.1.25", "severity": "Critical", "advisory": "GHSA-5rrx-jjjq-q2r5", "cve": "CVE-2025-55315", "patchAvailableIn21Line": false },
+      { "id": "Swashbuckle.AspNetCore.SwaggerUI", "version": "4.0.1", "severity": "Moderate", "advisory": "GHSA-qrmm-w75w-3wpx", "patchAvailableIn21Line": false }
+    ],
+    "suppressed": false
+  },
+  "kestrelSmoke": {
+    "environment": "Development", "host": "KestrelLoopback",
+    "before": { "health": 200, "swagger": 200, "basePath": "/API/BAZDID", "publicPathCount": 1 },
+    "after": { "health": 200, "swagger": 200, "basePath": "/API/BAZDID", "publicPathCount": 1 },
+    "swaggerSha256Before": "4396ffe794e0c9f5ea48f80afd484c1fce760bd892e174d08c0755886ee4c173",
+    "swaggerSha256After": "4396ffe794e0c9f5ea48f80afd484c1fce760bd892e174d08c0755886ee4c173",
+    "swaggerIdentical": true,
+    "processStopped": true
+  },
+  "publishInspection": {
+    "outputLocation": "session scratchpad (not deployed, not committed)",
+    "dllCount": 120,
+    "sniNative": ["win-x64", "win-x86", "win-arm64"],
+    "productionExampleExcluded": true,
+    "lockfileExcluded": true
+  },
+  "gate": {
+    "SqlRuntimeGate.ConnectedAcceptanceVerified": false,
+    "appsettings.json SqlRuntime.Enabled": false
+  },
+  "notExecuted": ["SQL connection/query/DDL/DML", "native SNI load/SSPI/TLS", "Windows accounts/tasks/rights/ACL", "SQL login/user/role/GRANT/DENY", "IIS/staging/Production deployment", "L1-R risk acceptance", "P1-P5", "2G"],
+  "backendProgressBefore": 20,
+  "earnedProgress": 0,
+  "backendProgressAfter": 20,
+  "conditionalProgressAfterFull2F": 22
+}

@@ -1,6 +1,6 @@
 # برنامهٔ مرجع پیاده‌سازی Backend بازدید
 
-تاریخ: `2026-11-03`؛ مخزن: `C:\Projects\vehicle-inspection-backend`. **وضعیت جاری: 2F-L1 انجام شد؛ `netcoreapp2.1` قید الزامی کارفرما است و canonical مهاجرت نمی‌کند.** نتیجه، [walkthrough L1](docs/implementation/CHECKPOINT-02F-LEGACY-SQLCLIENT-FEASIBILITY_FA.md) و تصمیم‌های باز L1-A/L1-R در بخش پایانی همین سند آمده‌اند. پیشرفت 20% است. متن زیر سابقهٔ P0 است و مهاجرت را گام مصوب معرفی نمی‌کند. **سابقه: P0 امکان‌سنجی تکمیل شد؛ Checkpoint2F هنوز پذیرش متصل ندارد و پیشرفت20% است.** [نمونهٔ جدا و walkthrough](docs/implementation/CHECKPOINT-02F-P0-MIGRATION-FEASIBILITY_FA.md) با مجوز `700bf7eb-76b8-4b84-ad87-1096b3eb12dd` ساخته شد: .NET10/MDS6.1.7 با pin امنیتی Pkcs10.0.14، build بدون warning/error،۱۴ تست و سه HTTP smoke موفق. regression اصلی تازه۱۰۹unit+۵۰offline موفق/۸SQL Skipped؛ canonical2.1، تمام package/lockfileها و gate بدون تغییر. هیچ SQL connection/metadata، permission/account یا IIS در P0 اجرا نشد. [برنامهٔ فایل‌به‌فایل](docs/checkpoint2f/P0_MIGRATION_FILE_PLAN_FA.md) و [بستهٔ P1/P2](docs/checkpoint2f/CONTINUATION_APPROVAL_FA.md) آماده‌اند؛ مهاجرت واقعی و هر عملیات زیرساخت/SQL مجوز جدا می‌خواهد.2G شروع نشده است.
+تاریخ: `2026-11-06`؛ مخزن: `C:\Projects\vehicle-inspection-backend`. **وضعیت جاری: L1-A روی canonical اعمال شد. 2F کامل نیست و پیشرفت 20% است.** شرح در بخش پایانی «2F-L1A» آمده است. **سابقهٔ 2026-11-03: 2F-L1 انجام شد؛ `netcoreapp2.1` قید الزامی کارفرما است و canonical مهاجرت نمی‌کند.** نتیجه، [walkthrough L1](docs/implementation/CHECKPOINT-02F-LEGACY-SQLCLIENT-FEASIBILITY_FA.md) و تصمیم‌های باز L1-A/L1-R در بخش پایانی همین سند آمده‌اند. پیشرفت 20% است. متن زیر سابقهٔ P0 است و مهاجرت را گام مصوب معرفی نمی‌کند. **سابقه: P0 امکان‌سنجی تکمیل شد؛ Checkpoint2F هنوز پذیرش متصل ندارد و پیشرفت20% است.** [نمونهٔ جدا و walkthrough](docs/implementation/CHECKPOINT-02F-P0-MIGRATION-FEASIBILITY_FA.md) با مجوز `700bf7eb-76b8-4b84-ad87-1096b3eb12dd` ساخته شد: .NET10/MDS6.1.7 با pin امنیتی Pkcs10.0.14، build بدون warning/error،۱۴ تست و سه HTTP smoke موفق. regression اصلی تازه۱۰۹unit+۵۰offline موفق/۸SQL Skipped؛ canonical2.1، تمام package/lockfileها و gate بدون تغییر. هیچ SQL connection/metadata، permission/account یا IIS در P0 اجرا نشد. [برنامهٔ فایل‌به‌فایل](docs/checkpoint2f/P0_MIGRATION_FILE_PLAN_FA.md) و [بستهٔ P1/P2](docs/checkpoint2f/CONTINUATION_APPROVAL_FA.md) آماده‌اند؛ مهاجرت واقعی و هر عملیات زیرساخت/SQL مجوز جدا می‌خواهد.2G شروع نشده است.
 
 ## هدف، معماری و وابستگی
 
@@ -347,3 +347,23 @@ regression تازهٔ canonical با سه فرمان مقرر: restore/build ص�
 - D (سرویس دادهٔ جدا): فقط مشروط به اجازهٔ زیرساخت.
 
 **قبلی 20% + سهم این بررسی 0 = 20%؛ باقی 80%.** وزن‌ها تغییر نکردند. ۲ واحد 2F فقط با provider مصوب و متصل، هویت‌های مصوب، effective permission، آزمون‌های repository/transaction/concurrency و regression/بازبینی امنیت کسب می‌شود؛ هدف مشروط 22% است. گام بعد: توقف تا تصمیم L1-A/L1-R. پس از L1-A، checkpoint آفلاین متمرکز تغییر بستهٔ canonical اجرا می‌شود. 2G شروع نشده است. SHA و push در [گزارش GitHub](docs/GITHUB_SYNC_FA.md) ثبت می‌شوند.
+
+## 2F-L1A — اعمال آفلاین وابستگی‌های مصوب روی canonical
+
+در `2026-11-06` دستور مالک («Execute Approved L1-A») فقط تغییر آفلاین بسته را تصویب کرد. L1-R، SQL، حساب، مجوز، TLS، IIS و Production صریحاً بیرون از این تصویب‌اند. [walkthrough L1-A](docs/implementation/CHECKPOINT-02F-L1A-CANONICAL-DEPENDENCIES_FA.md) و [شاهد](docs/checkpoint2f/L1A_VALIDATION.json) تحویل‌اند.
+
+انجام‌شده:
+
+- در `Bazdid.Api.csproj`، `Microsoft.AspNetCore.App 2.1.30` با ۳۵ بستهٔ ریز دقیق جایگزین شد، از جمله `System.Data.SqlClient 4.8.6`، `Kestrel.Transport.Sockets 2.1.40`، `RegularExpressions 4.3.1`، `Cryptography.Xml 4.7.1` و `Pkcs 4.7.0`. `WarningsAsErrors` برای NU1608/NU1605/NU1701 هم افزوده شد.
+- csproj با کپی آزمودهٔ L1 یکسان است و سه lockfile بایت‌به‌بایت برابرند. کد C#، تنظیمات و آزمون‌ها تغییری ندارند.
+- target همچنان `netcoreapp2.1` و C# 7.3 است. runtime فقط `Microsoft.NETCore.App 2.1.30` است و DLLهای ASP.NET Core app-local هستند.
+
+نتیجه:
+
+- restore، locked restore و build صفر warning/error.
+- ۱۰۹/۱۰۹ unit؛ ۵۰ موفق و ۸ SQL Skipped از ۵۸ integration؛ صفر شکست.
+- smoke Kestrel قبل و بعد: health و Swagger برابر 200، basePath `/API/BAZDID` و یک path عمومی. Swagger بایت‌به‌بایت یکسان است.
+- audit: ۲ بستهٔ flagged به‌جای ۹. باقی‌مانده: `Kestrel.Core 2.1.25` Critical (CVE-2025-55315، بی‌وصله در 2.1) و `SwaggerUI 4.0.1` Moderate.
+- gate `ConnectedAcceptanceVerified=false` و `SqlRuntime.Enabled=false` حفظ شدند. هیچ اتصال یا عملیات SQL و زیرساخت اجرا نشد.
+
+**قبلی 20% + سهم L1-A 0 = 20%؛ باقی 80%.** L1-A پیش‌نیاز آفلاین است، نه پذیرش 2F. ترتیب بعدی، هرکدام با مجوز مستقل: L1-R، P1، P2، P3، P4/P5. پس از پذیرش کامل 2F (هدف مشروط 22%)، Checkpoint 2G مجاز می‌شود. آزمون IIS/staging خروجی app-local پیش از هر استقرار لازم است.

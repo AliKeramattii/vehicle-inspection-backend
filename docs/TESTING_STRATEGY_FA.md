@@ -1,6 +1,15 @@
 # راهبرد آزمون و کنترل کیفیت
 
-شاهد تازهٔ 2F-L1 در `2026-11-03`: [روش](implementation/CHECKPOINT-02F-LEGACY-SQLCLIENT-FEASIBILITY_FA.md) و [نتایج](checkpoint2f/LEGACY_SECURITY_PINS.json).
+شاهد تازهٔ L1-A در `2026-11-06` ([روش](implementation/CHECKPOINT-02F-L1A-CANONICAL-DEPENDENCIES_FA.md)، [نتایج](checkpoint2f/L1A_VALIDATION.json)): canonical روی گراف ریز با `System.Data.SqlClient 4.8.6`.
+
+- `restore`، `restore --locked-mode`، build Release: صفر warning/error.
+- ۱۰۹/۱۰۹ unit؛ ۵۰ موفق، ۰ شکست و ۸ SQL Skipped از ۵۸ integration. آزمون Skipped موفق نیست و آزمون متصل اجرا نشد.
+- smoke Kestrel قبل و بعد با Swagger بایت‌به‌بایت یکسان.
+- audit با SDK 10 خارج از `global.json`: ۲ بستهٔ flagged.
+
+از این پس هر تغییر بسته باید همین چهار فرمان، مقایسهٔ Swagger و audit را ثبت کند.
+
+سابقهٔ 2F-L1 در `2026-11-03`: [روش](implementation/CHECKPOINT-02F-LEGACY-SQLCLIENT-FEASIBILITY_FA.md) و [نتایج](checkpoint2f/LEGACY_SECURITY_PINS.json).
 
 - **canonical** (`restore --locked-mode`، `build --configuration Release --no-restore`، `test --configuration Release --no-build --no-restore`): صفر warning/error، ۱۰۹ unit + ۵۰ integration موفق، صفر شکست، ۸ SQL Skipped.
 - **آزمایش‌های جدا:** هر نامزد probe آفلاین ۱۰ بررسی بدون `Open`/کوئری دارد. گراف ریز ۱۴ سناریوی میزبان دارد. کپی canonical روی گراف ریز همان ۱۰۹ + ۵۰ موفق/۸ Skipped را دارد.

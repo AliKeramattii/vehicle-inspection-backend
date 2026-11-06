@@ -2,7 +2,9 @@
 
 این صفحه، نقطهٔ ورود به توضیح «چگونه انجام شد» است؛ گزارش‌های قبلی سابقهٔ همان مرحله‌اند.
 
-**وضعیت جاری `2026-11-03`:** [2F-L1 — SQL Client سازگار با 2.1](CHECKPOINT-02F-LEGACY-SQLCLIENT-FEASIBILITY_FA.md) را بخوانید. این سند ۱۲ گراف آزمایشی، گراف ریز با `System.Data.SqlClient 4.8.6` و pinهای امنیتی، کپی canonical با ۱۵۹ موفق/۸ Skipped، audit با ۲ بستهٔ flagged و چک‌لیست P1/P2 را دارد. canonical تغییر نکرد و اتصال SQL اجرا نشد. پیشرفت **20%** است. [شاهد](../checkpoint2f/LEGACY_SECURITY_PINS.json).
+**وضعیت جاری `2026-11-06`:** [L1-A — وابستگی‌های canonical](CHECKPOINT-02F-L1A-CANONICAL-DEPENDENCIES_FA.md) را بخوانید. گراف ریز با `System.Data.SqlClient 4.8.6` روی canonical اعمال شده است. ۱۵۹ آزمون موفق، ۸ Skipped، Swagger بدون تغییر و audit با ۲ بستهٔ flagged ثبت شده‌اند. gate SQL بسته و پیشرفت **20%** است.
+
+سابقه، **وضعیت `2026-11-03`:** [2F-L1 — SQL Client سازگار با 2.1](CHECKPOINT-02F-LEGACY-SQLCLIENT-FEASIBILITY_FA.md) را بخوانید. این سند ۱۲ گراف آزمایشی، گراف ریز با `System.Data.SqlClient 4.8.6` و pinهای امنیتی، کپی canonical با ۱۵۹ موفق/۸ Skipped، audit با ۲ بستهٔ flagged و چک‌لیست P1/P2 را دارد. canonical تغییر نکرد و اتصال SQL اجرا نشد. پیشرفت **20%** است. [شاهد](../checkpoint2f/LEGACY_SECURITY_PINS.json).
 
 سابقه، وضعیت `2026-11-03`: [P0 امکان‌سنجی و آزمایش موقت](CHECKPOINT-02F-P0-MIGRATION-FEASIBILITY_FA.md) با۱۴ تست/سه HTTP smoke موفق انجام شد؛۱۵۹ تست canonical تازه موفق و۸SQL Skipped است. canonical مهاجرت نکرد و در P0 هیچ اتصال/metadata SQL اجرا نشد. پذیرش متصل O24/O26 باز و پیشرفت **20%** است. verificationهای زندهٔ اسناد قبلی و۳۵CASE SQL متعلق به مراحل تاریخی‌اند.
 

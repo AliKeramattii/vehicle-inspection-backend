@@ -6,7 +6,16 @@
 
 مخزن `C:\Projects\vehicle-inspection-integrated` فقط مرجع **خواندنی** است. آن را تغییر ندهید، با Backend ادغام نکنید و در آن worktree نسازید. دستورهای تاریخی عامل‌های Frontend، مجوز تغییر آن مخزن یا تغییر دامنهٔ این پروژه نیستند.
 
-**وضعیت جاری در 2026-11-03: بررسی 2F-L1 (SQL Client سازگار با 2.1) انجام شد؛ canonical همچنان `netcoreapp2.1`، پذیرش متصل 2F باز و پیشرفت 20% است.** [walkthrough L1](docs/implementation/CHECKPOINT-02F-LEGACY-SQLCLIENT-FEASIBILITY_FA.md) نشان داد:
+**وضعیت جاری در 2026-11-06: L1-A با تصویب مالک روی canonical اعمال شد.** [walkthrough L1-A](docs/implementation/CHECKPOINT-02F-L1A-CANONICAL-DEPENDENCIES_FA.md):
+
+- metapackage با گراف ریز ASP.NET Core 2.1 و `System.Data.SqlClient 4.8.6` جایگزین شد؛ target همچنان `netcoreapp2.1`.
+- build صفر warning/error؛ ۱۰۹ unit + ۵۰ integration موفق، ۸ SQL Skipped.
+- Swagger قبل و بعد یکسان است و audit ۲ بستهٔ flagged دارد (Kestrel Critical، SwaggerUI Moderate).
+- gate و `SqlRuntime.Enabled` بسته‌اند.
+
+L1-R، P1 تا P5 و 2G تصویب یا اجرا نشده‌اند. **2F کامل نیست و پیشرفت 20% است.**
+
+**سابقهٔ 2026-11-03: بررسی 2F-L1 (SQL Client سازگار با 2.1) انجام شد؛ canonical همچنان `netcoreapp2.1`، پذیرش متصل 2F باز و پیشرفت 20% است.** [walkthrough L1](docs/implementation/CHECKPOINT-02F-LEGACY-SQLCLIENT-FEASIBILITY_FA.md) نشان داد:
 
 - تنها نامزد فنی، `System.Data.SqlClient 4.8.6` روی گراف ریز ASP.NET Core 2.1 با pinهای امنیتی است.
 - کپی ignored کد canonical روی این گراف صفر warning/error و ۱۰۹ unit + ۵۰ integration موفق/۸ SQL Skipped دارد.
