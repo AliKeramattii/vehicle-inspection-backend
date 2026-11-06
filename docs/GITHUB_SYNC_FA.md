@@ -209,3 +209,14 @@ commit `c3739aec312b67b41741d083f9f739d6acee96e5` (والد `0eda1f3e08d1184caaf
 - ۱۳ فایل تغییر کرد: csproj، سه lockfile و مستندات.
 
 پیش از commit، اسکن راز و مسیر شخصی و بررسی ۲۰۲ پیوند نسبی (صفر شکسته) انجام شد. خروجی publish، logها، `bin/obj`، آزمایش‌ها و `src/Bazdid.Api/Properties/` منتشر نشدند. فقط `main` push شد. این ثبت تکمیلی سهم پیشرفت ندارد؛ پیشرفت 20% است.
+
+## انتشار تأییدشدهٔ گزارش P1–P5
+
+commit `b3b7c686a503024fb267ca7cafa9d4213e7ccaf2` (والد `c17e5183b53b91cb7aa20d50f86604da7760360c`) با `git push origin main:main` و بدون force منتشر شد. شواهد:
+
+- خروجی push برابر `c17e518..b3b7c68  main -> main` بود.
+- پس از fetch، HEAD محلی و `refs/heads/main` روی remote هر دو `b3b7c68` بودند.
+- blob چهار فایل در GitHub API با `HEAD` محلی برابر بود: گزارش پذیرش متصل `1430ee56…`، `CONNECTED_PREFLIGHT.json` `af05baab…` و دو script مدیر `a61cb803…` و `6827b752…`.
+- SHA-256 دو script پس از commit با مقدار ثبت‌شده برابر ماند، چون `.gitattributes` برای آن‌ها `eol=crlf` را pin کرده است.
+
+پیش از commit، اسکن راز و نام ماشین و کاربر و بررسی ۲۲۲ پیوند (صفر شکسته) انجام شد. probe، logها و `src/Bazdid.Api/Properties/` منتشر نشدند. پیشرفت 20% است.
