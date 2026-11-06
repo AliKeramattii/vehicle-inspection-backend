@@ -220,3 +220,14 @@ commit `b3b7c686a503024fb267ca7cafa9d4213e7ccaf2` (والد `c17e5183b53b91cb7aa
 - SHA-256 دو script پس از commit با مقدار ثبت‌شده برابر ماند، چون `.gitattributes` برای آن‌ها `eol=crlf` را pin کرده است.
 
 پیش از commit، اسکن راز و نام ماشین و کاربر و بررسی ۲۲۲ پیوند (صفر شکسته) انجام شد. probe، logها و `src/Bazdid.Api/Properties/` منتشر نشدند. پیشرفت 20% است.
+
+## انتشار تأییدشدهٔ بازنگری scriptهای P1 و P3 (2026-11-07)
+
+commit `5a192a8d9fbb74babbef4432daa0b6ded364aead` (والد `9c2775e025e18908defa9e89861071ecaf9c8503`) با `git push origin main:main` و بدون force منتشر شد. شواهد:
+
+- خروجی push برابر `9c2775e..5a192a8  main -> main` بود.
+- پس از fetch، HEAD محلی و `origin/main` هر دو `5a192a8` بودند.
+- blob سه فایل در GitHub API عمومی (در همان commit) با HEAD محلی برابر بود: script P3 `fdbf7ead…`، script P1 `27513bdc…` و گزارش پذیرش متصل `428a96d8…`.
+- SHA-256 دو script در checkout تازه (`git checkout-index`) با مقدار مستند برابر بود: P3 `07383213…49ec` و P1 `351227f2…838a`.
+
+پیش از commit، اسکن راز، نام ماشین و SID انجام شد و نتیجه‌ای نداشت. هیچ script اجرا نشد. پیشرفت 20% است.
