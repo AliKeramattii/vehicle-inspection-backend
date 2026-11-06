@@ -194,3 +194,18 @@ commit `069f55ca190dfa2fd908c826f8aea67d9cca5984` (والد `dbdd6ee6ebead440af6
 - اشیای تازه فقط ۱۲ فایل مستند همان commit بودند. پیش از commit، اسکن راز/مسیر شخصی و بررسی ۲۲۲ پیوند نسبی (صفر شکسته) انجام شد.
 
 آزمایش‌ها، logها، `bin/obj`، cache بسته‌ها و `src/Bazdid.Api/Properties/` منتشر نشدند. فقط `main` push شد و ref تاریخچهٔ اصلی محلی ارسال نشد. این ثبت تکمیلی سهم پیشرفت ندارد؛ پیشرفت 20% است.
+
+## انتشار تأییدشدهٔ L1-A
+
+commit `c3739aec312b67b41741d083f9f739d6acee96e5` (والد `0eda1f3e08d1184caafbf706751cfbd9ea61b67a`) با `git push origin main:main` و بدون force منتشر شد. شواهد:
+
+- خروجی push برابر `0eda1f3..c3739ae  main -> main` بود.
+- پس از fetch، HEAD محلی و `refs/heads/main` روی remote هر دو `c3739ae` بودند.
+- blob چهار فایل در GitHub API با `HEAD` محلی برابر بود:
+  - `Bazdid.Api.csproj`: `b8a63b55…`؛
+  - `src/Bazdid.Api/packages.lock.json`: `04225ee7…`؛
+  - walkthrough L1-A: `2b9d7431…`؛
+  - `L1A_VALIDATION.json`: `f0b1ebf1…`.
+- ۱۳ فایل تغییر کرد: csproj، سه lockfile و مستندات.
+
+پیش از commit، اسکن راز و مسیر شخصی و بررسی ۲۰۲ پیوند نسبی (صفر شکسته) انجام شد. خروجی publish، logها، `bin/obj`، آزمایش‌ها و `src/Bazdid.Api/Properties/` منتشر نشدند. فقط `main` push شد. این ثبت تکمیلی سهم پیشرفت ندارد؛ پیشرفت 20% است.
