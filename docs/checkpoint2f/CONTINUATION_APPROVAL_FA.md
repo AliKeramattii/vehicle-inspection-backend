@@ -185,3 +185,11 @@ for package, node in target.items():
 - چون کد فعلی Reader را به کار نمی‌برد (`UnconfiguredSourceReadConnectionFactory`)، تعویق ساخت Reader تا تصویب mapping مبدأ، گزینه‌ای کم‌اختیارتر است. این کار نسخه و hash تازهٔ script می‌خواهد و فعلاً پیشنهاد است.
 
 چک‌لیست اجرایی در بخش ۱۵ walkthrough L1 آمده است. هیچ حساب، login، user، role، GRANT/DENY، ACL یا task ساخته یا اجرا نشد. ترتیب لازم: L1-A، آفلاین canonical، L1-R، P1، P2، P3، P4/P5؛ هرکدام مستقل. درصد 20.
+
+## اجرای P1–P5 در 2026-11-06؛ ترتیب اصلاح‌شده P3 → P1 → P2
+
+اعلام مالک دربارهٔ تفویض اختیار Development محلی ثبت شد. این اعلام L1-R رسمی برای Production نیست. اجرای واقعی نشان داد ترتیب درست **P3 پیش از P2** است، چون حتی اتصال مدیر با سیاست امن به certificate معتبر نیاز دارد.
+
+- P1 و P3 به‌دلیل نبود token elevated به‌صورت script مدیر تحویل شدند: [certificate](../../deployment/development/Set-BazdidSqlDevCertificate.review.ps1) و [حساب‌ها](../../deployment/development/New-BazdidDevIdentities.review.ps1).
+- دو SQL proposal بدون تغییر ماندند و hash آن‌ها برابر شاهد قبلی است.
+- جزئیات: [گزارش پذیرش متصل](../implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md). درصد 20 است.

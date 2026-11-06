@@ -2,7 +2,9 @@
 
 این صفحه، نقطهٔ ورود به توضیح «چگونه انجام شد» است؛ گزارش‌های قبلی سابقهٔ همان مرحله‌اند.
 
-**وضعیت جاری `2026-11-06`:** [L1-A — وابستگی‌های canonical](CHECKPOINT-02F-L1A-CANONICAL-DEPENDENCIES_FA.md) را بخوانید. گراف ریز با `System.Data.SqlClient 4.8.6` روی canonical اعمال شده است. ۱۵۹ آزمون موفق، ۸ Skipped، Swagger بدون تغییر و audit با ۲ بستهٔ flagged ثبت شده‌اند. gate SQL بسته و پیشرفت **20%** است.
+**وضعیت جاری `2026-11-06`:** [پذیرش متصل 2F (P1–P5)](CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md) در P3 متوقف است: TLS با `SEC_E_UNTRUSTED_ROOT` رد شد و نشست عامل elevated نیست. scriptهای مدیر آماده و اجرانشده‌اند. پیشرفت **20%**.
+
+سابقه، **وضعیت `2026-11-06`:** [L1-A — وابستگی‌های canonical](CHECKPOINT-02F-L1A-CANONICAL-DEPENDENCIES_FA.md) را بخوانید. گراف ریز با `System.Data.SqlClient 4.8.6` روی canonical اعمال شده است. ۱۵۹ آزمون موفق، ۸ Skipped، Swagger بدون تغییر و audit با ۲ بستهٔ flagged ثبت شده‌اند. gate SQL بسته و پیشرفت **20%** است.
 
 سابقه، **وضعیت `2026-11-03`:** [2F-L1 — SQL Client سازگار با 2.1](CHECKPOINT-02F-LEGACY-SQLCLIENT-FEASIBILITY_FA.md) را بخوانید. این سند ۱۲ گراف آزمایشی، گراف ریز با `System.Data.SqlClient 4.8.6` و pinهای امنیتی، کپی canonical با ۱۵۹ موفق/۸ Skipped، audit با ۲ بستهٔ flagged و چک‌لیست P1/P2 را دارد. canonical تغییر نکرد و اتصال SQL اجرا نشد. پیشرفت **20%** است. [شاهد](../checkpoint2f/LEGACY_SECURITY_PINS.json).
 

@@ -1,6 +1,15 @@
 # راهبرد آزمون و کنترل کیفیت
 
-شاهد تازهٔ L1-A در `2026-11-06` ([روش](implementation/CHECKPOINT-02F-L1A-CANONICAL-DEPENDENCIES_FA.md)، [نتایج](checkpoint2f/L1A_VALIDATION.json)): canonical روی گراف ریز با `System.Data.SqlClient 4.8.6`.
+شاهد تازهٔ P1–P5 در `2026-11-06` ([گزارش](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md)):
+
+- regression: ۱۰۹ unit و ۵۰ integration موفق، ۰ شکست، ۸ SQL Skipped؛ build با 0 warning و 0 error؛ smoke و Swagger بدون تغییر.
+- آزمون متصل: **صفر اجرا**.
+- probe اتصال امن به سرور رسید، اما TLS رد شد؛ این شکست، شاهد مانع است، نه آزمون موفق.
+- scriptهای مدیر فقط parse شدند و آزمون منفی guard بدون elevation روی آن‌ها اجرا شد.
+
+قاعدهٔ پایدار: پذیرش متصل فقط با `Encrypt=true` و `TrustServerCertificate=false` و زیر token واقعی Writer معتبر است.
+
+شاهد L1-A در `2026-11-06` ([روش](implementation/CHECKPOINT-02F-L1A-CANONICAL-DEPENDENCIES_FA.md)، [نتایج](checkpoint2f/L1A_VALIDATION.json)): canonical روی گراف ریز با `System.Data.SqlClient 4.8.6`.
 
 - `restore`، `restore --locked-mode`، build Release: صفر warning/error.
 - ۱۰۹/۱۰۹ unit؛ ۵۰ موفق، ۰ شکست و ۸ SQL Skipped از ۵۸ integration. آزمون Skipped موفق نیست و آزمون متصل اجرا نشد.

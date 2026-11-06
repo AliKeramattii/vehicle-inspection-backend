@@ -2,7 +2,9 @@
 
 این مخزن مستقل، پایهٔ توسعهٔ Backend برنامهٔ فارسی خودبازدید خودرو برای کارگزاری بیمه است. Frontend موجود در `C:\Projects\vehicle-inspection-integrated` فقط مرجع خواندنی است؛ دو مخزن ادغام نمی‌شوند.
 
-**وضعیت `2026-11-06`:** [L1-A](docs/implementation/CHECKPOINT-02F-L1A-CANONICAL-DEPENDENCIES_FA.md) روی canonical اعمال شد:
+**وضعیت جاری `2026-11-06`:** [اجرای P1–P5](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md) در P3 متوقف شد. اتصال امن برنامه با `SEC_E_UNTRUSTED_ROOT` رد شد، چون instance certificate معتبر ندارد. نشست عامل هم دسترسی elevated ندارد. scriptهای مدیر برای certificate و حساب‌ها آماده‌اند و اجرا نشده‌اند. gate بسته است و هیچ حساب یا دادهٔ آزمونی ساخته نشد. **2F ناقص، پیشرفت 20%.**
+
+سابقه، **وضعیت `2026-11-06`:** [L1-A](docs/implementation/CHECKPOINT-02F-L1A-CANONICAL-DEPENDENCIES_FA.md) روی canonical اعمال شد:
 
 - گراف ریز ASP.NET Core 2.1 با `System.Data.SqlClient 4.8.6` جایگزین metapackage شد؛ target همچنان `netcoreapp2.1`.
 - build صفر warning/error؛ ۱۰۹ unit + ۵۰ integration موفق و ۸ SQL Skipped؛ Swagger بدون تغییر.

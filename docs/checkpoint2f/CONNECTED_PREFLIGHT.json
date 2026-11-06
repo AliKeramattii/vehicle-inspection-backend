@@ -1,0 +1,67 @@
+{
+  "date": "2026-11-06",
+  "checkpoint": "2F P1-P5",
+  "baseCommit": "c17e5183b53b91cb7aa20d50f86604da7760360c",
+  "ownerAuthorization": "owner statement 2026-11-06: employer delegated full authority for required local Development work; approvals can be obtained. Recorded as owner declaration only; no employer signature, approval number or formal Production risk acceptance exists.",
+  "environment": {
+    "os": "Windows 11 Home 10.0.26200",
+    "sessionIdentity": "<MACHINE>\\<owner-user>",
+    "sessionElevated": false,
+    "ownerUserInLocalAdministrators": true,
+    "machineName": "<MACHINE> (recorded locally, not published)",
+    "sqlService": { "name": "MSSQL$SQLSERVER2019", "status": "Running", "account": "NT Service\\MSSQL$SQLSERVER2019" },
+    "sqlNetwork": { "sharedMemory": "Enabled", "namedPipes": "Disabled", "tcp": "Enabled", "tcpPort": "dynamic 59725", "forceEncryption": 0, "certificateConfigured": false },
+    "machineServerAuthCertificates": [ { "subject": "CN=localhost", "selfSigned": true, "configuredForSql": false } ],
+    "sdk": "2.1.818",
+    "runtime": "2.1.30"
+  },
+  "p1": {
+    "executed": false,
+    "reason": "session token not elevated (UAC); local account creation requires administrator",
+    "accountsExist": { "BAZDIDDevWriter": false, "BAZDIDDevReader": false },
+    "handoff": "deployment/development/New-BazdidDevIdentities.review.ps1",
+    "handoffSha256": "b8e0cb09e352d3c650cfbe00255e4b62c52c6aee6e07000483d1953671beacfc"
+  },
+  "p2": {
+    "executed": false,
+    "reason": "requires P1 SIDs and a secure SQL connection (blocked by P3)",
+    "proposalScriptsUnchanged": true,
+    "proposalScriptSha256": {
+      "database/proposals/development_logins.review.sql": "9099de3dce8e77fc037d1bdc6d5b8649ba835253df067e6b0e8d89b121b5b15f",
+      "database/proposals/permissions.review.sql": "9888862c6997eb2ab0fc2effaac6559e6399905e1290fec506100ad46609a396"
+    }
+  },
+  "p3": {
+    "probe": "ignored netcoreapp2.1 console, System.Data.SqlClient 4.8.6, read-only queries only",
+    "connectionPolicy": { "dataSource": "lpc:.\\SQLSERVER2019", "initialCatalog": "BAZDID_Development", "integratedSecurity": true, "encrypt": true, "trustServerCertificate": false },
+    "managedProvider": { "assemblyVersion": "4.6.1.6" },
+    "runtime": ".NET Core 4.6.30411.01 (2.1.30)",
+    "opened": false,
+    "nativeSniReachedServer": true,
+    "errorNumber": -2146893019,
+    "errorHex": "0x80090325 SEC_E_UNTRUSTED_ROOT",
+    "errorClass": 20,
+    "error": "A connection was successfully established with the server, but then an error occurred during the login process. (provider: SSL Provider, error: 0 - The certificate chain was issued by an authority that is not trusted.)",
+    "loginCompleted": false,
+    "policyWeakened": false,
+    "tcpTested": false,
+    "handoff": "deployment/development/Set-BazdidSqlDevCertificate.review.ps1",
+    "handoffSha256": "638336a9696b6bd14cc43e7149ab7fa5f05594cdcafe22daa1a36e1050ea2536"
+  },
+  "handoffGuardTest": { "nonElevatedRun": "both scripts refused at elevation guard", "parseErrors": 0, "accountsCreated": false, "sqlCertificateRegistryChanged": false },
+  "p4": { "executed": false, "codeChanged": false, "reason": "instruction requires prerequisites verified before activation path; P1/P3 unverified", "gate": { "ConnectedAcceptanceVerified": false, "SqlRuntime.Enabled": false } },
+  "p5": { "executed": false, "dataWritten": false, "cleanupRequired": false },
+  "databaseState": { "read": false, "reason": "secure connection refused before login; no DML/DDL attempted" },
+  "regression": {
+    "commands": ["dotnet restore Bazdid.sln --locked-mode", "dotnet build Bazdid.sln --configuration Release --no-restore", "dotnet test Bazdid.sln --configuration Release --no-build --no-restore"],
+    "build": "0 warnings/0 errors",
+    "unit": { "total": 109, "passed": 109, "failed": 0, "skipped": 0 },
+    "offlineIntegration": { "total": 58, "passed": 50, "failed": 0, "skipped": 8 },
+    "connectedSqlExecuted": 0,
+    "kestrelSmoke": { "health": 200, "swagger": 200, "basePath": "/API/BAZDID", "publicPathCount": 1, "swaggerIdenticalToL1ABaseline": true }
+  },
+  "checkpoint2FAccepted": false,
+  "backendProgressBefore": 20,
+  "earnedProgress": 0,
+  "backendProgressAfter": 20
+}

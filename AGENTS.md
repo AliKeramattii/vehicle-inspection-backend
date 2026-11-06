@@ -6,7 +6,13 @@
 
 مخزن `C:\Projects\vehicle-inspection-integrated` فقط مرجع **خواندنی** است. آن را تغییر ندهید، با Backend ادغام نکنید و در آن worktree نسازید. دستورهای تاریخی عامل‌های Frontend، مجوز تغییر آن مخزن یا تغییر دامنهٔ این پروژه نیستند.
 
-**وضعیت جاری در 2026-11-06: L1-A با تصویب مالک روی canonical اعمال شد.** [walkthrough L1-A](docs/implementation/CHECKPOINT-02F-L1A-CANONICAL-DEPENDENCIES_FA.md):
+**وضعیت جاری در 2026-11-06 (پس از L1-A): اجرای P1–P5 آغاز شد ولی 2F پذیرفته نشد.** [گزارش پذیرش متصل](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md):
+
+- اتصال امن با `Encrypt=true` و `TrustServerCertificate=false` با `SEC_E_UNTRUSTED_ROOT` رد شد، چون instance certificate معتبر ندارد.
+- نشست عامل elevated نیست، پس P1 و P3 به مدیر محلی سپرده شدند: دو script بازبینی در `deployment/development/` که اجرا نشده‌اند.
+- gate، کد و پایگاه بدون تغییرند. هیچ حساب، login یا دادهٔ آزمونی ساخته نشد. پیشرفت 20% است.
+
+**سابقهٔ L1-A در 2026-11-06: L1-A با تصویب مالک روی canonical اعمال شد.** [walkthrough L1-A](docs/implementation/CHECKPOINT-02F-L1A-CANONICAL-DEPENDENCIES_FA.md):
 
 - metapackage با گراف ریز ASP.NET Core 2.1 و `System.Data.SqlClient 4.8.6` جایگزین شد؛ target همچنان `netcoreapp2.1`.
 - build صفر warning/error؛ ۱۰۹ unit + ۵۰ integration موفق، ۸ SQL Skipped.

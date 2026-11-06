@@ -1,6 +1,14 @@
 # ادامهٔ کار پس از قطع نشست عامل
 
-**آخرین نقطهٔ ادامه در `2026-11-06`: L1-A روی canonical اعمال و push شد.** ابتدا [walkthrough L1-A](implementation/CHECKPOINT-02F-L1A-CANONICAL-DEPENDENCIES_FA.md) و [L1A_VALIDATION.json](checkpoint2f/L1A_VALIDATION.json) را بخوانید.
+**آخرین نقطهٔ ادامه در `2026-11-06`: P1–P5 در P3 متوقف است.** [گزارش](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md) و [شاهد](checkpoint2f/CONNECTED_PREFLIGHT.json) را بخوانید.
+
+- اتصال امن با `SEC_E_UNTRUSTED_ROOT` رد شد.
+- نشست عامل elevated نیست.
+- پیش از هر کار، اجرای script P3 توسط مدیر را راستی‌آزمایی کنید: مقدار `SuperSocketNetLib\Certificate` غیرخالی باشد و certificate اعتماد شود. سپس probe `.sync-tmp/l1-legacy-spike-20261103/p3_probe` را با آرگومان‌های `lpc meta` دوباره اجرا کنید.
+- `Encrypt` یا `TrustServerCertificate` را تضعیف نکنید. حساب یا رمز نسازید، مگر از طریق script بازبینی‌شده و با token مدیر.
+- gate را پیش از تأیید P1 تا P3 تغییر ندهید. **20%.**
+
+**سابقه: L1-A روی canonical اعمال و push شد.** ابتدا [walkthrough L1-A](implementation/CHECKPOINT-02F-L1A-CANONICAL-DEPENDENCIES_FA.md) و [L1A_VALIDATION.json](checkpoint2f/L1A_VALIDATION.json) را بخوانید.
 
 - canonical اکنون گراف ریز با `System.Data.SqlClient 4.8.6` دارد. آن را دوباره اعمال یا پژوهش نکنید و نسخه‌ها را بدون دلیل سازگاری مستند تغییر ندهید.
 - gate و `SqlRuntime.Enabled` بسته‌اند.

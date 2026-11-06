@@ -6,3 +6,5 @@
 docs/reference/** -text
 # ثبات بایت فایل‌های SQL/ابزار و hash بازبینی بین checkoutهای Windows
 database/** text eol=lf
+# hash ثابت scriptهای بازبینی مدیر؛ PowerShell 5.1 با BOM و CRLF
+deployment/development/*.ps1 text eol=crlf

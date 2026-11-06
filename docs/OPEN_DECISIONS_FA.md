@@ -82,3 +82,10 @@ O26 (P1/P2) بدون تغییر و منتظر تصویب جدا است. بدون
 - D، فقط در صورت رد L1-R
 
 بدون L1-R هیچ فعال‌سازی متصل یا Production مجاز نیست. درصد 20 است.
+
+## P1–P5 در 2026-11-06؛ مانع TLS و token مدیر
+
+- اعلام مالک دربارهٔ تفویض اختیار Development محلی ثبت شد. این اعلام L1-R رسمی برای Production نیست.
+- P3 مانع اصلی است: instance برای `Encrypt=true` و `TrustServerCertificate=false` certificate معتبر ندارد.
+- تصمیم باز: اجرای script بازبینی P3 توسط مدیر محلی و ری‌استارت `MSSQL$SQLSERVER2019`. اگر PKI سازمانی وجود دارد، certificate صادرشده از CA سازمان ترجیح دارد.
+- سپس P1 و P2 و پس از آن‌ها P4/P5. جزئیات در [گزارش پذیرش متصل](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md). درصد 20 است.
