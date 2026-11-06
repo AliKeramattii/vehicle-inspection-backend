@@ -386,3 +386,22 @@ regression تازهٔ canonical با سه فرمان مقرر: restore/build ص�
 - regression: ۱۰۹ unit و ۵۰ integration موفق، ۸ Skipped؛ smoke و Swagger بدون تغییر.
 
 **قبلی 20% + سهم 0 = 20%.** ترتیب ادامه: مدیر P3 را اجرا و سرویس محلی را ری‌استارت می‌کند؛ عامل probe را دوباره اجرا می‌کند؛ مدیر P1 را اجرا می‌کند؛ P2 اجرا می‌شود؛ عامل P4/P5 را اجرا می‌کند. هدف مشروط 22% است و 2G شروع نشده است.
+
+### بازنگری scriptهای P1 و P3 در 2026-11-07
+
+مالک گزارش داد dry run نسخه‌های اولیه در جلسهٔ elevated موفق بوده است. بازبینی پیش از اجرا نقص‌های واقعی را اصلاح کرد ([بخش ۱۹ گزارش](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#revision-20261107)):
+
+- **P1:**
+  - سقف ۴۸ نویسهٔ `-Description` که `-Execute` را می‌شکست؛
+  - حق صریح `SeBatchLogonRight` و deny تعاملی/RDP/service با LSA API؛
+  - بازگشت خودکار شکست جزئی و حالت‌های `-VerifyOnly` و `-RemoveForRecovery`؛
+  - چرخهٔ عمر رمز که provisioning را در P4 از طریق چرخش انجام می‌دهد.
+- **P3:**
+  - BasicConstraints `CA=false` و KeyUsage بدون `keyCertSign`؛
+  - ACL فقط DACL؛
+  - CN برابر نام DNS؛
+  - بازگشت خودکار و `-RollbackThumbprint`؛
+  - پیش‌شرط ری‌استارت و تأیید بارگذاری در ERRORLOG؛
+  - حالت `-VerifyOnly`.
+
+hash جدید: P3 `07383213…49ec` و P1 `351227f2…838a`. عامل هیچ script را اجرا نکرد. **20%**؛ گام بعد همان ترتیب بالا با نسخه‌های جدید است.

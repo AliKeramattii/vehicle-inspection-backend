@@ -20,7 +20,8 @@
     "reason": "session token not elevated (UAC); local account creation requires administrator",
     "accountsExist": { "BAZDIDDevWriter": false, "BAZDIDDevReader": false },
     "handoff": "deployment/development/New-BazdidDevIdentities.review.ps1",
-    "handoffSha256": "b8e0cb09e352d3c650cfbe00255e4b62c52c6aee6e07000483d1953671beacfc"
+    "handoffSha256": "351227f2ca148bceea1354cbf2a7d153ef7a2a168bd8085bfc217248df3e838a",
+    "supersededSha256": "b8e0cb09e352d3c650cfbe00255e4b62c52c6aee6e07000483d1953671beacfc"
   },
   "p2": {
     "executed": false,
@@ -46,9 +47,27 @@
     "policyWeakened": false,
     "tcpTested": false,
     "handoff": "deployment/development/Set-BazdidSqlDevCertificate.review.ps1",
-    "handoffSha256": "638336a9696b6bd14cc43e7149ab7fa5f05594cdcafe22daa1a36e1050ea2536"
+    "handoffSha256": "07383213ad35bfdac9a889f06639cbbd19f9c7440ed76440cc747ceaa71d49ec",
+    "supersededSha256": "638336a9696b6bd14cc43e7149ab7fa5f05594cdcafe22daa1a36e1050ea2536"
   },
   "handoffGuardTest": { "nonElevatedRun": "both scripts refused at elevation guard", "parseErrors": 0, "accountsCreated": false, "sqlCertificateRegistryChanged": false },
+  "handoffRevision20261107": {
+    "ownerReport": "owner reported both superseded-version dry runs passed in an elevated session on the target machine with no changes; not independently verified by the agent",
+    "agentExecutedScripts": false,
+    "defectsCorrected": [
+      "P1 -Execute would fail: New-LocalUser -Description maximum length is 48 characters",
+      "P1 had no explicit SeBatchLogonRight and no deny of interactive, RDP or service logon",
+      "P1 partial failure left a created account and blocked every rerun; now per-run rollback plus -RemoveForRecovery",
+      "P1 group check used -ErrorAction SilentlyContinue and could pass silently; now direct ADSI membership where read failure is an error",
+      "P1 discarded password made later task registration impossible without an undocumented reset; lifecycle now defines provisioning by rotation in P4",
+      "P3 had no rollback; now ordered automatic rollback plus -RollbackThumbprint",
+      "P3 trusted root lacked BasicConstraints CA=false and KeyUsage limits; now critical CA=false and no keyCertSign",
+      "P3 used Set-Acl, which also writes owner; now DACL-only SetAccessControl with read-back verification",
+      "P3 restart had no prerequisites or load evidence; now Running state, no running dependents, ERRORLOG load confirmation and rollback on failure",
+      "P3 had no read-only verification; now -VerifyOnly"
+    ],
+    "offlineValidation": { "parseErrors": 0, "utf8Bom": true, "crlf": true, "lsaHelperCompiled": true, "lsaReadNonElevated": "access denied as expected; the elevated dry run performs this read before any change", "nonElevatedGuards": "refused; invalid parameter combinations and patterns refused", "certificateCreated": false, "accountsCreated": false, "sqlCertificateRegistryChanged": false }
+  },
   "p4": { "executed": false, "codeChanged": false, "reason": "instruction requires prerequisites verified before activation path; P1/P3 unverified", "gate": { "ConnectedAcceptanceVerified": false, "SqlRuntime.Enabled": false } },
   "p5": { "executed": false, "dataWritten": false, "cleanupRequired": false },
   "databaseState": { "read": false, "reason": "secure connection refused before login; no DML/DDL attempted" },

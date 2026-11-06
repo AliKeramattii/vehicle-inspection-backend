@@ -7,6 +7,10 @@
 - پیش از هر کار، اجرای script P3 توسط مدیر را راستی‌آزمایی کنید: مقدار `SuperSocketNetLib\Certificate` غیرخالی باشد و certificate اعتماد شود. سپس probe `.sync-tmp/l1-legacy-spike-20261103/p3_probe` را با آرگومان‌های `lpc meta` دوباره اجرا کنید.
 - `Encrypt` یا `TrustServerCertificate` را تضعیف نکنید. حساب یا رمز نسازید، مگر از طریق script بازبینی‌شده و با token مدیر.
 - gate را پیش از تأیید P1 تا P3 تغییر ندهید. **20%.**
+- از `2026-11-07` scriptهای P1/P3 بازنگری شده‌اند ([بخش ۱۹](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#revision-20261107)):
+  - P3 با hash `07383213…49ec` و P1 با hash `351227f2…838a`؛
+  - شاهد اجرا از مدیر: خروجی `-VerifyOnly` هر دو با PASS، به‌همراه SIDها؛
+  - provisioning رمز حساب‌ها فقط با چرخش در P4 انجام می‌شود، هرگز با نمایش رمز.
 
 **سابقه: L1-A روی canonical اعمال و push شد.** ابتدا [walkthrough L1-A](implementation/CHECKPOINT-02F-L1A-CANONICAL-DEPENDENCIES_FA.md) و [L1A_VALIDATION.json](checkpoint2f/L1A_VALIDATION.json) را بخوانید.
 

@@ -46,15 +46,7 @@
 
 **اجرا نشد.** ساخت حساب محلی به token مدیر نیاز دارد و نشست فعلی elevated نیست. حساب‌ها وجود ندارند و چیزی ساخته یا reset نشد.
 
-بستهٔ تحویل مدیر: [New-BazdidDevIdentities.review.ps1](../../deployment/development/New-BazdidDevIdentities.review.ps1) با SHA-256 `b8e0cb09…acfc`. رفتار آن:
-
-- بدون `-Execute` فقط پیش‌شرط‌ها را نشان می‌دهد.
-- اگر هرکدام از حساب‌ها وجود داشته باشد، متوقف می‌شود.
-- رمز تصادفی ۲۵۶ بیتی را فقط در حافظه و به‌صورت `SecureString` می‌سازد و هرگز نمایش، ثبت یا ذخیره نمی‌کند.
-- حساب‌ها را عضو Administrators، Users یا Remote Desktop Users نمی‌کند، پس ورود تعاملی و RDP ندارند.
-- خروجی فقط نام کامل و SID است.
-
-حق batch logon و ACL پوشهٔ آزمون در P4، هنگام ثبت task اجرای آزمون، با همان حساب و رمز تازهٔ درون‌حافظه تنظیم می‌شوند.
+بستهٔ تحویل مدیر: [New-BazdidDevIdentities.review.ps1](../../deployment/development/New-BazdidDevIdentities.review.ps1). نسخهٔ اولیه (`b8e0cb09…acfc`) در `2026-11-07` اصلاح شد و جای آن را نسخهٔ `351227f2…838a` گرفت. رفتار، فرمان‌ها، بازگشت و چرخهٔ عمر رمز در [بخش ۱۹](#revision-20261107) آمده‌اند.
 
 ## ۵. P2 — principalها و نقش‌های SQL
 
@@ -98,14 +90,7 @@ Integrated Security=true; Encrypt=true; TrustServerCertificate=false; Connect Ti
 - این به معنای اثبات رمزنگاری شبکه نیست. TCP جداگانه آزموده نشد، چون با همین certificate همان شکست را می‌دهد و endpoint شبکه در دامنهٔ کد برنامه نیست.
 - علت: مقدار `Certificate` در `SuperSocketNetLib` خالی است و instance certificate خودساختهٔ نامعتبر برای کلاینت ارائه می‌کند.
 
-**کوچک‌ترین اصلاح امن** (نیازمند مدیر و ری‌استارت همین instance محلی): اجرای [Set-BazdidSqlDevCertificate.review.ps1](../../deployment/development/Set-BazdidSqlDevCertificate.review.ps1) با SHA-256 `638336a9…2536`. این script:
-
-- certificate اختصاصی `CN=<MACHINE>` با SAN `<MACHINE>` و `localhost` و FQDN، EKU serverAuth، کلید RSA 2048 غیرقابل‌export و اعتبار یک‌ساله می‌سازد؛
-- مجوز Read کلید خصوصی را فقط به `NT Service\MSSQL$SQLSERVER2019` می‌دهد؛
-- فقط بخش عمومی همان certificate را به `LocalMachine\Root` می‌افزاید؛
-- thumbprint را در `SuperSocketNetLib\Certificate` ثبت می‌کند؛
-- ری‌استارت را فقط با `-RestartSqlService` انجام می‌دهد؛
-- اگر certificate دیگری از قبل تنظیم شده باشد، متوقف می‌شود.
+**کوچک‌ترین اصلاح امن** (نیازمند مدیر و ری‌استارت همین instance محلی): اجرای [Set-BazdidSqlDevCertificate.review.ps1](../../deployment/development/Set-BazdidSqlDevCertificate.review.ps1). نسخهٔ اولیه (`638336a9…2536`) در `2026-11-07` اصلاح شد و جای آن را نسخهٔ `07383213…49ec` گرفت. مشخصات certificate، پیش‌شرط ری‌استارت، راستی‌آزمایی و بازگشت در [بخش ۱۹](#revision-20261107) آمده‌اند.
 
 جایگزین بهتر، اگر PKI سازمانی وجود دارد: certificate صادرشده از CA سازمان، که نیاز به افزودن self-signed به Root را حذف می‌کند.
 
@@ -191,7 +176,7 @@ SHA و push در [GITHUB_SYNC_FA.md](../GITHUB_SYNC_FA.md) ثبت می‌شون�
 - رفتار نام‌سنجی certificate برای Shared Memory هنوز آزموده نشده است.
 - TCP و TLS شبکه آزموده نشدند.
 - طرح P4 پیاده نشده است.
-- Windows 11 Home ابزار گرافیکی Local Security Policy ندارد. طرح حساب‌ها برای همین به عضویت گروه و حق خودکار batch در Task Scheduler تکیه دارد، و این حق پس از ثبت task باید جداگانه راستی‌آزمایی شود.
+- Windows 11 Home ابزار گرافیکی Local Security Policy ندارد. از بازنگری `2026-11-07`، حق‌های logon مستقیم با LSA API اعطا و بازخوانی می‌شوند و دیگر به اعطای خودکار Task Scheduler تکیه نمی‌شود.
 
 ## ۱۸. تصمیم نهایی پذیرش 2F
 
@@ -202,10 +187,166 @@ SHA و push در [GITHUB_SYNC_FA.md](../GITHUB_SYNC_FA.md) ثبت می‌شون�
 
 **قبلی 20% + سهم 0 = 20%.** 2G شروع نشده است.
 
-ترتیب ادامه:
+ترتیب ادامه (فرمان‌های دقیق در [بخش ۱۹](#revision-20261107)):
 
-۱. **مدیر محلی** در PowerShell elevated، پس از بازبینی، P3 را ابتدا با `-ExpectedMachine <MACHINE> -ApprovalReference <مرجع>` و بدون `-Execute` اجرا می‌کند، سپس با `-Execute -RestartSqlService`. ری‌استارت فقط وقتی انجام شود که برنامهٔ دیگری به همین instance محلی وابسته نباشد.
+۱. **مدیر محلی** در PowerShell elevated، پس از بازبینی hash، P3 را ابتدا dry run و سپس با `-Execute -RestartSqlService` اجرا می‌کند و `-VerifyOnly` را می‌گیرد. ری‌استارت فقط وقتی انجام شود که برنامهٔ دیگری به همین instance محلی وابسته نباشد.
 ۲. عامل probe را دوباره اجرا می‌کند و TLS، هویت، instance، پایگاه و metadata را ثبت می‌کند.
-۳. مدیر P1 را با همان الگو اجرا می‌کند و SIDها را اعلام می‌کند.
+۳. مدیر P1 را با همان الگو اجرا می‌کند، `-VerifyOnly` را می‌گیرد و SIDها را اعلام می‌کند.
 ۴. عامل نسخهٔ اجرایی پارامتری P2 را آماده می‌کند و مدیر یا DBA آن را اجرا می‌کند.
 ۵. عامل P4 (مسیر آزمون internal و task اجرا با Writer) و P5 (manifest) را پیاده و اجرا می‌کند.
+
+<a id="revision-20261107"></a>
+
+## ۱۹. بازنگری scriptهای P1 و P3 پیش از اجرا (2026-11-07)
+
+### ۱۹.۱ زمینه و مرز کار
+
+مالک گزارش داد dry run هر دو نسخهٔ اولیه در PowerShell elevated روی ماشین هدف موفق بوده و هیچ تغییری اعمال نشده است. این گزارش مالک است و عامل آن را مستقلاً مشاهده نکرده است. در hash گزارش‌شده برای certificate یک نویسه جا افتاده است (`…696BBD14…` به‌جای `…696B6BD14…`). hash کامل نسخهٔ اولیه `638336a9696b6bd14cc43e7149ab7fa5f05594cdcafe22daa1a36e1050ea2536` بود.
+
+عامل در این بازنگری هیچ script را اجرا نکرد. هیچ حساب، certificate، login یا مجوزی ساخته نشد و سرویس SQL ری‌استارت نشد. تحقیق SQL Client تکرار نشد.
+
+### ۱۹.۲ نقص‌های واقعی و اصلاح آن‌ها
+
+| مورد | نقص نسخهٔ اولیه | اصلاح |
+| --- | --- | --- |
+| P1 توضیح حساب | `New-LocalUser -Description` حداکثر ۴۸ نویسه می‌پذیرد (با `Get-Command` تأیید شد). توضیح قبلی با مرجع تصویب حدود ۶۶ نویسه بود، پس `-Execute` شکست می‌خورد. | توضیح `BAZDID-DEV-SQL <ref>` با مرجع حداکثر ۳۲ نویسه از `[A-Za-z0-9._-]`؛ حداکثر ۴۷ نویسه. |
+| P1 اجرای task | هیچ `SeBatchLogonRight` صریحی نبود و به اعطای خودکار Task Scheduler تکیه می‌شد. | اعطای مستقیم با LSA API و بازخوانی دقیق. |
+| P1 حداقل اختیار | ورود تعاملی، RDP و service فقط با عضونبودن در گروه محدود می‌شد. | `SeDenyInteractiveLogonRight`، `SeDenyRemoteInteractiveLogonRight` و `SeDenyServiceLogonRight` صریح. |
+| P1 شکست جزئی | اگر حساب دوم شکست می‌خورد، حساب اول می‌ماند و هر اجرای بعدی رد می‌شد. | بازگشت خودکار فقط برای حساب‌ها و حق‌های ساخته‌شده در همان اجرا، به‌علاوهٔ حالت `-RemoveForRecovery`. |
+| P1 کنترل گروه | `Get-LocalGroupMember ... -ErrorAction SilentlyContinue` شکست خواندن را «عضو نیست» تعبیر می‌کرد. | عضویت مستقیم از دید خود حساب با ADSI؛ شکست خواندن، خطا است. انتظار: هیچ گروه مستقیم. |
+| P1 رمز | رمز دور ریخته می‌شد و ثبت task با رمز ذخیره‌شده، reset مستند‌نشده لازم داشت. | چرخهٔ عمر صریح (۱۹.۵): provisioning در P4 همیشه از طریق چرخش رمز. |
+| P1 راستی‌آزمایی | فقط خروجی SID. | حالت فقط‌خواندنی `-VerifyOnly` با PASS/FAIL. |
+| P3 ناسازگاری | شکست پس از ساخت certificate، آن را در My یا Root، یا registry را با thumbprint بارگذاری‌نشدنی باقی می‌گذاشت. | بازگشت خودکار به ترتیب معکوس (registry، Root، My با `-DeleteKey`)، به‌علاوهٔ اجرای دوبارهٔ سرویس اگر ری‌استارت شروع شده بود؛ بازگشت ناقص با پیام صریح و حالت `-RollbackThumbprint`. |
+| P3 گسترهٔ trust | self-signed بدون BasicConstraints و KeyUsage محدود در Root قرار می‌گرفت و به‌طور بالقوه می‌توانست certificate دیگری را امضا کند. | BasicConstraints بحرانی `CA=false`، KeyUsage فقط `DigitalSignature, KeyEncipherment` (بدون `keyCertSign`)، EKU فقط serverAuth. |
+| P3 ACL کلید | `Set-Acl` مالک را هم می‌نویسد و روی MachineKeys ممکن است شکست بخورد. | فقط DACL با `File.SetAccessControl`. حق دقیق `Read` برای SID سرویس، با بازخوانی. |
+| P3 نام | CN از نام NetBIOS بود و FQDN از DNS query. | CN برابر نام DNS میزبان یا FQDN (الزام SQL Server) از `IPGlobalProperties` بدون query شبکه. SAN شامل NetBIOS، نام DNS، FQDN در صورت وجود و `localhost`. |
+| P3 ری‌استارت | بدون پیش‌شرط و بدون شاهد بارگذاری. | فقط از وضعیت `Running` و بدون سرویس وابستهٔ در حال اجرا. تأیید پیام `Cert Hash(sha1) "<thumb>"] was successfully loaded for encryption` در ERRORLOG تا ۶۰ ثانیه؛ در غیر این صورت بازگشت. |
+| P3 راستی‌آزمایی | وجود نداشت. | `-VerifyOnly` فقط‌خواندنی. |
+
+### ۱۹.۳ طراحی P1
+
+- **حق‌های LSA هر حساب، دقیقاً:** `SeBatchLogonRight`، `SeDenyInteractiveLogonRight`، `SeDenyRemoteInteractiveLogonRight` و `SeDenyServiceLogonRight`.
+- **`SeDenyNetworkLogonRight` عمداً داده نمی‌شود.** احراز Windows در SQL Server (SSPI) حتی روی Shared Memory در سمت سرور یک network logon است. dry run هم بررسی می‌کند که `SeNetworkLogonRight` از طریق Everyone، Users یا Authenticated Users در دسترس باشد.
+- **عضویت گروه:** هیچ عضویت مستقیمی در هیچ گروهی، از جمله Administrators، Users و Remote Desktop Users. token ویندوز از طریق Authenticated Users گروه Users را دارد، که برای خواندن `dotnet` و مخزن کافی است.
+- **رمز:** ۴۰ نویسه از الفبای ۶۴تایی، یعنی ۲۴۰ بیت، مستقیم در `SecureString`؛ هیچ string میانی ساخته نمی‌شود. سپس `PasswordNeverExpires` و `UserMayNotChangePassword` تنظیم می‌شوند.
+- **ثبت task با رمز ذخیره‌شده:** dry run تنظیم `DisableDomainCreds` را گزارش می‌کند. اگر برابر ۱ باشد ثبت task ممکن نیست؛ script آن را تغییر نمی‌دهد.
+- **حذف بازیابی:** فقط حساب‌هایی که توضیحشان با `BAZDID-DEV-SQL` شروع شود و هیچ task ثبت‌شده‌ای نداشته باشند. حذف واقعی سوئیچ `-SqlLoginsAbsent` می‌خواهد. پس از حذف حساب، profile بارگذاری‌نشده هم حذف می‌شود.
+
+### ۱۹.۴ طراحی P3
+
+- **certificate:**
+  - `CN=<نام DNS یا FQDN>`؛
+  - RSA 2048 با `KeySpec=KeyExchange` در `Microsoft RSA SChannel Cryptographic Provider` (کلید CAPI، سازگار با SQL Server 2019)؛
+  - کلید غیرقابل‌export، SHA256 و اعتبار یک‌ساله.
+- **trust:** فقط بخش عمومی، با FriendlyName نشانه‌دار، در `LocalMachine\Root`. store کاربر کافی نیست، چون آزمون‌ها با حساب‌های Writer و Reader اجرا می‌شوند. محدودیت‌های بالا گسترهٔ این trust را به همین نام‌ها و این کلید غیرقابل‌export محدود می‌کنند.
+- **چرا `localhost` در SAN است:** نامی که native SNI برای مقصد `lpc:.` در اعتبارسنجی به کار می‌برد هنوز آزموده نشده است. probe پس از P3 آن را مشخص می‌کند. اگر `localhost` لازم نبود، در چرخش بعدی certificate حذف می‌شود.
+- **بدون تغییر:** `ForceEncryption=0`، پروتکل‌ها، firewall و تنظیم کلاینت. `Encrypt=true` و `TrustServerCertificate=false` در `BuildLocalConnectionString()` الزامی می‌مانند و هیچ bypass اضافه نشد.
+
+### ۱۹.۵ چرخهٔ عمر رمز حساب‌ها
+
+۱. **ساخت (P1):** رمز تصادفی ناشناخته؛ هیچ انسان یا فایلی آن را ندارد. حساب تا provisioning عملاً قابل استفاده نیست.
+۲. **provisioning (P4، با script بازبینی‌شدهٔ جدا که هنوز نوشته نشده است):** در یک PowerShell elevated، رمز تازهٔ تصادفی در حافظه ساخته می‌شود و در همان فرایند با `Set-LocalUser -Password` روی حساب و با `Register-ScheduledTask -User -Password` روی task ثبت می‌شود. Task Scheduler آن را در LSA secrets نگه می‌دارد. `Register-ScheduledTask` رمز را به‌صورت string می‌گیرد، پس رمز فقط لحظه‌ای در حافظهٔ همان فرایند است: نه در command line، نه history، نه log و نه فایل.
+۳. **چرخش:** حداکثر هر ۹۰ روز، پس از هر تغییر نفرات یا ظن افشا، با همان روش گام ۲. سپس رمز همهٔ taskهای همان حساب با `Set-ScheduledTask -User -Password` به‌روز می‌شود. رمز هرگز «بازیابی» یا نمایش داده نمی‌شود؛ فقط چرخانده می‌شود.
+۴. **ابطال:** `Disable-LocalUser`، حذف taskها، حذف user و login SQL (معکوس P2)، سپس `-RemoveForRecovery -Execute -SqlLoginsAbsent`.
+
+### ۱۹.۶ فرمان‌های dry run (PowerShell با Run as Administrator، cwd ریشهٔ مخزن)
+
+```powershell
+# پیشنهادی؛ عامل اجرا نکرده است
+Get-FileHash .\deployment\development\Set-BazdidSqlDevCertificate.review.ps1, .\deployment\development\New-BazdidDevIdentities.review.ps1 -Algorithm SHA256
+.\deployment\development\Set-BazdidSqlDevCertificate.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07
+.\deployment\development\New-BazdidDevIdentities.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07
+```
+
+انتظار dry run در P3:
+
+- `RegistryCertificate` خالی و `ForceEncryption` برابر `0`؛
+- `MarkedInMy` و `MarkedInRoot` خالی؛
+- `RunningDependents` خالی؛
+- پیام «اجرای آزمایشی: هیچ تغییری انجام نشد. پیش‌شرط‌ها برقرارند.»
+
+انتظار dry run در P1:
+
+- `NetworkLogonViaGroup : True` و `StoredTaskPasswordAllowed : True`؛
+- `PlannedLsaRights` با چهار حق بالا؛
+- پیام «اجرای آزمایشی: هیچ حسابی ساخته نشد.»
+
+هر خطا یعنی توقف قبل از هر تغییر.
+
+### ۱۹.۷ فرمان‌های اجرا و انتظار راستی‌آزمایی
+
+```powershell
+# پیشنهادی؛ ترتیب: P3، سپس probe عامل، سپس P1
+.\deployment\development\Set-BazdidSqlDevCertificate.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07 -Execute -RestartSqlService
+.\deployment\development\Set-BazdidSqlDevCertificate.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07 -VerifyOnly
+
+.\deployment\development\New-BazdidDevIdentities.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07 -Execute
+.\deployment\development\New-BazdidDevIdentities.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07 -VerifyOnly
+```
+
+انتظار در P3:
+
+- خروجی اجرا: `Thumbprint`، `Subject : CN=<host>`، `NotAfter` یک سال بعد و `Restarted : True`.
+- `-VerifyOnly`: `LoadedPerErrorLog : True`، `LoadFailureInErrorLog : False`، `Problems` خالی و «راستی‌آزمایی P3: PASS».
+
+انتظار در P1:
+
+- `-VerifyOnly` برای هر حساب: `Exists : True`، `Enabled : True`، `DirectGroups` خالی و `LsaRights : SeBatchLogonRight, SeDenyInteractiveLogonRight, SeDenyRemoteInteractiveLogonRight, SeDenyServiceLogonRight`.
+- `Pass : True` و «راستی‌آزمایی P1: PASS».
+- SIDها برای P2 اعلام شوند. آن‌ها PII نیستند ولی ماشین‌خاص‌اند و در مستندات با placeholder ثبت می‌شوند.
+
+### ۱۹.۸ بازگشت و بازیابی
+
+**P3 شکست در حین اجرا:** script خودکار برمی‌گرداند. اگر پیام «بازگشت ناقص» داد، یا پس از موفقیت بخواهید برگردانید:
+
+```powershell
+.\deployment\development\Set-BazdidSqlDevCertificate.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07 -RollbackThumbprint <THUMBPRINT>
+.\deployment\development\Set-BazdidSqlDevCertificate.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07 -RollbackThumbprint <THUMBPRINT> -Execute -RestartSqlService
+```
+
+**SQL پس از ری‌استارت اجرا نشد و بازگشت خودکار هم ناموفق بود:**
+
+۱. مقدار `Certificate` را در `HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL15.SQLSERVER2019\MSSQLServer\SuperSocketNetLib` به رشتهٔ خالی برگردانید.
+۲. `Start-Service 'MSSQL$SQLSERVER2019'` را اجرا کنید.
+۳. ERRORLOG و Application Event Log را بررسی کنید.
+۴. سپس `-RollbackThumbprint` را برای پاک‌سازی storeها اجرا کنید.
+
+**P1 شکست در حین اجرا:** فقط حساب‌های همان اجرا خودکار برگردانده می‌شوند. برای وضعیت باقی‌مانده پس از قطع ناگهانی:
+
+```powershell
+.\deployment\development\New-BazdidDevIdentities.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07 -VerifyOnly
+.\deployment\development\New-BazdidDevIdentities.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07 -RemoveForRecovery
+.\deployment\development\New-BazdidDevIdentities.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07 -RemoveForRecovery -Execute -SqlLoginsAbsent
+```
+
+`-SqlLoginsAbsent` فقط وقتی داده شود که login یا user SQL این SIDها هرگز ساخته نشده یا با معکوس P2 حذف شده باشد. پیش از P2 این شرط برقرار است.
+
+### ۱۹.۹ اعتبارسنجی واقعاً اجراشده (بدون elevation و بدون تغییر)
+
+```powershell
+# اجرا شد — cwd: ریشهٔ مخزن
+(Get-Command New-LocalUser).Parameters['Description']   # MaxLength 48
+(Get-Command New-SelfSignedCertificate).Parameters.Keys # شامل Extension و KeyUsage
+# اجرا شد — scratchpad، در powershell.exe جدا
+p1p3-offline-check.ps1 -Repo <repo>
+```
+
+نتیجه:
+
+- parser PowerShell 5.1 برای هر دو فایل صفر خطا داد. هر دو UTF-8 BOM و CRLF دارند.
+- LSA helper کامپایل شد. خواندن حق‌ها بدون elevation `Access is denied` داد، که انتظاری است. dry run elevated همین خواندن را پیش از هر تغییر انجام می‌دهد.
+- secret درون‌حافظه ۴۴ نویسه و read-only بود. ADSI عضویت مستقیم را خواند.
+- extensionهای BasicConstraints (`CA=False`، critical) و EKU فقط در حافظه ساخته شدند.
+- guardهای منفی همه رد کردند: نبود elevation، ترکیب نامعتبر `-VerifyOnly -Execute`، `-RestartSqlService` بدون `-Execute`، مرجع نامعتبر و thumbprint نامعتبر.
+- پس از آزمون: هیچ حساب BAZDID وجود ندارد و `Certificate` همچنان خالی است.
+
+اجرای واقعی `New-SelfSignedCertificate`، LSA write، `New-LocalUser` و ری‌استارت آزموده نشده‌اند، چون طبق دستور ممنوع بودند. نخستین شاهد آن‌ها dry run و اجرای مدیر است.
+
+### ۱۹.۱۰ hash نسخه‌های جدید
+
+| فایل | SHA-256 |
+| --- | --- |
+| `deployment/development/Set-BazdidSqlDevCertificate.review.ps1` | `07383213ad35bfdac9a889f06639cbbd19f9c7440ed76440cc747ceaa71d49ec` |
+| `deployment/development/New-BazdidDevIdentities.review.ps1` | `351227f2ca148bceea1354cbf2a7d153ef7a2a168bd8085bfc217248df3e838a` |
+
+`.gitattributes` برای این فایل‌ها CRLF را pin می‌کند، پس hash checkout برابر می‌ماند. **2F همچنان پذیرفته نشده است و پیشرفت 20% است.** 2G شروع نشده است.
