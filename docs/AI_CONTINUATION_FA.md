@@ -108,3 +108,52 @@ foundation از نو ساخته نشود: `Bazdid.sln`، API و دو پروژه�
 دو نام `.\BAZDIDDevWriter` و `.\BAZDIDDevReader` پیشنهاد مجاز این تحلیل‌اند، نه حساب مصوب/موجود. development_logins.review.sql جدید و permissions.review.sql اصلاح‌شده فقط پیشنهادند؛ هر دو AllowDdl0 و approval/ماشین/login/SIDهای NULL دارند. ScriptDom موجود فقط syntax دو فایل و دو template را parse کرد؛ هیچ SQL آن‌ها اجرا نشد. حساب metadata SQL sysadmin ولی Windows token فعلی admin مؤثر نیست؛ ساخت حساب نیازمند مسئول Windows و تصویب حقوق/ACL/task است. registry ForceEncryption0 و binding صریح خالی، گواه TLS یا نبود certificate نیست.
 
 regression همین ادامه تازه اجرا شد: restore/build صفر، warning/error صفر، ۱۰۹ unit + ۵۰ integration آفلاین موفق، ۸ SQL Skipped و صفر متصل/effective permission. تست جدیدی ساخته نشد؛ smoke Kestrel/IIS و ۳۵ CASE تاریخی تکرار نشدند. metadata محلی همان schema/صفر ردیف است. پیش از نسخهٔ package، ایجاد account/login/user/role، grant، certificate/network یا بازکردن gate، تصمیم‌های P0–P5 را از پاسخ مالک احراز کنید؛ مصوبهٔ قبلی را در دامنهٔ خودش حفظ کنید. کد قبلی بازنویسی نشود و source reader واقعی تنظیم‌نشده بماند. **20 + 0 = 20%**؛ باقی80%، هدف مشروط پذیرش کامل همین 2F برابر22%، توقف پیش از2G. SHA/push از گزارش GitHub و Git واقعی خوانده شود.
+
+<a id="agents-status-history"></a>
+
+## سابقهٔ وضعیت منتقل‌شده از AGENTS
+
+این بلوک‌ها در 2026-11-07 برای کوتاه‌شدن AGENTS.md بی‌تغییر به اینجا منتقل شدند (فقط مسیر نسبی پیوندها اصلاح شد).
+
+**وضعیت جاری در 2026-11-07 (شب): Checkpoint 2F پذیرفته شد؛ پیشرفت 22% است.** اجرای متصل `09a21cbd72e12d91` با هویت واقعی `BAZDIDDevWriter`: ۱۳ از ۱۳ آزمون موفق، verifier برابر PASS و cleanup `1/2/5` ([بخش ۲۲](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#acceptance-20261107)). gate زمان اجرای برنامه و Production همچنان بسته‌اند. گام بعد: آماده‌سازی 2G. حساب‌ها، loginها، certificate و task را بازسازی نکنید.
+
+**سابقهٔ عصر 2026-11-07: D-P3-NAME اعمال شد و P2 اجرا و تأیید شد (40/40 مجوز). P4/P5 پیاده شده‌اند و منتظر یک اجرای elevated مالک هستند.** [بخش ۲۱](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#execution-20261107):
+
+- مقصد ثابت `lpc:localhost\SQLSERVER2019`. اشکال guard، یعنی `HAS_PERMS_BY_NAME(NULL,N'SERVER',…)` که همیشه NULL می‌داد، رفع شد.
+- آزمون متصل فقط با `BAZDID_CONNECTED_SQL=1` و token واقعی `BAZDIDDevWriter` از طریق task اجرا می‌شود. gate برنامه بسته است.
+- گام بعد: مالک `Register-BazdidConnectedTestTask.review.ps1 -Execute` را اجرا می‌کند، سپس عامل `Start-BazdidConnectedRun.ps1` را. پیشرفت 20% است و 2G شروع نشده است.
+
+**سابقهٔ صبح 2026-11-07: certificate مربوط به P3 توسط مدیر نصب شد (thumbprint `9F8A13B7…E84F`). آن را دوباره نصب یا تغییر ندهید.** [راستی‌آزمایی](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#p3-verification-20261107):
+
+- اعتماد زنجیره حل شد. مقصد pin‌شدهٔ `lpc:.\SQLSERVER2019` با `SEC_E_WRONG_PRINCIPAL` رد می‌شود.
+- `localhost` و نام میزبان، روی Shared Memory و loopback TCP، با اعتبارسنجی کامل موفق‌اند.
+- تصمیم باز `D-P3-NAME`؛ P1 آمادهٔ اجرای مدیر است. gate بسته است و پیشرفت 20% است.
+
+**سابقهٔ 2026-11-06 (پس از L1-A): اجرای P1–P5 آغاز شد ولی 2F پذیرفته نشد.** [گزارش پذیرش متصل](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md):
+
+- اتصال امن با `Encrypt=true` و `TrustServerCertificate=false` با `SEC_E_UNTRUSTED_ROOT` رد شد، چون instance certificate معتبر ندارد.
+- نشست عامل elevated نیست، پس P1 و P3 به مدیر محلی سپرده شدند: دو script بازبینی در `deployment/development/` که اجرا نشده‌اند.
+- gate، کد و پایگاه بدون تغییرند. هیچ حساب، login یا دادهٔ آزمونی ساخته نشد. پیشرفت 20% است.
+
+**سابقهٔ L1-A در 2026-11-06: L1-A با تصویب مالک روی canonical اعمال شد.** [walkthrough L1-A](implementation/CHECKPOINT-02F-L1A-CANONICAL-DEPENDENCIES_FA.md):
+
+- metapackage با گراف ریز ASP.NET Core 2.1 و `System.Data.SqlClient 4.8.6` جایگزین شد؛ target همچنان `netcoreapp2.1`.
+- build صفر warning/error؛ ۱۰۹ unit + ۵۰ integration موفق، ۸ SQL Skipped.
+- Swagger قبل و بعد یکسان است و audit ۲ بستهٔ flagged دارد (Kestrel Critical، SwaggerUI Moderate).
+- gate و `SqlRuntime.Enabled` بسته‌اند.
+
+L1-R، P1 تا P5 و 2G تصویب یا اجرا نشده‌اند. **2F کامل نیست و پیشرفت 20% است.**
+
+**سابقهٔ 2026-11-03: بررسی 2F-L1 (SQL Client سازگار با 2.1) انجام شد؛ canonical همچنان `netcoreapp2.1`، پذیرش متصل 2F باز و پیشرفت 20% است.** [walkthrough L1](implementation/CHECKPOINT-02F-LEGACY-SQLCLIENT-FEASIBILITY_FA.md) نشان داد:
+
+- تنها نامزد فنی، `System.Data.SqlClient 4.8.6` روی گراف ریز ASP.NET Core 2.1 با pinهای امنیتی است.
+- کپی ignored کد canonical روی این گراف صفر warning/error و ۱۰۹ unit + ۵۰ integration موفق/۸ SQL Skipped دارد.
+- audit از ۹ به ۲ بستهٔ flagged رسید؛ Kestrel 2.1.25 با Critical CVE-2025-55315 بی‌وصله باقی است.
+
+هیچ نامزدی امن یا آمادهٔ Production اعلام نشده است. کد، package، lockfile، gate، SQL و فایل شخصی کاربر حفظ شدند. هیچ اتصال SQL، native load، حساب/ACL/task، DDL/GRANT، TLS یا IIS اجرا نشد. ادامه نیازمند تصمیم کارفرما است:
+
+- **L1-A**: تغییر بستهٔ canonical؛
+- **L1-R**: پذیرش مکتوب ریسک باقی‌مانده؛
+- P1 تا P4: هرکدام مستقل.
+
+P0 با .NET10 ([walkthrough](implementation/CHECKPOINT-02F-P0-MIGRATION-FEASIBILITY_FA.md)) فقط پژوهش آینده است و مهاجرت گام مصوب نیست. پیش از تصویب‌ها توقف؛ 2G، source واقعی، OTP/Session/Info/media/Production شروع نشده‌اند.
