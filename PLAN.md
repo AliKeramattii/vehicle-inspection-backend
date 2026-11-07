@@ -482,3 +482,9 @@ hash جدید: P3 `07383213…49ec` و P1 `351227f2…838a`. عامل هیچ scr
 [walkthrough](docs/implementation/CHECKPOINT-03-OTP-SESSION_FA.md). برش اول پیاده شد: قراردادهای OTP، سیاست پیشنهادی، تولید امن کد، MAC با length-prefix، مقایسهٔ ثابت‌زمان، چرخهٔ issue/resend/verify با Save شرطی، و guard محیطی fixture. ۲۶ آزمون unit دارد: build با 0 warning، ۱۴۶ از ۱۴۶ unit، ۵۰ integration و ۱۳ Skipped.
 
 بدون SQL، endpoint یا DI. **24% + 0 = 24%.** گام بعد: migration `0002_otp_session` با الگوی 2G روی `BAZDID_MigrationTest`. اجرای آن روی `BAZDID_Development` و GRANT جدید Writer مجوز جدا لازم دارند.
+
+### Checkpoint 3 — برش دوم (2026-11-07)
+
+migration `0002_otp_session` (سه جدول احراز با ضد replay و جداسازی tenant در خود پایگاه) و storeهای SQL (چالش، نشست، rate limit) تحویل شدند. rehearsal روی `BAZDID_MigrationTest`: ۳۷ گام PASS، شامل ۴ از ۴ آزمون store روی SQL واقعی؛ پایگاه حذف شد و `BAZDID_Development` بدون تغییر ماند. regression: ۱۴۶ unit؛ ۵۰ integration و ۱۷ Skipped. [شرح](docs/implementation/CHECKPOINT-03-OTP-SESSION_FA.md#slice2).
+
+**24% + 0 = 24%.** منتظر تصویب: اعمال 0001 (Adopted) و 0002 روی `BAZDID_Development`، و `0002_auth_grants.review.sql`. گام بعد مستقل از تصویب: endpointها، cookie، CSRF و آزمون HTTP.

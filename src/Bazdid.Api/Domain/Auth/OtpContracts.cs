@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Bazdid.Api.Domain.Brokerage;
 using Bazdid.Api.Domain.Persistence;
 
 namespace Bazdid.Api.Domain.Auth
@@ -45,7 +46,10 @@ namespace Bazdid.Api.Domain.Auth
             BrowserNonceHash = (byte[])browserNonceHash.Clone(); ContextExpiresAtUtc = contextExpiresAtUtc;
             State = OtpChallengeState.Resolved;
         }
+        /// <summary>handle خام opaque؛ فقط در حافظه/پاسخ. در SQL فقط SHA-256 آن (HandleHash) ذخیره می‌شود.</summary>
         public string ChallengeId { get; }
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public BrokerageScope Scope { get; set; }
         public Guid RequestContextId { get; }
         public byte[] BrowserNonceHash { get; }
         public DateTimeOffset ContextExpiresAtUtc { get; }
@@ -64,7 +68,7 @@ namespace Bazdid.Api.Domain.Auth
         {
             return new OtpChallenge(ChallengeId, RequestContextId, BrowserNonceHash, ContextExpiresAtUtc)
             {
-                State = State, Generation = Generation, CodeMac = CodeMac == null ? null : (byte[])CodeMac.Clone(), CodeExpiresAtUtc = CodeExpiresAtUtc,
+                Id = Id, Scope = Scope, State = State, Generation = Generation, CodeMac = CodeMac == null ? null : (byte[])CodeMac.Clone(), CodeExpiresAtUtc = CodeExpiresAtUtc,
                 FailedAttempts = FailedAttempts, LastSentAtUtc = LastSentAtUtc, SendWindowStartUtc = SendWindowStartUtc, SendsInWindow = SendsInWindow,
                 ConsumedAtUtc = ConsumedAtUtc, Version = Version
             };
@@ -106,7 +110,51 @@ namespace Bazdid.Api.Domain.Auth
     public interface IOtpChallengeStore
     {
         Task<OtpChallenge> FindAsync(string challengeId, CancellationToken cancellationToken);
+        Task<bool> TryCreateAsync(OtpChallenge challenge, CancellationToken cancellationToken);
         Task<bool> TrySaveAsync(OtpChallenge challenge, RowVersionToken expectedVersion, CancellationToken cancellationToken);
+    }
+
+    /// <summary>نشست سروری مشتری. مرورگر فقط handle تصادفی دارد؛ SQL فقط hash آن را نگه می‌دارد.</summary>
+    public sealed class CustomerSession
+    {
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public byte[] HandleHash { get; set; }
+        public BrokerageScope Scope { get; set; }
+        public Guid RequestContextId { get; set; }
+        public Guid CustomerLinkId { get; set; }
+        public Guid OtpChallengeId { get; set; }
+        public DateTimeOffset AuthenticatedAtUtc { get; set; }
+        public DateTimeOffset LastSeenAtUtc { get; set; }
+        public DateTimeOffset IdleExpiresAtUtc { get; set; }
+        public DateTimeOffset AbsoluteExpiresAtUtc { get; set; }
+        public DateTimeOffset? RevokedAtUtc { get; set; }
+        public string RevokeReason { get; set; }
+        public RowVersionToken Version { get; set; }
+        public bool IsActive(DateTimeOffset now) => RevokedAtUtc == null && now < IdleExpiresAtUtc && now < AbsoluteExpiresAtUtc;
+    }
+
+    public interface ICustomerSessionStore
+    {
+        /// <summary>درج نشست. چالش تکراری (replay) با DuplicateConflict رد می‌شود.</summary>
+        Task CreateAsync(CustomerSession session, CancellationToken cancellationToken);
+        Task<CustomerSession> FindByHandleHashAsync(byte[] handleHash, CancellationToken cancellationToken);
+        /// <summary>تمدید idle بدون افزایش absolute؛ شرطی روی Version و فعال‌بودن.</summary>
+        Task<bool> TryTouchAsync(Guid id, RowVersionToken expectedVersion, DateTimeOffset lastSeen, DateTimeOffset idleExpires, CancellationToken cancellationToken);
+        /// <summary>ابطال اتمیک؛ فقط اگر هنوز ابطال نشده باشد true.</summary>
+        Task<bool> TryRevokeAsync(Guid id, string reason, DateTimeOffset now, CancellationToken cancellationToken);
+    }
+
+    public sealed class RateDecision
+    {
+        public RateDecision(bool allowed, TimeSpan retryAfter) { Allowed = allowed; RetryAfter = retryAfter; }
+        public bool Allowed { get; }
+        public TimeSpan RetryAfter { get; }
+    }
+
+    /// <summary>شمارندهٔ نرخ مشترک و پایدار بین instanceها. کلید همیشه hash است، نه IP/موبایل خام.</summary>
+    public interface IAuthRateLimiter
+    {
+        Task<RateDecision> HitAsync(string scope, byte[] keyHash, int limit, TimeSpan window, DateTimeOffset now, CancellationToken cancellationToken);
     }
 
     public interface IClock { DateTimeOffset UtcNow { get; } }

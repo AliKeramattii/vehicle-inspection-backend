@@ -34,6 +34,8 @@ namespace Bazdid.UnitTests
                     return Task.FromResult(true);
                 }
             }
+            public Task<bool> TryCreateAsync(OtpChallenge challenge, CancellationToken ct)
+            { challenge.Version = Next(); return Task.FromResult(_rows.TryAdd(challenge.ChallengeId, challenge.Copy())); }
             public OtpChallenge Raw(string id) => _rows[id];
         }
         private sealed class Sender : IOtpSender

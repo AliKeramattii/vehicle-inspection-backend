@@ -1,0 +1,279 @@
+﻿{
+    "Date":  "2026-11-07T15:42:35.2868215Z",
+    "Action":  "Accept",
+    "ApprovalReference":  "OWNER-2026-11-07-CP3-0002-REHEARSAL",
+    "Target":  {
+                   "Instance":  "SQLSERVER2019",
+                   "Major":  15,
+                   "Transport":  "Shared memory",
+                   "Encrypt":  "TRUE",
+                   "UserDatabasesAtStart":  "BAZDID_Development"
+               },
+    "MigrationSha256":  {
+                            "Forward":  "2568AA10017953AA0FA45BFBF15AF2F590B24E1B12E50EDCFCFCED47A16BD667",
+                            "Revert":  "E97734D7170BFB1B6E960BC188198854285147BAD7C9429563D773865F6DB5FC"
+                        },
+    "Steps":  [
+                  {
+                      "Step":  "01 create disposable DB + marker",
+                      "Expected":  "True",
+                      "Actual":  "True",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "02 forward (fresh)",
+                      "Expected":  "Created",
+                      "Actual":  "Created",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "03 schema equals BAZDID_Development",
+                      "Expected":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b",
+                      "Actual":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "04 history after forward",
+                      "Expected":  "0001_baseline:Created:2568AA10017953AA0FA45BFBF15AF2F590B24E1B12E50EDCFCFCED47A16BD667",
+                      "Actual":  "0001_baseline:Created:2568AA10017953AA0FA45BFBF15AF2F590B24E1B12E50EDCFCFCED47A16BD667",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "05 forward repeat is no-op",
+                      "Expected":  "AlreadyApplied",
+                      "Actual":  "AlreadyApplied",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "06 forward with wrong checksum rejected",
+                      "Expected":  "ChecksumMismatch",
+                      "Actual":  "ChecksumMismatch",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "07 schema unchanged after repeats",
+                      "Expected":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b",
+                      "Actual":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "08 revert",
+                      "Expected":  "Reverted",
+                      "Actual":  "Reverted",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "09 rollback state: only history table",
+                      "Expected":  "BAZDIDSchemaMigrations",
+                      "Actual":  "BAZDIDSchemaMigrations",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "10 rollback state: empty history",
+                      "Expected":  "",
+                      "Actual":  "",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "11 revert repeat is no-op",
+                      "Expected":  "NotApplied",
+                      "Actual":  "NotApplied",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "11b 0002 refused without 0001",
+                      "Expected":  "Prerequisite",
+                      "Actual":  "Prerequisite",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "12 forward re-apply",
+                      "Expected":  "Created",
+                      "Actual":  "Created",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "13 schema equals reference after re-apply",
+                      "Expected":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b",
+                      "Actual":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "14 history after re-apply",
+                      "Expected":  "0001_baseline:Created:2568AA10017953AA0FA45BFBF15AF2F590B24E1B12E50EDCFCFCED47A16BD667",
+                      "Actual":  "0001_baseline:Created:2568AA10017953AA0FA45BFBF15AF2F590B24E1B12E50EDCFCFCED47A16BD667",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "15 revert refused while data present",
+                      "Expected":  "DataPresent",
+                      "Actual":  "DataPresent",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "16 data and schema intact after refusal",
+                      "Expected":  "1",
+                      "Actual":  "1",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "17 forward adopts existing exact schema",
+                      "Expected":  "Adopted",
+                      "Actual":  "Adopted",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "18 history after adopt",
+                      "Expected":  "0001_baseline:Adopted:2568AA10017953AA0FA45BFBF15AF2F590B24E1B12E50EDCFCFCED47A16BD667",
+                      "Actual":  "0001_baseline:Adopted:2568AA10017953AA0FA45BFBF15AF2F590B24E1B12E50EDCFCFCED47A16BD667",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "19 final schema equals reference",
+                      "Expected":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b",
+                      "Actual":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "23 0002 forward",
+                      "Expected":  "Created",
+                      "Actual":  "Created",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "24 0002 objects present",
+                      "Expected":  "BAZDIDAuthRateCounters:CK_BAZDIDAuthRateCounters_Hits,CK_BAZDIDAuthRateCounters_Scope,PK_BAZDIDAuthRateCounters;BAZDIDCustomerSessions:CK_BAZDIDCustomerSessions_Revoke,CK_BAZDIDCustomerSessions_Tenant,CK_BAZDIDCustomerSessions_Time,FK_BAZDIDCustomerSessions_Challenge,FK_BAZDIDCustomerSessions_Context,FK_BAZDIDCustomerSessions_Customer,IX_BAZDIDCustomerSessions_Context,IX_BAZDIDCustomerSessions_Expiry,PK_BAZDIDCustomerSessions,UQ_BAZDIDCustomerSessions_Challenge,UQ_BAZDIDCustomerSessions_Handle;BAZDIDOtpChallenges:CK_BAZDIDOtpChallenges_Code,CK_BAZDIDOtpChallenges_Consumed,CK_BAZDIDOtpChallenges_Counters,CK_BAZDIDOtpChallenges_State,CK_BAZDIDOtpChallenges_Tenant,DF_BAZDIDOtpChallenges_Created,DF_BAZDIDOtpChallenges_Failed,DF_BAZDIDOtpChallenges_Generation,DF_BAZDIDOtpChallenges_Sends,FK_BAZDIDOtpChallenges_Context,IX_BAZDIDOtpChallenges_Context,IX_BAZDIDOtpChallenges_Expiry,PK_BAZDIDOtpChallenges,UQ_BAZDIDOtpChallenges_Handle",
+                      "Actual":  "BAZDIDAuthRateCounters:CK_BAZDIDAuthRateCounters_Hits,CK_BAZDIDAuthRateCounters_Scope,PK_BAZDIDAuthRateCounters;BAZDIDCustomerSessions:CK_BAZDIDCustomerSessions_Revoke,CK_BAZDIDCustomerSessions_Tenant,CK_BAZDIDCustomerSessions_Time,FK_BAZDIDCustomerSessions_Challenge,FK_BAZDIDCustomerSessions_Context,FK_BAZDIDCustomerSessions_Customer,IX_BAZDIDCustomerSessions_Context,IX_BAZDIDCustomerSessions_Expiry,PK_BAZDIDCustomerSessions,UQ_BAZDIDCustomerSessions_Challenge,UQ_BAZDIDCustomerSessions_Handle;BAZDIDOtpChallenges:CK_BAZDIDOtpChallenges_Code,CK_BAZDIDOtpChallenges_Consumed,CK_BAZDIDOtpChallenges_Counters,CK_BAZDIDOtpChallenges_State,CK_BAZDIDOtpChallenges_Tenant,DF_BAZDIDOtpChallenges_Created,DF_BAZDIDOtpChallenges_Failed,DF_BAZDIDOtpChallenges_Generation,DF_BAZDIDOtpChallenges_Sends,FK_BAZDIDOtpChallenges_Context,IX_BAZDIDOtpChallenges_Context,IX_BAZDIDOtpChallenges_Expiry,PK_BAZDIDOtpChallenges,UQ_BAZDIDOtpChallenges_Handle",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "25 0002 repeat is no-op",
+                      "Expected":  "AlreadyApplied",
+                      "Actual":  "AlreadyApplied",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "26 0002 wrong checksum rejected",
+                      "Expected":  "ChecksumMismatch",
+                      "Actual":  "ChecksumMismatch",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "27 0001 revert refused while 0002 present",
+                      "Expected":  "LaterMigration",
+                      "Actual":  "LaterMigration",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "28 SQL store tests on disposable DB",
+                      "Expected":  "Failed=0 Skipped=0",
+                      "Actual":  "Failed=0 Skipped=0",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "29 store tests left no rows",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "30 0002 revert refused while data present",
+                      "Expected":  "DataPresent",
+                      "Actual":  "DataPresent",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "31 0002 revert",
+                      "Expected":  "Reverted",
+                      "Actual":  "Reverted",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "32 0002 objects absent after revert",
+                      "Expected":  "",
+                      "Actual":  "",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "33 0001 schema intact after 0002 revert",
+                      "Expected":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b",
+                      "Actual":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "34 0002 revert repeat is no-op",
+                      "Expected":  "NotApplied",
+                      "Actual":  "NotApplied",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "35 0002 re-apply",
+                      "Expected":  "Created",
+                      "Actual":  "Created",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "36 0002 objects present after re-apply",
+                      "Expected":  "BAZDIDAuthRateCounters:CK_BAZDIDAuthRateCounters_Hits,CK_BAZDIDAuthRateCounters_Scope,PK_BAZDIDAuthRateCounters;BAZDIDCustomerSessions:CK_BAZDIDCustomerSessions_Revoke,CK_BAZDIDCustomerSessions_Tenant,CK_BAZDIDCustomerSessions_Time,FK_BAZDIDCustomerSessions_Challenge,FK_BAZDIDCustomerSessions_Context,FK_BAZDIDCustomerSessions_Customer,IX_BAZDIDCustomerSessions_Context,IX_BAZDIDCustomerSessions_Expiry,PK_BAZDIDCustomerSessions,UQ_BAZDIDCustomerSessions_Challenge,UQ_BAZDIDCustomerSessions_Handle;BAZDIDOtpChallenges:CK_BAZDIDOtpChallenges_Code,CK_BAZDIDOtpChallenges_Consumed,CK_BAZDIDOtpChallenges_Counters,CK_BAZDIDOtpChallenges_State,CK_BAZDIDOtpChallenges_Tenant,DF_BAZDIDOtpChallenges_Created,DF_BAZDIDOtpChallenges_Failed,DF_BAZDIDOtpChallenges_Generation,DF_BAZDIDOtpChallenges_Sends,FK_BAZDIDOtpChallenges_Context,IX_BAZDIDOtpChallenges_Context,IX_BAZDIDOtpChallenges_Expiry,PK_BAZDIDOtpChallenges,UQ_BAZDIDOtpChallenges_Handle",
+                      "Actual":  "BAZDIDAuthRateCounters:CK_BAZDIDAuthRateCounters_Hits,CK_BAZDIDAuthRateCounters_Scope,PK_BAZDIDAuthRateCounters;BAZDIDCustomerSessions:CK_BAZDIDCustomerSessions_Revoke,CK_BAZDIDCustomerSessions_Tenant,CK_BAZDIDCustomerSessions_Time,FK_BAZDIDCustomerSessions_Challenge,FK_BAZDIDCustomerSessions_Context,FK_BAZDIDCustomerSessions_Customer,IX_BAZDIDCustomerSessions_Context,IX_BAZDIDCustomerSessions_Expiry,PK_BAZDIDCustomerSessions,UQ_BAZDIDCustomerSessions_Challenge,UQ_BAZDIDCustomerSessions_Handle;BAZDIDOtpChallenges:CK_BAZDIDOtpChallenges_Code,CK_BAZDIDOtpChallenges_Consumed,CK_BAZDIDOtpChallenges_Counters,CK_BAZDIDOtpChallenges_State,CK_BAZDIDOtpChallenges_Tenant,DF_BAZDIDOtpChallenges_Created,DF_BAZDIDOtpChallenges_Failed,DF_BAZDIDOtpChallenges_Generation,DF_BAZDIDOtpChallenges_Sends,FK_BAZDIDOtpChallenges_Context,IX_BAZDIDOtpChallenges_Context,IX_BAZDIDOtpChallenges_Expiry,PK_BAZDIDOtpChallenges,UQ_BAZDIDOtpChallenges_Handle",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "37 history has both migrations",
+                      "Expected":  "0001_baseline:Adopted:2568AA10017953AA0FA45BFBF15AF2F590B24E1B12E50EDCFCFCED47A16BD667,0002_otp_session:Created:544D33CB343DC9A6DCF3503603553D66F3F3AABC3648C800933DFF6173A00248",
+                      "Actual":  "0001_baseline:Adopted:2568AA10017953AA0FA45BFBF15AF2F590B24E1B12E50EDCFCFCED47A16BD667,0002_otp_session:Created:544D33CB343DC9A6DCF3503603553D66F3F3AABC3648C800933DFF6173A00248",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "20 disposable DB removed",
+                      "Expected":  "Dropped",
+                      "Actual":  "Dropped",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "21 disposable DB absent",
+                      "Expected":  "True",
+                      "Actual":  "True",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "22 BAZDID_Development unchanged",
+                      "Expected":  "{\"Rows\":\"0/0/0\",\"Tables\":3,\"Principals\":4,\"Permissions\":232,\"PermissionChecksum\":-670225535,\"CustomerModified\":\"2026-11-01T23:18:08.2130000\",\"SignatureItems\":81,\"SignatureHash\":\"d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b\"}",
+                      "Actual":  "{\"Rows\":\"0/0/0\",\"Tables\":3,\"Principals\":4,\"Permissions\":232,\"PermissionChecksum\":-670225535,\"CustomerModified\":\"2026-11-01T23:18:08.2130000\",\"SignatureItems\":81,\"SignatureHash\":\"d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b\"}",
+                      "Pass":  true
+                  }
+              ],
+    "ReferenceBefore":  {
+                            "Rows":  "0/0/0",
+                            "Tables":  3,
+                            "Principals":  4,
+                            "Permissions":  232,
+                            "PermissionChecksum":  -670225535,
+                            "CustomerModified":  "2026-11-01T23:18:08.2130000",
+                            "SignatureItems":  81,
+                            "SignatureHash":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b"
+                        },
+    "SignatureItems":  81,
+    "StoreTests":  {
+                       "Total":  4,
+                       "Passed":  4,
+                       "Failed":  0,
+                       "Skipped":  0,
+                       "ExitCode":  0,
+                       "FailureLines":  [
+
+                                        ]
+                   },
+    "Cleanup":  "Dropped",
+    "Result":  "PASS",
+    "ReferenceAfter":  {
+                           "Rows":  "0/0/0",
+                           "Tables":  3,
+                           "Principals":  4,
+                           "Permissions":  232,
+                           "PermissionChecksum":  -670225535,
+                           "CustomerModified":  "2026-11-01T23:18:08.2130000",
+                           "SignatureItems":  81,
+                           "SignatureHash":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b"
+                       }
+}

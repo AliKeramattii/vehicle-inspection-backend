@@ -31,7 +31,10 @@ $root = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $migrations = [ordered]@{
     Forward = @{ Path = 'migrations\0001_baseline.forward.sql'; Sha = '2568AA10017953AA0FA45BFBF15AF2F590B24E1B12E50EDCFCFCED47A16BD667' }
     Revert  = @{ Path = 'migrations\0001_baseline.revert.sql'; Sha = 'E97734D7170BFB1B6E960BC188198854285147BAD7C9429563D773865F6DB5FC' }
+    Forward2 = @{ Path = 'migrations\0002_otp_session.forward.sql'; Sha = '544D33CB343DC9A6DCF3503603553D66F3F3AABC3648C800933DFF6173A00248' }
+    Revert2  = @{ Path = 'migrations\0002_otp_session.revert.sql'; Sha = '66DDDD5A6129E1B425ED8E8540B18D056AAA06BAFAB1BBE16347FC997956F71C' }
 }
+$AuthTables = @('BAZDIDOtpChallenges', 'BAZDIDCustomerSessions', 'BAZDIDAuthRateCounters')
 foreach ($m in $migrations.Values) {
     $full = Join-Path $root $m.Path
     $hash = (Get-FileHash -LiteralPath $full -Algorithm SHA256).Hash
@@ -75,15 +78,15 @@ function Get-Executable([string]$text, [hashtable]$values) {
     }
     return $text
 }
-function Get-ForwardSql([string]$checksum) {
-    Get-Executable $migrations.Forward.Text @{
+function Get-ForwardSql([string]$checksum, [string]$text = $migrations.Forward.Text) {
+    Get-Executable $text @{
         'DECLARE @AllowDdl bit = 0;'                       = 'DECLARE @AllowDdl bit = 1;'
         'DECLARE @ApprovalReference nvarchar(128) = NULL;' = "DECLARE @ApprovalReference nvarchar(128) = N'$ApprovalReference';"
         'DECLARE @MigrationChecksum char(64) = NULL;'      = "DECLARE @MigrationChecksum char(64) = '$checksum';"
     }
 }
-function Get-RevertSql {
-    Get-Executable $migrations.Revert.Text @{
+function Get-RevertSql([string]$text = $migrations.Revert.Text) {
+    Get-Executable $text @{
         'DECLARE @AllowDdl bit = 0;'                       = 'DECLARE @AllowDdl bit = 1;'
         'DECLARE @ApprovalReference nvarchar(128) = NULL;' = "DECLARE @ApprovalReference nvarchar(128) = N'$ApprovalReference';"
     }
@@ -119,7 +122,8 @@ function Test-Disposable {
         $c = Get-Rows $TestDatabase @"
 SELECT (SELECT CONVERT(nvarchar(256),value) FROM sys.extended_properties WHERE class=0 AND name=@P) AS Marker,
  (SELECT STRING_AGG(name, N',') FROM sys.objects WHERE is_ms_shipped=0 AND type IN ('U','V','P','FN','IF','TF','TR','SN','SO')
-    AND name NOT IN (N'BAZDIDSchemaMigrations',N'BAZDIDCustomerLinks',N'BAZDIDRequestContexts',N'BAZDIDAuditLogs')) AS ForeignObjects,
+    AND name NOT IN (N'BAZDIDSchemaMigrations',N'BAZDIDCustomerLinks',N'BAZDIDRequestContexts',N'BAZDIDAuditLogs',
+                     N'BAZDIDOtpChallenges',N'BAZDIDCustomerSessions',N'BAZDIDAuthRateCounters')) AS ForeignObjects,
  (SELECT COUNT(*) FROM sys.database_principals WHERE principal_id>4 AND is_fixed_role=0 AND type NOT IN ('R')) AS Users,
  (SELECT COUNT(*) FROM sys.database_principals WHERE type='R' AND is_fixed_role=0 AND principal_id>0 AND name<>N'public') AS Roles
 "@ @{ '@P' = $DisposableProperty }
@@ -127,7 +131,7 @@ SELECT (SELECT CONVERT(nvarchar(256),value) FROM sys.extended_properties WHERE c
         if ("$($r.Marker)" -ne $DisposableValue) { $problems.Add('نشانهٔ BAZDID.Disposable وجود ندارد یا برابر نیست.') }
         if ("$($r.ForeignObjects)") { $problems.Add("شیء ناشناخته: $($r.ForeignObjects)") }
         if ($r.Users -ne 0 -or $r.Roles -ne 0) { $problems.Add('user یا نقش پایگاه وجود دارد.') }
-        foreach ($tbl in $BaselineTables) {
+        foreach ($tbl in ($BaselineTables + $AuthTables)) {
             $n = (Get-Rows $TestDatabase "SELECT CASE WHEN OBJECT_ID(N'dbo.$tbl',N'U') IS NULL THEN 0 ELSE 1 END AS E").Rows[0].E
             if ($n -eq 1) {
                 $rows = (Get-Rows $TestDatabase "SELECT COUNT_BIG(*) AS N FROM dbo.$tbl").Rows[0].N
@@ -214,6 +218,34 @@ function Get-StringHash([string]$s) {
     $sha = [Security.Cryptography.SHA256]::Create()
     try { -join ($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($s)) | ForEach-Object { $_.ToString('x2') }) } finally { $sha.Dispose() }
 }
+# نام دقیق اشیای 0002 (جدول، PK/UQ/FK/CHECK/DEFAULT، index) برای راستی‌آزمایی وجود/نبود.
+$Expected0002 = 'BAZDIDAuthRateCounters:CK_BAZDIDAuthRateCounters_Hits,CK_BAZDIDAuthRateCounters_Scope,PK_BAZDIDAuthRateCounters;' +
+  'BAZDIDCustomerSessions:CK_BAZDIDCustomerSessions_Revoke,CK_BAZDIDCustomerSessions_Tenant,CK_BAZDIDCustomerSessions_Time,FK_BAZDIDCustomerSessions_Challenge,FK_BAZDIDCustomerSessions_Context,FK_BAZDIDCustomerSessions_Customer,IX_BAZDIDCustomerSessions_Context,IX_BAZDIDCustomerSessions_Expiry,PK_BAZDIDCustomerSessions,UQ_BAZDIDCustomerSessions_Challenge,UQ_BAZDIDCustomerSessions_Handle;' +
+  'BAZDIDOtpChallenges:CK_BAZDIDOtpChallenges_Code,CK_BAZDIDOtpChallenges_Consumed,CK_BAZDIDOtpChallenges_Counters,CK_BAZDIDOtpChallenges_State,CK_BAZDIDOtpChallenges_Tenant,DF_BAZDIDOtpChallenges_Created,DF_BAZDIDOtpChallenges_Failed,DF_BAZDIDOtpChallenges_Generation,DF_BAZDIDOtpChallenges_Sends,FK_BAZDIDOtpChallenges_Context,IX_BAZDIDOtpChallenges_Context,IX_BAZDIDOtpChallenges_Expiry,PK_BAZDIDOtpChallenges,UQ_BAZDIDOtpChallenges_Handle'
+function Get-AuthObjects {
+    $rows = Get-Rows $TestDatabase @"
+SELECT t.name AS T, o.name AS N FROM sys.tables t JOIN sys.objects o ON o.parent_object_id=t.object_id
+WHERE t.name IN (N'BAZDIDOtpChallenges',N'BAZDIDCustomerSessions',N'BAZDIDAuthRateCounters') AND o.type IN ('PK','UQ','F','C','D')
+UNION ALL SELECT t.name, i.name FROM sys.tables t JOIN sys.indexes i ON i.object_id=t.object_id
+WHERE t.name IN (N'BAZDIDOtpChallenges',N'BAZDIDCustomerSessions',N'BAZDIDAuthRateCounters') AND i.is_primary_key=0 AND i.is_unique_constraint=0 AND i.type>0
+"@
+    (@($rows.Rows | Group-Object T | Sort-Object Name | ForEach-Object { $_.Name + ':' + ((@($_.Group | ForEach-Object { $_.N }) | Sort-Object) -join ',') })) -join ';'
+}
+function Get-AuthRowCount {
+    (Get-Rows $TestDatabase "SELECT (SELECT COUNT_BIG(*) FROM dbo.BAZDIDOtpChallenges)+(SELECT COUNT_BIG(*) FROM dbo.BAZDIDCustomerSessions)+(SELECT COUNT_BIG(*) FROM dbo.BAZDIDAuthRateCounters)+(SELECT COUNT_BIG(*) FROM dbo.BAZDIDCustomerLinks)+(SELECT COUNT_BIG(*) FROM dbo.BAZDIDRequestContexts)+(SELECT COUNT_BIG(*) FROM dbo.BAZDIDAuditLogs) AS N").Rows[0].N
+}
+function Invoke-StoreTests {
+    # آزمون‌های store SQL فقط با انتخاب صریح و روی همین پایگاه یک‌بارمصرف (هویت مالک؛ نه هویت برنامه).
+    $project = Join-Path (Split-Path $root -Parent) 'tests\Bazdid.IntegrationTests\Bazdid.IntegrationTests.csproj'
+    $env:BAZDID_DISPOSABLE_SQL = '1'
+    # در PS 5.1 خط‌های stderr فرمان native با Stop به خطای پایان‌دهنده تبدیل می‌شوند؛ فقط همین فراخوانی Continue است.
+    $previous = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+    try { $output = & dotnet test $project --configuration Release --no-build --no-restore --filter 'FullyQualifiedName~SqlAuthStoreDisposableTests' 2>&1 | Out-String }
+    finally { $ErrorActionPreference = $previous; Remove-Item Env:BAZDID_DISPOSABLE_SQL -ErrorAction SilentlyContinue }
+    function N([string]$label) { if ($output -match "$label\s*:\s*(\d+)") { [int]$Matches[1] } else { 0 } }
+    [pscustomobject]@{ Total = (N 'Total tests'); Passed = (N 'Passed'); Failed = (N 'Failed'); Skipped = (N 'Skipped'); ExitCode = $LASTEXITCODE
+        FailureLines = @(($output -split "`r?`n") | Where-Object { $_ -match '\[FAIL\]|Error Message|Assert|Exception|Expected|Actual|at Bazdid' } | Select-Object -First 40) }
+}
 function Get-TestState {
     $r = (Get-Rows $TestDatabase @"
 SELECT (SELECT STRING_AGG(name, N',') WITHIN GROUP (ORDER BY name) FROM sys.tables WHERE is_ms_shipped=0) AS Tables,
@@ -252,6 +284,7 @@ $existing = Test-Disposable
 if ($existing.Exists -and -not $existing.Proven) { throw ('BAZDID_MigrationTest از قبل وجود دارد و اثبات یک‌بارمصرف ندارد؛ متوقف شد: ' + ($existing.Problems -join '; ')) }
 if ($existing.Exists) { Step 'pre-existing disposable test DB removed' 'Dropped' (Remove-TestDatabase) }
 $forwardSha = $migrations.Forward.Sha
+$forward2Sha = $migrations.Forward2.Sha
 try {
     New-TestDatabase
     Step '01 create disposable DB + marker' 'True' (Test-Disposable).Proven
@@ -267,6 +300,8 @@ try {
     Step '09 rollback state: only history table' 'BAZDIDSchemaMigrations' $s.Tables
     Step '10 rollback state: empty history' '' $s.History
     Step '11 revert repeat is no-op' 'NotApplied' (Invoke-Sql $TestDatabase (Get-RevertSql))
+    $pre = try { [void](Invoke-Sql $TestDatabase (Get-ForwardSql $forward2Sha $migrations.Forward2.Text)); 'NoError' } catch { if ($_.Exception.Message -match 'BAZDID_PREREQUISITE_0001_MISSING') { 'Prerequisite' } else { $_.Exception.Message } }
+    Step '11b 0002 refused without 0001' 'Prerequisite' $pre
     Step '12 forward re-apply' 'Created' (Invoke-Sql $TestDatabase (Get-ForwardSql $forwardSha))
     Step '13 schema equals reference after re-apply' (Get-StringHash ($referenceSignature -join "`n")) (Get-StringHash ((Get-Signature $TestDatabase) -join "`n"))
     Step '14 history after re-apply' "0001_baseline:Created:$forwardSha" (Get-TestState).History
@@ -282,6 +317,30 @@ try {
     Step '18 history after adopt' "0001_baseline:Adopted:$forwardSha" (Get-TestState).History
     Step '19 final schema equals reference' (Get-StringHash ($referenceSignature -join "`n")) (Get-StringHash ((Get-Signature $TestDatabase) -join "`n"))
     $evidence.SignatureItems = $referenceSignature.Count
+    # ---------------- 0002_otp_session ----------------
+    Step '23 0002 forward' 'Created' (Invoke-Sql $TestDatabase (Get-ForwardSql $forward2Sha $migrations.Forward2.Text))
+    Step '24 0002 objects present' $Expected0002 (Get-AuthObjects)
+    Step '25 0002 repeat is no-op' 'AlreadyApplied' (Invoke-Sql $TestDatabase (Get-ForwardSql $forward2Sha $migrations.Forward2.Text))
+    $tampered2 = try { [void](Invoke-Sql $TestDatabase (Get-ForwardSql ('0' * 64) $migrations.Forward2.Text)); 'NoError' } catch { if ($_.Exception.Message -match 'BAZDID_MIGRATION_CHECKSUM_MISMATCH') { 'ChecksumMismatch' } else { $_.Exception.Message } }
+    Step '26 0002 wrong checksum rejected' 'ChecksumMismatch' $tampered2
+    $later = try { [void](Invoke-Sql $TestDatabase (Get-RevertSql)); 'NoError' } catch { if ($_.Exception.Message -match 'BAZDID_REVERT_LATER_MIGRATION_PRESENT') { 'LaterMigration' } else { $_.Exception.Message } }
+    Step '27 0001 revert refused while 0002 present' 'LaterMigration' $later
+    $tests = Invoke-StoreTests
+    $evidence.StoreTests = $tests
+    if ($tests.Failed -ne 0 -or $tests.Total -eq 0) { $tests.FailureLines | ForEach-Object { Write-Host "  $_" } }
+    Step '28 SQL store tests on disposable DB' 'Failed=0 Skipped=0' ("Failed=$($tests.Failed) Skipped=$($tests.Skipped)")
+    Step '29 store tests left no rows' '0' (Get-AuthRowCount)
+    [void](Invoke-Sql $TestDatabase "INSERT dbo.BAZDIDAuthRateCounters (Scope,KeyHash,WindowStartUtc,Hits) VALUES ('ip',HASHBYTES('SHA2_256',N'TEST-2G'),SYSUTCDATETIME(),1); SELECT 'Inserted' AS Result;")
+    $guard2 = try { [void](Invoke-Sql $TestDatabase (Get-RevertSql $migrations.Revert2.Text)); 'NoError' } catch { if ($_.Exception.Message -match 'BAZDID_REVERT_DATA_PRESENT') { 'DataPresent' } else { $_.Exception.Message } }
+    Step '30 0002 revert refused while data present' 'DataPresent' $guard2
+    [void](Invoke-Sql $TestDatabase "DELETE FROM dbo.BAZDIDAuthRateCounters WHERE Scope='ip' AND KeyHash=HASHBYTES('SHA2_256',N'TEST-2G'); SELECT 'Deleted' AS Result;")
+    Step '31 0002 revert' 'Reverted' (Invoke-Sql $TestDatabase (Get-RevertSql $migrations.Revert2.Text))
+    Step '32 0002 objects absent after revert' '' (Get-AuthObjects)
+    Step '33 0001 schema intact after 0002 revert' (Get-StringHash ($referenceSignature -join "`n")) (Get-StringHash ((Get-Signature $TestDatabase) -join "`n"))
+    Step '34 0002 revert repeat is no-op' 'NotApplied' (Invoke-Sql $TestDatabase (Get-RevertSql $migrations.Revert2.Text))
+    Step '35 0002 re-apply' 'Created' (Invoke-Sql $TestDatabase (Get-ForwardSql $forward2Sha $migrations.Forward2.Text))
+    Step '36 0002 objects present after re-apply' $Expected0002 (Get-AuthObjects)
+    Step '37 history has both migrations' "0001_baseline:Adopted:$forwardSha,0002_otp_session:Created:$forward2Sha" (Get-TestState).History
 }
 finally {
     $cleanup = try { Remove-TestDatabase } catch { 'FAILED: ' + $_.Exception.Message }

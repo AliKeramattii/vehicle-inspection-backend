@@ -1,6 +1,8 @@
 # ادامهٔ کار پس از قطع نشست عامل
 
-**Checkpoint 3 در حال اجرا (`2026-11-07`):** برش اول، یعنی منطق دامنهٔ OTP بدون SQL/HTTP/DI، پیاده شد و ۲۶ آزمون unit دارد ([walkthrough](implementation/CHECKPOINT-03-OTP-SESSION_FA.md)). گام بعد: migration `0002_otp_session` با الگوی 2G، سپس store SQL، resolution context، نشست، CSRF و endpointها. پیشرفت 24%.
+**Checkpoint 3، برش دوم (`2026-11-07`):** migration `0002_otp_session` و storeهای SQL با rehearsal روی `BAZDID_MigrationTest` (۳۷ گام و ۴ آزمون store) تحویل شدند ([بخش ۷](implementation/CHECKPOINT-03-OTP-SESSION_FA.md#slice2)). اعمال روی Development و GRANT منتظر تصویب‌اند. گام بعد: endpointها، cookie و CSRF.
+
+**Checkpoint 3، برش اول:** برش اول، یعنی منطق دامنهٔ OTP بدون SQL/HTTP/DI، پیاده شد و ۲۶ آزمون unit دارد ([walkthrough](implementation/CHECKPOINT-03-OTP-SESSION_FA.md)). گام بعد: migration `0002_otp_session` با الگوی 2G، سپس store SQL، resolution context، نشست، CSRF و endpointها. پیشرفت 24%.
 
 **آخرین نقطهٔ ادامه در `2026-11-07`: Checkpoint 2G پذیرفته شد؛ Checkpoint 2 کامل است؛ پیشرفت 24%** ([walkthrough 2G](implementation/CHECKPOINT-02G-MIGRATIONS_FA.md)، [شاهد](checkpoint2g/MIGRATION_ACCEPTANCE.json)).
 
