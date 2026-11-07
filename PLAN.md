@@ -417,3 +417,18 @@ hash جدید: P3 `07383213…49ec` و P1 `351227f2…838a`. عامل هیچ scr
 - کد، gate، schema، داده و certificate بدون تغییرند.
 
 **قبلی 20% + سهم 0 = 20%.** گام بعد: مدیر P1 را اجرا می‌کند و مالک دربارهٔ `D-P3-NAME` تصمیم می‌گیرد (پیشنهاد: pin به `lpc:localhost\SQLSERVER2019`). سپس P2 و P4/P5. 2G شروع نشده است.
+
+### اجرای D-P3-NAME، P2 و پیاده‌سازی P4/P5 در 2026-11-07
+
+مالک D-P3-NAME و اجرای P1 تا P5 محلی را تصویب کرد. commit کد `fd1e992`. جزئیات در [بخش ۲۱](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#execution-20261107) آمده است.
+
+- **انجام‌شده:**
+  - مقصد ثابت `lpc:localhost\SQLSERVER2019`؛
+  - رفع اشکال guard مجوز سرور (`HAS_PERMS_BY_NAME(NULL,NULL,…)`)؛
+  - P2 اجرا و تأیید شد: ۴۰ از ۴۰ مجوز و مجوز مؤثر دقیق؛
+  - P4: نشانهٔ internal فقط Testing و Writer واقعی، به‌علاوهٔ task محدود؛
+  - P5: آزمون‌های commitشده با RunId، verifier و cleanup دقیق.
+- **regression:** ۱۲۰ از ۱۲۰ unit؛ ۵۰ integration موفق و ۱۳ متصلِ انتخاب‌نشده Skipped؛ build با 0 warning.
+- **مانع:** provisioning رمز Writer و task به elevation نیاز دارد (دستور بخش ۲۱.۸). حق‌های LSA مربوط به P1 هم با همان دستور تأیید می‌شوند.
+
+**قبلی 20% + سهم 0 = 20%.** پس از PASS اجرای متصل، شامل ۱۳ از ۱۳ آزمون، verifier و cleanup، 2F کامل و پیشرفت **22%** می‌شود و آماده‌سازی 2G آغاز می‌شود. 2G پیش از آن شروع نمی‌شود.

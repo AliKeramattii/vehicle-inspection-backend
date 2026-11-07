@@ -6,7 +6,13 @@
 
 مخزن `C:\Projects\vehicle-inspection-integrated` فقط مرجع **خواندنی** است. آن را تغییر ندهید، با Backend ادغام نکنید و در آن worktree نسازید. دستورهای تاریخی عامل‌های Frontend، مجوز تغییر آن مخزن یا تغییر دامنهٔ این پروژه نیستند.
 
-**وضعیت جاری در 2026-11-07: certificate مربوط به P3 توسط مدیر نصب شد (thumbprint `9F8A13B7…E84F`). آن را دوباره نصب یا تغییر ندهید.** [راستی‌آزمایی](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#p3-verification-20261107):
+**وضعیت جاری در 2026-11-07 (عصر): D-P3-NAME اعمال شد و P2 اجرا و تأیید شد (40/40 مجوز). P4/P5 پیاده شده‌اند و منتظر یک اجرای elevated مالک هستند.** [بخش ۲۱](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#execution-20261107):
+
+- مقصد ثابت `lpc:localhost\SQLSERVER2019`. اشکال guard، یعنی `HAS_PERMS_BY_NAME(NULL,N'SERVER',…)` که همیشه NULL می‌داد، رفع شد.
+- آزمون متصل فقط با `BAZDID_CONNECTED_SQL=1` و token واقعی `BAZDIDDevWriter` از طریق task اجرا می‌شود. gate برنامه بسته است.
+- گام بعد: مالک `Register-BazdidConnectedTestTask.review.ps1 -Execute` را اجرا می‌کند، سپس عامل `Start-BazdidConnectedRun.ps1` را. پیشرفت 20% است و 2G شروع نشده است.
+
+**سابقهٔ صبح 2026-11-07: certificate مربوط به P3 توسط مدیر نصب شد (thumbprint `9F8A13B7…E84F`). آن را دوباره نصب یا تغییر ندهید.** [راستی‌آزمایی](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#p3-verification-20261107):
 
 - اعتماد زنجیره حل شد. مقصد pin‌شدهٔ `lpc:.\SQLSERVER2019` با `SEC_E_WRONG_PRINCIPAL` رد می‌شود.
 - `localhost` و نام میزبان، روی Shared Memory و loopback TCP، با اعتبارسنجی کامل موفق‌اند.

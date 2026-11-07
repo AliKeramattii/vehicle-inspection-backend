@@ -2,7 +2,9 @@
 
 این مخزن مستقل، پایهٔ توسعهٔ Backend برنامهٔ فارسی خودبازدید خودرو برای کارگزاری بیمه است. Frontend موجود در `C:\Projects\vehicle-inspection-integrated` فقط مرجع خواندنی است؛ دو مخزن ادغام نمی‌شوند.
 
-**وضعیت جاری `2026-11-07`:** مدیر certificate مربوط به P3 را با موفقیت نصب کرد. [راستی‌آزمایی عامل](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#p3-verification-20261107) نشان داد TLS و اعتبارسنجی certificate با نام‌های `localhost` و نام میزبان روی Shared Memory و loopback TCP موفق‌اند. اما مقصد pin‌شدهٔ برنامه، `lpc:.\SQLSERVER2019`، با `SEC_E_WRONG_PRINCIPAL` رد می‌شود. gate بسته است. **2F ناقص، پیشرفت 20%.**
+**وضعیت جاری `2026-11-07` (عصر):** [مقصد SQL به `lpc:localhost` منتقل شد، P2 اجرا و تأیید شد و مسیر آزمون متصل P4/P5 پیاده شد](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#execution-20261107). آزمون متصل واقعی منتظر provisioning elevated مالک است. regression: ۱۲۰ unit، ۵۰ integration موفق و ۱۳ متصلِ انتخاب‌نشده. **2F ناقص، پیشرفت 20%.**
+
+سابقه، **صبح `2026-11-07`:** مدیر certificate مربوط به P3 را با موفقیت نصب کرد. [راستی‌آزمایی عامل](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#p3-verification-20261107) نشان داد TLS و اعتبارسنجی certificate با نام‌های `localhost` و نام میزبان روی Shared Memory و loopback TCP موفق‌اند. اما مقصد pin‌شدهٔ برنامه، `lpc:.\SQLSERVER2019`، با `SEC_E_WRONG_PRINCIPAL` رد می‌شود. gate بسته است. **2F ناقص، پیشرفت 20%.**
 
 سابقه، **وضعیت `2026-11-06`:** [اجرای P1–P5](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md) در P3 متوقف شد. اتصال امن برنامه با `SEC_E_UNTRUSTED_ROOT` رد شد، چون instance certificate معتبر ندارد. نشست عامل هم دسترسی elevated ندارد. scriptهای مدیر برای certificate و حساب‌ها آماده‌اند و اجرا نشده‌اند. gate بسته است و هیچ حساب یا دادهٔ آزمونی ساخته نشد. در `2026-11-07` هر دو script پیش از اجرا بازنگری و اصلاح شدند ([بخش ۱۹](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#revision-20261107)). **2F ناقص، پیشرفت 20%.**
 

@@ -1,0 +1,79 @@
+{
+  "date": "2026-11-07",
+  "checkpoint": "2F — D-P3-NAME, P1 check, P2 execution, P4/P5 implementation",
+  "codeCommit": "fd1e992d98a30d7021b7e2d09968da197408c0bc",
+  "note": "Host name, SIDs and operator login replaced with placeholders.",
+  "dP3Name": {
+    "approvedBy": "owner 2026-11-07",
+    "applicationTarget": "lpc:localhost\\SQLSERVER2019",
+    "rejectedTargets": ["lpc:.\\SQLSERVER2019", "tcp:localhost,1433", "Initial Catalog=master"],
+    "dbaToolTrustServerCertificate": "true -> false (Inspect read-only passed with validation)"
+  },
+  "bugFixed": {
+    "file": "src/Bazdid.Api/Infrastructure/Sql/SqlConnections.cs",
+    "before": "HAS_PERMS_BY_NAME(NULL,N'SERVER',N'CONTROL SERVER')=0",
+    "after": "HAS_PERMS_BY_NAME(NULL,NULL,N'CONTROL SERVER')=0",
+    "evidence": "old form returned NULL for both sysadmin and Writer; new form returned 1 for sysadmin and 0 for Writer (EXECUTE AS LOGIN verifier)",
+    "impact": "Writer guard would always return Blocked even with correct permissions"
+  },
+  "p1": {
+    "executedBy": "owner (elevated), not observed by agent",
+    "agentNonElevatedChecks": {
+      "accountsExist": ["BAZDIDDevWriter <SID-W>", "BAZDIDDevReader <SID-R>"],
+      "enabled": true,
+      "description": "BAZDID-DEV-SQL OWNER-2026-11-07",
+      "directGroups": [],
+      "inAdministrators": false,
+      "passwordNeverExpires": true,
+      "userMayChangePassword": false
+    },
+    "lsaRights": "NOT verified by agent: LsaEnumerateAccountRights -> error 5 without elevation; owner -VerifyOnly required (handoff)"
+  },
+  "p2": {
+    "executedBy": "agent with owner SQL login (sysadmin, no Windows elevation needed)",
+    "runner": "deployment/development/Invoke-BazdidDevSqlPrincipals.review.ps1",
+    "sqlScripts": {
+      "database/proposals/development_logins.review.sql": "9099DE3DCE8E77FC037D1BDC6D5B8649BA835253DF067E6B0E8D89B121B5B15F",
+      "database/proposals/permissions.review.sql": "9888862C6997EB2AB0FC2EFFAAC6559E6399905E1290FEC506100AD46609A396"
+    },
+    "connection": "lpc:localhost\\SQLSERVER2019, Integrated Security, Encrypt=true, TrustServerCertificate=false, Shared memory, encrypt_option=TRUE",
+    "dryRun": "PASS (Plan: Logins:create, Permissions:create)",
+    "execute": "logins, users, roles and permissions applied",
+    "firstVerify": "FAIL only on CS=NULL (same HAS_PERMS_BY_NAME bug); catalog 40/40",
+    "verifyOnlyAfterFix": "PASS",
+    "catalogPermissions": "40 of 40 expected, no extra",
+    "effectiveWriter": "SA=0 DBO=0 CL_S=1 CL_I=1 CL_U=0 CL_D=0 RC_S=1 RC_I=1 RC_U=1 RC_D=0 AL_S=0 AL_I=1 AL_U=0 AL_D=0 DDL=0 CTRL=0 CS=0",
+    "effectiveReader": "SA=0 DBO=0 CL_S=0 CL_I=0 CL_U=0 CL_D=0 RC_S=0 RC_I=0 RC_U=0 RC_D=0 AL_S=0 AL_I=0 AL_U=0 AL_D=0 DDL=0 CTRL=0 CS=0",
+    "serverRoleMemberships": 0
+  },
+  "p4": {
+    "status": "implemented; provisioning blocked on Windows elevation",
+    "mechanism": "internal ConnectedTestAcceptance + internal BazdidWriteConnectionFactory ctor; ConnectedSqlFact skips unless BAZDID_CONNECTED_SQL=1",
+    "negativeRunAsOperator": "13/13 failed with 'token جاری Windows متعلق به Writer مصوب نیست' before any SQL connection",
+    "publishCheck": "published output has no runtimeconfig.dev.json; vstest discovers 13 connected tests (skipped when not selected)",
+    "scripts": {
+      "Register-BazdidConnectedTestTask.review.ps1": "121EF92AEDCA5FB8B51D9231C082F6E10F8759052C1155FECF2F20303909E5AB",
+      "Invoke-BazdidConnectedTests.ps1": "B6BFD1F47F4B57AA53F30418942E6F09510ADD0338379948372FA8ED87F8990C",
+      "Start-BazdidConnectedRun.ps1": "BFEEACDDCC41650AA059C4B8A78E73483B5520644E839166E21F4D4181D7DC3B",
+      "Invoke-BazdidDevSqlPrincipals.review.ps1": "CB339BCD230C5E5F8FE25E2D9EB115A9100408150A6432E285447805C7508443"
+    }
+  },
+  "p5": {
+    "status": "implemented; not executed (depends on P4 provisioning)",
+    "committedManifest": { "CIDEM": "1/1/1", "CCONC": "1/0/0", "CTENA": "1/0/0", "CTENB": "1/0/0", "CSTALE": "1/1/0" },
+    "zeroTags": ["KEYS", "KEYS2", "RELINK", "STALE", "RBACK", "LOCK", "AUDX", "AUDY", "CTENC"],
+    "cleanupScope": "BrokerageId=TEST-BROKERAGE AND LEFT(SourceSystem,18)='R'+RunId+'_' with exact counts 1/2/5 in one transaction",
+    "verifierDryCheck": "SQL executed against empty RunId; failed as designed (missing committed rows)"
+  },
+  "regression": {
+    "build": "0 warnings, 0 errors",
+    "unit": "120/120 passed",
+    "integration": "50 passed, 0 failed, 13 skipped (connected, not selected)"
+  },
+  "databaseState": {
+    "rows": "0/0/0 (no test data written; no connected run yet)",
+    "schema": "39 columns, checksum 1193879634"
+  },
+  "gate": "SqlRuntimeGate.ConnectedAcceptanceVerified=false; SqlRuntime.Enabled=false; Production rejects any SQL config",
+  "progress": "20%"
+}

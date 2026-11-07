@@ -479,3 +479,166 @@ Get-FileHash .\deployment\development\New-BazdidDevIdentities.review.ps1 -Algori
 ### ۲۰.۱۰ پیشرفت
 
 **قبلی 20% + سهم 0 = 20%.** P3 از نظر certificate کامل است، اما پذیرش 2F به P1، P2، P4، P5 و رفع ناسازگاری نام وابسته است. هدف مشروط پس از پذیرش کامل 2F برابر 22% است. P2، P4، P5 و 2G شروع نشده‌اند.
+
+<a id="execution-20261107"></a>
+
+## ۲۱. اجرای D-P3-NAME، P2 و پیاده‌سازی P4/P5 (2026-11-07)
+
+commit کد: `fd1e992`. شاهد ماشین‌خوان: [P2_P4_EXECUTION.json](../checkpoint2f/P2_P4_EXECUTION.json). SIDها، نام میزبان و login اپراتور در مستندات placeholder هستند.
+
+### ۲۱.۱ مجوز و وضعیت اولیه
+
+- مالک در `2026-11-07` تصمیم `D-P3-NAME` را تصویب کرد و اجرای P1 تا P5 محلی را مجاز دانست.
+- HEAD اولیه `773584d` بود و worktree فقط پوشهٔ شخصی `src/Bazdid.Api/Properties/` را داشت.
+- P1 توسط مالک اجرا شده بود: هر دو حساب با توضیح `BAZDID-DEV-SQL OWNER-2026-11-07` وجود داشتند. خروجی `-VerifyOnly` به عامل داده نشد.
+
+### ۲۱.۲ فاز A — مقصد SQL (D-P3-NAME)
+
+- [SqlRuntimeOptions.cs](../../src/Bazdid.Api/Infrastructure/Sql/SqlRuntimeOptions.cs): دو ثابت `ApprovedLocalDataSource = lpc:localhost\SQLSERVER2019` و `ApprovedDatabase` اضافه شدند. مقایسه به‌صورت ordinal و دقیق است و مقصد دلخواه پذیرفته نمی‌شود.
+- آزمون‌ها به مقصد جدید منتقل شدند. سه مورد رد صریح اضافه شد: `lpc:.`، `tcp:localhost,1433` و `Initial Catalog=master`.
+- [Invoke-BazdidDevelopmentDatabase.ps1](../../database/tools/Invoke-BazdidDevelopmentDatabase.ps1) (ابزار DBA مربوط به 2C) به `lpc:localhost` منتقل شد و استثنای قبلی `TrustServerCertificate=true` حذف شد. `-Action Inspect`، که فقط‌خواندنی است، با اعتبارسنجی کامل موفق شد.
+- `Integrated Security`، `Encrypt=true`، `TrustServerCertificate=false`، guard مربوط به Shared Memory و principal مصوب همه بدون تغییر ماندند.
+
+### ۲۱.۳ اشکال واقعی: guard مجوز سطح سرور
+
+```sql
+-- قبل (همیشه NULL؛ guard همیشه Blocked)
+AND HAS_PERMS_BY_NAME(NULL,N'SERVER',N'CONTROL SERVER')=0
+-- بعد
+AND HAS_PERMS_BY_NAME(NULL,NULL,N'CONTROL SERVER')=0
+```
+
+- **شاهد:** شکل قدیمی هم برای sysadmin و هم زیر `EXECUTE AS LOGIN` برای Writer مقدار `NULL` برگرداند. شکل جدید برای sysadmin `1` و برای Writer `0` برگرداند.
+- **پیامد:** بدون این اصلاح، کارخانهٔ اتصال Writer، یعنی [SqlConnections.cs](../../src/Bazdid.Api/Infrastructure/Sql/SqlConnections.cs)، حتی با مجوز درست همیشه `Blocked` می‌داد و هیچ آزمون متصلی ممکن نبود.
+
+### ۲۱.۴ فاز B — P1 و P2
+
+**بررسی‌های غیرelevated عامل روی P1** (هر دو حساب):
+
+- `Enabled=True`؛
+- عضویت مستقیم گروه: هیچ (با ADSI)؛
+- عضو Administrators نیستند؛
+- `PasswordExpires` خالی است و `UserMayChangePassword=False`.
+
+**حق‌های LSA** بدون elevation خوانده نمی‌شوند (`LsaEnumerateAccountRights` خطای ۵ داد). بنابراین در دستور مدیر، `-VerifyOnly` گنجانده شده است.
+
+**P2 توسط عامل اجرا شد.** login مالک در SQL مستقیماً sysadmin است، پس elevation ویندوز لازم نبود. runner [Invoke-BazdidDevSqlPrincipals.review.ps1](../../deployment/development/Invoke-BazdidDevSqlPrincipals.review.ps1):
+
+- hash دو script بازبینی‌شده را کنترل می‌کند: `development_logins` با `9099DE3D…B15F` و `permissions` با `9888862C…A396`.
+- SIDها را از Windows می‌خواند.
+- فقط هفت خط `DECLARE` دقیق را جایگزین می‌کند. هر خط باید دقیقاً یک بار وجود داشته باشد؛ guardهای خود scriptها حذف نمی‌شوند.
+- با `lpc:localhost` و `Encrypt=true`/`TrustServerCertificate=false` روی Shared Memory اجرا می‌شود.
+
+```powershell
+# اجرا شد — cwd: ریشهٔ مخزن، PowerShell 5.1 غیرelevated
+.\deployment\development\Invoke-BazdidDevSqlPrincipals.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07            # dry run: PASS
+.\deployment\development\Invoke-BazdidDevSqlPrincipals.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07 -Execute   # اعمال؛ verify اول به‌خاطر اشکال ۲۱.۳ شکست خورد
+.\deployment\development\Invoke-BazdidDevSqlPrincipals.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07 -VerifyOnly # پس از اصلاح: PASS
+```
+
+| بررسی | نتیجه |
+| --- | --- |
+| login و SID | دو login Windows با SID برابر P1؛ فعال؛ بدون server role |
+| user/نقش | `BAZDIDWriter` و `BAZDIDSourceReader`، هر کدام دقیقاً با یک عضو |
+| مجوز کاتالوگ | ۴۰ از ۴۰ مورد انتظار، بدون مورد اضافه؛ userها فقط `CONNECT` دارند |
+| مجوز مؤثر Writer | SELECT/INSERT روی CustomerLinks؛ SELECT/INSERT/UPDATE روی RequestContexts؛ فقط INSERT روی audit؛ DELETE، ALTER، DDL، CONTROL و CONTROL SERVER برابر ۰ |
+| مجوز مؤثر Reader | همهٔ موارد ۰ (هیچ مبدأ مصوبی وجود ندارد) |
+| داده و schema | ردیف‌ها `0/0/0`؛ ۳۹ ستون؛ checksum `1193879634`؛ ۳ جدول |
+
+بازگشت: ابتدا `-RemoveForRecovery` (آزمایشی)، سپس `-RemoveForRecovery -Execute`. این حالت فقط user، نقش و login همین دو SID را حذف می‌کند و اگر عضو بیگانه‌ای وجود داشته باشد متوقف می‌شود.
+
+### ۲۱.۵ فاز C — P4: فعال‌سازی آزمون متصل
+
+**طراحی:**
+
+- **`ConnectedTestAcceptance` (internal):** فقط اسمبلی‌های آزمون از طریق `InternalsVisibleTo` به آن دسترسی دارند. `Create` فقط وقتی موفق است که همهٔ این شرط‌ها برقرار باشد:
+  - محیط دقیقاً `Testing`؛
+  - `BAZDID_CONNECTED_SQL=1`؛
+  - `SqlRuntime.Enabled=false` (نشانه جای flag را نمی‌گیرد)؛
+  - مقصد ثابت؛
+  - `ApprovedWriterPrincipal` برابر `<HOST>\BAZDIDDevWriter`؛
+  - token جاری Windows همان Writer باشد و گروه Administrators را، حتی به‌صورت deny-only، نداشته باشد.
+- **کارخانهٔ اتصال:** سازندهٔ internal دوم فقط با این نشانه کار می‌کند. guard کامل SQL، شامل ORIGINAL_LOGIN، نبود sysadmin و db_owner، مجوزهای دقیق، Shared Memory و NTLM/Kerberos، بدون تغییر اجرا می‌شود.
+- **بسته ماندن برنامه:** DI فقط سازندهٔ public را می‌بیند (آزمون واحد این را بررسی می‌کند). `SqlRuntimeGate.ConnectedAcceptanceVerified` همچنان `false` است و Production هر پیکربندی SQL را رد می‌کند.
+- **`[ConnectedSqlFact]`:** بدون انتخاب صریح Skip می‌شود. اگر انتخاب شده باشد ولی شرط‌ها برقرار نباشند، آزمون شکست می‌خورد.
+
+**اجرا با هویت Writer:**
+
+- [Register-BazdidConnectedTestTask.review.ps1](../../deployment/development/Register-BazdidConnectedTestTask.review.ps1) (مدیر):
+  - رمز تصادفی ۲۴۰ بیتی درون `SecureString` می‌سازد و روی حساب و task می‌نشاند. رمز نمایش، ذخیره یا لاگ نمی‌شود.
+  - task درخواستی `BAZDID-Dev-ConnectedSqlTests` را ثبت می‌کند: بدون trigger، `LogonType=Password`، `RunLevel=Limited` و فقط runner ثابت.
+  - به اپراتور غیرمدیر فقط حق `GRGX` روی task می‌دهد.
+  - پوشهٔ `C:\ProgramData\BAZDID\ConnectedTests` را با ACL محافظت‌شده می‌سازد: Writer فقط خواندن/اجرا دارد و نوشتن فقط در `results`.
+  - حالت‌های دیگر: `-VerifyOnly`، `-Rotate` و `-Remove`.
+- [Invoke-BazdidConnectedTests.ps1](../../deployment/development/Invoke-BazdidConnectedTests.ps1): runner داخل task. هویت را بررسی می‌کند، RunId تصادفی ۱۶ hex می‌سازد و `dotnet vstest` را فقط روی `SqlRepositoryConnectedTests` اجرا می‌کند.
+- [Start-BazdidConnectedRun.ps1](../../deployment/development/Start-BazdidConnectedRun.ps1) (اپراتور، غیرمدیر): publish آزمون‌ها بدون وابستگی به cache NuGet کاربر، baseline، اجرای task، خلاصهٔ TRX، verifier و cleanup.
+
+**شاهد اجراشده:**
+
+- آزمون واحد مسیرهای ردی در [ConnectedTestAcceptanceTests.cs](../../tests/Bazdid.UnitTests/ConnectedTestAcceptanceTests.cs): همه موفق.
+- اجرای انتخاب‌شده با هویت اپراتور: هر ۱۳ آزمون با پیام «token جاری Windows متعلق به Writer مصوب نیست» شکست خوردند، پیش از هر اتصال.
+- publish بدون `runtimeconfig.dev.json` است و `dotnet vstest` ۱۳ آزمون را کشف می‌کند.
+
+### ۲۱.۶ فاز D — P5: طرح RunId و verifier
+
+داده‌ها با `BrokerageId=TEST-BROKERAGE` و `SourceSystem=R<RunId>_<TAG>` ساخته می‌شوند.
+
+| برچسب | نوع | Customers/Requests/Audit پایدار |
+| --- | --- | --- |
+| `CIDEM` | idempotency بین دو transaction | 1/1/1 |
+| `CCONC` | ۴ ایجاد هم‌زمان commitشده؛ فقط یکی Created | 1/0/0 |
+| `CTENA`، `CTENB` | جداسازی tenant | 1/0/0 هر کدام |
+| `CSTALE` | rowversion کهنه در transaction جدید رد می‌شود؛ نسخهٔ نهایی `TEST-V2` | 1/1/0 |
+| `KEYS`، `KEYS2`، `RELINK`، `STALE`، `RBACK`، `LOCK`، `AUDX`، `AUDY`، `CTENC` | rollback، مالکیت، lock و audit بیگانه | 0/0/0 (شامل audit برچسب `RBACK`) |
+
+**verifier**، با login مالک و فقط خواندنی، این موارد را بررسی می‌کند:
+
+- تعداد دقیق هر برچسب و نبود هیچ برچسب ناشناخته؛
+- اتصال audit به context همان tenant؛
+- schema بدون تغییر؛
+- عدم تغییر ردیف‌های خارج از دامنه نسبت به baseline.
+
+**cleanup:** در یک transaction، به ترتیب audit، requests و customers. شرط حذف `LEFT(SourceSystem,18)='R'+RunId+'_'` است و شمارش باید دقیقاً `1/2/5` باشد؛ در غیر این صورت rollback. SQL verifier روی RunId خالی اجرا و طبق طراحی رد شد. اجرای واقعی P5 هنوز انجام نشده است.
+
+### ۲۱.۷ regression اجراشده
+
+```powershell
+# اجرا شد — cwd: ریشهٔ مخزن، پس از آخرین تغییر کد
+dotnet restore Bazdid.sln --locked-mode
+dotnet build Bazdid.sln --configuration Release --no-restore   # 0 warning، 0 error
+dotnet test Bazdid.sln --configuration Release --no-build --no-restore
+```
+
+نتیجه: ۱۲۰ از ۱۲۰ آزمون unit موفق. در integration، ۵۰ موفق، ۰ شکست و ۱۳ Skipped؛ این ۱۳ آزمون همان مجموعهٔ متصل‌اند که انتخاب نشده‌اند (۸ آزمون قبلی به‌علاوهٔ ۵ آزمون commitشدهٔ P5).
+
+### ۲۱.۸ مانع باقی‌مانده و دستور یک‌بارهٔ مدیر
+
+تنظیم رمز حساب دیگر و ثبت task با رمز به token مدیر نیاز دارد و نشست عامل elevated نیست. در یک PowerShell با Run as Administrator، با حساب مالک (اپراتور پیش‌فرض)، از ریشهٔ مخزن:
+
+```powershell
+# پیشنهادی؛ عامل اجرا نکرده است
+Get-FileHash .\deployment\development\New-BazdidDevIdentities.review.ps1, .\deployment\development\Register-BazdidConnectedTestTask.review.ps1 -Algorithm SHA256
+# انتظار: 351227F2…838A و 121EF92A…E5AB
+.\deployment\development\New-BazdidDevIdentities.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07 -VerifyOnly
+.\deployment\development\Register-BazdidConnectedTestTask.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07 -Execute
+.\deployment\development\Register-BazdidConnectedTestTask.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07 -VerifyOnly
+```
+
+انتظار: «راستی‌آزمایی P1: PASS»، «P4 provisioning: PASS» و «راستی‌آزمایی P4: PASS».
+
+پس از آن، عامل بدون elevation این را اجرا می‌کند:
+
+```powershell
+.\deployment\development\Start-BazdidConnectedRun.ps1
+```
+
+شرط پذیرش 2F:
+
+- ۱۳ از ۱۳ آزمون متصل Passed، با صفر NotExecuted؛
+- verifier برابر PASS؛
+- cleanup دقیقاً `1/2/5` و صفر ردیف باقی‌مانده؛
+- regression سبز.
+
+### ۲۱.۹ پیشرفت
+
+**قبلی 20% + سهم 0 = 20%.** P2 اجرا و تأیید شد و P4/P5 پیاده شدند، اما آزمون متصل واقعی هنوز اجرا نشده است. طبق قاعدهٔ PLAN، کار ناتمام امتیاز ندارد. پس از PASS بخش ۲۱.۸، 2F کامل و پیشرفت برابر 22% می‌شود. 2G شروع نشده است، چون شرط آن پذیرش کامل 2F است.

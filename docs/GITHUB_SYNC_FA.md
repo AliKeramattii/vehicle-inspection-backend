@@ -241,3 +241,7 @@ commit `2af6bf2982c13a7b79cfbbd88095a32b196d2e28` (والد `51c921697e40a3c0907
 - `P3_TLS_VERIFICATION.json` و گزارش پذیرش متصل از raw.githubusercontent در همان commit با HTTP 200 خوانده شدند. anchor `p3-verification-20261107` در نسخهٔ GitHub وجود داشت. `gh` احراز نشده بود، پس تطبیق blob با API انجام نشد.
 
 پیش از commit، نام ماشین و login در فایل‌های منتشرشده جست‌وجو شد و نتیجه‌ای نداشت. probe ignored و `src/Bazdid.Api/Properties/` منتشر نشدند. پیشرفت 20% است.
+
+## انتشار تأییدشدهٔ D-P3-NAME، P2 و P4/P5 (2026-11-07)
+
+commit کد `fd1e992d98a30d7021b7e2d09968da197408c0bc` (والد `773584d`) با `git push origin main` و بدون force منتشر شد. خروجی push برابر `773584d..fd1e992  main -> main` بود و `ls-remote` و HEAD محلی هر دو `fd1e992` بودند. پیش از commit، جست‌وجوی نام ماشین، SID و `password=` در فایل‌های staged نتیجه‌ای نداشت. رمز Writer در هیچ فایلی وجود ندارد. commit مستندات بعدی در همین بخش با SHA واقعی تکمیل می‌شود.

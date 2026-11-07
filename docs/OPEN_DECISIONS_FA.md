@@ -90,7 +90,9 @@ O26 (P1/P2) بدون تغییر و منتظر تصویب جدا است. بدون
 - تصمیم باز: اجرای script بازبینی P3 توسط مدیر محلی و ری‌استارت `MSSQL$SQLSERVER2019`. اگر PKI سازمانی وجود دارد، certificate صادرشده از CA سازمان ترجیح دارد.
 - سپس P1 و P2 و پس از آن‌ها P4/P5. جزئیات در [گزارش پذیرش متصل](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md). درصد 20 است.
 
-## D-P3-NAME — نام مقصد اتصال پس از P3 (باز از 2026-11-07)
+## D-P3-NAME — نام مقصد اتصال پس از P3 (**بسته شد: مصوب مالک و اعمال‌شده در 2026-11-07**، commit `fd1e992`)
+
+> مقصد ثابت برنامه، آزمون‌ها و ابزار DBA اکنون `lpc:localhost\SQLSERVER2019` است. [بخش ۲۱](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#execution-20261107). متن زیر سابقهٔ تصمیم است.
 
 - P3 اجرا شد و certificate اعتماد می‌شود. مقصد pin‌شده `lpc:.\SQLSERVER2019` با `SEC_E_WRONG_PRINCIPAL` رد می‌شود، چون `.` در CN/SAN نیست.
 - پیشنهاد: تغییر pin در `SqlRuntimeOptions` و آزمون‌ها به `lpc:localhost\SQLSERVER2019`. Shared Memory و guard بدون تغییر می‌مانند.

@@ -1,6 +1,12 @@
 # ادامهٔ کار پس از قطع نشست عامل
 
-**آخرین نقطهٔ ادامه در `2026-11-07`: راستی‌آزمایی P3 انجام شد** ([بخش ۲۰](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#p3-verification-20261107)، [شاهد](checkpoint2f/P3_TLS_VERIFICATION.json)).
+**آخرین نقطهٔ ادامه در `2026-11-07` (عصر): P2 انجام شد؛ P4/P5 پیاده شده و منتظر provisioning مدیر است** ([بخش ۲۱](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#execution-20261107)، [شاهد](checkpoint2f/P2_P4_EXECUTION.json)).
+
+- P2 را دوباره اجرا نکنید. برای کنترل، `Invoke-BazdidDevSqlPrincipals.review.ps1 -VerifyOnly` کافی است.
+- ابتدا وجود task `BAZDID-Dev-ConnectedSqlTests` را بررسی کنید (`Get-ScheduledTask`). اگر وجود دارد، `deployment/development/Start-BazdidConnectedRun.ps1` را اجرا کنید. اگر وجود ندارد، دستور بخش ۲۱.۸ برای مالک است.
+- پس از PASS کامل: 2F پذیرفته، پیشرفت 22% و آماده‌سازی 2G. هرگز رمز Writer را نمایش ندهید و gate برنامه را باز نکنید.
+
+**نقطهٔ قبلی، صبح `2026-11-07`: راستی‌آزمایی P3 انجام شد** ([بخش ۲۰](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#p3-verification-20261107)، [شاهد](checkpoint2f/P3_TLS_VERIFICATION.json)).
 
 - certificate با thumbprint `9F8A13B7…E84F` نصب و اعتماد شده است. آن را دوباره نصب یا تغییر ندهید.
 - مقصد pin‌شدهٔ برنامه، `lpc:.\SQLSERVER2019`، با `SEC_E_WRONG_PRINCIPAL` رد می‌شود. `lpc:localhost\SQLSERVER2019` و `lpc:<HOST>\SQLSERVER2019` با اعتبارسنجی کامل موفق‌اند.
