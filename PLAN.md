@@ -405,3 +405,15 @@ regression تازهٔ canonical با سه فرمان مقرر: restore/build ص�
   - حالت `-VerifyOnly`.
 
 hash جدید: P3 `07383213…49ec` و P1 `351227f2…838a`. عامل هیچ script را اجرا نکرد. **20%**؛ گام بعد همان ترتیب بالا با نسخه‌های جدید است.
+
+### راستی‌آزمایی P3 در 2026-11-07
+
+مدیر P3 را اجرا کرد و `-VerifyOnly` برابر PASS شد (گزارش مالک). عامل فقط probe فقط‌خواندنی را اجرا کرد ([بخش ۲۰](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#p3-verification-20261107)، [شاهد](docs/checkpoint2f/P3_TLS_VERIFICATION.json)):
+
+- اعتماد زنجیره حل شد؛ `SEC_E_UNTRUSTED_ROOT` دیگر رخ نمی‌دهد.
+- `lpc:.\SQLSERVER2019`، یعنی pin برنامه، با `SEC_E_WRONG_PRINCIPAL` رد می‌شود. `127.0.0.1` هم همین‌طور.
+- `lpc:` و `tcp:` با `localhost` یا نام میزبان، با `Encrypt=true` و `TrustServerCertificate=false` موفق‌اند و `encrypt_option=TRUE`. native SNI `4.6.25512.1` کار می‌کند.
+- خوانش فقط‌خواندنی: SQL Server `15.0.2000.5`؛ سه جدول BAZDID با ۰ ردیف؛ بدون login یا user BAZDID.
+- کد، gate، schema، داده و certificate بدون تغییرند.
+
+**قبلی 20% + سهم 0 = 20%.** گام بعد: مدیر P1 را اجرا می‌کند و مالک دربارهٔ `D-P3-NAME` تصمیم می‌گیرد (پیشنهاد: pin به `lpc:localhost\SQLSERVER2019`). سپس P2 و P4/P5. 2G شروع نشده است.

@@ -1,5 +1,13 @@
 # ادامهٔ کار پس از قطع نشست عامل
 
+**آخرین نقطهٔ ادامه در `2026-11-07`: راستی‌آزمایی P3 انجام شد** ([بخش ۲۰](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#p3-verification-20261107)، [شاهد](checkpoint2f/P3_TLS_VERIFICATION.json)).
+
+- certificate با thumbprint `9F8A13B7…E84F` نصب و اعتماد شده است. آن را دوباره نصب یا تغییر ندهید.
+- مقصد pin‌شدهٔ برنامه، `lpc:.\SQLSERVER2019`، با `SEC_E_WRONG_PRINCIPAL` رد می‌شود. `lpc:localhost\SQLSERVER2019` و `lpc:<HOST>\SQLSERVER2019` با اعتبارسنجی کامل موفق‌اند.
+- گام بعد: مدیر P1 را اجرا می‌کند، و مالک دربارهٔ `D-P3-NAME` تصمیم می‌گیرد (پیشنهاد: pin به `lpc:localhost\SQLSERVER2019`). تا تصویب، کد و gate را تغییر ندهید. **20%.**
+
+سابقهٔ پیشین:
+
 **آخرین نقطهٔ ادامه در `2026-11-06`: P1–P5 در P3 متوقف است.** [گزارش](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md) و [شاهد](checkpoint2f/CONNECTED_PREFLIGHT.json) را بخوانید.
 
 - اتصال امن با `SEC_E_UNTRUSTED_ROOT` رد شد.

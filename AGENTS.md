@@ -6,7 +6,13 @@
 
 مخزن `C:\Projects\vehicle-inspection-integrated` فقط مرجع **خواندنی** است. آن را تغییر ندهید، با Backend ادغام نکنید و در آن worktree نسازید. دستورهای تاریخی عامل‌های Frontend، مجوز تغییر آن مخزن یا تغییر دامنهٔ این پروژه نیستند.
 
-**وضعیت جاری در 2026-11-06 (پس از L1-A): اجرای P1–P5 آغاز شد ولی 2F پذیرفته نشد.** [گزارش پذیرش متصل](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md):
+**وضعیت جاری در 2026-11-07: certificate مربوط به P3 توسط مدیر نصب شد (thumbprint `9F8A13B7…E84F`). آن را دوباره نصب یا تغییر ندهید.** [راستی‌آزمایی](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#p3-verification-20261107):
+
+- اعتماد زنجیره حل شد. مقصد pin‌شدهٔ `lpc:.\SQLSERVER2019` با `SEC_E_WRONG_PRINCIPAL` رد می‌شود.
+- `localhost` و نام میزبان، روی Shared Memory و loopback TCP، با اعتبارسنجی کامل موفق‌اند.
+- تصمیم باز `D-P3-NAME`؛ P1 آمادهٔ اجرای مدیر است. gate بسته است و پیشرفت 20% است.
+
+**سابقهٔ 2026-11-06 (پس از L1-A): اجرای P1–P5 آغاز شد ولی 2F پذیرفته نشد.** [گزارش پذیرش متصل](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md):
 
 - اتصال امن با `Encrypt=true` و `TrustServerCertificate=false` با `SEC_E_UNTRUSTED_ROOT` رد شد، چون instance certificate معتبر ندارد.
 - نشست عامل elevated نیست، پس P1 و P3 به مدیر محلی سپرده شدند: دو script بازبینی در `deployment/development/` که اجرا نشده‌اند.

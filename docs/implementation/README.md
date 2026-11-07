@@ -2,7 +2,9 @@
 
 این صفحه، نقطهٔ ورود به توضیح «چگونه انجام شد» است؛ گزارش‌های قبلی سابقهٔ همان مرحله‌اند.
 
-**وضعیت جاری `2026-11-06`:** [پذیرش متصل 2F (P1–P5)](CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md) در P3 متوقف است: TLS با `SEC_E_UNTRUSTED_ROOT` رد شد و نشست عامل elevated نیست. scriptهای مدیر آماده و اجرانشده‌اند و در `2026-11-07` پیش از اجرا بازنگری شدند ([بخش ۱۹](CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#revision-20261107)). پیشرفت **20%**.
+**وضعیت جاری `2026-11-07`:** [راستی‌آزمایی P3](CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#p3-verification-20261107). نصب certificate موفق بود و اعتماد زنجیره حل شد. مقصد pin‌شدهٔ برنامه، `lpc:.\SQLSERVER2019`، با `SEC_E_WRONG_PRINCIPAL` رد می‌شود، در حالی که `localhost` و نام میزبان با اعتبارسنجی کامل موفق‌اند. تصمیم `D-P3-NAME` و اجرای P1 باز هستند. پیشرفت **20%**.
+
+سابقه، **وضعیت `2026-11-06`:** [پذیرش متصل 2F (P1–P5)](CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md) در P3 متوقف است: TLS با `SEC_E_UNTRUSTED_ROOT` رد شد و نشست عامل elevated نیست. scriptهای مدیر آماده و اجرانشده‌اند و در `2026-11-07` پیش از اجرا بازنگری شدند ([بخش ۱۹](CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#revision-20261107)). پیشرفت **20%**.
 
 سابقه، **وضعیت `2026-11-06`:** [L1-A — وابستگی‌های canonical](CHECKPOINT-02F-L1A-CANONICAL-DEPENDENCIES_FA.md) را بخوانید. گراف ریز با `System.Data.SqlClient 4.8.6` روی canonical اعمال شده است. ۱۵۹ آزمون موفق، ۸ Skipped، Swagger بدون تغییر و audit با ۲ بستهٔ flagged ثبت شده‌اند. gate SQL بسته و پیشرفت **20%** است.
 

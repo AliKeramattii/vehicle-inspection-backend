@@ -2,6 +2,8 @@
 
 تاریخ: `2026-11-06`؛ مبنا: `c17e5183b53b91cb7aa20d50f86604da7760360c`. **نتیجه: 2F پذیرفته نشد و پیشرفت 20% می‌ماند.** این سند پیش‌بررسی واقعی، مانع TLS، نبود دسترسی مدیر در نشست و بستهٔ دقیق ادامه را ثبت می‌کند. شاهد ماشین‌خوان: [CONNECTED_PREFLIGHT.json](../checkpoint2f/CONNECTED_PREFLIGHT.json).
 
+> **به‌روزرسانی `2026-11-07`:** نصب certificate در P3 توسط مدیر موفق بود و اعتماد زنجیره حل شد. اتصال provider برنامه با مقصد pin‌شدهٔ `lpc:.\SQLSERVER2019` اکنون با `SEC_E_WRONG_PRINCIPAL` (ناسازگاری نام) رد می‌شود. همان سیاست امن با `localhost` یا نام میزبان، هم روی Shared Memory و هم روی loopback TCP، موفق است. جزئیات در [بخش ۲۰](#p3-verification-20261107) آمده است. پیشرفت همچنان 20% است.
+
 ## ۱. دامنهٔ مجوز مالک
 
 مالک پروژه در `2026-11-06` اعلام کرد کارفرما اختیار کامل کارهای لازم Development محلی را به او تفویض کرده است و تصویب‌های لازم قابل اخذند. این دستور برای عملیات محلی Development در دامنهٔ P1–P5 به‌عنوان **اعلام مالک** ثبت می‌شود. امضای کارفرما، شمارهٔ تصویب یا پذیرش رسمی ریسک Production وجود ندارد و ساخته نشد.
@@ -350,3 +352,130 @@ p1p3-offline-check.ps1 -Repo <repo>
 | `deployment/development/New-BazdidDevIdentities.review.ps1` | `351227f2ca148bceea1354cbf2a7d153ef7a2a168bd8085bfc217248df3e838a` |
 
 `.gitattributes` برای این فایل‌ها CRLF را pin می‌کند، پس hash checkout برابر می‌ماند. **2F همچنان پذیرفته نشده است و پیشرفت 20% است.** 2G شروع نشده است.
+
+<a id="p3-verification-20261107"></a>
+
+## ۲۰. راستی‌آزمایی اتصال پس از نصب certificate در P3 (2026-11-07)
+
+شاهد ماشین‌خوان: [P3_TLS_VERIFICATION.json](../checkpoint2f/P3_TLS_VERIFICATION.json). نام میزبان و login در مستندات با `<HOST>` و `<owner>` جایگزین شده‌اند.
+
+### ۲۰.۱ دو ادعای جدا
+
+| ادعا | نتیجه | شاهد |
+| --- | --- | --- |
+| **نصب certificate (P3)** | **موفق** | گزارش مالک (elevated): `-VerifyOnly` برابر PASS، `LoadedPerErrorLog : True`، `LoadFailureInErrorLog : False`، `Problems` خالی. تلاش دوم نصب، درست، رد شد. عامل نصب را اجرا یا تکرار نکرد. |
+| **اتصال provider برنامه با مقصد pin‌شده** `lpc:.\SQLSERVER2019` | **ناموفق** | `-2146893022` (`0x80090322`، `SEC_E_WRONG_PRINCIPAL`)، Class 20، سه اجرای پیاپی یکسان |
+
+خطای قبلی `SEC_E_UNTRUSTED_ROOT` دیگر رخ نمی‌دهد، پس **اعتماد زنجیرهٔ certificate حل شده است**. اکنون مانع فقط **نام‌سنجی certificate** است.
+
+### ۲۰.۲ وضعیت فقط‌خواندنی که عامل مستقلاً مشاهده کرد
+
+- `SuperSocketNetLib\Certificate` برابر `9f8a13b7…e84f` است و `ForceEncryption=0` بدون تغییر مانده است.
+- سرویس `MSSQL$SQLSERVER2019` در وضعیت `Running` است.
+- certificate در `LocalMachine\My` با کلید خصوصی و در `LocalMachine\Root` بدون کلید خصوصی قرار دارد:
+  - `CN=<HOST>`؛ SAN: `<HOST>` و `localhost`؛
+  - EKU فقط Server Authentication؛ انقضا `2027-11-07`.
+- hash هر دو script برابر نسخهٔ بخش ۱۹.۱۰ است. هیچ حساب `BAZDID*` محلی وجود ندارد.
+
+### ۲۰.۳ اجرای probe
+
+همان probe فقط‌خواندنی ignored بخش ۷ اجرا شد: `System.Data.SqlClient 4.8.6`، assembly `4.6.1.6`، runtime 2.1.30. سیاست ثابت بود: `Integrated Security=true`، `Encrypt=true`، `TrustServerCertificate=false`، `Pooling=false`.
+
+برای تشخیص علت، سه حالت مقصد ثابت به probe ignored افزوده شد: `lpcname`، `lpclocalhost` و `tcplocalhost`. در این حالت‌ها فقط نام میزبان تغییر می‌کند و هیچ گزینهٔ امنیتی تغییر نکرد. حالت‌های `tcp` و `tcpname` از قبل وجود داشتند.
+
+| Data Source | نتیجه | `net_transport` | `encrypt_option` |
+| --- | --- | --- | --- |
+| `lpc:.\SQLSERVER2019` (**pin برنامه**) | شکست `SEC_E_WRONG_PRINCIPAL` | — | — |
+| `tcp:127.0.0.1,<port>` | شکست `SEC_E_WRONG_PRINCIPAL` | — | — |
+| `tcp:<HOST>,<port>` | **موفق** | `TCP` | `TRUE` |
+| `tcp:localhost,<port>` | **موفق** | `TCP` | `TRUE` |
+| `lpc:<HOST>\SQLSERVER2019` | **موفق** | `Shared memory` | `TRUE` |
+| `lpc:localhost\SQLSERVER2019` | **موفق** | `Shared memory` | `TRUE` |
+
+اتصال TCP فقط روی loopback و با port پویای موجود انجام شد. firewall، پروتکل و port تغییر نکردند.
+
+### ۲۰.۴ نتیجه‌گیری فنی
+
+- **handshake TLS و اعتبارسنجی certificate** هم روی TCP و هم روی Shared Memory موفق‌اند، به شرطی که نام مقصد در CN/SAN باشد.
+- **TLS شبکه:** فقط روی loopback TCP اثبات شد (`tcp:<HOST>` و `tcp:localhost`). این ادعا به Shared Memory تکیه ندارد. TLS از ماشین دیگر یا روی شبکهٔ واقعی آزموده نشده و در دامنه نیست.
+- **native SNI:** کار می‌کند. `sni.dll` `4.6.25512.1` از بستهٔ `runtime.win-x64.runtime.native.System.Data.SqlClient.sni 4.4.0` بارگذاری شد. پیشوند `lpc:` فقط در native SNI پشتیبانی می‌شود و اتصال Shared Memory موفق شد.
+- **علت دقیق باقی‌مانده:** نامی که native SNI برای مقصد `.` (و برای `127.0.0.1`) در اعتبارسنجی به کار می‌برد، با هیچ‌یک از `<HOST>` و `localhost` برابر نیست. پس `BuildLocalConnectionString()`، که مقصد را دقیقاً `lpc:.\SQLSERVER2019` pin می‌کند ([SqlRuntimeOptions.cs](../../src/Bazdid.Api/Infrastructure/Sql/SqlRuntimeOptions.cs))، با certificate فعلی وصل نمی‌شود. این یک ناسازگاری نام است، نه نقص certificate.
+
+### ۲۰.۵ راستی‌آزمایی فقط‌خواندنی سرور
+
+این خوانش از مسیر `lpc:localhost\SQLSERVER2019` با اعتبارسنجی کامل certificate و با هویت مالک انجام شد. فقط `SELECT` روی DMV، `SERVERPROPERTY` و `sys.*` و `COUNT_BIG` اجرا شد.
+
+| مورد | مقدار |
+| --- | --- |
+| instance / نسخه | `SQLSERVER2019` / `15.0.2000.5`، Standard Edition (64-bit) |
+| پایگاه | `BAZDID_Development`، compatibility `150`، `SQL_Latin1_General_CP1_CI_AS`، `ONLINE` |
+| هویت اتصال | `<HOST>\<owner>`، `auth_scheme=NTLM`، `IsSysadmin=1` (هویت مالک است، نه Writer؛ پذیرش effective permission نیست) |
+| جدول‌ها | `dbo.BAZDIDAuditLogs`، `dbo.BAZDIDCustomerLinks`، `dbo.BAZDIDRequestContexts`؛ هر سه با ۰ ردیف |
+| امضای schema | ۳۹ ستون BAZDID، `CHECKSUM_AGG=1193879634` |
+| principalها | هیچ login یا user BAZDID؛ صفر principal غیرثابت در پایگاه؛ صفر linked server |
+
+این نخستین شاهد خوانده‌شدهٔ نسخه، collation و شمار ردیف‌هاست. با آن، مورد اول بخش ۱۷ بسته می‌شود.
+
+### ۲۰.۶ گزینه‌های رفع، بدون تضعیف امنیت (تصمیم باز `D-P3-NAME`)
+
+| گزینه | ارزیابی |
+| --- | --- |
+| **الف (پیشنهادی):** تغییر pin در `SqlRuntimeOptions` و آزمون‌های مرتبط به `lpc:localhost\SQLSERVER2019` | همچنان Shared Memory است و guard `net_transport='Shared memory'` بدون تغییر می‌ماند. به نام ماشین وابسته نیست و `localhost` در SAN هست. تغییر کد کوچکی است و مجوز جدا می‌خواهد. |
+| ب: pin به `lpc:<HOST>\SQLSERVER2019` | کار می‌کند ولی نام ماشین را در پیکربندی hardcode می‌کند. |
+| رد: افزودن `.` به SAN | `.` نام DNS معتبر نیست و نیاز به صدور دوبارهٔ certificate دارد، که طبق دستور ممنوع است. |
+| رد: `TrustServerCertificate=true` یا `Encrypt=false` | دور زدن اعتبارسنجی است و ممنوع است. |
+| رد: `HostNameInCertificate` | در `System.Data.SqlClient 4.8.6` وجود ندارد. |
+
+از این به بعد `localhost` در SAN لازم است، چون گزینهٔ الف به آن وابسته است. پیشنهاد حذف آن در چرخش بعدی certificate (بخش ۱۹.۴) لغو می‌شود.
+
+### ۲۰.۷ آنچه تغییر نکرد
+
+- schema، داده، login، user، نقش، مجوز و حساب Windows؛
+- certificate، registry و سرویس (ری‌استارت نشد)؛
+- کد برنامه، آزمون‌ها، package و lockfile؛
+- gate: `ConnectedAcceptanceVerified => false` و `SqlRuntime.Enabled=false`.
+
+تنها تغییر کد، افزودن سه حالت مقصد به probe ignored در `.sync-tmp` است، که منتشر نمی‌شود.
+
+### ۲۰.۸ فرمان‌های واقعاً اجراشده
+
+```powershell
+# اجرا شد — cwd: ریشهٔ مخزن؛ فقط‌خواندنی
+Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL15.SQLSERVER2019\MSSQLServer\SuperSocketNetLib'
+Get-ChildItem Cert:\LocalMachine\My, Cert:\LocalMachine\Root | Where-Object Thumbprint -eq '9F8A13B7B6A2B86A1C42211ABF313F89D602E84F'
+Get-FileHash .\deployment\development\*.review.ps1 -Algorithm SHA256
+Get-LocalUser | Where-Object Name -like 'BAZDID*'
+
+# اجرا شد — cwd: .sync-tmp\l1-legacy-spike-20261103\p3_probe (ignored)؛ SDK 2.1.818
+dotnet restore Probe.csproj --locked-mode
+dotnet build Probe.csproj -c Release --no-restore          # 0 warning، 0 error
+dotnet bin/Release/netcoreapp2.1/win-x64/Probe.dll lpc meta
+dotnet bin/Release/netcoreapp2.1/win-x64/Probe.dll tcp <port>
+dotnet bin/Release/netcoreapp2.1/win-x64/Probe.dll tcpname <port>
+dotnet bin/Release/netcoreapp2.1/win-x64/Probe.dll tcplocalhost <port>
+dotnet bin/Release/netcoreapp2.1/win-x64/Probe.dll lpcname
+dotnet bin/Release/netcoreapp2.1/win-x64/Probe.dll lpclocalhost meta
+```
+
+regression برنامه اجرا نشد، چون کد، package و آزمون تغییر نکردند.
+
+### ۲۰.۹ گام دقیق بعدی
+
+**P1** به TLS وابسته نیست و اکنون اجرایی است. کانال امن هم با certificate فعلی اثبات شد. مدیر محلی در PowerShell با Run as Administrator و cwd ریشهٔ مخزن اجرا می‌کند:
+
+```powershell
+# پیشنهادی؛ عامل اجرا نکرده است
+Get-FileHash .\deployment\development\New-BazdidDevIdentities.review.ps1 -Algorithm SHA256
+# انتظار: 351227F2CA148BCEEA1354CBF2A7D153EF7A2A168BD8085BFC217248DF3E838A
+.\deployment\development\New-BazdidDevIdentities.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07
+.\deployment\development\New-BazdidDevIdentities.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07 -Execute
+.\deployment\development\New-BazdidDevIdentities.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07 -VerifyOnly
+```
+
+انتظارها همان‌اند که در بخش ۱۹.۷ آمده: `Pass : True`، «راستی‌آزمایی P1: PASS» و اعلام دو SID.
+
+**هم‌زمان، پیش از P2 و P4**، مالک دربارهٔ `D-P3-NAME` تصمیم بگیرد. پیشنهاد گزینهٔ الف است. پس از تصویب، عامل pin و آزمون‌ها را تغییر می‌دهد، regression را اجرا می‌کند و probe را با مقصد جدید تکرار می‌کند. DBA در P2 می‌تواند با `localhost\SQLSERVER2019` و `Encrypt=true` وصل شود.
+
+### ۲۰.۱۰ پیشرفت
+
+**قبلی 20% + سهم 0 = 20%.** P3 از نظر certificate کامل است، اما پذیرش 2F به P1، P2، P4، P5 و رفع ناسازگاری نام وابسته است. هدف مشروط پس از پذیرش کامل 2F برابر 22% است. P2، P4، P5 و 2G شروع نشده‌اند.

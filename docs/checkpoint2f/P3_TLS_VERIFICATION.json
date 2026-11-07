@@ -1,0 +1,66 @@
+{
+  "date": "2026-11-07",
+  "checkpoint": "2F P3 verification",
+  "baseCommit": "51c9216",
+  "note": "Host name and Windows login replaced with placeholders. Probe is ignored scratch code (.sync-tmp); read-only; no DML/DDL.",
+  "ownerReportedInstallation": {
+    "source": "owner statement 2026-11-07 (elevated PowerShell); not executed by agent",
+    "thumbprint": "9F8A13B7B6A2B86A1C42211ABF313F89D602E84F",
+    "verifyOnly": "PASS",
+    "loadedPerErrorLog": true,
+    "loadFailureInErrorLog": false,
+    "secondInstallAttempt": "failed as expected (already configured); not repeated"
+  },
+  "agentReadOnlyState": {
+    "registryCertificate": "9f8a13b7b6a2b86a1c42211abf313f89d602e84f",
+    "forceEncryption": 0,
+    "service": "Running",
+    "certInLocalMachineMy": { "subject": "CN=<HOST>", "san": ["<HOST>", "localhost"], "eku": "Server Authentication", "hasPrivateKey": true, "notAfter": "2027-11-07" },
+    "certInLocalMachineRoot": { "hasPrivateKey": false },
+    "p3ScriptSha256": "07383213ad35bfdac9a889f06639cbbd19f9c7440ed76440cc747ceaa71d49ec",
+    "p1ScriptSha256": "351227f2ca148bceea1354cbf2a7d153ef7a2a168bd8085bfc217248df3e838a",
+    "bazdidLocalUsers": 0
+  },
+  "provider": {
+    "package": "System.Data.SqlClient 4.8.6",
+    "assemblyVersion": "4.6.1.6",
+    "runtime": "2.1.30 (netcoreapp2.1, win-x64)",
+    "nativeSni": "runtime.win-x64.runtime.native.System.Data.SqlClient.sni 4.4.0 / sni.dll 4.6.25512.1",
+    "connectionPolicy": { "integratedSecurity": true, "encrypt": true, "trustServerCertificate": false, "connectTimeout": 5, "pooling": false }
+  },
+  "probeResults": [
+    { "dataSource": "lpc:.\\SQLSERVER2019", "pinnedByApplication": true, "opened": false, "errorNumber": -2146893022, "hresult": "0x80090322", "symbol": "SEC_E_WRONG_PRINCIPAL", "errorClass": 20, "message": "A connection was successfully established with the server, but then an error occurred during the login process. (provider: SSL Provider, error: 0 - The target principal name is incorrect.)", "runs": 3 },
+    { "dataSource": "tcp:127.0.0.1,<dynamic-port>", "opened": false, "errorNumber": -2146893022, "symbol": "SEC_E_WRONG_PRINCIPAL" },
+    { "dataSource": "tcp:<HOST>,<dynamic-port>", "opened": true, "net_transport": "TCP", "encrypt_option": "TRUE", "auth_scheme": "NTLM" },
+    { "dataSource": "tcp:localhost,<dynamic-port>", "opened": true, "net_transport": "TCP", "encrypt_option": "TRUE", "auth_scheme": "NTLM" },
+    { "dataSource": "lpc:<HOST>\\SQLSERVER2019", "opened": true, "net_transport": "Shared memory", "encrypt_option": "TRUE", "auth_scheme": "NTLM" },
+    { "dataSource": "lpc:localhost\\SQLSERVER2019", "opened": true, "net_transport": "Shared memory", "encrypt_option": "TRUE", "auth_scheme": "NTLM" }
+  ],
+  "readOnlyServerVerification": {
+    "via": "lpc:localhost\\SQLSERVER2019 (full certificate validation)",
+    "instance": "SQLSERVER2019",
+    "productVersion": "15.0.2000.5",
+    "edition": "Standard Edition (64-bit)",
+    "database": "BAZDID_Development",
+    "compatibilityLevel": 150,
+    "collation": "SQL_Latin1_General_CP1_CI_AS",
+    "originalLogin": "<HOST>\\<owner>",
+    "isSysadmin": 1,
+    "tables": ["dbo.BAZDIDAuditLogs", "dbo.BAZDIDCustomerLinks", "dbo.BAZDIDRequestContexts"],
+    "rowCounts": { "CustomerLinks": 0, "RequestContexts": 0, "AuditLogs": 0 },
+    "bazdidColumns": 39,
+    "bazdidColumnChecksum": 1193879634,
+    "linkedServers": 0,
+    "bazdidServerPrincipals": 0,
+    "nonFixedDatabasePrincipals": 0
+  },
+  "conclusion": {
+    "certificateInstallation": "success (owner VerifyOnly PASS; agent read-only state consistent)",
+    "tlsChainTrust": "success (SEC_E_UNTRUSTED_ROOT no longer occurs)",
+    "networkTlsLoopbackTcp": "success with certificate name validation, using a name in the SAN",
+    "nativeSni": "working (Shared Memory requires native SNI; connections succeeded)",
+    "applicationPinnedDataSource": "FAIL: lpc:.\\SQLSERVER2019 -> SEC_E_WRONG_PRINCIPAL; '.' does not match CN/SAN",
+    "gate": "unchanged (ConnectedAcceptanceVerified=false, SqlRuntime.Enabled=false)",
+    "progress": "20%"
+  }
+}
