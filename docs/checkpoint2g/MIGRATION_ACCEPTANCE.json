@@ -1,0 +1,173 @@
+﻿{
+    "Date":  "2026-11-07T15:23:43.6273459Z",
+    "Action":  "Accept",
+    "ApprovalReference":  "OWNER-2026-11-07-D-2G-TARGET",
+    "Target":  {
+                   "Instance":  "SQLSERVER2019",
+                   "Major":  15,
+                   "Transport":  "Shared memory",
+                   "Encrypt":  "TRUE",
+                   "UserDatabasesAtStart":  "BAZDID_Development"
+               },
+    "MigrationSha256":  {
+                            "Forward":  "2568AA10017953AA0FA45BFBF15AF2F590B24E1B12E50EDCFCFCED47A16BD667",
+                            "Revert":  "E97734D7170BFB1B6E960BC188198854285147BAD7C9429563D773865F6DB5FC"
+                        },
+    "Steps":  [
+                  {
+                      "Step":  "01 create disposable DB + marker",
+                      "Expected":  "True",
+                      "Actual":  "True",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "02 forward (fresh)",
+                      "Expected":  "Created",
+                      "Actual":  "Created",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "03 schema equals BAZDID_Development",
+                      "Expected":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b",
+                      "Actual":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "04 history after forward",
+                      "Expected":  "0001_baseline:Created:2568AA10017953AA0FA45BFBF15AF2F590B24E1B12E50EDCFCFCED47A16BD667",
+                      "Actual":  "0001_baseline:Created:2568AA10017953AA0FA45BFBF15AF2F590B24E1B12E50EDCFCFCED47A16BD667",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "05 forward repeat is no-op",
+                      "Expected":  "AlreadyApplied",
+                      "Actual":  "AlreadyApplied",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "06 forward with wrong checksum rejected",
+                      "Expected":  "ChecksumMismatch",
+                      "Actual":  "ChecksumMismatch",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "07 schema unchanged after repeats",
+                      "Expected":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b",
+                      "Actual":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "08 revert",
+                      "Expected":  "Reverted",
+                      "Actual":  "Reverted",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "09 rollback state: only history table",
+                      "Expected":  "BAZDIDSchemaMigrations",
+                      "Actual":  "BAZDIDSchemaMigrations",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "10 rollback state: empty history",
+                      "Expected":  "",
+                      "Actual":  "",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "11 revert repeat is no-op",
+                      "Expected":  "NotApplied",
+                      "Actual":  "NotApplied",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "12 forward re-apply",
+                      "Expected":  "Created",
+                      "Actual":  "Created",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "13 schema equals reference after re-apply",
+                      "Expected":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b",
+                      "Actual":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "14 history after re-apply",
+                      "Expected":  "0001_baseline:Created:2568AA10017953AA0FA45BFBF15AF2F590B24E1B12E50EDCFCFCED47A16BD667",
+                      "Actual":  "0001_baseline:Created:2568AA10017953AA0FA45BFBF15AF2F590B24E1B12E50EDCFCFCED47A16BD667",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "15 revert refused while data present",
+                      "Expected":  "DataPresent",
+                      "Actual":  "DataPresent",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "16 data and schema intact after refusal",
+                      "Expected":  "1",
+                      "Actual":  "1",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "17 forward adopts existing exact schema",
+                      "Expected":  "Adopted",
+                      "Actual":  "Adopted",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "18 history after adopt",
+                      "Expected":  "0001_baseline:Adopted:2568AA10017953AA0FA45BFBF15AF2F590B24E1B12E50EDCFCFCED47A16BD667",
+                      "Actual":  "0001_baseline:Adopted:2568AA10017953AA0FA45BFBF15AF2F590B24E1B12E50EDCFCFCED47A16BD667",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "19 final schema equals reference",
+                      "Expected":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b",
+                      "Actual":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "20 disposable DB removed",
+                      "Expected":  "Dropped",
+                      "Actual":  "Dropped",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "21 disposable DB absent",
+                      "Expected":  "True",
+                      "Actual":  "True",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "22 BAZDID_Development unchanged",
+                      "Expected":  "{\"Rows\":\"0/0/0\",\"Tables\":3,\"Principals\":4,\"Permissions\":232,\"PermissionChecksum\":-670225535,\"CustomerModified\":\"2026-11-01T23:18:08.2130000\",\"SignatureItems\":81,\"SignatureHash\":\"d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b\"}",
+                      "Actual":  "{\"Rows\":\"0/0/0\",\"Tables\":3,\"Principals\":4,\"Permissions\":232,\"PermissionChecksum\":-670225535,\"CustomerModified\":\"2026-11-01T23:18:08.2130000\",\"SignatureItems\":81,\"SignatureHash\":\"d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b\"}",
+                      "Pass":  true
+                  }
+              ],
+    "ReferenceBefore":  {
+                            "Rows":  "0/0/0",
+                            "Tables":  3,
+                            "Principals":  4,
+                            "Permissions":  232,
+                            "PermissionChecksum":  -670225535,
+                            "CustomerModified":  "2026-11-01T23:18:08.2130000",
+                            "SignatureItems":  81,
+                            "SignatureHash":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b"
+                        },
+    "SignatureItems":  81,
+    "Cleanup":  "Dropped",
+    "Result":  "PASS",
+    "ReferenceAfter":  {
+                           "Rows":  "0/0/0",
+                           "Tables":  3,
+                           "Principals":  4,
+                           "Permissions":  232,
+                           "PermissionChecksum":  -670225535,
+                           "CustomerModified":  "2026-11-01T23:18:08.2130000",
+                           "SignatureItems":  81,
+                           "SignatureHash":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b"
+                       }
+}

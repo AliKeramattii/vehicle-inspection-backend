@@ -106,3 +106,16 @@ O26 (P1/P2) بدون تغییر و منتظر تصویب جدا است. بدون
 - **O26 (principal):** دو حساب Windows کم‌اختیار با مجوز مؤثر دقیق (۴۰ از ۴۰) وجود دارند. ۱۳ از ۱۳ آزمون متصل با هویت Writer موفق بودند.
 - شرح کامل در [بخش ۲۲](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#acceptance-20261107).
 - باز می‌مانند: L1-R برای استفادهٔ عمومی/Production، فعال‌سازی gate زمان اجرای برنامه (تصمیم جدا) و mapping واقعی مبدأ.
+
+## D-2G-TARGET — مقصد آزمون migration در 2G (**بسته شد: مصوب مالک و اجراشده در 2026-11-07؛ گزینهٔ الف**)
+
+> پایگاه یک‌بارمصرف `BAZDID_MigrationTest` ساخته، آزموده و پس از اثبات حذف شد. [walkthrough 2G](implementation/CHECKPOINT-02G-MIGRATIONS_FA.md). متن زیر سابقهٔ تصمیم است.
+
+PLAN برای 2G این‌ها را می‌خواهد: scriptهای شماره‌دار forward/revert فقط برای اشیای BAZDID، اثبات ساخت از صفر، اجرای تکراری، rollback و بازاعمال روی پایگاه تست. مانع واقعی این است که همهٔ guardهای موجود (ابزار 2C، runner مربوط به P2 و scriptهای `.review.sql`) وجود هر پایگاه کاربری دیگری جز `BAZDID_Development` را رد می‌کنند.
+
+| گزینه | ارزیابی |
+| --- | --- |
+| **الف (پیشنهادی):** پایگاه یک‌بارمصرف `BAZDID_MigrationTest` روی همان instance | این پایگاه فقط با ابزار 2G ساخته و حذف می‌شود. guardهای 2G به‌جای قاعدهٔ «فقط یک پایگاه» از فهرست مجاز صریح `{BAZDID_Development, BAZDID_MigrationTest}` استفاده می‌کنند. `BAZDID_Development` و مجوزهای پذیرفته‌شدهٔ 2F دست‌نخورده می‌مانند. پس از اثبات، ثبت baseline تاریخچهٔ migration روی `BAZDID_Development` به مجوز جدا نیاز دارد (جدول تازهٔ `BAZDIDSchemaMigrations`، بدون DROP). |
+| ب: drop و بازاعمال روی خود `BAZDID_Development` (اکنون خالی) | محیط پذیرفته‌شدهٔ 2F را تغییر می‌دهد. با حذف جدول‌ها، GRANTهای P2 هم از بین می‌روند و باید دوباره اعمال شوند. توصیه نمی‌شود. |
+
+تا تصویب این تصمیم، هیچ پایگاه، DDL یا DROPی اجرا نمی‌شود. نوشتن scriptها و آزمون compile آن‌ها با `SET NOEXEC ON` (بدون اجرا) مستقل از این تصمیم انجام‌شدنی است.

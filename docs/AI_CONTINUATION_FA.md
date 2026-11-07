@@ -1,6 +1,12 @@
 # ادامهٔ کار پس از قطع نشست عامل
 
-**آخرین نقطهٔ ادامه در `2026-11-07` (شب): Checkpoint 2F پذیرفته شد؛ پیشرفت 22%** ([بخش ۲۲](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#acceptance-20261107)، [شاهد](checkpoint2f/CONNECTED_ACCEPTANCE_RESULT.json)).
+**آخرین نقطهٔ ادامه در `2026-11-07`: Checkpoint 2G پذیرفته شد؛ Checkpoint 2 کامل است؛ پیشرفت 24%** ([walkthrough 2G](implementation/CHECKPOINT-02G-MIGRATIONS_FA.md)، [شاهد](checkpoint2g/MIGRATION_ACCEPTANCE.json)).
+
+- migrationها در `database/migrations/` قرار دارند و runner در `database/tools/Invoke-BazdidMigration.ps1`. پایگاه یک‌بارمصرف `BAZDID_MigrationTest` حذف شده است. اجرای دوباره فقط با `-Action Accept` و نشانهٔ یک‌بارمصرف انجام می‌شود.
+- revert هرگز روی `BAZDID_Development` اجرا نمی‌شود. ثبت baseline (`Adopted`) روی آن مجوز جدا لازم دارد.
+- گام بعد: Checkpoint 3 (OTP و نشست)، با قراردادها، اینترفیس‌ها، سرویس‌ها و آزمون‌ها در `netcoreapp2.1`/C# 7.3.
+
+**نقطهٔ قبلی، شب `2026-11-07`: Checkpoint 2F پذیرفته شد؛ پیشرفت 22%** ([بخش ۲۲](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#acceptance-20261107)، [شاهد](checkpoint2f/CONNECTED_ACCEPTANCE_RESULT.json)).
 
 - P1 تا P5 کامل‌اند. task `BAZDID-Dev-ConnectedSqlTests` آماده است. هر اجرای تازهٔ متصل فقط با `deployment/development/Start-BazdidConnectedRun.ps1` و بدون elevation انجام می‌شود (publish، اجرا با هویت Writer، verifier و cleanup).
 - حساب‌ها، loginها، certificate و task را بازسازی نکنید. رمز Writer را فقط با `-Rotate` (مدیر) بچرخانید.

@@ -1,0 +1,72 @@
+﻿{
+    "Date":  "2026-11-07T15:23:04.7607935Z",
+    "Action":  "Accept",
+    "ApprovalReference":  "OWNER-2026-11-07-D-2G-TARGET",
+    "Target":  {
+                   "Instance":  "SQLSERVER2019",
+                   "Major":  15,
+                   "Transport":  "Shared memory",
+                   "Encrypt":  "TRUE",
+                   "UserDatabasesAtStart":  "BAZDID_Development"
+               },
+    "MigrationSha256":  {
+                            "Forward":  "2568AA10017953AA0FA45BFBF15AF2F590B24E1B12E50EDCFCFCED47A16BD667",
+                            "Revert":  "539B160EBE48CDDDC6DE5AE50B63FED196528F60CF87FD452C2BAD8EAB58238A"
+                        },
+    "Steps":  [
+                  {
+                      "Step":  "01 create disposable DB + marker",
+                      "Expected":  "True",
+                      "Actual":  "True",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "02 forward (fresh)",
+                      "Expected":  "Created",
+                      "Actual":  "Created",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "03 schema equals BAZDID_Development",
+                      "Expected":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b",
+                      "Actual":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "04 history after forward",
+                      "Expected":  "0001_baseline:Created:2568AA10017953AA0FA45BFBF15AF2F590B24E1B12E50EDCFCFCED47A16BD667",
+                      "Actual":  "0001_baseline:Created:2568AA10017953AA0FA45BFBF15AF2F590B24E1B12E50EDCFCFCED47A16BD667",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "05 forward repeat is no-op",
+                      "Expected":  "AlreadyApplied",
+                      "Actual":  "AlreadyApplied",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "06 forward with wrong checksum rejected",
+                      "Expected":  "ChecksumMismatch",
+                      "Actual":  "ChecksumMismatch",
+                      "Pass":  true
+                  },
+                  {
+                      "Step":  "07 schema unchanged after repeats",
+                      "Expected":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b",
+                      "Actual":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b",
+                      "Pass":  true
+                  }
+              ],
+    "ReferenceBefore":  {
+                            "Rows":  "0/0/0",
+                            "Tables":  3,
+                            "Principals":  4,
+                            "Permissions":  232,
+                            "PermissionChecksum":  -670225535,
+                            "CustomerModified":  "2026-11-01T23:18:08.2130000",
+                            "SignatureItems":  81,
+                            "SignatureHash":  "d4c57bc216afd8331631107fe64368b7f90b691bed46c9971cd0a9870073902b"
+                        },
+    "Cleanup":  "Dropped",
+    "Result":  "INCOMPLETE"
+}

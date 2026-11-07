@@ -32,7 +32,7 @@ flowchart LR
 - [x] Checkpoint 2C: provisioning پایگاه و سه جدول؛ ۳۵ آزمون SQL rollback-only، verification metadata و ۴۳ آزمون موجود برنامه موفق؛ [walkthrough و شواهد](docs/implementation/CHECKPOINT-02C-DATABASE-CREATION_FA.md).
 - [x] Checkpoint 2D: reader/قرارداد/fixture ساختگی، DI امن و ۱۰۸ آزمون؛ [walkthrough و شواهد](docs/implementation/CHECKPOINT-02D-BROKERAGE-READER_FA.md).
 - [x] Checkpoint 2E فقط طراحی: قرارداد ماندگاری/refresh و manifest آینده، بدون Info/DDL/runtime؛ [طرح و شواهد](docs/implementation/CHECKPOINT-02E-INFO-PERSISTENCE-DESIGN_FA.md).
-- [ ] Phase 1 / Checkpoint 2 کامل: 2F فقط آفلاین تحویل شد؛ پذیرش SQL متصل با O24/O26 مسدود است. 2G و adapter واقعی شروع نشده‌اند.
+- [x] Phase 1 / Checkpoint 2 کامل (2026-11-07؛ 2F و 2G پذیرفته شدند؛ متن قدیمی بند در ادامه سابقه است): 2F فقط آفلاین تحویل شد؛ پذیرش SQL متصل با O24/O26 مسدود است. 2G و adapter واقعی شروع نشده‌اند.
 - [ ] Phase 1 / Checkpoint 3: OTP و session.
 - [ ] Phase 1 / Checkpoint 4: اطلاعات و `BAZDIDInfo`.
 - [ ] Phase 1 / Checkpoint 5: گردش بازدید و سیاست مدرک.
@@ -92,7 +92,7 @@ flowchart LR
 - [x] **2D — reader و قرارداد در دامنهٔ مصوب:** `IBrokerageRequestReader` با ResolveReferralAsync/GetRequestSnapshotAsync، نتیجهٔ typed، scope/reference دقیق، snapshot منشأدار و سرویس داخلی پیاده شد. ۱۸ رکورد حافظه‌ای، حالات نتیجه و Missing/Invalid/Unavailable، صفر با سیاست مستقل، شناسهٔ بزرگ، موبایل متعارض و cancellation آزموده شدند. Synthetic فقط Development/Testing و Production fail-closed است؛ SqlBrokerageRequestReader تنها Unavailable/SourceNotConfigured می‌دهد و query ندارد. هیچ احراز هویت، seed یا SQL runtime پیاده نشد.
 - [x] **2E — فقط طرح persistence اطلاعات:** ماتریس فیلدهای واقعی Frontend به reader/DTO/ستون، هفت خانوادهٔ provenance، جداسازی وضعیت مبدأ و منشأ Manual، طرح ۱۳۱ ستون و ۱۹ قاعدهٔ constraint، FK مالک پین‌شدهٔ inspection آینده، refresh با پذیرش صریح، CAS/transaction و ۲۴ سناریوی طراحی ثبت شدند. نسخهٔ بدون version، crypto و policyهای کسب‌وکار gateهای صریح دارند. ساخت/نوشتن Info، repository، API و migration در این بسته انجام نشد؛ اجرای آن در Checkpoint 4 با تصویب وابستگی‌هاست.
 - [ ] **2F — SQL runtime/repository و آزمون واقعی:** طبق مجوز 2026-11-03، کد مستقل آفلاین و ۵۱ case تازه موفق تحویل شد؛ سه repository روی schema موجود، transaction صریح، owner/CAS و audit INSERT-only. gate اتصال بسته است؛ provider امنِ متصل و دو principal مصوب موجود نیستند. ۸ تست SQL صریحاً Skipped و اجرای connected صفر؛ effective permissions، رقابت/rollback واقعی و پذیرش کامل انجام نشده‌اند. [راهنما و شواهد](docs/implementation/CHECKPOINT-02F-SQL-REPOSITORIES_FA.md).
-- [ ] **2G — rollback و پذیرش:** scriptهای شماره‌دار forward/revert فقط برای اشیای BAZDID با guard مقصد تست و پیش‌شرط نسخه آماده و پیش از اجرا بازبینی شوند؛ حفظ داده و backup لازم در طرح درج شود. ساخت از صفر، اجرای تکراری کنترل‌شده، rollback و بازاعمال روی تست اثبات شوند؛ حذف/تغییر جدول مبدأ یا اجرای Production مجاز نیست. خروجی واقعی آزمون، طرح/تفاوت schema و محدودیت‌ها پیش از تکمیل checkpoint ثبت شوند.
+- [x] **2G — rollback و پذیرش (پذیرفته 2026-11-07):** scriptهای شماره‌دار forward/revert فقط برای اشیای BAZDID با guard مقصد تست و پیش‌شرط نسخه آماده و پیش از اجرا بازبینی شوند؛ حفظ داده و backup لازم در طرح درج شود. ساخت از صفر، اجرای تکراری کنترل‌شده، rollback و بازاعمال روی تست اثبات شوند؛ حذف/تغییر جدول مبدأ یا اجرای Production مجاز نیست. خروجی واقعی آزمون، طرح/تفاوت schema و محدودیت‌ها پیش از تکمیل checkpoint ثبت شوند.
 
 endpoint عمومی تازه، OTP، cookie احراز هویت، آپلود و ماژول کارکنان در این بسته‌ها پیاده نمی‌شوند. موارد O01/O02/O20 تا O22 در دفتر تصمیم‌ها، gateهای adapter واقعی و محیط تست را مشخص می‌کنند.
 
@@ -451,3 +451,28 @@ hash جدید: P3 `07383213…49ec` و P1 `351227f2…838a`. عامل هیچ scr
 - **regression:** ۱۲۰ از ۱۲۰ unit؛ ۵۰ integration موفق و ۱۳ متصلِ انتخاب‌نشده Skipped؛ build با 0 warning.
 
 **قبلی 20% + سهم 2 = 22%.** Checkpoint 2 اکنون ۱۰ از ۱۲ واحد را دارد و هدف پایان آن 24% است. **گام بعد: 2G** (برآورد مشروط پس از پذیرش آن 24%). اجرای schema روی پایگاه موجود فقط با preflight مقصد دقیق و مجوز دامنه انجام می‌شود.
+
+### آماده‌سازی 2G (آغاز 2026-11-07)
+
+- **دامنه:** همان بند 2G در جدول بالا.
+- **طرح:**
+  - جدول تاریخچهٔ `BAZDIDSchemaMigrations` با شناسه، checksum، زمان و مرجع مجوز؛
+  - `0001_baseline` معادل سه جدول 2C و CHECKهای اصلاح‌شده، که فقط وقتی اعمال می‌شود که schema خالی باشد یا با امضای ۳۹ ستون/`1193879634` برابر باشد؛
+  - revert متناظر که فقط اشیای BAZDID را حذف می‌کند و اگر داده وجود داشته باشد متوقف می‌شود (حفظ داده)؛
+  - runner با preflight مقصد دقیق، dry run، hash ثابت و ثبت شاهد.
+- **مانع:** تصمیم `D-2G-TARGET` در [OPEN_DECISIONS](docs/OPEN_DECISIONS_FA.md). پیشنهاد گزینهٔ الف است: پایگاه یک‌بارمصرف `BAZDID_MigrationTest`.
+- **پیشرفت:** 22%. سهم 2G (۲ واحد، هدف 24%) فقط پس از اجرای واقعی forward/rollback/بازاعمال و ثبت شاهد کسب می‌شود.
+
+### پذیرش Checkpoint 2G در 2026-11-07
+
+مالک `D-2G-TARGET` را تصویب کرد: پایگاه یک‌بارمصرف `BAZDID_MigrationTest`. [walkthrough](docs/implementation/CHECKPOINT-02G-MIGRATIONS_FA.md) و [شاهد](docs/checkpoint2g/MIGRATION_ACCEPTANCE.json):
+
+- **تحویل:**
+  - `database/migrations/0001_baseline.{forward,revert}.sql`؛
+  - جدول تاریخچهٔ `BAZDIDSchemaMigrations`؛
+  - runner با preflight مقصد دقیق، hash ثابت و اثبات یک‌بارمصرف‌بودن پیش از هر حذف.
+- **اجرای اول:** گام‌های ۰۱ تا ۰۷ PASS. guard وابستگی revert به‌اشتباه وابستگی درونی را مانع دانست و ایمن رد کرد. پایگاه پس از اثبات حذف شد.
+- **اجرای دوم:** ۲۲ از ۲۲ گام PASS؛ شامل forward، تکرار، checksum نادرست، rollback، تکرار rollback، بازاعمال، guard داده، adopt و حذف پایگاه. `BAZDID_Development` بدون تغییر ماند.
+- **regression:** ۱۲۰ unit؛ ۵۰ integration و ۱۳ Skipped؛ P2 برابر ۴۰ از ۴۰؛ 2C Verify برابر Passed؛ اجرای متصل `1003a430e25ce496` با ۱۳ از ۱۳ Passed.
+
+**قبلی 22% + سهم 2 = 24%. Checkpoint 2 کامل است (۱۲ از ۱۲).** گام بعد: **Checkpoint 3 — OTP و نشست** (وزن 12%). ثبت baseline روی `BAZDID_Development` و هر migration بعدی مجوز جدا دارند. Production همچنان ممنوع است.

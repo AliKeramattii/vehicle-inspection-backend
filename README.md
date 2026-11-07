@@ -2,7 +2,9 @@
 
 این مخزن مستقل، پایهٔ توسعهٔ Backend برنامهٔ فارسی خودبازدید خودرو برای کارگزاری بیمه است. Frontend موجود در `C:\Projects\vehicle-inspection-integrated` فقط مرجع خواندنی است؛ دو مخزن ادغام نمی‌شوند.
 
-**وضعیت جاری `2026-11-07` (شب):** [Checkpoint 2F پذیرفته شد](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#acceptance-20261107). ۱۳ از ۱۳ آزمون SQL متصل با هویت واقعی Writer موفق بودند. regression: ۱۲۰ unit و ۵۰ integration موفق. gate برنامه و Production بسته‌اند. **پیشرفت 22%**؛ گام بعد 2G.
+**وضعیت جاری `2026-11-07`:** [Checkpoint 2G پذیرفته شد و Checkpoint 2 کامل است](docs/implementation/CHECKPOINT-02G-MIGRATIONS_FA.md). migration شماره‌دار `0001_baseline` با forward، rollback و بازاعمال روی پایگاه یک‌بارمصرف آزموده شد (۲۲ گام PASS) و `BAZDID_Development` بدون تغییر ماند. **پیشرفت 24%**؛ گام بعد Checkpoint 3.
+
+سابقه، **شب `2026-11-07`:** [Checkpoint 2F پذیرفته شد](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#acceptance-20261107). ۱۳ از ۱۳ آزمون SQL متصل با هویت واقعی Writer موفق بودند. regression: ۱۲۰ unit و ۵۰ integration موفق. gate برنامه و Production بسته‌اند. **پیشرفت 22%**؛ گام بعد 2G.
 
 سابقه، **عصر `2026-11-07`:** [مقصد SQL به `lpc:localhost` منتقل شد، P2 اجرا و تأیید شد و مسیر آزمون متصل P4/P5 پیاده شد](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#execution-20261107). آزمون متصل واقعی منتظر provisioning elevated مالک است. regression: ۱۲۰ unit، ۵۰ integration موفق و ۱۳ متصلِ انتخاب‌نشده. **2F ناقص، پیشرفت 20%.**
 

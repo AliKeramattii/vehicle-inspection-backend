@@ -46,3 +46,18 @@ metadata نقش‌ها/Windows user صفر و نام دو principal مصوب م�
 [development_logins.review.sql](proposals/development_logins.review.sql) تازه، فقط دو Windows login از حساب‌های محلیِ پیشنهادی BAZDIDDevWriter/BAZDIDDevReader را پس از تصویب نام کامل/SID هدف می‌گیرد؛ Windows user نمی‌سازد. [permissions.review.sql](proposals/permissions.review.sql) اصلاح‌شده، UPDATE CustomerLinks و source grant اختیاری تاریخی را حذف و منع SELECT audit و سایر حدود حداقلی را اضافه کرد. هر دو AllowDdl0 و approval/ماشین/login/SIDهای NULL دارند؛ اجرا نشدند. SHAها، مقصد/ترتیب و approvalهای لازم در [بستهٔ تصویب](../docs/checkpoint2f/CONTINUATION_APPROVAL_FA.md) هستند.
 
 SQL Server/sysadmin بودن metadata اجازهٔ ایجاد Windows account نمی‌دهد؛ نام‌ها هنوز وجود/تصویب ندارند. دو فایل و دو template فقط با parser آفلاین معتبر شدند. هیچ GRANT/DENY یا DDL/DML، schema، TLS/registry/ACL تغییر نکرد. SourceReader هیچ شیء مبدأ مصوب یا SELECT ندارد. گراف provider فعلی هم مسدود است؛ ۱۵۹ موفق آفلاین/۸ SQL Skipped تازه، نه SQL acceptance؛ پیشرفت۲۰٪. مجوز 2C یا این پیش‌نویس، اجازهٔ اجرا یا بازسازی DB نیست.
+
+## Checkpoint 2G — migrationهای شماره‌دار (2026-11-07)
+
+| فایل | کاربرد |
+|---|---|
+| [0001_baseline.forward.sql](migrations/0001_baseline.forward.sql) | `BAZDIDSchemaMigrations` و baseline سه جدول. حالت‌ها: Created، Adopted، AlreadyApplied؛ checksum نابرابر یا حالت جزئی رد می‌شود. |
+| [0001_baseline.revert.sql](migrations/0001_baseline.revert.sql) | فقط روی `BAZDID_MigrationTest`. اگر داده، migration بعدی یا وابستگی بیرونی وجود داشته باشد، متوقف می‌شود. |
+| [Invoke-BazdidMigration.ps1](tools/Invoke-BazdidMigration.ps1) | `Preflight` (فقط‌خواندنی)، `Accept` و `Cleanup` روی پایگاه یک‌بارمصرف، با اثبات نشانهٔ `BAZDID.Disposable` |
+
+```powershell
+.\database\tools\Invoke-BazdidMigration.ps1 -Action Preflight
+.\database\tools\Invoke-BazdidMigration.ps1 -Action Accept -ApproveDisposableDatabase -ApprovalReference <ref> -EvidencePath <path>
+```
+
+`BAZDID_Development` فقط خوانده می‌شود (مرجع مقایسه و snapshot). جزئیات در [walkthrough 2G](../docs/implementation/CHECKPOINT-02G-MIGRATIONS_FA.md).
