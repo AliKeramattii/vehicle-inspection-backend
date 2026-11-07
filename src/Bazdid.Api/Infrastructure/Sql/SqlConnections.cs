@@ -10,11 +10,18 @@ namespace Bazdid.Api.Infrastructure.Sql
     public sealed class BazdidWriteConnectionFactory : IBazdidWriteConnectionFactory
     {
         private readonly SqlRuntimeOptions _options;
+        private readonly ConnectedTestAcceptance _testAcceptance;
         public BazdidWriteConnectionFactory(SqlRuntimeOptions options) { _options=options ?? throw new ArgumentNullException(nameof(options)); }
+        // فقط آزمون متصل P4؛ DI این سازندهٔ internal را نمی‌بیند. guard هویت/مجوز پایین بدون تغییر اجرا می‌شود.
+        internal BazdidWriteConnectionFactory(SqlRuntimeOptions options, ConnectedTestAcceptance testAcceptance) : this(options)
+        { _testAcceptance=testAcceptance ?? throw new ArgumentNullException(nameof(testAcceptance)); }
         public async Task<SqlConnection> OpenAsync(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            if (!_options.Enabled || !SqlRuntimeGate.ConnectedAcceptanceVerified) throw new PersistenceException(PersistenceFailure.Blocked);
+            var open=_testAcceptance != null
+                ? string.Equals(_options.ApprovedWriterPrincipal,_testAcceptance.Principal,StringComparison.OrdinalIgnoreCase)
+                : _options.Enabled && SqlRuntimeGate.ConnectedAcceptanceVerified;
+            if (!open) throw new PersistenceException(PersistenceFailure.Blocked);
             if (string.IsNullOrWhiteSpace(_options.ApprovedWriterPrincipal)) throw new PersistenceException(PersistenceFailure.Blocked);
             var connection=new SqlConnection(_options.BuildLocalConnectionString());
             try
@@ -46,7 +53,7 @@ namespace Bazdid.Api.Infrastructure.Sql
  AND HAS_PERMS_BY_NAME(N'dbo.BAZDIDRequestContexts',N'OBJECT',N'DELETE')=0
  AND HAS_PERMS_BY_NAME(N'dbo.BAZDIDRequestContexts',N'OBJECT',N'ALTER')=0
  AND HAS_PERMS_BY_NAME(DB_NAME(),N'DATABASE',N'CONTROL')=0
- AND HAS_PERMS_BY_NAME(NULL,N'SERVER',N'CONTROL SERVER')=0
+ AND HAS_PERMS_BY_NAME(NULL,NULL,N'CONTROL SERVER')=0
  AND HAS_PERMS_BY_NAME(DB_NAME(),N'DATABASE',N'CREATE TABLE')=0 THEN 1 ELSE 0 END;";
                     SqlCommands.Parameter(command,"@Machine",SqlDbType.NVarChar,128,false,Environment.MachineName);
                     SqlCommands.Parameter(command,"@Principal",SqlDbType.NVarChar,128,false,_options.ApprovedWriterPrincipal);

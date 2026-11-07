@@ -149,14 +149,18 @@ namespace Bazdid.UnitTests
         [InlineData("Development",true,"")]
         [InlineData("Testing",true,"")]
         [InlineData("development",false,"")]
-        [InlineData("Production",false,"Data Source=lpc:.\\SQLSERVER2019;Initial Catalog=BAZDID_Development;Integrated Security=true;Encrypt=true")]
+        [InlineData("Production",false,"Data Source=lpc:localhost\\SQLSERVER2019;Initial Catalog=BAZDID_Development;Integrated Security=true;Encrypt=true")]
+        // مقصد قدیمی `.` در certificate نیست (D-P3-NAME)؛ نباید دوباره پذیرفته شود.
+        [InlineData("Development",false,"Data Source=lpc:.\\SQLSERVER2019;Initial Catalog=BAZDID_Development;Integrated Security=true;Encrypt=true")]
+        [InlineData("Development",false,"Data Source=tcp:localhost,1433;Initial Catalog=BAZDID_Development;Integrated Security=true;Encrypt=true")]
+        [InlineData("Development",false,"Data Source=lpc:localhost\\SQLSERVER2019;Initial Catalog=master;Integrated Security=true;Encrypt=true")]
         [InlineData("Development",false,"Data Source=remote;Initial Catalog=BAZDID_Development;Integrated Security=true;Encrypt=true")]
         public void Unsafe_or_unaccepted_runtime_configuration_fails_closed(string environment,bool enabled,string connection)
         { Assert.Throws<InvalidOperationException>(()=>new SqlRuntimeOptions { Enabled=enabled,ConnectionString=connection }.Validate(environment)); }
         [Fact]
         public void Local_builder_disables_retry_and_refuses_certificate_bypass()
         {
-            var options=new SqlRuntimeOptions {ConnectionString=@"Data Source=lpc:.\SQLSERVER2019;Initial Catalog=BAZDID_Development;Integrated Security=true;Encrypt=true;TrustServerCertificate=false"};
+            var options=new SqlRuntimeOptions {ConnectionString=@"Data Source=lpc:localhost\SQLSERVER2019;Initial Catalog=BAZDID_Development;Integrated Security=true;Encrypt=true;TrustServerCertificate=false"};
             var builder=new SqlConnectionStringBuilder(options.BuildLocalConnectionString());
             Assert.Equal(0,builder.ConnectRetryCount); Assert.Equal(5,builder.ConnectTimeout);
             options.ConnectionString+=";TrustServerCertificate=true";
@@ -167,7 +171,7 @@ namespace Bazdid.UnitTests
         [InlineData(";Network Library=dbmssocn")]
         public void Local_builder_rejects_explicit_credentials_or_transport_overrides(string suffix)
         {
-            var options=new SqlRuntimeOptions { ConnectionString=@"Data Source=lpc:.\SQLSERVER2019;Initial Catalog=BAZDID_Development;Integrated Security=true;Encrypt=true"+suffix };
+            var options=new SqlRuntimeOptions { ConnectionString=@"Data Source=lpc:localhost\SQLSERVER2019;Initial Catalog=BAZDID_Development;Integrated Security=true;Encrypt=true"+suffix };
             Assert.Throws<InvalidOperationException>(()=>options.BuildLocalConnectionString());
         }
         [Fact]

@@ -46,6 +46,6 @@ namespace Bazdid.IntegrationTests
         { Assert.ThrowsAny<Exception>(()=>Server(environment,new Dictionary<string,string>{{"SqlRuntime:Enabled","true"}})); }
         [Fact]
         public void Production_rejects_local_connection_even_while_disabled()
-        { Assert.ThrowsAny<Exception>(()=>Server("Production",new Dictionary<string,string>{{"ConnectionStrings:Bazdid",@"Data Source=lpc:.\SQLSERVER2019;Initial Catalog=BAZDID_Development;Integrated Security=true;Encrypt=true"}})); }
+        { Assert.ThrowsAny<Exception>(()=>Server("Production",new Dictionary<string,string>{{"ConnectionStrings:Bazdid",@"Data Source=lpc:localhost\SQLSERVER2019;Initial Catalog=BAZDID_Development;Integrated Security=true;Encrypt=true"}})); }
     }
 }

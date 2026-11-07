@@ -18,12 +18,12 @@ $approvedDatabase = 'BAZDID_Development'
 function Open-LocalConnection([string]$databaseName) {
     if ($databaseName -notin @('master',$approvedDatabase)) { throw 'پایگاه خارج از دامنهٔ مصوب است.' }
     $builder = New-Object System.Data.SqlClient.SqlConnectionStringBuilder
-    $builder['Data Source'] = 'lpc:.\SQLSERVER2019'
+    # D-P3-NAME (2026-11-07): certificate معتبر P3 نام localhost را دارد؛ استثنای قبلی TrustServerCertificate حذف شد.
+    $builder['Data Source'] = 'lpc:localhost\SQLSERVER2019'
     $builder['Initial Catalog'] = $databaseName
     $builder['Integrated Security'] = $true
     $builder['Encrypt'] = $true
-    # این استثنا فقط برای shared memory محلی است؛ تنظیم runtime یا شبکه نیست.
-    $builder['TrustServerCertificate'] = $true
+    $builder['TrustServerCertificate'] = $false
     $builder['Connect Timeout'] = 5
     $builder['Application Name'] = 'BAZDID-Checkpoint2C-ControlledLocal'
     $connection = New-Object System.Data.SqlClient.SqlConnection($builder.ConnectionString)
