@@ -231,3 +231,13 @@ commit `5a192a8d9fbb74babbef4432daa0b6ded364aead` (والد `9c2775e025e18908def
 - SHA-256 دو script در checkout تازه (`git checkout-index`) با مقدار مستند برابر بود: P3 `07383213…49ec` و P1 `351227f2…838a`.
 
 پیش از commit، اسکن راز، نام ماشین و SID انجام شد و نتیجه‌ای نداشت. هیچ script اجرا نشد. پیشرفت 20% است.
+
+## انتشار تأییدشدهٔ راستی‌آزمایی P3 (2026-11-07)
+
+commit `2af6bf2982c13a7b79cfbbd88095a32b196d2e28` (والد `51c921697e40a3c090706d2e3d2eeeff24da6c1c`) با `git push origin main` و بدون force منتشر شد. شواهد:
+
+- خروجی push برابر `51c9216..2af6bf2  main -> main` بود.
+- پس از fetch، HEAD محلی، `origin/main` و `ls-remote` هر سه `2af6bf2` بودند.
+- `P3_TLS_VERIFICATION.json` و گزارش پذیرش متصل از raw.githubusercontent در همان commit با HTTP 200 خوانده شدند. anchor `p3-verification-20261107` در نسخهٔ GitHub وجود داشت. `gh` احراز نشده بود، پس تطبیق blob با API انجام نشد.
+
+پیش از commit، نام ماشین و login در فایل‌های منتشرشده جست‌وجو شد و نتیجه‌ای نداشت. probe ignored و `src/Bazdid.Api/Properties/` منتشر نشدند. پیشرفت 20% است.
