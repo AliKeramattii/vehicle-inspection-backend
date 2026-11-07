@@ -2,7 +2,9 @@
 
 این صفحه، نقطهٔ ورود به توضیح «چگونه انجام شد» است؛ گزارش‌های قبلی سابقهٔ همان مرحله‌اند.
 
-**وضعیت جاری `2026-11-07`:** [Checkpoint 2G — migrationهای شماره‌دار و rollback](CHECKPOINT-02G-MIGRATIONS_FA.md). ۲۲ گام پذیرش روی `BAZDID_MigrationTest` PASS شدند و پایگاه حذف شد. Checkpoint 2 کامل است. پیشرفت **24%**.
+**وضعیت جاری `2026-11-07`:** [Checkpoint 3 — OTP و نشست (در حال اجرا)](CHECKPOINT-03-OTP-SESSION_FA.md). برش اول منطق OTP با ۲۶ آزمون پیاده شد. پیشرفت **24%**.
+
+سابقه: [Checkpoint 2G — migrationهای شماره‌دار و rollback](CHECKPOINT-02G-MIGRATIONS_FA.md). ۲۲ گام پذیرش روی `BAZDID_MigrationTest` PASS شدند و پایگاه حذف شد. Checkpoint 2 کامل است. پیشرفت **24%**.
 
 سابقه، **شب `2026-11-07`:** [پذیرش نهایی 2F](CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#acceptance-20261107). ۱۳ از ۱۳ آزمون متصل با هویت Writer موفق بودند، verifier برابر PASS و cleanup دقیق. پیشرفت **22%**.
 

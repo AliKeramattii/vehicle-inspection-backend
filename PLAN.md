@@ -476,3 +476,9 @@ hash جدید: P3 `07383213…49ec` و P1 `351227f2…838a`. عامل هیچ scr
 - **regression:** ۱۲۰ unit؛ ۵۰ integration و ۱۳ Skipped؛ P2 برابر ۴۰ از ۴۰؛ 2C Verify برابر Passed؛ اجرای متصل `1003a430e25ce496` با ۱۳ از ۱۳ Passed.
 
 **قبلی 22% + سهم 2 = 24%. Checkpoint 2 کامل است (۱۲ از ۱۲).** گام بعد: **Checkpoint 3 — OTP و نشست** (وزن 12%). ثبت baseline روی `BAZDID_Development` و هر migration بعدی مجوز جدا دارند. Production همچنان ممنوع است.
+
+### آغاز Checkpoint 3 در 2026-11-07
+
+[walkthrough](docs/implementation/CHECKPOINT-03-OTP-SESSION_FA.md). برش اول پیاده شد: قراردادهای OTP، سیاست پیشنهادی، تولید امن کد، MAC با length-prefix، مقایسهٔ ثابت‌زمان، چرخهٔ issue/resend/verify با Save شرطی، و guard محیطی fixture. ۲۶ آزمون unit دارد: build با 0 warning، ۱۴۶ از ۱۴۶ unit، ۵۰ integration و ۱۳ Skipped.
+
+بدون SQL، endpoint یا DI. **24% + 0 = 24%.** گام بعد: migration `0002_otp_session` با الگوی 2G روی `BAZDID_MigrationTest`. اجرای آن روی `BAZDID_Development` و GRANT جدید Writer مجوز جدا لازم دارند.
