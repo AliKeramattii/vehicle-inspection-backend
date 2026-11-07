@@ -6,7 +6,9 @@
 
 مخزن `C:\Projects\vehicle-inspection-integrated` فقط مرجع **خواندنی** است. آن را تغییر ندهید، با Backend ادغام نکنید و در آن worktree نسازید. دستورهای تاریخی عامل‌های Frontend، مجوز تغییر آن مخزن یا تغییر دامنهٔ این پروژه نیستند.
 
-**وضعیت جاری در 2026-11-07 (عصر): D-P3-NAME اعمال شد و P2 اجرا و تأیید شد (40/40 مجوز). P4/P5 پیاده شده‌اند و منتظر یک اجرای elevated مالک هستند.** [بخش ۲۱](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#execution-20261107):
+**وضعیت جاری در 2026-11-07 (شب): Checkpoint 2F پذیرفته شد؛ پیشرفت 22% است.** اجرای متصل `09a21cbd72e12d91` با هویت واقعی `BAZDIDDevWriter`: ۱۳ از ۱۳ آزمون موفق، verifier برابر PASS و cleanup `1/2/5` ([بخش ۲۲](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#acceptance-20261107)). gate زمان اجرای برنامه و Production همچنان بسته‌اند. گام بعد: آماده‌سازی 2G. حساب‌ها، loginها، certificate و task را بازسازی نکنید.
+
+**سابقهٔ عصر 2026-11-07: D-P3-NAME اعمال شد و P2 اجرا و تأیید شد (40/40 مجوز). P4/P5 پیاده شده‌اند و منتظر یک اجرای elevated مالک هستند.** [بخش ۲۱](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#execution-20261107):
 
 - مقصد ثابت `lpc:localhost\SQLSERVER2019`. اشکال guard، یعنی `HAS_PERMS_BY_NAME(NULL,N'SERVER',…)` که همیشه NULL می‌داد، رفع شد.
 - آزمون متصل فقط با `BAZDID_CONNECTED_SQL=1` و token واقعی `BAZDIDDevWriter` از طریق task اجرا می‌شود. gate برنامه بسته است.

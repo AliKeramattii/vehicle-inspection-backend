@@ -2,7 +2,9 @@
 
 این صفحه، نقطهٔ ورود به توضیح «چگونه انجام شد» است؛ گزارش‌های قبلی سابقهٔ همان مرحله‌اند.
 
-**وضعیت جاری `2026-11-07` (عصر):** [اجرای D-P3-NAME، P2 و پیاده‌سازی P4/P5](CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#execution-20261107). مقصد `lpc:localhost` شد و اشکال guard مجوز سرور رفع شد. P2 با ۴۰ از ۴۰ مجوز تأیید شد. اجرای متصل با هویت Writer منتظر یک دستور elevated مالک است. پیشرفت **20%**.
+**وضعیت جاری `2026-11-07` (شب):** [پذیرش نهایی 2F](CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#acceptance-20261107). ۱۳ از ۱۳ آزمون متصل با هویت Writer موفق بودند، verifier برابر PASS و cleanup دقیق. پیشرفت **22%**.
+
+سابقه، **عصر `2026-11-07`:** [اجرای D-P3-NAME، P2 و پیاده‌سازی P4/P5](CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#execution-20261107). مقصد `lpc:localhost` شد و اشکال guard مجوز سرور رفع شد. P2 با ۴۰ از ۴۰ مجوز تأیید شد. اجرای متصل با هویت Writer منتظر یک دستور elevated مالک است. پیشرفت **20%**.
 
 سابقه، **صبح `2026-11-07`:** [راستی‌آزمایی P3](CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#p3-verification-20261107). نصب certificate موفق بود و اعتماد زنجیره حل شد. مقصد pin‌شدهٔ برنامه، `lpc:.\SQLSERVER2019`، با `SEC_E_WRONG_PRINCIPAL` رد می‌شود، در حالی که `localhost` و نام میزبان با اعتبارسنجی کامل موفق‌اند. تصمیم `D-P3-NAME` و اجرای P1 باز هستند. پیشرفت **20%**.
 

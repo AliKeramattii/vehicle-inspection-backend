@@ -432,3 +432,22 @@ hash جدید: P3 `07383213…49ec` و P1 `351227f2…838a`. عامل هیچ scr
 - **مانع:** provisioning رمز Writer و task به elevation نیاز دارد (دستور بخش ۲۱.۸). حق‌های LSA مربوط به P1 هم با همان دستور تأیید می‌شوند.
 
 **قبلی 20% + سهم 0 = 20%.** پس از PASS اجرای متصل، شامل ۱۳ از ۱۳ آزمون، verifier و cleanup، 2F کامل و پیشرفت **22%** می‌شود و آماده‌سازی 2G آغاز می‌شود. 2G پیش از آن شروع نمی‌شود.
+
+### پذیرش نهایی Checkpoint 2F در 2026-11-07
+
+[بخش ۲۲ گزارش](docs/implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#acceptance-20261107) و [شاهد](docs/checkpoint2f/CONNECTED_ACCEPTANCE_RESULT.json):
+
+- **اجرای قبلی** `1af50f1d48c3eb84`: ۱۲ از ۱۳ آزمون موفق بود. دو اشکال وجود داشت:
+  - آزمون لغو انتظار `OperationCanceledException` داشت، در حالی که provider یک `SqlException` با «Operation cancelled by user.» برمی‌گرداند؛
+  - `-VerifyOnly` دنبال رشتهٔ خام `GRGX` می‌گشت، اما Task Scheduler آن را به mask `0x1200a9` تبدیل کرده بود.
+- **اصلاح‌ها:**
+  - آزمون لغو فقط امضای تأییدشدهٔ لغو را می‌پذیرد، به‌علاوهٔ کنترل منفی timeout و خطای عادی؛
+  - راستی‌آزمایی معنایی SDDL، SID دقیق Writer و منع ACE عمومی؛
+  - دو اشکال تبدیل عدد در PowerShell 5.1.
+- **اجرای نهایی** `09a21cbd72e12d91`، با شروع task توسط اپراتور غیرمدیر:
+  - ۱۳ از ۱۳ Passed، ۰ Failed، ۰ NotExecuted؛
+  - verifier برابر PASS؛ cleanup `1/2/5` و صفر ردیف باقی‌مانده؛
+  - schema بدون تغییر؛ مجوز SQL ۴۰ از ۴۰؛ gate و Production بسته.
+- **regression:** ۱۲۰ از ۱۲۰ unit؛ ۵۰ integration موفق و ۱۳ متصلِ انتخاب‌نشده Skipped؛ build با 0 warning.
+
+**قبلی 20% + سهم 2 = 22%.** Checkpoint 2 اکنون ۱۰ از ۱۲ واحد را دارد و هدف پایان آن 24% است. **گام بعد: 2G** (برآورد مشروط پس از پذیرش آن 24%). اجرای schema روی پایگاه موجود فقط با preflight مقصد دقیق و مجوز دامنه انجام می‌شود.

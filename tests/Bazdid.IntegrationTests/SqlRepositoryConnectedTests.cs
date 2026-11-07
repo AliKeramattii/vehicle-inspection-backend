@@ -215,16 +215,52 @@ namespace Bazdid.IntegrationTests
                 Assert.Equal(PersistenceFailure.Timeout,SqlErrors.Map(error.Number).Failure);
             }
         }
+        /// <summary>
+        /// امضای مشاهده‌شدهٔ لغو در System.Data.SqlClient 4.8.6 (netcoreapp2.1): لغو token فرمان attention می‌فرستد و
+        /// provider به‌جای OperationCanceledException یک SqlException با Number=0، Class=11 و پیام
+        /// «Operation cancelled by user.» برمی‌گرداند؛ اتصال باز می‌ماند. timeout (Number=-2) و خطای عادی SQL پذیرفته نمی‌شوند.
+        /// </summary>
+        internal static bool IsVerifiedProviderCancellation(Exception error)
+        {
+            if (error is OperationCanceledException) return true;
+            var sql=error as SqlException;
+            if (sql == null || sql.Number != 0 || sql.Class != 11) return false;
+            var errors=sql.Errors.Cast<SqlError>().ToList();
+            return errors.Count > 0 && errors.All(e => e.Number == 0 && e.Class == 11) &&
+                   errors.Any(e => string.Equals(e.Message,"Operation cancelled by user.",StringComparison.Ordinal));
+        }
         [ConnectedSqlFact]
         public async Task Actual_SQL_command_observes_cancellation()
         {
             var options=Options();
             using (var connection=await Connections(options).OpenAsync(CancellationToken.None))
             using (var command=connection.CreateCommand())
-            using (var cancellation=new CancellationTokenSource(TimeSpan.FromMilliseconds(200)))
             {
+                // فرمان عادی ۵ ثانیه طول می‌کشد؛ token پس از ۲۰۰ms لغو می‌شود.
                 command.CommandTimeout=10; command.CommandText="WAITFOR DELAY '00:00:05'; SELECT 1;";
-                await Assert.ThrowsAnyAsync<OperationCanceledException>(()=>command.ExecuteScalarAsync(cancellation.Token));
+                Exception cancelled;
+                var watch=System.Diagnostics.Stopwatch.StartNew();
+                using (var cancellation=new CancellationTokenSource(TimeSpan.FromMilliseconds(200)))
+                {
+                    cancelled=await Record.ExceptionAsync(()=>command.ExecuteScalarAsync(cancellation.Token));
+                    watch.Stop();
+                    Assert.True(cancellation.IsCancellationRequested,"token لغو باید واقعاً signal شده باشد.");
+                }
+                Assert.NotNull(cancelled);
+                Assert.True(watch.Elapsed < TimeSpan.FromSeconds(3),"فرمان باید پیش از پایان عادی ۵ ثانیه‌ای متوقف شود: "+watch.Elapsed);
+                Assert.True(IsVerifiedProviderCancellation(cancelled),"امضای لغو تأییدشده نیست: "+cancelled);
+                var sqlCancel=cancelled as SqlException;
+                if (sqlCancel != null) Assert.NotEqual(PersistenceFailure.Timeout,SqlErrors.Map(sqlCancel.Number).Failure);
+
+                // اتصال سالم ماند (شکست اتصال نیست) و همان predicate، timeout و خطای عادی SQL را رد می‌کند.
+                command.CommandTimeout=10; command.CommandText="SELECT 1;";
+                Assert.Equal(1,Convert.ToInt32(await command.ExecuteScalarAsync(CancellationToken.None)));
+                command.CommandTimeout=1; command.CommandText="WAITFOR DELAY '00:00:03'; SELECT 1;";
+                var timeout=await Assert.ThrowsAsync<SqlException>(()=>command.ExecuteScalarAsync(CancellationToken.None));
+                Assert.Equal(-2,timeout.Number); Assert.False(IsVerifiedProviderCancellation(timeout));
+                command.CommandTimeout=10; command.CommandText="SELECT 1/0;";
+                var ordinary=await Assert.ThrowsAsync<SqlException>(()=>command.ExecuteScalarAsync(CancellationToken.None));
+                Assert.Equal(8134,ordinary.Number); Assert.False(IsVerifiedProviderCancellation(ordinary));
             }
         }
 

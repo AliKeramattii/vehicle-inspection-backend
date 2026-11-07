@@ -27,7 +27,8 @@ if ($env:COMPUTERNAME -ne $ExpectedMachine) { throw 'نام ماشین با مق
 if (@($VerifyOnly, $Rotate, $Remove | Where-Object { $_ }).Count -gt 1) { throw 'فقط یکی از -VerifyOnly، -Rotate یا -Remove مجاز است.' }
 if ($VerifyOnly -and $Execute) { throw '-VerifyOnly با -Execute ترکیب نمی‌شود.' }
 $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-if (-not $isAdmin) { throw 'این script به PowerShell با Run as Administrator نیاز دارد.' }
+# -VerifyOnly فقط می‌خواند و از نشست غیرمدیر اپراتور هم قابل اجراست؛ هر تغییر به token مدیر نیاز دارد.
+if (-not $isAdmin -and -not $VerifyOnly) { throw 'این script به PowerShell با Run as Administrator نیاز دارد.' }
 
 $writer = Get-LocalUser -Name $writerName -ErrorAction Stop
 if (-not $writer.Enabled -or $writer.Description -notlike 'BAZDID-DEV-SQL *') { throw 'حساب Writer با نشانهٔ P1 مطابقت ندارد.' }
@@ -73,25 +74,54 @@ function Set-FolderAcl {
         [IO.Directory]::SetAccessControl((Join-Path $root $child), $c)
     }
 }
+# Task Scheduler حق generic را به mask نگاشت‌شده تبدیل می‌کند (GRGX -> 0x1200a9)؛ پس ACE معنایی بررسی می‌شود، نه رشتهٔ خام.
+$readExecuteMask = 0x001200A9          # FILE_GENERIC_READ | FILE_GENERIC_EXECUTE
+$genericReadExecute = [int64]2684354560 # 0xA0000000 = GENERIC_READ | GENERIC_EXECUTE؛ literal هگز در PS 5.1 منفی می‌شود
+$forbiddenMask = 0x500D0116            # GENERIC_ALL|GENERIC_WRITE|WRITE_OWNER|WRITE_DAC|DELETE|WriteData|AppendData|WriteEA|WriteAttributes
+$broadSids = 'S-1-1-0', 'S-1-5-11', 'S-1-5-32-545', 'S-1-5-4', 'S-1-5-7', 'S-1-5-2'
+function Get-TaskAccess([string]$sddl) {
+    $sd = New-Object Security.AccessControl.RawSecurityDescriptor($sddl)
+    $allow = 0L; $deny = $false; $broad = @()
+    foreach ($ace in $sd.DiscretionaryAcl) {
+        if ($ace -isnot [Security.AccessControl.CommonAce]) { continue }
+        $sid = $ace.SecurityIdentifier.Value; $mask = ([int64]$ace.AccessMask) -band [int64]4294967295   # AccessMask از نوع Int32 است و برای حق generic منفی می‌شود
+        if ($sid -eq $operatorSid) {
+            if ($ace.AceQualifier -eq 'AccessAllowed') { $allow = $allow -bor $mask } else { $deny = $true }
+        }
+        if ($sid -in $broadSids -and $ace.AceQualifier -eq 'AccessAllowed') { $broad += $sid }
+    }
+    [pscustomobject]@{
+        OperatorMask = ('0x{0:x}' -f $allow)
+        CanReadRun   = (-not $deny) -and ((($allow -band $readExecuteMask) -eq $readExecuteMask) -or (($allow -band $genericReadExecute) -eq $genericReadExecute))
+        OverGranted  = ($allow -band $forbiddenMask) -ne 0
+        BroadSids    = $broad
+    }
+}
 function Grant-OperatorRun {
     $svc = New-Object -ComObject Schedule.Service; $svc.Connect()
     $task = $svc.GetFolder('\').GetTask($taskName)
     $sddl = $task.GetSecurityDescriptor(4)
-    if ($sddl -notmatch [regex]::Escape(";;;$operatorSid)")) { $task.SetSecurityDescriptor($sddl + "(A;;GRGX;;;$operatorSid)", 0) }
+    if (-not (Get-TaskAccess $sddl).CanReadRun) { $task.SetSecurityDescriptor($sddl + "(A;;GRGX;;;$operatorSid)", 0) }
 }
 function Test-Provisioning {
     $problems = New-Object System.Collections.Generic.List[string]
+    $operatorMask = ''
     $t = Get-ScheduledTask -TaskName $taskName -TaskPath '\' -ErrorAction SilentlyContinue
     if (-not $t) { $problems.Add('task وجود ندارد.') }
     else {
-        if ($t.Principal.UserId -notmatch "(^|\\)$writerName$") { $problems.Add("هویت task: $($t.Principal.UserId)") }
+        $principalSid = try { (New-Object Security.Principal.NTAccount($t.Principal.UserId)).Translate([Security.Principal.SecurityIdentifier]).Value } catch { '' }
+        if ($principalSid -ne $writer.SID.Value) { $problems.Add("هویت task برابر SID Writer نیست: $($t.Principal.UserId)") }
         if ("$($t.Principal.LogonType)" -ne 'Password') { $problems.Add("LogonType: $($t.Principal.LogonType)") }
         if ("$($t.Principal.RunLevel)" -ne 'Limited') { $problems.Add("RunLevel: $($t.Principal.RunLevel)") }
         if (@($t.Triggers | Where-Object { $_ }).Count -ne 0) { $problems.Add('task نباید trigger داشته باشد.') }
         $a = @($t.Actions)
         if ($a.Count -ne 1 -or $a[0].Execute -notmatch 'powershell\.exe$' -or $a[0].Arguments -notlike "*-File `"$runner`"*") { $problems.Add('action task برابر runner ثابت نیست.') }
         $svc = New-Object -ComObject Schedule.Service; $svc.Connect()
-        if ($svc.GetFolder('\').GetTask($taskName).GetSecurityDescriptor(4) -notmatch [regex]::Escape("(A;;GRGX;;;$operatorSid)")) { $problems.Add('اپراتور حق اجرای task را ندارد.') }
+        $access = Get-TaskAccess ($svc.GetFolder('\').GetTask($taskName).GetSecurityDescriptor(4))
+        if (-not $access.CanReadRun) { $problems.Add("اپراتور حق خواندن/اجرای task را ندارد (mask=$($access.OperatorMask)).") }
+        if ($access.OverGranted) { $problems.Add("اپراتور حق بیش از خواندن/اجرا دارد (mask=$($access.OperatorMask)).") }
+        if (@($access.BroadSids).Count) { $problems.Add('ACE عمومی روی task: ' + ($access.BroadSids -join ',')) }
+        $operatorMask = $access.OperatorMask
     }
     if (Test-Path -LiteralPath $root) {
         $writerSid = $writer.SID.Value
@@ -101,7 +131,7 @@ function Test-Provisioning {
             if ((Get-Acl -LiteralPath $d).Access | Where-Object { $_.IdentityReference.Value -in 'Everyone', 'BUILTIN\Users', 'NT AUTHORITY\Authenticated Users' }) { $problems.Add("ACL عمومی روی $d.") }
         }
     } else { $problems.Add('پوشهٔ ConnectedTests وجود ندارد.') }
-    [pscustomobject]@{ Task = $taskName; WriterAccount = $writerAccount; Operator = $OperatorAccount; Root = $root; Problems = @($problems); Pass = ($problems.Count -eq 0) }
+    [pscustomobject]@{ Task = $taskName; WriterAccount = $writerAccount; Operator = $OperatorAccount; OperatorTaskMask = $operatorMask; Root = $root; Problems = @($problems); Pass = ($problems.Count -eq 0) }
 }
 
 if ($VerifyOnly) {

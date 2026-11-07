@@ -251,3 +251,9 @@ commit مستندات `5ca987634e077043e87c5330769e76ec46674b0c` با push عا�
 ## اصلاح اشکال ثبت task در P4 (2026-11-07)
 
 اصلاح تداخل نام `$action` در `Register-BazdidConnectedTestTask.review.ps1` و بررسی trigger در `-VerifyOnly`. SHA و نتیجهٔ push این commit در گزارش نهایی همان وظیفه و پس از راستی‌آزمایی `ls-remote` ثبت می‌شود. hash script: `3EB982D0792078E18BF56AFE2B3A174EEA0CC40A5ACCF4271B063CDFD025ADF1`.
+
+commit اصلاح P4 (`1601325`) با push عادی منتشر شد و `ls-remote` با HEAD محلی برابر بود.
+
+## پذیرش نهایی 2F (2026-11-07)
+
+commit پذیرش 2F شامل اصلاح آزمون لغو، راستی‌آزمایی معنایی task و مستندات است. پیش از commit، جست‌وجوی نام ماشین، SID و رمز در فایل‌های staged انجام شد. SHA و نتیجهٔ push در گزارش نهایی همان وظیفه ثبت می‌شوند. TRX و لاگ‌های اجرا منتشر نمی‌شوند.

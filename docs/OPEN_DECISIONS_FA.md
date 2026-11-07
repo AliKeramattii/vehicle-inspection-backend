@@ -99,3 +99,10 @@ O26 (P1/P2) بدون تغییر و منتظر تصویب جدا است. بدون
 - جایگزین: نام میزبان، که به ماشین وابسته است.
 - رد: bypass اعتبارسنجی، افزودن `.` به SAN، و `HostNameInCertificate` (در 4.8.6 وجود ندارد).
 - این تصمیم پیش از P2 و P4 لازم است. [بخش ۲۰](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#p3-verification-20261107).
+
+## O24/O26 — بسته شد با پذیرش متصل 2F (2026-11-07)
+
+- **O24 (provider):** `System.Data.SqlClient 4.8.6` روی گراف L1-A با `Encrypt=true` و `TrustServerCertificate=false` روی SQL Server واقعی پذیرفته شد.
+- **O26 (principal):** دو حساب Windows کم‌اختیار با مجوز مؤثر دقیق (۴۰ از ۴۰) وجود دارند. ۱۳ از ۱۳ آزمون متصل با هویت Writer موفق بودند.
+- شرح کامل در [بخش ۲۲](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#acceptance-20261107).
+- باز می‌مانند: L1-R برای استفادهٔ عمومی/Production، فعال‌سازی gate زمان اجرای برنامه (تصمیم جدا) و mapping واقعی مبدأ.

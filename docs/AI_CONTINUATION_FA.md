@@ -1,6 +1,12 @@
 # ادامهٔ کار پس از قطع نشست عامل
 
-**آخرین نقطهٔ ادامه در `2026-11-07` (عصر): P2 انجام شد؛ P4/P5 پیاده شده و منتظر provisioning مدیر است** ([بخش ۲۱](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#execution-20261107)، [شاهد](checkpoint2f/P2_P4_EXECUTION.json)).
+**آخرین نقطهٔ ادامه در `2026-11-07` (شب): Checkpoint 2F پذیرفته شد؛ پیشرفت 22%** ([بخش ۲۲](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#acceptance-20261107)، [شاهد](checkpoint2f/CONNECTED_ACCEPTANCE_RESULT.json)).
+
+- P1 تا P5 کامل‌اند. task `BAZDID-Dev-ConnectedSqlTests` آماده است. هر اجرای تازهٔ متصل فقط با `deployment/development/Start-BazdidConnectedRun.ps1` و بدون elevation انجام می‌شود (publish، اجرا با هویت Writer، verifier و cleanup).
+- حساب‌ها، loginها، certificate و task را بازسازی نکنید. رمز Writer را فقط با `-Rotate` (مدیر) بچرخانید.
+- گام بعد: آماده‌سازی 2G طبق PLAN، با scriptهای forward/rollback بازبینی‌شده. اجرای DDL روی پایگاه موجود به preflight مقصد دقیق و مجوز دامنه نیاز دارد.
+
+**نقطهٔ قبلی، عصر `2026-11-07`: P2 انجام شد؛ P4/P5 پیاده شده و منتظر provisioning مدیر است** ([بخش ۲۱](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#execution-20261107)، [شاهد](checkpoint2f/P2_P4_EXECUTION.json)).
 
 - P1 `-VerifyOnly` توسط مالک PASS شد. اجرای اول P4 به‌خاطر تداخل نام `$action` شکست خورد و در [بخش ۲۱.۸.۱](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#execution-20261107) اصلاح شد (hash `3EB982D0…ADF1`). اجرای دوم امن است. خروجی publish از پیش در `bin` آماده است.
 - P2 را دوباره اجرا نکنید. برای کنترل، `Invoke-BazdidDevSqlPrincipals.review.ps1 -VerifyOnly` کافی است.

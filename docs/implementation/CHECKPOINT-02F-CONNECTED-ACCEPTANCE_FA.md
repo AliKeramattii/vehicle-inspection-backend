@@ -1,5 +1,7 @@
 # پذیرش متصل Checkpoint 2F (P1–P5) — اجرای مرحله‌ای و مانع واقعی
 
+> **نتیجهٔ نهایی `2026-11-07`: Checkpoint 2F پذیرفته شد و پیشرفت از 20% به 22% رسید.** اجرای متصل `09a21cbd72e12d91` با هویت واقعی `BAZDIDDevWriter`: ۱۳ از ۱۳ آزمون موفق، verifier برابر PASS و cleanup دقیق `1/2/5`. جزئیات در [بخش ۲۲](#acceptance-20261107). متن پایین‌تر سابقهٔ مرحله‌ای همین پذیرش است.
+
 تاریخ: `2026-11-06`؛ مبنا: `c17e5183b53b91cb7aa20d50f86604da7760360c`. **نتیجه: 2F پذیرفته نشد و پیشرفت 20% می‌ماند.** این سند پیش‌بررسی واقعی، مانع TLS، نبود دسترسی مدیر در نشست و بستهٔ دقیق ادامه را ثبت می‌کند. شاهد ماشین‌خوان: [CONNECTED_PREFLIGHT.json](../checkpoint2f/CONNECTED_PREFLIGHT.json).
 
 > **به‌روزرسانی `2026-11-07`:** نصب certificate در P3 توسط مدیر موفق بود و اعتماد زنجیره حل شد. اتصال provider برنامه با مقصد pin‌شدهٔ `lpc:.\SQLSERVER2019` اکنون با `SEC_E_WRONG_PRINCIPAL` (ناسازگاری نام) رد می‌شود. همان سیاست امن با `localhost` یا نام میزبان، هم روی Shared Memory و هم روی loopback TCP، موفق است. جزئیات در [بخش ۲۰](#p3-verification-20261107) آمده است. پیشرفت همچنان 20% است.
@@ -681,3 +683,105 @@ hash جدید: `Register-BazdidConnectedTestTask.review.ps1` = `3EB982D0792078E1
 ### ۲۱.۹ پیشرفت
 
 **قبلی 20% + سهم 0 = 20%.** P2 اجرا و تأیید شد و P4/P5 پیاده شدند، اما آزمون متصل واقعی هنوز اجرا نشده است. طبق قاعدهٔ PLAN، کار ناتمام امتیاز ندارد. پس از PASS بخش ۲۱.۸، 2F کامل و پیشرفت برابر 22% می‌شود. 2G شروع نشده است، چون شرط آن پذیرش کامل 2F است.
+
+<a id="acceptance-20261107"></a>
+
+## ۲۲. پذیرش نهایی 2F (2026-11-07)
+
+شاهد ماشین‌خوان: [CONNECTED_ACCEPTANCE_RESULT.json](../checkpoint2f/CONNECTED_ACCEPTANCE_RESULT.json). TRX و لاگ‌های اجرا محلی در `C:\ProgramData\BAZDID\ConnectedTests\results` می‌مانند و منتشر نمی‌شوند.
+
+### ۲۲.۱ اجرای قبلی و دو اشکال
+
+پس از اصلاح بخش ۲۱.۸.۱، مالک task را ثبت کرد. اجرای `1af50f1d48c3eb84` با هویت Writer این نتایج را داشت:
+
+- ۱۲ از ۱۳ آزمون موفق؛ verifier برابر PASS؛ cleanup برابر `1/2/5`.
+- یک آزمون شکست خورد: `Actual_SQL_command_observes_cancellation`.
+- `-VerifyOnly` گزارش داد «اپراتور حق اجرای task را ندارد»، با اینکه task درست اجرا شده بود.
+
+### ۲۲.۲ اصلاح ۱ — آزمون لغو
+
+**رفتار واقعی provider** با `System.Data.SqlClient 4.8.6`، از طریق probe ignored با همان مقصد امن و بدون داده:
+
+| حالت | Number | Class | پیام | اتصال پس از خطا |
+| --- | --- | --- | --- | --- |
+| لغو token پس از ۲۰۰ms | 0 | 11 | «A severe error occurred…» و سپس «Operation cancelled by user.» | Open |
+| timeout | -2 | 11 | «Timeout expired…» | Open |
+| خطای عادی (`1/0`) | 8134 | 16 | Divide by zero | Open |
+
+پس provider لغو واقعی را به‌صورت `SqlException` گزارش می‌کند، نه `OperationCanceledException`.
+
+**آزمون** در [SqlRepositoryConnectedTests.cs](../../tests/Bazdid.IntegrationTests/SqlRepositoryConnectedTests.cs) فقط این خطاها را می‌پذیرد: `OperationCanceledException`، یا `SqlException` با `Number=0` و `Class=11` که همهٔ خطاهایش نیز `0/11` باشند و یکی از آن‌ها دقیقاً «Operation cancelled by user.» باشد. علاوه بر این، آزمون ثابت می‌کند:
+
+- token واقعاً signal شده است؛
+- فرمان ۵ ثانیه‌ای کمتر از ۳ ثانیه طول کشیده است؛
+- اتصال پس از لغو سالم است (`SELECT 1`)؛
+- همان predicate، timeout واقعی (`-2`) و خطای عادی (`8134`) را رد می‌کند.
+
+`SqlErrors.Map` در Production تغییر نکرد، چون قرارداد برنامه نگاشت خاصی برای لغو ندارد.
+
+### ۲۲.۳ اصلاح ۲ — راستی‌آزمایی task
+
+**علت:** Task Scheduler حق generic `GRGX` را به mask نگاشت‌شدهٔ `0x1200a9` تبدیل می‌کند. بررسی قبلی دنبال رشتهٔ خام `(A;;GRGX;;;SID)` می‌گشت و هرگز آن را پیدا نمی‌کرد. **حق اپراتور واقعاً وجود داشت** و اقدام مدیر لازم نبود. ACE سه بار تکراری ثبت شده بود؛ این بی‌خطر است و task بازسازی نشد.
+
+**اصلاح** در [Register-BazdidConnectedTestTask.review.ps1](../../deployment/development/Register-BazdidConnectedTestTask.review.ps1):
+
+- SDDL به‌صورت معنایی با `RawSecurityDescriptor` تجزیه می‌شود.
+- اپراتور باید خواندن+اجرا داشته باشد (`0x1200a9` یا `GR|GX`)، هیچ deny نداشته باشد و هیچ حق نوشتن، حذف، `WRITE_DAC`، `WRITE_OWNER`، `GENERIC_ALL` یا `GENERIC_WRITE` هم نداشته باشد.
+- هیچ ACE مجاز برای Everyone، AU، BU، IU، AN یا NETWORK نباید وجود داشته باشد.
+- principal task با SID واقعی Writer مقایسه می‌شود، نه با نام.
+- ACE فقط وقتی اضافه می‌شود که لازم باشد، پس دیگر تکرار نمی‌شود.
+- `-VerifyOnly` فقط می‌خواند و بدون elevation هم مجاز است.
+
+**دو اشکال دیگر** با آزمون ساختگی پیدا و رفع شدند:
+
+- literal هگز `0xA0000000` در PowerShell 5.1 منفی تفسیر می‌شود؛
+- cast `[uint32]` روی `AccessMask` منفی (Int32) خطا می‌داد.
+
+**نتیجه:**
+
+- ۱۰ از ۱۰ حالت ساختگی ACE درست بودند: شکل نگاشت‌شده، generic، تکراری، نبود ACE، فقط خواندن، `FA`، `GW`، deny، Everyone و AU.
+- `-VerifyOnly` واقعی از نشست غیرمدیر اپراتور: **PASS**، با `OperatorTaskMask=0x1200a9`.
+- hash script: `34E76B037C57C3ACE3418BFAA25244F49131C83F76F3B223094171754E455DEF`.
+
+### ۲۲.۴ اجرای پذیرش نهایی
+
+```powershell
+# اجرا شد — cwd: ریشهٔ مخزن، اپراتور غیرelevated
+dotnet restore Bazdid.sln --locked-mode
+dotnet build Bazdid.sln --configuration Release --no-restore      # 0 warning، 0 error
+dotnet test Bazdid.sln --configuration Release --no-build --no-restore
+.\deployment\development\Register-BazdidConnectedTestTask.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07 -VerifyOnly
+.\deployment\development\Start-BazdidConnectedRun.ps1
+.\deployment\development\Invoke-BazdidDevSqlPrincipals.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07 -VerifyOnly
+```
+
+| معیار | نتیجهٔ واقعی |
+| --- | --- |
+| regression آفلاین | ۱۲۰ از ۱۲۰ unit؛ ۵۰ integration موفق، ۰ شکست و ۱۳ Skipped (متصل‌های انتخاب‌نشده) |
+| شروع task | اپراتور غیرمدیر با `Start-ScheduledTask` (اثبات عملی حق اجرا) |
+| RunId تازه | `09a21cbd72e12d91` |
+| هویت | `<HOST>\BAZDIDDevWriter`؛ عضو Administrators نیست؛ ExitCode برابر 0 |
+| آزمون متصل | **۱۳ از ۱۳ Passed**؛ ۰ Failed؛ ۰ NotExecuted |
+| verifier مستقل | PASS؛ ردیف‌ها دقیقاً مطابق manifest؛ هیچ برچسب rollback ردیف پایدار ندارد |
+| cleanup | `Audit=1 Requests=2 Customers=5`؛ صفر ردیف باقی‌مانده |
+| schema و دادهٔ نامرتبط | ۳۹ ستون، checksum `1193879634`، ۳ جدول؛ همهٔ جدول‌ها 0 ردیف |
+| مجوز SQL | P2 `-VerifyOnly` برابر PASS؛ ۴۰ از ۴۰ بدون مجوز اضافه |
+| Production | `ConnectedAcceptanceVerified => false`، `SqlRuntime.Enabled=false`؛ Production هر پیکربندی SQL را رد می‌کند |
+
+### ۲۲.۵ تصمیم پذیرش و پیشرفت
+
+**Checkpoint 2F پذیرفته شد.** دلیل‌ها:
+
+- provider و اتصال امن (`Encrypt=true`، `TrustServerCertificate=false`، Shared Memory) واقعاً کار می‌کنند؛
+- دو هویت واقعی کم‌اختیار وجود دارند و مجوز مؤثرشان دقیق است؛
+- transaction، rollback، هم‌زمانی، rowversion، idempotency، مالکیت، جداسازی tenant و محدودیت audit روی SQL Server واقعی آزموده شده‌اند؛
+- regression و مستندات به‌روزند.
+
+**قبلی 20% + سهم 2 = 22%.** از وزن ۱۲ واحدی Checkpoint 2، ده واحد کسب شده است. هدف پایان Checkpoint 2 برابر 24% است و دو واحد باقی‌مانده به 2G تعلق دارند.
+
+**محدودیت‌های باقی‌مانده:**
+
+- gate زمان اجرای برنامه عمداً بسته است؛ فعال‌سازی SQL در برنامه تصمیم جداگانه است.
+- L1-R برای استفادهٔ عمومی یا Production باز است: Kestrel 2.1.25 با CVE-2025-55315، SwaggerUI و runtime بدون پشتیبانی.
+- certificate توسعه‌ای self-signed است و در Root ماشین قرار دارد.
+- رمز Writer هر ۹۰ روز با `-Rotate` چرخانده شود.

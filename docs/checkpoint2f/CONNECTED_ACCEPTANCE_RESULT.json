@@ -1,0 +1,51 @@
+{
+  "date": "2026-11-07",
+  "checkpoint": "2F connected acceptance — FINAL",
+  "result": "ACCEPTED",
+  "note": "Host name and operator login replaced with placeholders. TRX and run logs stay local under C:\\ProgramData\\BAZDID\\ConnectedTests\\results (not published).",
+  "previousRun": {
+    "runId": "1af50f1d48c3eb84",
+    "executedBy": "owner-triggered task (Writer identity)",
+    "tests": "13 executed, 12 passed, 1 failed (Actual_SQL_command_observes_cancellation), 0 not executed",
+    "failure": "expected OperationCanceledException; provider returned SqlException 'Operation cancelled by user.'",
+    "verifier": "PASS",
+    "cleanup": "Audit=1 Requests=2 Customers=5; remaining 0"
+  },
+  "fix1Cancellation": {
+    "observedProviderBehaviour": {
+      "cancel": "SqlException Number=0 Class=11; errors: 'A severe error occurred…' + 'Operation cancelled by user.'; ~225 ms; token requested; connection stays Open",
+      "timeout": "SqlException Number=-2 Class=11 'Timeout expired…'",
+      "ordinaryError": "SqlException Number=8134 Class=16 (divide by zero)"
+    },
+    "testChange": "accepts only OperationCanceledException or SqlException with Number=0, Class=11, all errors Number=0/Class=11 and an exact 'Operation cancelled by user.' error; asserts token signalled, elapsed < 3 s of a 5 s command, connection still usable, and rejects real timeout (-2) and ordinary error (8134) with the same predicate",
+    "productionMappingChanged": false
+  },
+  "fix2TaskVerification": {
+    "rootCause": "Task Scheduler stores generic GRGX as mapped mask 0x1200a9; old check searched the literal '(A;;GRGX;;;SID)'",
+    "permissionActuallyMissing": false,
+    "change": "semantic SDDL parsing (RawSecurityDescriptor): operator must have read+execute (0x1200a9 or GR|GX), no deny, no write/delete/WRITE_DAC/WRITE_OWNER/GENERIC_ALL/GENERIC_WRITE; no allow ACE for Everyone/AU/BU/IU/AN/NETWORK; principal compared by Writer SID; grant made idempotent; -VerifyOnly allowed without elevation (read-only)",
+    "additionalBugsFixed": ["hex literal 0xA0000000 negative in PS 5.1", "[uint32] cast of negative Int32 AccessMask threw"],
+    "syntheticAceCases": "10/10 OK",
+    "realVerifyOnlyNonElevated": "PASS, OperatorTaskMask=0x1200a9",
+    "scriptSha256": "34E76B037C57C3ACE3418BFAA25244F49131C83F76F3B223094171754E455DEF",
+    "adminActionRequired": false
+  },
+  "finalRun": {
+    "runId": "09a21cbd72e12d91",
+    "startedBy": "operator, non-elevated, Start-ScheduledTask via Start-BazdidConnectedRun.ps1",
+    "identity": "<HOST>\\BAZDIDDevWriter",
+    "isAdministratorsMember": false,
+    "exitCode": 0,
+    "tests": { "total": 13, "executed": 13, "passed": 13, "failed": 0, "notExecuted": 0 },
+    "verifier": {
+      "pass": true,
+      "runRows": "CCONC|Customers=1, CIDEM|Audit=1, CIDEM|Customers=1, CIDEM|Requests=1, CSTALE|Customers=1, CSTALE|Requests=1, CTENA|Customers=1, CTENB|Customers=1"
+    },
+    "cleanup": { "deleted": "Audit=1 Requests=2 Customers=5", "remaining": 0 },
+    "after": { "columns": 39, "columnChecksum": 1193879634, "tables": 3, "rows": "0/0/0" }
+  },
+  "permissionsAfter": "P2 -VerifyOnly PASS, catalog 40/40, no extra",
+  "regression": { "build": "0 warnings, 0 errors", "unit": "120/120", "integration": "50 passed, 13 skipped (connected, not selected), 0 failed" },
+  "gate": "SqlRuntimeGate.ConnectedAcceptanceVerified=false; SqlRuntime.Enabled=false; Production rejects SQL configuration",
+  "progress": { "before": "20%", "earned": 2, "after": "22%" }
+}
