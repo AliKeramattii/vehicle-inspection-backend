@@ -2,6 +2,7 @@
 
 **آخرین نقطهٔ ادامه در `2026-11-07` (عصر): P2 انجام شد؛ P4/P5 پیاده شده و منتظر provisioning مدیر است** ([بخش ۲۱](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#execution-20261107)، [شاهد](checkpoint2f/P2_P4_EXECUTION.json)).
 
+- P1 `-VerifyOnly` توسط مالک PASS شد. اجرای اول P4 به‌خاطر تداخل نام `$action` شکست خورد و در [بخش ۲۱.۸.۱](implementation/CHECKPOINT-02F-CONNECTED-ACCEPTANCE_FA.md#execution-20261107) اصلاح شد (hash `3EB982D0…ADF1`). اجرای دوم امن است. خروجی publish از پیش در `bin` آماده است.
 - P2 را دوباره اجرا نکنید. برای کنترل، `Invoke-BazdidDevSqlPrincipals.review.ps1 -VerifyOnly` کافی است.
 - ابتدا وجود task `BAZDID-Dev-ConnectedSqlTests` را بررسی کنید (`Get-ScheduledTask`). اگر وجود دارد، `deployment/development/Start-BazdidConnectedRun.ps1` را اجرا کنید. اگر وجود ندارد، دستور بخش ۲۱.۸ برای مالک است.
 - پس از PASS کامل: 2F پذیرفته، پیشرفت 22% و آماده‌سازی 2G. هرگز رمز Writer را نمایش ندهید و gate برنامه را باز نکنید.

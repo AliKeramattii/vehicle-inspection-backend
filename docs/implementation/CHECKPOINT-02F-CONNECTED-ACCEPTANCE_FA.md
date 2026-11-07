@@ -618,7 +618,7 @@ dotnet test Bazdid.sln --configuration Release --no-build --no-restore
 ```powershell
 # پیشنهادی؛ عامل اجرا نکرده است
 Get-FileHash .\deployment\development\New-BazdidDevIdentities.review.ps1, .\deployment\development\Register-BazdidConnectedTestTask.review.ps1 -Algorithm SHA256
-# انتظار: 351227F2…838A و 121EF92A…E5AB
+# انتظار: 351227F2…838A و 3EB982D0…ADF1 (نسخهٔ اصلاح‌شدهٔ بخش ۲۱.۸.۱)
 .\deployment\development\New-BazdidDevIdentities.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07 -VerifyOnly
 .\deployment\development\Register-BazdidConnectedTestTask.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07 -Execute
 .\deployment\development\Register-BazdidConnectedTestTask.review.ps1 -ExpectedMachine $env:COMPUTERNAME -ApprovalReference OWNER-2026-11-07 -VerifyOnly
@@ -638,6 +638,45 @@ Get-FileHash .\deployment\development\New-BazdidDevIdentities.review.ps1, .\depl
 - verifier برابر PASS؛
 - cleanup دقیقاً `1/2/5` و صفر ردیف باقی‌مانده؛
 - regression سبز.
+
+### ۲۱.۸.۱ اشکال اجرای elevated P4 و اصلاح آن (2026-11-07)
+
+**نتیجهٔ اجرای مالک:** P1 `-VerifyOnly` برای هر دو حساب PASS شد. اجرای `Register-BazdidConnectedTestTask.review.ps1 -Execute` با این خطا متوقف شد:
+
+```text
+Register-ScheduledTask: Cannot convert a System.Management.Automation.ScriptBlock to Microsoft.Management.Infrastructure.CimInstance[] for parameter -Action.
+```
+
+**علت:** پارامتر `[scriptblock]$action` در تابع `Invoke-WithPlain` همنام متغیر `$action` در script بود، یعنی خروجی `New-ScheduledTaskAction`. callback با dynamic scope نزدیک‌ترین `$action` را می‌خواند، که همان scriptblock بود.
+
+**اصلاح کمینه:**
+
+- نام پارامتر و فراخوانی آن به `$operation` تغییر کرد.
+- بررسی نبود trigger در `-VerifyOnly` به `@($t.Triggers | Where-Object { $_ }).Count` اصلاح شد، چون `@($null).Count` برابر ۱ است و task بدون trigger را به‌اشتباه رد می‌کرد.
+
+رفتار رمز، ACL، `RunLevel=Limited` و نبود trigger تغییر نکرد.
+
+**راستی‌آزمایی غیرتغییردهنده:** آزمون mock در scratchpad متن دقیق `Invoke-WithPlain` و callbackهای Register/Rotate را از AST خود script برداشت و با تابع‌هایی اجرا کرد که نوع پارامترهایشان با cmdlet واقعی کنترل شده بود.
+
+- نسخهٔ قبلی همان خطا را بازتولید کرد.
+- نسخهٔ اصلاح‌شده:
+  - `-Action` با نوع `MSFT_TaskExecAction` و `-Settings` با نوع `MSFT_TaskSettings3` bind شدند؛
+  - `RunLevel=Limited` و ۰ trigger؛
+  - رمز به callback رسید و چاپ نشد؛
+  - مسیر Rotate هم bind شد.
+- اسکن AST: متغیرهای هر دو callback با نام‌های داخلی تابع (`secure`، `operation`، `bstr`) هیچ تداخلی ندارند.
+
+**وضعیت باقی‌مانده از اجرای ناقص** (عامل فقط‌خواندنی مشاهده کرد):
+
+- پوشه و ACL محافظت‌شده کامل ساخته شده‌اند: Writer روی ریشه و `bin` فقط خواندن/اجرا دارد و Modify فقط روی `results`.
+- رمز Writer تغییر کرده است (`PasswordLastSet` ثبت شده) و مقدار آن نزد هیچ‌کس نیست.
+- هیچ task ثبت نشده است.
+
+اجرای دوم امن است: چون task وجود ندارد، مسیر ایجاد ادامه می‌یابد، `Set-FolderAcl` همان ACL را دوباره اعمال می‌کند، رمز تصادفی تازه‌ای روی حساب و task نشانده می‌شود و task ثبت می‌شود. حساب‌ها حذف یا بازسازی نمی‌شوند.
+
+**آماده‌سازی P5:** عامل `Start-BazdidConnectedRun.ps1 -PrepareOnly` را اجرا کرد. خروجی publish (۲۳۶ فایل) و runner در `bin` قرار گرفتند و Writer روی آن‌ها فقط خواندن/اجرا دارد.
+
+hash جدید: `Register-BazdidConnectedTestTask.review.ps1` = `3EB982D0792078E18BF56AFE2B3A174EEA0CC40A5ACCF4271B063CDFD025ADF1`.
 
 ### ۲۱.۹ پیشرفت
 

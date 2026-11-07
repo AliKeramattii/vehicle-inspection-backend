@@ -245,3 +245,9 @@ commit `2af6bf2982c13a7b79cfbbd88095a32b196d2e28` (والد `51c921697e40a3c0907
 ## انتشار تأییدشدهٔ D-P3-NAME، P2 و P4/P5 (2026-11-07)
 
 commit کد `fd1e992d98a30d7021b7e2d09968da197408c0bc` (والد `773584d`) با `git push origin main` و بدون force منتشر شد. خروجی push برابر `773584d..fd1e992  main -> main` بود و `ls-remote` و HEAD محلی هر دو `fd1e992` بودند. پیش از commit، جست‌وجوی نام ماشین، SID و `password=` در فایل‌های staged نتیجه‌ای نداشت. رمز Writer در هیچ فایلی وجود ندارد. commit مستندات بعدی در همین بخش با SHA واقعی تکمیل می‌شود.
+
+commit مستندات `5ca987634e077043e87c5330769e76ec46674b0c` با push عادی منتشر شد (`fd1e992..5ca9876`) و `ls-remote` با HEAD محلی برابر بود.
+
+## اصلاح اشکال ثبت task در P4 (2026-11-07)
+
+اصلاح تداخل نام `$action` در `Register-BazdidConnectedTestTask.review.ps1` و بررسی trigger در `-VerifyOnly`. SHA و نتیجهٔ push این commit در گزارش نهایی همان وظیفه و پس از راستی‌آزمایی `ls-remote` ثبت می‌شود. hash script: `3EB982D0792078E18BF56AFE2B3A174EEA0CC40A5ACCF4271B063CDFD025ADF1`.

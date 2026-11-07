@@ -52,7 +52,7 @@
     "negativeRunAsOperator": "13/13 failed with 'token جاری Windows متعلق به Writer مصوب نیست' before any SQL connection",
     "publishCheck": "published output has no runtimeconfig.dev.json; vstest discovers 13 connected tests (skipped when not selected)",
     "scripts": {
-      "Register-BazdidConnectedTestTask.review.ps1": "121EF92AEDCA5FB8B51D9231C082F6E10F8759052C1155FECF2F20303909E5AB",
+      "Register-BazdidConnectedTestTask.review.ps1": "3EB982D0792078E18BF56AFE2B3A174EEA0CC40A5ACCF4271B063CDFD025ADF1 (fixed $action shadowing; previous 121EF92A…E5AB failed in elevated run)",
       "Invoke-BazdidConnectedTests.ps1": "B6BFD1F47F4B57AA53F30418942E6F09510ADD0338379948372FA8ED87F8990C",
       "Start-BazdidConnectedRun.ps1": "BFEEACDDCC41650AA059C4B8A78E73483B5520644E839166E21F4D4181D7DC3B",
       "Invoke-BazdidDevSqlPrincipals.review.ps1": "CB339BCD230C5E5F8FE25E2D9EB115A9100408150A6432E285447805C7508443"

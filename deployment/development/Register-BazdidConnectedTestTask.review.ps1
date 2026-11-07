@@ -46,10 +46,11 @@ function New-Secret {
     $secure.MakeReadOnly()
     return $secure
 }
-function Invoke-WithPlain([Security.SecureString]$secure, [scriptblock]$action) {
+function Invoke-WithPlain([Security.SecureString]$secure, [scriptblock]$operation) {
     # Register/Set-ScheduledTask رمز را به‌صورت string می‌گیرند؛ فقط لحظه‌ای در همین فرایند و بدون خروجی.
+    # نام پارامتر نباید با متغیرهای script (مانند $action) یکی باشد؛ callback با dynamic scope آن‌ها را می‌خواند.
     $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
-    try { & $action ([Runtime.InteropServices.Marshal]::PtrToStringBSTR($bstr)) } finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr) }
+    try { & $operation ([Runtime.InteropServices.Marshal]::PtrToStringBSTR($bstr)) } finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr) }
 }
 function Set-FolderAcl {
     foreach ($d in (Split-Path $root -Parent), $root, (Join-Path $root 'bin'), (Join-Path $root 'results')) {
@@ -86,7 +87,7 @@ function Test-Provisioning {
         if ($t.Principal.UserId -notmatch "(^|\\)$writerName$") { $problems.Add("هویت task: $($t.Principal.UserId)") }
         if ("$($t.Principal.LogonType)" -ne 'Password') { $problems.Add("LogonType: $($t.Principal.LogonType)") }
         if ("$($t.Principal.RunLevel)" -ne 'Limited') { $problems.Add("RunLevel: $($t.Principal.RunLevel)") }
-        if (@($t.Triggers).Count -ne 0) { $problems.Add('task نباید trigger داشته باشد.') }
+        if (@($t.Triggers | Where-Object { $_ }).Count -ne 0) { $problems.Add('task نباید trigger داشته باشد.') }
         $a = @($t.Actions)
         if ($a.Count -ne 1 -or $a[0].Execute -notmatch 'powershell\.exe$' -or $a[0].Arguments -notlike "*-File `"$runner`"*") { $problems.Add('action task برابر runner ثابت نیست.') }
         $svc = New-Object -ComObject Schedule.Service; $svc.Connect()
